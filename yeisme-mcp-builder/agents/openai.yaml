@@ -1,0 +1,3 @@
+display_name: Yeisme MCP Builder
+short_description: Scaffold and review self-built MCP work under mcp/.
+default_prompt: Create or review a self-built MCP under mcp/ with clear schemas, side effects, and debug commands.

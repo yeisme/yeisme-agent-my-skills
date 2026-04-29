@@ -1,0 +1,3 @@
+display_name: Yeisme Apigateway Auth Sync
+short_description: Maintain Codex, Gemini CLI, and OpenCode auth sync sidecars for new-api channels.
+default_prompt: Change or debug an apigateway auth sync sidecar while preserving managed-channel behavior, credential safety, Taskfile rebuild inputs, and provider tests.

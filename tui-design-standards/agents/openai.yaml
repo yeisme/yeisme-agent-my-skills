@@ -1,0 +1,3 @@
+display_name: TUI Design Standards
+short_description: Enforce mouse-responsive, polished, Apple-like terminal UI design.
+default_prompt: Review or implement this TUI so primary workflows respond to mouse input, keyboard shortcuts still work, and the visual design feels calm, rounded, and Apple-like.

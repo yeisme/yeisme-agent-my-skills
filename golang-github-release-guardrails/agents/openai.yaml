@@ -1,0 +1,3 @@
+display_name: Golang GitHub Release Guardrails
+short_description: Require GitHub Actions, golangci-lint, and GoReleaser for Go projects with GitHub or Git management.
+default_prompt: For this Go project, enforce GitHub Actions CI, golangci-lint, and GoReleaser release guardrails before treating GitHub/Git management as complete.

@@ -1,0 +1,3 @@
+display_name: Yeisme MCP Registry Onboarding
+short_description: Add and review MCP registry entries, credentials, clients, gateway exposure, and health policies.
+default_prompt: Add or review an MCP backend in mcp/registry.json with explicit permissions, credentials, client rendering, gateway exposure, and validation.

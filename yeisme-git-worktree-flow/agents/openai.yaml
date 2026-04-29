@@ -1,0 +1,3 @@
+display_name: Yeisme Git Worktree Flow
+short_description: Develop with Git flow branches, git worktrees, Taskfile, and nerdctl compose.
+default_prompt: Use Git flow style branches, isolate work with git worktree, and maintain project commands through Taskfile plus nerdctl compose.yml.

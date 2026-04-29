@@ -1,0 +1,3 @@
+display_name: Yeisme Skill Publisher
+short_description: Create, validate, sync, and publish self-built project skills.
+default_prompt: Create or update a self-built skill in my-skills/, validate it, and sync it into the local skill targets.

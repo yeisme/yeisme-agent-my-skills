@@ -1,0 +1,3 @@
+display_name: Yeisme MCP Gateway Maintainer
+short_description: Maintain the TypeScript MCP Gateway, CLI rendering, health checks, routing, and tests.
+default_prompt: Change or debug mcp/gateway while preserving registry-driven routing, compact output, isolated backend failures, and the gateway validation commands.

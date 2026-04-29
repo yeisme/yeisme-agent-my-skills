@@ -1,0 +1,3 @@
+display_name: Yeisme Repo Routing
+short_description: Decide where new project files, skills, MCPs, and docs belong.
+default_prompt: Route a new project capability to the correct directory and list any companion files to update.
