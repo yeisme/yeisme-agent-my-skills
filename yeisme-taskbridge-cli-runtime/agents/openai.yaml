@@ -1,0 +1,3 @@
+display_name: Yeisme TaskBridge CLI Runtime
+short_description: Develop and ship TaskBridge CLI control-plane, sync audit, project planning, action-file, provider sync, and Agent JSON contract behavior.
+default_prompt: Change or review cli/taskbridge while preserving Agent JSON envelopes, dry-run and confirmation gates, sync diff audit semantics, Chinese CLI output, and Go validation commands.
