@@ -1,11 +1,13 @@
 ---
 name: yeisme-apigateway-auth-sync
-description: Use when changing, debugging, testing, or reviewing apigateway authentication sync sidecars for Codex, Gemini CLI, or OpenCode channels, including Taskfile tasks, compose wiring, env defaults, model lists, and new-api channel behavior.
+description: Use when changing, debugging, testing, or reviewing apigateway authentication sync sidecars for Codex or Gemini CLI channels, including Taskfile tasks, compose wiring, env defaults, model lists, and new-api channel behavior.
 ---
 
 # Yeisme Apigateway Auth Sync
 
 Use this skill for the `apigateway/` auth synchronization sidecars and related gateway channel behavior.
+
+OpenCode Zen / Go is now handled as direct `new-api` channel types, not by an auth sync sidecar.
 
 ## Boundary
 
@@ -13,12 +15,12 @@ Use this skill for the `apigateway/` auth synchronization sidecars and related g
 - Sidecar Dockerfiles live in `apigateway/Dockerfile.*-auth-sync`.
 - Runtime wiring lives in `apigateway/api-gateway.compose.yml` and `apigateway/Taskfile.yml`.
 - Channel defaults live in `apigateway/new-api.env`.
-- Source credential directories are `apigateway/codex-auth/`, `apigateway/gemini-auth/`, and `apigateway/opencode-auth/`.
+- Source credential directories are `apigateway/codex-auth/` and `apigateway/gemini-auth/`.
 - Do not commit new real credentials. Keep examples templated or documented.
 
 ## Workflow
 
-1. Identify the provider: Codex, Gemini CLI, or OpenCode.
+1. Identify the provider: Codex or Gemini CLI.
 2. Read the provider README section in `apigateway/README.md` and the matching script before editing.
 3. Preserve managed-channel safety:
    - update channels owned by the matching managed tag
@@ -27,7 +29,6 @@ Use this skill for the `apigateway/` auth synchronization sidecars and related g
 4. Keep file normalization deterministic:
    - Codex: `auth.json.<email>`
    - Gemini CLI: `oauth_creds.json.<email>`
-   - OpenCode: `auth.json.<email>`
 5. If script, Dockerfile, requirements, compose, or env inputs change, ensure the Taskfile hash/rebuild logic still includes the changed input.
 6. Keep user-facing logs and docs in Chinese.
 
@@ -47,7 +48,6 @@ Then run provider smoke commands as applicable:
 task new-api:config
 task new-api:codex-sync
 task new-api:gemini-sync
-task new-api:opencode-sync
 task new-api:health
 ```
 

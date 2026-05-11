@@ -20,6 +20,7 @@ Use this skill when the user is adding new repository content and the correct lo
 | Agent runtime, product agent integrations, agent-specific assets | `agent/` |
 | API gateway deployment, sidecars, runtime orchestration | `apigateway/` |
 | Human-facing repository docs | `docs/` |
+| Project execution checklists, evidence, and closeout decisions | `docs/<project>/checklists/active|done/<slug>/` |
 | Automation shared by the repository | `scripts/` |
 
 ## Decision Flow
@@ -31,7 +32,8 @@ Use this skill when the user is adding new repository content and the correct lo
 5. If it is a shared command entry point for humans or automation, put it in `cli/` or `scripts/` based on scope.
 6. If it belongs to the API gateway runtime, put it in `apigateway/`.
 7. If it belongs to a concrete agent runtime or integration, put it in `agent/`.
-8. If it only explains the repository, put it in `docs/`.
+8. If it is an execution checklist package, put `checklist.md`, `evidence.md`, `decisions.md`, and optional `implementation-plan.md` together under `docs/<project>/checklists/active/<slug>/`, then archive to `docs/<project>/checklists/done/<slug>/` after closeout.
+9. If it only explains the repository, put it in `docs/`.
 
 ## Guardrails
 
@@ -42,6 +44,7 @@ Use this skill when the user is adding new repository content and the correct lo
 - Do not put third-party skills in `my-skills/`.
 - Prefer one clear owner directory over duplicating the same workflow in multiple places.
 - Prefer CLI plus skills over MCP when an existing CLI already solves the task with less context and no cross-service reuse requirement.
+- Do not create execution checklist packages under `work-items/active/`, `plans/active/`, implementation directories, or temporary directories. Those locations may link to checklists but do not own them.
 
 ## Output Style
 

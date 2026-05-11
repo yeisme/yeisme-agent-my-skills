@@ -9,7 +9,7 @@ description: Use when implementing, modifying, debugging, refactoring, or verify
 
 Drive coding sessions end to end. Turn a request, approved plan, PRD, bug report, or failing command into a prioritized recursive checklist, execute the highest-priority unblocked leaf, verify each completed slice, and continue until the task is handled or a real stop condition is reached.
 
-Use this together with narrower skills when they apply, such as `test-driven-development`, `systematic-debugging`, `verification-before-completion`, `yeisme-repo-routing`, `yeisme-opsroom-cli-runtime`, `yeisme-mcp-builder`, or `yeisme-mcp-gateway-maintainer`.
+Use this together with narrower skills when they apply, such as `test-driven-development`, `systematic-debugging`, `verification-before-completion`, `yeisme-repo-routing`, `yeisme-cohors-cli-runtime`, `yeisme-mcp-builder`, or `yeisme-mcp-gateway-maintainer`.
 
 ## Trigger Conditions
 
@@ -43,6 +43,8 @@ Do not use this skill for:
 - Scoped code, test, documentation, or config edits that preserve unrelated user changes.
 - Focused verification output after each meaningful slice.
 - A final status with changed files, checks run, unresolved blockers, and residual risk.
+
+User-facing command examples in docs, plans, reviews, and final replies must show the real command a human can run. Do not expose local execution wrappers, shell aliases, or agent-only command prefixes outside tool execution.
 
 ## Checklist Model
 
@@ -204,6 +206,15 @@ Always run a verification command before claiming completion. Prefer, in order:
 4. A manual inspection with exact files and rationale when no executable check exists.
 
 If a check cannot run, say why and name the next best evidence used.
+
+For plan/checklist/work-item workflows, also apply `docs/workflows/execution-slice-lifecycle.md` before claiming completion:
+
+- ensure execution checklist artifacts live under `docs/<project>/checklists/active|done/<slug>/`; if they were created under `work-items/active/`, `plans/active/`, or another ad hoc directory, migrate them to `checklists/active/<slug>/` before continuing
+- update `checklist.md`, `evidence.md`, and `decisions.md`
+- sync any owning readiness, roadmap, README, or document-map paths
+- move ordinary completed execution slices from `checklists/active/<slug>/` to `checklists/done/<slug>/`
+- leave long-lived status boards such as `project-readiness` or `mvp-checklist` in `active/`
+- fix stale references that still point to the old active path
 
 ## Final Response
 

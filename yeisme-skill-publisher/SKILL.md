@@ -10,11 +10,11 @@ Use this skill when the user asks to create, change, publish, package, install, 
 ## Source And Targets
 
 - Author source skills in `my-skills/<skill-name>/`.
-- Sync runnable copies into `.agents/skills/` and mirror them into `.claude/skills/` with `scripts/skills.sh sync-custom`.
-- Use `.agents/skills/` for the project agent runtime and `.claude/skills/` for Claude Code. `.claude/skills/` must contain every skill present in `.agents/skills/`.
+- Assign runnable copies through `skills.profiles/root.txt` and `<subproject>/skills.profile`, then materialize them with `scripts/skills.sh sync-root` or `scripts/skills.sh sync-subprojects`.
+- Use `.agents/skills/` for generated runtime copies only and `.claude/skills/` for the root Claude Code mirror. `.claude/skills/` must contain every skill present in the root `.agents/skills/`.
 - Keep `mcp/` for MCP implementations only.
 
-Do not treat `.agents/skills/`, `.claude/skills/`, or `.codex/skills/` as the publishing source for self-built skills. `my-skills/` is the publishing source, `skills/` is reserved for third-party skills, and `.agents/skills/` plus `.claude/skills/` are generated local install targets.
+Do not treat `.agents/skills/`, `.claude/skills/`, or `.codex/skills/` as the publishing source for self-built skills. `my-skills/` is the publishing source, `skills/` is reserved for third-party/imported skills, profile files define scope, and `.agents/skills` plus `.claude/skills` are generated runtime targets.
 
 Do not sync self-built project skills into `.codex/skills/` in this repository. Do not put external skills, symlinks, or local runtime copies into `my-skills/`.
 
@@ -41,7 +41,7 @@ find .codex/skills -maxdepth 2 -name SKILL.md 2>/dev/null | sort
 find my-skills -maxdepth 1 -mindepth 1 -type l -print
 ```
 
-Fix by deleting only generated duplicates for project-owned skills, keeping `my-skills/<skill-name>/`, then run `scripts/skills.sh sync-custom` to regenerate `.agents/skills/<skill-name>/` and `.claude/skills/<skill-name>/`.
+Fix by deleting only generated duplicates for project-owned skills, keeping `my-skills/<skill-name>/`, then run `scripts/skills.sh sync-root` and the relevant subproject sync to regenerate runtime copies from profiles.
 
 ## Required Structure
 
@@ -66,6 +66,7 @@ The body should stay lean:
 - workflow
 - validation
 - references to optional scripts or reference files
+- command examples must show the real command a user can run, without local execution wrappers, shell aliases, or agent-only prefixes
 
 `agents/openai.yaml` must include:
 
@@ -75,29 +76,36 @@ The body should stay lean:
 
 Do not add per-skill `README.md`, `CHANGELOG.md`, `QUICK_REFERENCE.md`, or `INSTALLATION_GUIDE.md`. Put human-facing authoring guidance in `docs/skills/` instead.
 
+Do not write local execution wrappers, shell aliases, or agent-only command prefixes into user-facing docs, skill examples, plans, reviews, or final replies. Keep those details inside the execution layer only.
+
 ## Workflow
 
 1. Read `my-skills/README.md` and the target skill's `SKILL.md` if it already exists.
 2. Confirm the requested capability is a reusable agent workflow. If it is an MCP implementation, put the implementation under `mcp/` and only create a skill if the workflow needs agent guidance.
 3. Create or update the skill in `my-skills/<skill-name>/`.
 4. Keep metadata in `agents/openai.yaml` consistent with `SKILL.md`.
-5. Run:
+5. If the skill should be available in a root or subproject session, add it to `skills.profiles/root.txt` or the relevant `<subproject>/skills.profile`.
+6. Run:
 
 ```bash
 scripts/skills.sh validate-custom
-scripts/skills.sh sync-custom
+scripts/skills.sh validate-profiles
+scripts/skills.sh sync-root
+scripts/skills.sh sync-subprojects
 scripts/skills.sh list-custom
 ```
 
-6. If publishing, ensure the GitHub remote exists, commit the `my-skills/`, `scripts/skills.sh`, and docs changes, then push.
+7. If publishing, ensure the GitHub remote exists, commit the `my-skills/`, profile, `scripts/skills.sh`, and docs changes, then push.
 
 ## Validation Rules
 
 - Directory name, `name:` frontmatter, and display metadata must agree.
 - `description:` must say when the skill should be used and must not be empty.
 - `agents/openai.yaml` must contain `display_name`, `short_description`, and `default_prompt`.
-- `scripts/skills.sh sync-custom` must not write project-owned skills into `.codex/skills/`.
-- `scripts/skills.sh sync-custom` must write project-owned skills into `.agents/skills/` and mirror `.agents/skills/` into `.claude/skills/`.
+- `scripts/skills.sh sync-root` and `sync-subprojects` must not write project-owned skills into `.codex/skills/`.
+- `scripts/skills.sh sync-root` must write only root-profile skills into root `.agents/skills/` and mirror root `.agents/skills/` into `.claude/skills/`.
+- `scripts/skills.sh sync-subprojects` must write only each subproject profile into that subproject's generated `.agents/skills/`.
+- Profile files must not reference `.agents/skills` as a source.
 - `my-skills/` must contain only self-built skill directories plus `README.md`.
 - `skills/` must contain only third-party skill directories plus `README.md`.
 - Do not add generated caches, local secrets, runtime data, or vendored dependencies.
@@ -110,7 +118,8 @@ For other users, document either:
 ```bash
 git clone <repo-url>
 cd yeisme-agent
-scripts/skills.sh sync-custom
+scripts/skills.sh sync-root
+scripts/skills.sh sync-subprojects
 ```
 
 or:

@@ -1,0 +1,3 @@
+display_name: AI Native CLI Output Contract
+short_description: Enforce unified AI-native CLI output modes and schemas.
+default_prompt: Design or review this CLI output so summary, --agent, --json, --events, and --explain all share one validated contract.

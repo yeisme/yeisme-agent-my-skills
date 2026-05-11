@@ -15,6 +15,7 @@ Use this skill for code or behavior changes inside `mcp/gateway/`.
 - Product and interface plans live in `docs/mcp-gateway/`.
 - Do not put gateway implementation code in `skills/`.
 - Do not add per-server Taskfiles for remote MCPs; prefer registry entries.
+- BigModel/Zai `web-search-prime` is intentionally disabled for 联网搜索. Preserve that policy; use Firecrawl CLI against `backend-server/firecrawl` for search workflows unless a separate plan explicitly introduces a Firecrawl MCP backend.
 
 ## Workflow
 
@@ -29,6 +30,7 @@ Use this skill for code or behavior changes inside `mcp/gateway/`.
    - Streamable HTTP backends via gateway
    - stdio backends rendered for direct client use, not hosted by v1 gateway
    - compact CLI output by default, JSON when requested
+   - CLI output changes must also follow `ai-native-cli-output-contract`
 3. Keep failure boundaries isolated. A failed backend must not break unrelated backends.
 4. Keep audit output compact and secret-safe. Do not log full tokens, headers, large payloads, or complete tool outputs.
 5. Update tests near the changed behavior before broad refactors.

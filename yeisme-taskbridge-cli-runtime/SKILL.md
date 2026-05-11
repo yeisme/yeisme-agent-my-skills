@@ -21,6 +21,7 @@ Use this skill for `cli/taskbridge`, the Go CLI that bridges local task control-
 2. Preserve TaskBridge product semantics:
    - `today`, `next`, `inbox`, `review`, and `sync diff` are safe read/preview surfaces.
    - `agent *` stdout must remain valid `taskbridge.agent-result.v1` JSON.
+   - new general CLI output surfaces must follow `ai-native-cli-output-contract`: concise human summaries by default, strict machine JSON, stable agent mode, NDJSON events for streams, and no logs mixed into machine stdout.
    - dangerous actions require `--confirm` or an action-file confirmation gate.
    - `--dry-run` must not mutate local storage or call remote write APIs.
    - sync/audit output must describe what was compared or written, not just that a command ran.

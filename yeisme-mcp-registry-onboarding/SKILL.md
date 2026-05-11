@@ -15,6 +15,7 @@ Use this skill for registry-driven MCP onboarding and maintenance.
 - Real secrets: `mcp/.env.mcp`, `mcp/gateway/.env`, service-specific `.env` files. Do not commit real secrets.
 - Add `mcp/<name>/` only for self-hosted code or lifecycle owned by this repo.
 - Remote or package-managed MCPs should normally be registry-only.
+- 联网搜索默认不接入 BigModel/Zai `web-search-prime`；保持该 backend disabled，并让 agent 通过 Firecrawl CLI 直连 `backend-server/firecrawl`。
 
 ## Workflow
 
@@ -27,6 +28,7 @@ Use this skill for registry-driven MCP onboarding and maintenance.
 2. Decide exposure:
    - Streamable HTTP can be gateway-exposed when `gateway.enabled=true`.
    - stdio stays direct-rendered for clients unless gateway support has been explicitly implemented.
+   - Firecrawl CLI is a direct CLI workflow, not a Gateway MCP backend; do not wrap it in registry unless a real Firecrawl MCP server is intentionally introduced.
 3. Define permission and response policy before enabling:
    - `permission.mode`
    - `credentialSource`

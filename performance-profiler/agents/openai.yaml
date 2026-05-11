@@ -1,0 +1,3 @@
+display_name: Performance Profiler
+short_description: Measure software performance, including backend latency, Go concurrency, workers, queues, CPU, memory, and before/after optimization evidence.
+default_prompt: Profile this project for a concrete performance issue, establish a repeatable baseline, identify the bottleneck, and recommend or implement targeted optimizations with before/after evidence, including race/pprof/benchmark checks for Go backend or worker code when relevant.

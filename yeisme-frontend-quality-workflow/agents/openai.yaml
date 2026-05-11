@@ -1,0 +1,3 @@
+display_name: Yeisme Frontend Quality Workflow
+short_description: Add and verify Tailwind CSS 4 style boundaries, Storybook, Chromatic, addon-designs, Lighthouse, Axe, Playwright, and browser-use frontend quality gates.
+default_prompt: Add or review frontend quality tooling for this Yeisme project with Tailwind CSS 4 style boundary checks, Storybook, Chromatic, addon-designs, Lighthouse, Axe, Playwright, browser-use integration tests, and diagnostics output.

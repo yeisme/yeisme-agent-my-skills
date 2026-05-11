@@ -1,3 +1,0 @@
-display_name: Yeisme Opsroom CLI Runtime
-short_description: Develop Opsroom CLI workflow, daemon, TUI, command-center, eval, and Generic CLI Runtime behavior.
-default_prompt: Change or review cli/opsroom while preserving local-first run evidence, structured CLI runtime contracts, Chinese user-facing output, and Go validation commands.
