@@ -10,7 +10,7 @@ Use this skill when the user asks to create, change, publish, package, install, 
 ## Source And Targets
 
 - Author source skills in `my-skills/<skill-name>/`.
-- Assign runnable copies through `skills.profiles/root.txt` and `<subproject>/skills.profile`, then materialize them with `scripts/skills.sh sync-root` or `scripts/skills.sh sync-subprojects`.
+- Assign runnable copies through `skills.profiles/root.txt` and `skills.profiles/targets/<subproject>.txt`, then materialize them with `scripts/skills.sh sync-root` or `scripts/skills.sh sync-subprojects`.
 - Use `.agents/skills/` and `.claude/skills/` as generated active runtime copies. Use `.agents/skills-available/` and `.claude/skills-available/` as generated optional libraries. Both homes must stay in sync for the same profile target.
 - Keep `mcp/` for MCP implementations only.
 
@@ -84,7 +84,7 @@ Do not write local execution wrappers, shell aliases, or agent-only command pref
 2. Confirm the requested capability is a reusable agent workflow. If it is an MCP implementation, put the implementation under `mcp/` and only create a skill if the workflow needs agent guidance.
 3. Create or update the skill in `my-skills/<skill-name>/`.
 4. Keep metadata in `agents/openai.yaml` consistent with `SKILL.md`.
-5. If the skill should be available in a root or subproject session, add it to `skills.profiles/root.txt` or the relevant `<subproject>/skills.profile`.
+5. If the skill should be available in a root or subproject session, add it to `skills.profiles/root.txt` or the relevant `skills.profiles/targets/<subproject>.txt`.
 6. Run:
 
 ```bash

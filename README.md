@@ -7,7 +7,7 @@
 - `my-skills/`：项目自建 skill 的发布源。
 - `skills/`：skills.sh、gstack、clawhub 等来源的三方 skill 本地目录。
 - `skills.profiles/root.txt`：根目录会话的 skill profile。
-- `<subproject>/skills.profile`：子项目会话的 skill profile。
+- `skills.profiles/targets/<subproject>.txt`：子项目会话的 skill profile。
 - `.agents/skills/`：本仓库 agent 本地运行副本，由 `scripts/skills.sh sync-root` 按根 profile 生成。
 - `.claude/skills/`：Claude Code 本地运行副本，由同一套 `scripts/skills.sh` 命令从根 `.agents/skills` 镜像生成。
 - `.codex/skills/`：不用于本仓库自建 skill。

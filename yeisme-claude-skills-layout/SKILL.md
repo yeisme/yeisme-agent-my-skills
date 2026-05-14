@@ -20,27 +20,27 @@ Use this structure in the downstream repository:
     <active-runtime-skill>/
       SKILL.md
   skills-available/
-    _planning/
+    _agent-workflow/
       <optional-skill>/
         SKILL.md
-    _engineering/
-    _quality/
-    _security/
+    _backend/
     _devops/
-    _workflow/
+    _frontend/
+    _reference/
+    _testing/
 .agents/
   skills/
     <active-runtime-skill>/
       SKILL.md
   skills-available/
-    _planning/
+    _agent-workflow/
       <optional-skill>/
         SKILL.md
-    _engineering/
-    _quality/
-    _security/
+    _backend/
     _devops/
-    _workflow/
+    _frontend/
+    _reference/
+    _testing/
 ```
 
 Directory roles:
@@ -58,12 +58,12 @@ Directory roles:
 
 Use category directories with a leading underscore so they sort before skill names:
 
-- `_planning/`: PRD, architecture, roadmap, plan review, founder/PM review.
-- `_engineering/`: coding execution, backend, CLI, docs, project-specific engineering workflows.
-- `_quality/`: review, QA, health, debugging, TDD, verification.
-- `_security/`: threat modeling, security audit, permission review.
-- `_devops/`: release, dependency, deployment, performance, external runtime operations.
-- `_workflow/`: shipping, documentation release, repository routing, skill maintenance, general process helpers.
+- `_agent-workflow/`: agent process, OpenSpec, plan execution, repository routing, skill governance, multi-agent coordination.
+- `_backend/`: backend, CLI runtime, MCP, API, persistence, and project-specific implementation workflows.
+- `_devops/`: release, deployment, CI, dependency, performance, and external runtime operations.
+- `_frontend/`: frontend, TUI, design system, UI implementation, and visual QA workflows.
+- `_reference/`: output contracts, examples, research, diagrams, command references, and low-frequency knowledge packs.
+- `_testing/`: TDD, debugging, QA, review, health, security audit, and completion verification.
 
 Add another `_category/` only when an existing category would become ambiguous.
 
@@ -85,11 +85,11 @@ For projects using this layout, do not create or reintroduce:
 - `.codex/`
 - root `skills/`
 - root `my-skills/`
-- `skills.profile`
+- `skills.profiles/targets/<subproject>.txt`
 - `skills.profiles/`
 - root `agent-skills/`
 
-These directories cause agents to see duplicate or stale skill sources. If they exist from an older migration, move their useful contents into `.claude/skills/` plus `.agents/skills/`, or into both `skills-available/<category>/` libraries, then delete the old directory. In `yeisme-agent`, keep root `my-skills/`, root `skills/`, and legacy profile files because they are the publishing and sync source of truth.
+These directories cause agents to see duplicate or stale skill sources. If they exist from an older migration, move their useful contents into `.claude/skills/` plus `.agents/skills/`, or into both `skills-available/<category>/` libraries, then delete the old directory. In `yeisme-agent`, keep root `my-skills/`, root `skills/`, `skills.profiles/root.txt`, and `skills.profiles/targets/<subproject>.txt` because they are the publishing and sync source of truth.
 
 ## Discovery Workflow
 

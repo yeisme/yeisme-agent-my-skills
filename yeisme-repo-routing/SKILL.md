@@ -51,7 +51,7 @@ Use this skill when the user is adding new repository content and the correct lo
 - Do not track subproject code implementation in root `openspec/`; root changes may link to subproject OpenSpec paths as handoff targets.
 - Do not require subproject OpenSpec tasks to update root `docs/<project>/**`; update the owning subproject `docs/**` instead, and keep root docs as indexes or handoff links.
 - Do not create execution task packages under `docs/**/checklists`, `work-items/active/`, `plans/active/`, implementation directories, or temporary directories. Those locations may link to OpenSpec changes but do not own task state.
-- When creating a new subproject, bootstrap `AGENTS.md`, `CLAUDE.md`, `skills.profile`, local `openspec/`, and local `docs/README.md` before non-trivial implementation. Then run `scripts/skills.sh validate-profiles`, `scripts/skills.sh sync-subprojects`, `scripts/openspec.sh sync-tools`, and `scripts/openspec.sh validate` from the repository root.
+- When creating a new subproject, bootstrap `AGENTS.md`, `CLAUDE.md`, the root-level `skills.profiles/targets/<subproject>.txt`, local `openspec/`, and local `docs/README.md` before non-trivial implementation. Then run `scripts/skills.sh validate-profiles`, `scripts/skills.sh sync-subprojects`, `scripts/openspec.sh sync-tools`, and `scripts/openspec.sh validate` from the repository root.
 
 ## Output Style
 
