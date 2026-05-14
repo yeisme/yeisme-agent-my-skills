@@ -15,8 +15,8 @@ Use this skill for `cli/eikona`, the agent-facing visual asset runtime and evide
 - Provider protocol adapters live in `internal/adapters/*`; adapters must not print CLI output or bypass runtime storage.
 - Run/job/artifact evidence lifecycle lives in `internal/runtime` and `internal/runstore`.
 - Project library, prompt memory, sessions, replacement ledger, index, Web API, and Web UI live under their matching `internal/*` or `web/` modules.
-- Human-facing design docs live in `docs/eikona/`; code behavior docs live in `cli/eikona/README.md` and `cli/eikona/AGENTS.md`.
-- Eikona checklist lifecycle follows the repository-wide `docs/workflows/execution-slice-lifecycle.md`; Eikona-specific notes live in `docs/eikona/checklists/README.md`. Execution checklist artifacts must stay under `docs/eikona/checklists/active|done/<slug>/`, not plans or ad hoc work-item directories.
+- In a `cli/eikona` session, human-facing product, design, runtime, protocol, governance, evaluation, and delivery docs live in local `docs/**`; code behavior docs live in `README.md` and `AGENTS.md`. Root project-doc mirrors are not valid owners and must not be required for closeout.
+- Eikona task lifecycle follows the repository-wide OpenSpec rules in `docs/workflows/execution-slice-lifecycle.md`; migrated Eikona notes live in `cli/eikona/openspec/changes/archive/2026-05-11-eikona-checklists-index/legacy/README.md`. Execution task state must stay under `cli/eikona/openspec/changes/eikona-<slug>/` or its archive, not docs checklists, plans, or ad hoc work-item directories.
 
 ## Workflow
 
@@ -42,7 +42,7 @@ Use this skill for `cli/eikona`, the agent-facing visual asset runtime and evide
    - Web API behavior in `internal/webapi`
    - Web UI behavior in `web/src`
 5. For Web UI changes, follow existing React/Vite patterns, keep operational density, and verify with the Web UI test stack rather than relying on static inspection.
-6. For Eikona plan/checklist work, keep `checklist.md`, `evidence.md`, `decisions.md`, and optional `implementation-plan.md` under `docs/eikona/checklists/active/<slug>/`; migrate any misplaced checklist before continuing. Do not leave completed execution slices under `active/`. After closeout, update `project-readiness`, record evidence/decisions, and archive ordinary slices to `docs/eikona/checklists/done/<slug>/`.
+6. For Eikona plan/checklist work, keep `proposal.md`, `design.md`, `tasks.md`, and `specs/**/spec.md` under `cli/eikona/openspec/changes/eikona-<slug>/`; migrate any misplaced checklist or root `openspec/` implementation task before continuing. Do not leave completed execution changes active. After closeout, update readiness/specs, record verification in `tasks.md` or `design.md`, and archive ordinary changes to `cli/eikona/openspec/changes/archive/YYYY-MM-DD-eikona-<slug>/`.
 
 ## Validation
 

@@ -207,14 +207,15 @@ Always run a verification command before claiming completion. Prefer, in order:
 
 If a check cannot run, say why and name the next best evidence used.
 
-For plan/checklist/work-item workflows, also apply `docs/workflows/execution-slice-lifecycle.md` before claiming completion:
+For plan/checklist/work-item workflows, also apply the OpenSpec lifecycle in `docs/workflows/execution-slice-lifecycle.md` before claiming completion:
 
-- ensure execution checklist artifacts live under `docs/<project>/checklists/active|done/<slug>/`; if they were created under `work-items/active/`, `plans/active/`, or another ad hoc directory, migrate them to `checklists/active/<slug>/` before continuing
-- update `checklist.md`, `evidence.md`, and `decisions.md`
-- sync any owning readiness, roadmap, README, or document-map paths
-- move ordinary completed execution slices from `checklists/active/<slug>/` to `checklists/done/<slug>/`
-- leave long-lived status boards such as `project-readiness` or `mvp-checklist` in `active/`
-- fix stale references that still point to the old active path
+- choose the owner first: root `openspec/` is for repository-level design and handoff only; code implementation, test fixes, behavior changes, verification evidence, and closeout belong in the owning `<subproject>/openspec/changes/<change-id>/`
+- if tracked work was created under `docs/**/checklists`, `docs/**/plans/active`, `work-items/active`, root `openspec/` for code work, or another ad hoc directory, migrate it to the correct owner OpenSpec change before continuing
+- update `proposal.md`, `design.md`, `tasks.md`, and `specs/**/spec.md` as needed
+- record verification evidence in `tasks.md` or the verification section of `design.md`
+- sync any owning readiness, roadmap, README, document-map, or `openspec/specs/` paths
+- move completed ordinary changes to the owner archive path, such as `<subproject>/openspec/changes/archive/YYYY-MM-DD-<change-id>/`
+- fix stale references that still point to the old task-management paths
 
 ## Final Response
 

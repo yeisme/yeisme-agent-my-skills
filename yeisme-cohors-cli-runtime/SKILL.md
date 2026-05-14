@@ -14,7 +14,7 @@ Use this skill for `cli/cohors`, the local-first agent team command system.
 - Runtime, daemon, projection, trace, store, templates, evals, TUI, and worker logic live under `cli/cohors/internal/`.
 - Workflow fixtures live in `cli/cohors/testdata/workflows/`.
 - Cohors is a Go project with its own Taskfile and release guardrails.
-- Cohors checklist lifecycle follows repository-wide `docs/workflows/execution-slice-lifecycle.md`; Cohors-specific notes live in `docs/cohors/checklists/README.md`. `docs/cohors/work-items/` is not an execution checklist owner.
+- Cohors task lifecycle follows repository-wide OpenSpec rules in root `docs/workflows/execution-slice-lifecycle.md`; migrated Cohors notes live in `openspec/changes/archive/2026-05-11-cohors-checklists-index/legacy/README.md`. In a `cli/cohors` session, Cohors product/design/operator docs live in local `docs/**`; root project-doc mirrors are not task-state owners and must not be required for closeout.
 
 ## Workflow
 
@@ -25,7 +25,7 @@ Use this skill for `cli/cohors`, the local-first agent team command system.
    - commands should work with `--json` for scripts and concise human output by default
    - CLI output changes must also follow `ai-native-cli-output-contract`
    - TUI is read-only for dangerous actions and should show copyable commands
-   - CLI and TUI output follows `docs/cohors/operator-experience/terminal-output-style-system.md`
+   - CLI and TUI output follows `docs/operator-experience/terminal-output-style-system.md`
 3. For Generic CLI Runtime changes:
    - use structured argv, not shell string concatenation
    - keep prompt modes explicit: `stdin`, `file`, or `arg`
@@ -39,7 +39,7 @@ Use this skill for `cli/cohors`, the local-first agent team command system.
    - dangerous actions remain previews; the CEO agent does not approve, delete, push, deploy, or mutate project files unless a separate explicit workflow grants that boundary.
 5. Keep user-visible docs, logs, help text, and reports in Chinese unless the string is a protocol field, code identifier, or third-party term.
 6. Add tests at the package closest to the behavior. Prefer fixtures in `testdata/workflows/` for workflow contracts.
-7. For Cohors plan/work-item execution, keep `implementation-plan.md`, `checklist.md`, `evidence.md`, and `decisions.md` together under `docs/cohors/checklists/active/<topic>/`. If a checklist appears under `docs/cohors/work-items/active/<topic>/` or another ad hoc directory, migrate it to `docs/cohors/checklists/active/<topic>/` before continuing. Close ordinary completed slices by synchronizing docs and moving `docs/cohors/checklists/active/<topic>/` to `docs/cohors/checklists/done/<topic>/`.
+7. For Cohors plan/work-item execution, keep task state in `openspec/changes/cohors-<topic>/` with `proposal.md`, `design.md`, `tasks.md`, and `specs/**/spec.md`. If a task checklist appears under `docs/checklists`, `docs/work-items/active/<topic>/`, `docs/plans/active`, root project-doc mirrors, root `openspec/` for code work, or another ad hoc directory, migrate it to `openspec/changes/cohors-<topic>/` before continuing. Close ordinary completed changes by synchronizing local `docs/**` and specs, then moving the change to `openspec/changes/archive/YYYY-MM-DD-cohors-<topic>/`.
 
 ## Terminal Output Constraints
 

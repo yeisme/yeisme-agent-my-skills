@@ -12,7 +12,7 @@ Use this skill for code or behavior changes inside `mcp/gateway/`.
 - Gateway implementation lives in `mcp/gateway/src/`.
 - Tests live in `mcp/gateway/tests/`.
 - Shared MCP facts live in `mcp/registry.json` and `mcp/registry.schema.json`.
-- Product and interface plans live in `docs/mcp-gateway/`.
+- In an `mcp/gateway` session, product, interface, runtime, observability, logging, and long-lived implementation plans live in local `docs/**`. Root project-doc mirrors are not valid owners and must not be required for closeout.
 - Do not put gateway implementation code in `skills/`.
 - Do not add per-server Taskfiles for remote MCPs; prefer registry entries.
 - BigModel/Zai `web-search-prime` is intentionally disabled for 联网搜索. Preserve that policy; use Firecrawl CLI against `backend-server/firecrawl` for search workflows unless a separate plan explicitly introduces a Firecrawl MCP backend.
