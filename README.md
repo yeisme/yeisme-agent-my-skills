@@ -115,6 +115,7 @@ find my-skills -maxdepth 1 -mindepth 1 -type l -print
 - `yeisme-frontend-quality-workflow`：维护 Storybook、Tailwind stories、Chromatic、addon-designs、Lighthouse、Axe、Playwright 和 browser-use 前端质量门禁。
 - `backend-system-workflow`：设计、实现或审查后端 API、worker、状态机、持久化、并发、权限、可观测性、迁移、测试和性能门禁。
 - `yeisme-repo-routing`：判断新文件、workflow、skill、MCP、CLI、agent、gateway 和文档应该落在哪一层。
+- `yeisme-claude-skills-layout`：为 Yeisme 项目设计、迁移或审查 `.claude` 与 `.agents` 双 skill homes 的 active runtime 和 `skills-available/<category>` 可选技能库管理方式。
 - `yeisme-git-worktree-flow`：使用 Git flow、`git worktree`、`Taskfile` 和 `nerdctl compose.yml` 进行开发。
 - `yeisme-coding-execution-driver`：把代码实现任务转成实时 checklist、持续执行循环、验证检查点和明确停止条件，避免 agent 编程中途无谓停下。
 - `golang-github-release-guardrails`：为 Go 项目强制 GitHub Actions、golangci-lint 和 GoReleaser 发布护栏。
@@ -138,4 +139,4 @@ scripts/skills.sh list-custom
 scripts/skills.sh install-custom <repo-url> [ref]
 ```
 
-更详细的编写规范见 [docs/skills/skills-authoring.md](/home/yeshugen/workplace/yeisme-agent/docs/skills/skills-authoring.md)。
+更详细的编写规范见 [docs/skills/skills-authoring.md](../docs/skills/skills-authoring.md)。

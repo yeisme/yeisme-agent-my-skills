@@ -11,10 +11,10 @@ Use this skill when the user asks to create, change, publish, package, install, 
 
 - Author source skills in `my-skills/<skill-name>/`.
 - Assign runnable copies through `skills.profiles/root.txt` and `<subproject>/skills.profile`, then materialize them with `scripts/skills.sh sync-root` or `scripts/skills.sh sync-subprojects`.
-- Use `.agents/skills/` for generated runtime copies only and `.claude/skills/` for the root Claude Code mirror. `.claude/skills/` must contain every skill present in the root `.agents/skills/`.
+- Use `.agents/skills/` and `.claude/skills/` as generated active runtime copies. Use `.agents/skills-available/` and `.claude/skills-available/` as generated optional libraries. Both homes must stay in sync for the same profile target.
 - Keep `mcp/` for MCP implementations only.
 
-Do not treat `.agents/skills/`, `.claude/skills/`, or `.codex/skills/` as the publishing source for self-built skills. `my-skills/` is the publishing source, `skills/` is reserved for third-party/imported skills, profile files define scope, and `.agents/skills` plus `.claude/skills` are generated runtime targets.
+Do not treat `.agents/skills/`, `.agents/skills-available/`, `.claude/skills/`, `.claude/skills-available/`, or `.codex/skills/` as the publishing source for self-built skills. `my-skills/` is the publishing source, `skills/` is reserved for third-party/imported skills, profile files define scope, and `.agents` plus `.claude` are generated runtime homes.
 
 Do not sync self-built project skills into `.codex/skills/` in this repository. Do not put external skills, symlinks, or local runtime copies into `my-skills/`.
 
@@ -103,8 +103,8 @@ scripts/skills.sh list-custom
 - `description:` must say when the skill should be used and must not be empty.
 - `agents/openai.yaml` must contain `display_name`, `short_description`, and `default_prompt`.
 - `scripts/skills.sh sync-root` and `sync-subprojects` must not write project-owned skills into `.codex/skills/`.
-- `scripts/skills.sh sync-root` must write only root-profile skills into root `.agents/skills/` and mirror root `.agents/skills/` into `.claude/skills/`.
-- `scripts/skills.sh sync-subprojects` must write only each subproject profile into that subproject's generated `.agents/skills/`.
+- `scripts/skills.sh sync-root` must write only root-profile skills into root `.agents/skills/` and `.claude/skills/`, with optional libraries under both `skills-available/` homes.
+- `scripts/skills.sh sync-subprojects` must write only each subproject profile into that subproject's generated `.agents/skills/` and `.claude/skills/`, with optional libraries under both homes.
 - Profile files must not reference `.agents/skills` as a source.
 - `my-skills/` must contain only self-built skill directories plus `README.md`.
 - `skills/` must contain only third-party skill directories plus `README.md`.
