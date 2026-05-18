@@ -119,6 +119,7 @@ find my-skills -maxdepth 1 -mindepth 1 -type l -print
 - `yeisme-git-worktree-flow`：使用 Git flow、`git worktree`、`Taskfile` 和 `nerdctl compose.yml` 进行开发。
 - `yeisme-coding-execution-driver`：把代码实现任务转成实时 checklist、持续执行循环、验证检查点和明确停止条件，避免 agent 编程中途无谓停下。
 - `golang-github-release-guardrails`：为 Go 项目强制 GitHub Actions、golangci-lint 和 GoReleaser 发布护栏。
+- `internet-access`：指导 agent 优先使用本地 CLI 从互联网获取、核验、提取信息，并在需要交互时升级到 agent-browser、Playwright 或 browser-use。
 - `tui-design-standards`：审查或实现 TUI 时强制鼠标响应，并保持圆滑、克制、Apple-like 的终端界面质感。
 
 ## 验证与同步

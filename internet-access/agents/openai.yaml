@@ -1,0 +1,3 @@
+display_name: 互联网信息获取与交互
+short_description: 指导 agent 按任务意图和来源优先级使用本地 CLI 获取、核验、提取互联网信息；支持深度研究、大样本论证和浏览器交互升级。
+default_prompt: 请完成这个互联网信息获取或交互任务。先判断任务意图是 lookup、research、deep-research、verify、extract、interact 还是 automate；再按来源选择本地 CLI，例如 firecrawl、gh、包管理器、curl、jq、agent-browser、browser-use 或 npx playwright；直接使用真实 CLI 命令，不要默认使用辅助脚本；如果用户要求 50/100/200/300 个实例或系统性扫描，使用 deep_research 路线，先定义查询矩阵、研究预算和停止条件，再记录候选数量、去重规则、纳入样本、分类统计和证据矩阵；按证据等级和时效性要求引用来源，并说明任何降级路径、限制和置信度。
