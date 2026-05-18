@@ -1,43 +1,43 @@
-# 证据台账
+# Evidence Ledger
 
-## 目的
+## Purpose
 
-为深度研究和大样本论证提供可追溯记录。agent 必须区分候选来源、去重后来源、纳入样本、排除样本和最终引用。
+Provide traceable records for deep research and large-sample arguments. Agents must distinguish candidate sources, deduplicated sources, included samples, excluded samples, and final citations.
 
-## 台账层级
+## Ledger Levels
 
-| 层级 | 含义 |
+| Level | Meaning |
 | --- | --- |
-| candidate | 搜索、CLI、API 或浏览器发现的原始候选 |
-| deduped | 去重后的候选 |
-| included | 符合纳入标准的样本 |
-| excluded | 被排除的候选及原因 |
-| cited | 最终回答中引用的代表来源 |
+| candidate | Raw candidate found by search, CLI, API, or browser |
+| deduped | Candidate after deduplication |
+| included | Sample that matches inclusion criteria |
+| excluded | Candidate excluded with a reason |
+| cited | Representative source cited in the final answer |
 
-## 推荐字段
+## Recommended Fields
 
-| 字段 | 说明 |
+| Field | Description |
 | --- | --- |
-| id | 稳定编号 |
-| name | 项目、产品、公司或来源名 |
-| canonical_url | 规范 URL |
+| id | Stable identifier |
+| name | Project, product, company, or source name |
+| canonical_url | Canonical URL |
 | source_type | docs / GitHub / registry / API / paper / blog / news / browser |
-| discovery_query | 发现它的 query 或命令 |
-| tool | firecrawl / gh / npm / curl / agent-browser 等 |
-| raw_url | 原始 URL |
-| dedupe_key | URL、owner/repo、package name 或 domain |
+| discovery_query | Query or command that found it |
+| tool | firecrawl / gh / npm / curl / agent-browser |
+| raw_url | Original URL |
+| dedupe_key | URL, owner/repo, package name, or domain |
 | included | yes/no |
-| exclusion_reason | 排除原因 |
-| category | 分类 |
-| fields | 抽取到的关键字段 |
+| exclusion_reason | Reason for exclusion |
+| category | Classification |
+| fields | Extracted key fields |
 | evidence_level | L1-L5 |
-| last_updated | 来源更新时间 |
+| last_updated | Source update time |
 | confidence | high / medium / low |
-| notes | 备注 |
+| notes | Notes |
 
-## Markdown 台账格式
+## Markdown Ledger Format
 
-小样本可以直接在回答中使用表格：
+Small samples can be shown directly in the answer:
 
 ```markdown
 | id | name | category | evidence | source |
@@ -45,42 +45,42 @@
 | S001 | Example | open-source | L4 | https://example.com |
 ```
 
-## JSONL 台账格式
+## JSONL Ledger Format
 
-大样本更适合 JSONL。只有用户要求保存完整清单或样本过大无法在回答中展示时，才创建文件：
+Large samples are better as JSONL. Create a file only when the user asks to save the full list or when the sample is too large to display:
 
 ```jsonl
 {"id":"S001","name":"Example","canonical_url":"https://example.com","source_type":"docs","included":true,"category":"platform","evidence_level":"L3"}
 ```
 
-如果创建文件，应使用用户指定路径；没有指定时先说明建议路径并征得同意，除非任务明确要求生成交付物。
+If a file is created, use the user-specified path. If no path is specified, explain the suggested path and get consent, unless the task explicitly asks for a file deliverable.
 
-## 去重规则
+## Deduplication Rules
 
-优先 dedupe key：
+Dedupe key priority:
 
-1. GitHub `owner/repo`。
-2. package name。
-3. canonical URL。
-4. domain + product name。
-5. title + organization。
+1. GitHub `owner/repo`.
+2. package name.
+3. canonical URL.
+4. domain + product name.
+5. title + organization.
 
-## 排除原因
+## Exclusion Reasons
 
-常见排除原因：
+Common exclusion reasons:
 
-- duplicate。
-- irrelevant。
-- inaccessible。
-- low_quality_aggregator。
-- no_primary_source。
-- outside_scope。
-- stale_or_inactive。
-- insufficient_evidence。
+- duplicate.
+- irrelevant.
+- inaccessible.
+- low_quality_aggregator.
+- no_primary_source.
+- outside_scope.
+- stale_or_inactive.
+- insufficient_evidence.
 
-## 汇总指标
+## Summary Metrics
 
-深度研究输出至少报告：
+Deep research output must report at least:
 
 - candidates_total
 - deduped_total
@@ -91,8 +91,8 @@
 - duplicate_rate
 - inclusion_rate
 
-## 质量要求
+## Quality Requirements
 
-- 每个关键发现都应能回到台账中的来源。
-- 最终引用不是越多越好，应代表不同类别和证据等级。
-- 如果完整台账未输出，必须说明展示的是代表样本还是完整样本。
+- Every key finding should trace back to a ledger source.
+- Final citations should represent distinct categories and evidence levels; more citations are not automatically better.
+- If the full ledger is not output, state whether the displayed table is representative or complete.

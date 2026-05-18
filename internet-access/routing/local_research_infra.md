@@ -1,33 +1,33 @@
-# 本地研究基础设施
+# Local Research Infrastructure
 
-## 目的
+## Purpose
 
-说明在 Yeisme、Hermes、OpenWebUI、MCP Gateway 等本地部署环境中，如何把通用互联网信息获取路线落到已经配置好的本地服务和 CLI。这个文件只处理本地研究基础设施选择，不替代 `source_priority.md`、`deep_research.md` 或 `browser_tools.md`。
+Explain how to map general internet information access routes onto already configured local services and CLIs in Yeisme, Hermes, OpenWebUI, MCP Gateway, and similar local deployment contexts. This file only handles local research infrastructure selection; it does not replace `source_priority.md`, `deep_research.md`, or `browser_tools.md`.
 
-## 适用场景
+## When To Use
 
-使用本路线：
+Use this route when:
 
-- 用户明确提到 Hermes、OpenWebUI、Open WebUI、Research Harness、MCP Gateway、SearXNG、Firecrawl 后端或本机服务。
-- 当前任务是在本仓库内设计、调试、审查或使用 OpenWebUI Hermes 的联网研究能力。
-- agent 需要决定是在宿主 shell 里用 CLI 搜索，还是在 OpenWebUI/Hermes 内使用已配置的工具。
-- 搜索质量问题和本地服务配置有关，例如结果太少、query 生成太宽、Firecrawl loader 没生效。
+- The user explicitly mentions Hermes, OpenWebUI, Open WebUI, Research Harness, MCP Gateway, SearXNG, Firecrawl backend, or local services.
+- The current task is to design, debug, review, or use OpenWebUI Hermes internet research capability inside this repository.
+- The agent needs to decide between host-shell CLI search and OpenWebUI/Hermes configured tools.
+- Search quality issues are tied to local service configuration, such as too few results, over-broad query generation, or Firecrawl loader not working.
 
-不要把本路线当成全局默认规则。普通互联网信息获取仍按来源优先级选择 `firecrawl`、`gh`、包管理器、`curl`/`jq` 或浏览器工具。
+Do not treat this route as a global default. General internet information access still follows source priority: `firecrawl`, `gh`, package managers, `curl`/`jq`, or browser tools.
 
-## 本仓库策略
+## Repository Policy
 
-在 Yeisme/Hermes/OpenWebUI 语境里：
+In Yeisme/Hermes/OpenWebUI context:
 
-- 不使用、不排障 BigModel/Zai `web-search-prime` 作为默认联网搜索后端；该能力在 MCP Gateway 侧按策略保持 disabled。
-- 宿主 agent 做搜索、抓取和大样本研究时，优先使用本地 `firecrawl` CLI，并连接 `backend-server/firecrawl` 已配置后端。
-- OpenWebUI 内置 Web Search 走 SearXNG，Web Loader 走 Firecrawl。
-- OpenWebUI Research Harness 负责研究任务规划、query buckets、证据 trace、source diversity gate 和答案质量检查；它不是通用网页搜索 CLI 的替代品。
-- `gh` 仍只用于 GitHub 结构化来源，不因为任务在 Hermes/OpenWebUI 中就升级成通用搜索工具。
+- Do not use or debug BigModel/Zai `web-search-prime` as the default internet search backend; it is intentionally kept disabled on the MCP Gateway side.
+- When host agents perform search, scraping, or large-sample research, prefer the local `firecrawl` CLI connected to the configured `backend-server/firecrawl` backend.
+- OpenWebUI built-in Web Search uses SearXNG; Web Loader uses Firecrawl.
+- OpenWebUI Research Harness plans research tasks, builds query buckets, records evidence traces, enforces source diversity gates, and checks answer quality; it is not a replacement for general web search CLI work.
+- `gh` remains a GitHub-specific structured-source adapter. Do not promote it to a general search tool just because the task is in Hermes/OpenWebUI.
 
-## 宿主 shell 路线
+## Host Shell Route
 
-agent 在宿主 shell 内执行研究任务时，优先直接用本地 CLI：
+When the agent runs a research task in the host shell, prefer direct local CLI commands:
 
 ```bash
 firecrawl view-config
@@ -36,14 +36,14 @@ firecrawl search "Open WebUI web_search_queries_generated query prompt" --api-ur
 firecrawl scrape "https://docs.openwebui.com/" --api-url http://localhost:32741
 ```
 
-使用规则：
+Rules:
 
-- 先用 `firecrawl view-config` 判断当前 CLI 是否已经指向本地 Firecrawl 后端。
-- 如果当前配置没有指向本地后端，再显式传 `--api-url`。
-- 本仓库默认 Firecrawl API 端口记录在 `docs/service-ports.md`，常见宿主入口是 `32741`；SearXNG 搜索入口常见端口是 `32742`。
-- 对复杂研究，把结果写入 `.firecrawl/`，再用 `jq`、`rg`、`head` 等增量读取，避免把全部输出塞进上下文。
+- Use `firecrawl view-config` first to see whether the CLI already points at the local Firecrawl backend.
+- If the current config does not point at the local backend, pass `--api-url` explicitly.
+- This repository records default Firecrawl API ports in `docs/service-ports.md`; common host entry is `32741`, and common SearXNG search entry is `32742`.
+- For complex research, write results to `.firecrawl/`, then read incrementally with `jq`, `rg`, `head`, and similar tools to avoid flooding context.
 
-示例：
+Example:
 
 ```bash
 mkdir -p .firecrawl
@@ -51,57 +51,57 @@ firecrawl search "Hermes Agent Open WebUI Research Harness" --limit 10 --json -o
 jq -r '.data.web[]? | [.title, .url] | @tsv' .firecrawl/hermes-research.json
 ```
 
-## OpenWebUI/Hermes 路线
+## OpenWebUI/Hermes Route
 
-当任务发生在 OpenWebUI/Hermes 内部时，优先利用已经注入的 OpenWebUI 配置：
+When the task happens inside OpenWebUI/Hermes, prefer the injected OpenWebUI configuration:
 
-| 能力 | 默认本地组件 | 作用 |
+| Capability | Default local component | Role |
 | --- | --- | --- |
-| Web Search | SearXNG | 返回候选搜索结果。 |
-| Web Loader | Firecrawl | 加载网页正文。 |
-| Research Harness | OpenWebUI Tool | 规划 research profile、生成 query buckets、记录 trace、做质量检查。 |
-| Agent CLI Tool | OpenWebUI Tool | 在容器内调用白名单 agent CLI。 |
+| Web Search | SearXNG | Returns candidate search results. |
+| Web Loader | Firecrawl | Loads page body text. |
+| Research Harness | OpenWebUI Tool | Plans research profiles, builds query buckets, records traces, checks quality. |
+| Agent CLI Tool | OpenWebUI Tool | Calls allowlisted agent CLIs inside the container. |
 
-OpenWebUI 容器内通常通过 `host.docker.internal` 访问宿主服务：
+OpenWebUI containers usually access host services through `host.docker.internal`:
 
 ```text
 http://host.docker.internal:32742/search
 http://host.docker.internal:32741
 ```
 
-在宿主机直接访问时，应以 `docs/service-ports.md` 和当前 `.env` 为准，不把 token、API key 或真实密钥写进回答。
+For direct host access, use `docs/service-ports.md` and the current `.env` as the source of truth. Do not write tokens, API keys, or real secrets into answers.
 
-## Research Harness 选择
+## Research Harness Selection
 
-OpenWebUI Hermes 的 Research Harness 当前适合这些任务：
+OpenWebUI Hermes Research Harness currently fits:
 
-- `daily_news_digest`：今日热点、综合新闻、多来源摘要。
-- `technical_research`：技术调研、错误排查、版本行为，保留精确术语并优先一手来源。
-- `fact_check`：事实核查、传言辨析、单一来源不足判断。
+- `daily_news_digest`: daily hot topics, general news, multi-source digest.
+- `technical_research`: technical research, error investigation, version behavior; preserves exact terms and prefers primary sources.
+- `fact_check`: fact checking, rumor analysis, insufficient single-source claims.
 
-如果 agent 在 OpenWebUI/Hermes 上下文中能调用 Research Harness，应优先让它做规划和 trace，再让底层搜索服务收集 evidence。关键输出应包含：
+If an agent in OpenWebUI/Hermes context can call Research Harness, prefer it for planning and trace first, then let lower-level search services collect evidence. Key output should include:
 
-- profile。
-- query buckets。
-- raw/deduped/selected counts。
-- dropped reasons。
-- coverage limits。
-- trace path。
-- quality grade。
+- profile.
+- query buckets.
+- raw/deduped/selected counts.
+- dropped reasons.
+- coverage limits.
+- trace path.
+- quality grade.
 
-如果用户要求 100/200/300 个样本，Research Harness 可能只适合作为第一轮规划器；大样本去重、分类和完整台账仍按 `deep_research.md` 与 `evidence_ledger.md` 执行。若本地工具或 OpenWebUI 阀值限制了预算，必须报告被 clamp 的参数和需要追加的批次。
+If the user asks for 100/200/300 samples, Research Harness may only be suitable as a first-round planner. Large-sample dedupe, classification, and full ledger still follow `deep_research.md` and `evidence_ledger.md`. If local tools or OpenWebUI valves limit the budget, report the clamped parameters and the additional batches needed.
 
-## 查询生成约束
+## Query Generation Constraints
 
-本仓库 OpenWebUI 查询生成 prompt 的原则也适用于 agent 直接搜索：
+This repository's OpenWebUI query generation prompt principles also apply to direct agent searches:
 
-- 第一条 query 保留用户的精确目标、产品名、命令、flag、文件名、错误文本、URL、版本和日期。
-- 不要把精确技术问题改写成宽泛类别。
-- 用户没有要求最新/当前/新闻时，不要机械加年份。
-- 中文问题里的英文产品名、API 名、repo 名和错误文本保持英文。
-- follow-up 问题要从附近上下文恢复精确主题，但 query 保持短。
+- The first query preserves the user's exact target, product names, commands, flags, filenames, error text, URLs, versions, and dates.
+- Do not rewrite a precise technical issue into a broad category.
+- Do not add a year mechanically unless the user asks for latest/current/news or the topic is time-sensitive.
+- Preserve English product names, API names, repository names, and error text even when the user asks in Chinese.
+- For follow-up questions, recover the exact topic from nearby context, but keep the query concise.
 
-技术调研示例：
+Technical research examples:
 
 ```bash
 firecrawl search "Open WebUI web_search_queries_generated query prompt" --limit 8
@@ -109,24 +109,24 @@ firecrawl search "Open WebUI web_search_queries_generated query prompt official 
 firecrawl search "\"Open WebUI web_search_queries_generated query prompt\"" --limit 8
 ```
 
-## 排障路线
+## Debugging Route
 
-当 Hermes/OpenWebUI 搜索质量差时，按顺序排查：
+When Hermes/OpenWebUI search quality is poor, debug in this order:
 
-1. 宿主 Firecrawl CLI 是否可用：
+1. Check host Firecrawl CLI availability:
 
 ```bash
 firecrawl view-config
 firecrawl search "openwebui" --limit 3 --json
 ```
 
-2. 本地服务端口是否与文档一致：
+2. Check whether local service ports match docs:
 
 ```bash
 ss -lntp | rg ':(32741|32742|7457|8000|8642)\b'
 ```
 
-3. OpenWebUI 子项目健康检查是否通过：
+3. Check OpenWebUI subproject health:
 
 ```bash
 cd /home/yeshugen/workplace/yeisme-agent/backend-server/openwebui-hermes
@@ -134,12 +134,12 @@ task health
 task webui-config-status
 ```
 
-4. Research Harness 是否报告 `search_scarcity`、`domain_scarcity` 或预算 clamp。
-5. 如果是技术问题，确认 query 是否保留了原始命令、错误文本和版本，而不是被泛化。
+4. Inspect whether Research Harness reports `search_scarcity`, `domain_scarcity`, or budget clamp.
+5. For technical problems, confirm that the query preserved the original command, error text, and version instead of becoming generic.
 
-## 参考位置
+## Reference Locations
 
-本路线来自这些本仓库材料：
+This route is derived from repository materials:
 
 - `docs/skills/skill-trigger-guide.md`
 - `docs/service-ports.md`

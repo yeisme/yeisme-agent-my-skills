@@ -1,51 +1,51 @@
-# 证据策略
+# Evidence Policy
 
-## 目的
+## Purpose
 
-避免 agent 把搜索摘要、二手文章或旧页面当成最终事实。每个依赖互联网的信息都应有明确证据等级。
+Prevent agents from treating search summaries, second-hand articles, or old pages as final facts. Every internet-dependent claim should have a clear evidence level.
 
-## 证据等级
+## Evidence Levels
 
-| 等级 | 证据类型 | 可用于 |
+| Level | Evidence type | Use for |
 | --- | --- | --- |
-| L1 | 搜索结果摘要、网页 snippet | 线索、候选来源，不作为最终关键证据 |
-| L2 | 普通网页正文、博客、新闻稿 | 一般背景和低风险事实 |
-| L3 | 官方文档、release notes、标准、论文、源码仓库 | 技术结论、产品/API 行为、版本说明 |
-| L4 | 结构化 CLI/API 返回，例如 `gh`、`npm view`、`curl` + `jq` | 当前状态、版本、更新时间、仓库元数据 |
-| L5 | 浏览器真实页面状态、截图、下载文件、console/network 证据 | UI 状态、登录后状态、动态内容、交互结果 |
+| L1 | Search result summaries, snippets | Leads and candidate sources, not final key evidence |
+| L2 | Regular web page text, blogs, press releases | General background and low-risk facts |
+| L3 | Official docs, release notes, standards, papers, source repositories | Technical conclusions, product/API behavior, version notes |
+| L4 | Structured CLI/API output, such as `gh`, `npm view`, `curl` + `jq` | Current status, versions, update time, repository metadata |
+| L5 | Real browser page state, screenshots, downloaded files, console/network evidence | UI state, logged-in state, dynamic content, interaction results |
 
-## 使用规则
+## Usage Rules
 
-- `lookup` 至少需要 L2；版本、release、仓库元数据优先 L4。
-- `research` 至少使用多个 L2/L3；技术建议优先 L3。
-- `deep-research` 必须区分候选来源、纳入样本和最终引用；最终结论需要证据矩阵或分类统计支撑。
-- `verify` 必须优先 L3/L4；有争议时列出冲突来源。
-- `extract` 优先 L4 或直接 URL 抓取结果。
-- `interact` 需要 L5，至少记录最终 URL 或截图路径。
+- `lookup` needs at least L2; versions, releases, and repository metadata should prefer L4.
+- `research` needs multiple L2/L3 sources; technical guidance should prefer L3.
+- `deep-research` must distinguish candidate sources, included samples, and final citations; final conclusions need an evidence matrix or category statistics.
+- `verify` must prefer L3/L4; list conflicting sources when disputed.
+- `extract` should prefer L4 or direct URL extraction.
+- `interact` needs L5, with at least final URL or screenshot path recorded.
 
-## 来源可信度
+## Source Credibility
 
-优先级：
+Priority:
 
-1. 官方文档、标准、论文、源码仓库、release notes。
-2. 官方 API 或 CLI 返回。
-3. 项目维护者发布的 issue、discussion、blog。
-4. 第三方教程、媒体报道、社区讨论。
-5. 搜索摘要。
+1. Official docs, standards, papers, source repositories, release notes.
+2. Official API or CLI output.
+3. Issues, discussions, or blogs from project maintainers.
+4. Third-party tutorials, media reports, community discussion.
+5. Search summaries.
 
-## 引用要求
+## Citation Requirements
 
-最终回答中：
+Final answers should:
 
-- 给出 URL 或明确来源名。
-- 对高影响结论说明证据等级或置信度。
-- 不确定时明确说“不足以确认”。
-- 来源冲突时，不强行合并成一个确定结论。
+- Provide URLs or clear source names.
+- State evidence level or confidence for high-impact claims.
+- Say "insufficient evidence" when uncertain.
+- Avoid merging conflicting sources into a single overconfident conclusion.
 
-## 不能接受的证据
+## Unacceptable Evidence
 
-- 只凭模型记忆回答最新信息。
-- 只凭搜索摘要做关键结论。
-- 对 GitHub/npm/PyPI/Cargo/Go 元数据不用结构化来源却用截图或网页猜测。
-- 对登录后或动态状态不用浏览器证据却下结论。
-- 声称“全网”“全面”“200 个案例”却没有候选数量、去重规则、纳入标准和样本统计。
+- Answering current information from model memory only.
+- Using only search snippets for key conclusions.
+- Guessing GitHub/npm/PyPI/Cargo/Go metadata from screenshots or web pages when structured sources exist.
+- Concluding logged-in or dynamic state without browser evidence.
+- Claiming "the whole web", "comprehensive", or "200 cases" without candidate counts, dedupe rules, inclusion criteria, and sample statistics.

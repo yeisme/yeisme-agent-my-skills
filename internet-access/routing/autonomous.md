@@ -1,19 +1,19 @@
-# Autonomous 浏览器路线
+# Autonomous Browser Route
 
-## 目的
+## Purpose
 
-处理需要浏览器交互、动态内容、认证、重复导航、下载、表单、截图或多步骤网页工作流的任务。优先直接使用已有本地浏览器和 CLI 工具；只有当用户需要可复用产物时才创建自动化脚本。工具细节先参考 `browser_tools.md`。
+Handle tasks that require browser interaction, dynamic content, authentication, repeated navigation, downloads, forms, screenshots, or multi-step web workflows. Prefer existing local browsers and CLI tools. Create automation scripts only when the user needs a reusable artifact. See `browser_tools.md` for tool details.
 
-## 什么时候使用
+## When To Use
 
-- 静态搜索或抓取不足以完成任务。
-- 用户要求登录、点击、填写表单、筛选、下载、监控或自动化。
-- 网站依赖 JavaScript 渲染状态。
-- 数据需要跨多个页面并根据页面状态分支收集。
+- Static search or scraping is insufficient.
+- The user asks for login, clicks, form filling, filtering, downloads, monitoring, or automation.
+- The site depends on JavaScript-rendered state.
+- Data must be collected across multiple pages with state-dependent branches.
 
-## 本地工具优先级
+## Local Tool Priority
 
-优先使用本地已配置的自动化工具，因为它们可能已经具备浏览器二进制、profile、凭证和网络访问：
+Prefer locally configured automation tools because they may already have browser binaries, profiles, credentials, and network access:
 
 ```bash
 command -v agent-browser
@@ -22,41 +22,41 @@ command -v npx
 command -v firecrawl
 ```
 
-工具选择：
+Tool choice:
 
-- 需要 AI agent 逐步观察、点击、读取页面状态时，优先使用 `agent-browser`。
-- 已知、可重复、要进入测试或长期维护的工作流使用项目已有 Playwright 命令或 `npx playwright`。
-- 需要视觉探索或 UI 状态不确定时，使用 `agent-browser`；如果本机没有它，再用 `browser-use` 或内置浏览器工具。
-- 静态提取降级使用 `firecrawl scrape` 或 `firecrawl crawl`。
-- 如果存在结构化数据入口，优先用来源专用 CLI/API，而不是浏览器自动化；例如 GitHub 才用 `gh`。
-- 不要为一次性探索编写新的封装脚本。
+- Use `agent-browser` first when the task needs an AI agent to observe, click, and read page state step by step.
+- Use existing project Playwright commands or `npx playwright` for known, repeatable workflows that should become tests or long-term automation.
+- Use `agent-browser` for visual exploration or uncertain UI state; if unavailable, use `browser-use` or built-in browser tools.
+- Fall back to `firecrawl scrape` or `firecrawl crawl` for static extraction.
+- If structured data exists, prefer source-specific CLI/API instead of browser automation; for example, use `gh` only for GitHub.
+- Do not write new wrapper scripts for one-off exploration.
 
-## 工作流
+## Workflow
 
-1. 拆分任务步骤并定义成功标准。
-2. 检查本地浏览器/搜索 CLI，并阅读 `browser_tools.md` 的工具选择规则。
-3. 先尝试成本最低且可靠的路径：
-   - 结构化 CLI（GitHub 时用 `gh`，包 registry 时用包管理器）
+1. Split the task into steps and define success criteria.
+2. Check local browser/search CLIs and read `browser_tools.md` for tool selection.
+3. Try the lowest-cost reliable path first:
+   - structured CLI (use `gh` for GitHub; package managers for package registries)
    - `firecrawl search` / `firecrawl scrape`
-   - 需要交互时使用浏览器自动化
-4. 保留证据：最终 URL、必要截图或下载文件、抽取出的记录。
-5. 只有遇到凭证、权限、支付或破坏性操作时，才停下来向用户确认。
+   - browser automation when interaction is needed
+4. Preserve evidence: final URL, screenshots or downloaded files if needed, and extracted records.
+5. Pause for user confirmation only when credentials, permissions, payments, or destructive actions are involved.
 
-## 示例模式
+## Example Patterns
 
-已知静态来源：
+Known static source:
 
 ```bash
 firecrawl scrape "https://github.com/trending"
 ```
 
-GitHub 结构化数据：
+GitHub structured data:
 
 ```bash
 gh search repos "stars:>10000 language:TypeScript" --sort stars --limit 10
 ```
 
-浏览器工作流：
+Browser workflow:
 
 ```bash
 agent-browser skills get core --full
@@ -68,26 +68,26 @@ npx playwright codegen "https://example.com"
 browser-use --help
 ```
 
-如果仓库已经提供项目专用 Playwright 脚本，优先使用项目已有脚本。
+If the repository already has a project-specific Playwright script, use that first.
 
-## 输出格式
+## Output Format
 
 ```markdown
-**执行摘要**
-- 路线：autonomous
-- 使用工具：[本地 CLI / 浏览器工具]
-- 已完成：[成功事项]
-- 阻塞：[失败事项或需要用户访问的事项]
+**Execution Summary**
+- Route: autonomous
+- Tools used: [local CLI / browser tool]
+- Completed: [successful work]
+- Blocked: [failed work or items needing user access]
 
-**结果**
-[结构化数据、链接、文件或观察]
+**Result**
+[structured data, links, files, or observations]
 
-**证据**
-[截图、URL、日志或产物路径]
+**Evidence**
+[screenshots, URL, logs, or artifact paths]
 ```
 
-## 安全
+## Safety
 
-- 未经用户明确确认，不提交购买、不可逆表单、账号变更或破坏性操作。
-- 遵守 robots、服务条款、速率限制和认证边界。
-- 避免把 secret 写入输出或产物。
+- Do not submit purchases, irreversible forms, account changes, or destructive operations without explicit user confirmation.
+- Respect robots, terms of service, rate limits, and authentication boundaries.
+- Avoid writing secrets into output or artifacts.

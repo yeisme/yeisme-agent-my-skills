@@ -1,26 +1,26 @@
-# 任务意图分类
+# Task Intent Classification
 
-## 目的
+## Purpose
 
-在选择工具前，先判断用户到底想完成哪类互联网任务。工具选择必须服务任务意图，而不是反过来由工具驱动。
+Before choosing tools, identify what kind of internet task the user wants. Tool choice must serve the task intent, not the other way around.
 
-## 意图类型
+## Intent Types
 
 ### `lookup`
 
-目标：查一个明确事实、当前版本、URL、发布日期、状态或简短定义。
+Goal: find one clear fact, current version, URL, release date, status, or short definition.
 
-信号：
+Signals:
 
-- “查一下”
-- “当前版本”
-- “官网/仓库地址”
-- “什么时候发布”
-- “是谁维护”
+- "check"
+- "current version"
+- "official site / repository address"
+- "when was it released"
+- "who maintains it"
 
-默认路线：`lightweight.md`
+Default route: `lightweight.md`
 
-示例命令：
+Example commands:
 
 ```bash
 npm view @playwright/test version --json
@@ -28,47 +28,47 @@ gh repo view openai/openai-python --json name,url,pushedAt
 firecrawl search "Firecrawl GitHub" --limit 5
 ```
 
-输出：直接答案 + 来源。
+Output: direct answer + source.
 
 ### `research`
 
-目标：围绕主题做多来源调研、比较、背景梳理或方案判断。
+Goal: multi-source research, comparison, background, or option analysis around a topic.
 
-信号：
+Signals:
 
-- “调研”
-- “比较”
-- “分析”
-- “有什么方案”
-- “优缺点”
+- "research"
+- "compare"
+- "analyze"
+- "what are the options"
+- "pros and cons"
 
-默认路线：`standard.md`
+Default route: `standard.md`
 
-示例命令：
+Example commands:
 
 ```bash
 firecrawl search "Firecrawl Exa Tavily comparison" --limit 8
 firecrawl search "site:docs.firecrawl.dev search scrape crawl" --limit 8
 ```
 
-输出：摘要、发现、来源、限制。
+Output: summary, findings, sources, limits.
 
 ### `local-research-infra`
 
-目标：在 Yeisme/Hermes/OpenWebUI 本地部署中，选择或排查搜索、抓取、Research Harness 和浏览器升级路线。
+Goal: choose or debug search, scraping, Research Harness, and browser escalation in a Yeisme/Hermes/OpenWebUI local deployment.
 
-信号：
+Signals:
 
-- “Hermes/OpenWebUI 的 research”
-- “Open WebUI 搜索”
-- “Research Harness”
-- “SearXNG/Firecrawl 本地服务”
-- “MCP Gateway 联网搜索”
-- “web-search-prime”
+- "Hermes/OpenWebUI research"
+- "Open WebUI search"
+- "Research Harness"
+- "SearXNG/Firecrawl local service"
+- "MCP Gateway internet search"
+- "web-search-prime"
 
-默认路线：`local_research_infra.md`，必要时再组合 `standard.md`、`deep_research.md` 或 `browser_tools.md`
+Default route: `local_research_infra.md`, combined with `standard.md`, `deep_research.md`, or `browser_tools.md` when needed.
 
-示例命令：
+Example commands:
 
 ```bash
 firecrawl view-config
@@ -76,24 +76,24 @@ firecrawl search "Open WebUI Research Harness" --api-url http://localhost:32741 
 curl -fsS "http://localhost:32742/search?q=openwebui&format=json" | jq '.results[:3][] | {title, url}'
 ```
 
-输出：本地链路选择、使用的服务/CLI、端口或配置来源、trace/预算/覆盖限制、下一步排障路径。
+Output: local route decision, services/CLIs used, port/config evidence, trace/budget/coverage limits, and next debugging path.
 
 ### `deep-research`
 
-目标：对一个主题做系统性、大样本、可审计的互联网研究。
+Goal: systematic, large-sample, auditable internet research.
 
-信号：
+Signals:
 
-- “深度研究”
-- “全网调研”
-- “系统性扫描”
-- “找 200/300 个案例”
-- “真实搜索大量实例”
-- “市场地图/竞品地图/生态扫描”
+- "deep research"
+- "broad web research"
+- "systematic scan"
+- "find 200/300 cases"
+- "real search over many examples"
+- "market map / competitor map / ecosystem scan"
 
-默认路线：`deep_research.md` + `query_strategy.md` + `evidence_ledger.md` + `research_budget.md` + `evidence_policy.md` + `output_contract.md`
+Default route: `deep_research.md` + `query_strategy.md` + `evidence_ledger.md` + `research_budget.md` + `evidence_policy.md` + `output_contract.md`
 
-示例命令：
+Example commands:
 
 ```bash
 firecrawl search "AI coding agent startup GitHub" --limit 20
@@ -102,43 +102,43 @@ gh search repos "agent framework language:TypeScript" --limit 100
 npm search agent framework --json
 ```
 
-输出：研究问题、查询批次、候选数量、去重数量、分类统计、代表样本、证据矩阵、结论和限制。
+Output: research question, query batches, candidate count, deduped count, category statistics, representative samples, evidence matrix, conclusions, and limits.
 
 ### `verify`
 
-目标：核验一个说法是否真实、过时、夸大或存在冲突。
+Goal: check whether a claim is true, stale, exaggerated, or conflicting.
 
-信号：
+Signals:
 
-- “验证”
-- “是否真实”
-- “是不是过时”
-- “有没有依据”
-- “查证”
+- "verify"
+- "is this true"
+- "is this outdated"
+- "what evidence exists"
+- "fact check"
 
-默认路线：`standard.md` + `evidence_policy.md`
+Default route: `standard.md` + `evidence_policy.md`
 
-要求：
+Requirements:
 
-- 至少优先找一手来源。
-- 对高影响结论使用多个独立来源。
-- 明确冲突和不确定性。
+- Prefer primary sources first.
+- Use multiple independent sources for high-impact conclusions.
+- State conflicts and uncertainty.
 
 ### `extract`
 
-目标：从 URL、API、GitHub、registry 或文档站点抽取字段。
+Goal: extract fields from a URL, API, GitHub, registry, or documentation site.
 
-信号：
+Signals:
 
-- “提取”
-- “抓取字段”
-- “列出 release”
-- “拿到版本/更新时间”
-- “从这个 URL 读取”
+- "extract"
+- "scrape fields"
+- "list releases"
+- "get version/update time"
+- "read from this URL"
 
-默认路线：`source_priority.md` + `standard.md`
+Default route: `source_priority.md` + `standard.md`
 
-示例命令：
+Example commands:
 
 ```bash
 firecrawl scrape "https://docs.firecrawl.dev/"
@@ -146,24 +146,24 @@ gh release list --repo openai/openai-python --limit 10
 curl -L "https://api.github.com/repos/openai/openai-python" | jq '{name, pushed_at, html_url}'
 ```
 
-输出：字段、来源、缺失项。
+Output: fields, sources, missing items.
 
 ### `interact`
 
-目标：打开网页并执行一次性操作，查看真实页面状态或生成证据。
+Goal: open a web page and perform a one-off operation, inspect real page state, or produce evidence.
 
-信号：
+Signals:
 
-- “打开网页”
-- “点一下”
-- “截图”
-- “下载”
-- “登录后查看”
-- “页面上显示什么”
+- "open the page"
+- "click"
+- "screenshot"
+- "download"
+- "check after login"
+- "what does the page show"
 
-默认路线：`autonomous.md` + `browser_tools.md`
+Default route: `autonomous.md` + `browser_tools.md`
 
-示例命令：
+Example commands:
 
 ```bash
 agent-browser open "https://example.com"
@@ -171,37 +171,37 @@ agent-browser snapshot
 agent-browser screenshot /tmp/example.png
 ```
 
-输出：工具、最终 URL、操作结果、证据路径、阻塞点。
+Output: tool, final URL, operation result, evidence path, blockers.
 
 ### `automate`
 
-目标：把浏览器或联网流程做成可重复执行的测试、监控或自动化。
+Goal: turn a browser or internet workflow into a repeatable test, monitor, or automation.
 
-信号：
+Signals:
 
-- “以后反复执行”
-- “写自动化”
-- “做测试”
-- “监控”
-- “批量下载”
+- "run repeatedly later"
+- "write automation"
+- "make a test"
+- "monitor"
+- "batch download"
 
-默认路线：先 `browser_tools.md` 探索，再按项目规范考虑 Playwright 或项目脚本。
+Default route: explore with `browser_tools.md`, then consider Playwright or project scripts according to project conventions.
 
-示例命令：
+Example commands:
 
 ```bash
 npx playwright codegen "https://example.com"
 npx playwright test --headed
 ```
 
-输出：执行策略、是否需要项目脚本、风险和验证命令。
+Output: execution strategy, whether a project script is needed, risks, and verification command.
 
-## 多意图任务
+## Multi-Intent Tasks
 
-如果一个任务同时包含多个意图，按以下顺序处理：
+If a task has multiple intents, process them in this order:
 
 ```text
-local-research-infra → lookup/extract → verify → research → deep-research → interact → automate
+local-research-infra -> lookup/extract -> verify -> research -> deep-research -> interact -> automate
 ```
 
-示例：用户要求“验证这个库是否还活跃，并打开官网看看是否有最新文档”。先用 `gh`/registry/搜索核验活跃度，再在静态信息不足时升级浏览器。
+Example: if the user asks to verify whether a library is still active and open the official site to see if docs are current, first verify activity with `gh`/registry/search, then escalate to browser only if static information is insufficient.

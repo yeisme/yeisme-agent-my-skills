@@ -1,23 +1,23 @@
-# 时效性策略
+# Freshness Policy
 
-## 目的
+## Purpose
 
-互联网信息经常变化。agent 必须判断哪些内容需要当前查询，哪些内容可以用稳定知识补充。
+Internet information changes often. Agents must decide which content needs current lookup and which can use stable knowledge as support.
 
-## 必须查新的信息
+## Information That Must Be Refreshed
 
-以下任务必须使用当前互联网查询，并在输出中标注来源日期或查询到的更新时间：
+Use current internet lookup and include source dates or update signals for:
 
-- “最新”、“现在”、“今天”、“最近”、“当前”
-- 版本号、release、changelog、API 变更
-- 价格、计划、额度、政策、条款
-- 法律、规则、标准状态、合规要求
-- CEO、负责人、维护者、组织状态
-- 安全漏洞、风险、事故、新闻
-- 软件包是否活跃、仓库是否维护、issue/release 状态
-- 产品功能是否仍存在
+- "latest", "now", "today", "recent", "current".
+- versions, releases, changelogs, API changes.
+- pricing, plans, quotas, policies, terms.
+- laws, rules, standards status, compliance requirements.
+- CEOs, maintainers, owners, organization status.
+- security vulnerabilities, risks, incidents, news.
+- package activity, repository maintenance, issue/release state.
+- whether a product feature still exists.
 
-优先命令示例：
+Preferred command examples:
 
 ```bash
 gh repo view openai/openai-python --json pushedAt,latestRelease,url
@@ -25,41 +25,41 @@ npm view @playwright/test version time --json
 firecrawl search "OpenAI Responses API latest docs" --limit 8
 ```
 
-## 可以较少依赖当前查询的信息
+## Information That Can Rely Less On Current Lookup
 
-以下内容通常较稳定，但仍应给来源：
+These topics are usually more stable, but should still have sources:
 
-- 基础概念解释。
-- 历史背景。
-- 已稳定的协议和标准概念。
-- 长期不变的数学、计算机科学基础知识。
+- basic concept explanations.
+- historical background.
+- stable protocol and standards concepts.
+- long-lived math and computer science fundamentals.
 
-## 日期处理
+## Date Handling
 
-输出中尽量包含：
+When useful, include:
 
-- 查询或访问日期。
-- 来源发布/更新日期。
-- release 时间或 `pushedAt` 等结构化时间字段。
+- query/access date.
+- source publication/update date.
+- release time or structured fields such as `pushedAt`.
 
-示例输出：
+Example output:
 
 ```markdown
-**时效性**：这是高变动信息；我使用当前查询结果，并优先参考官方文档和 release 数据。
+**Freshness**: This is high-change information; I used current lookup and prioritized official docs and release data.
 ```
 
-## 过时风险
+## Staleness Risk
 
-当来源日期较旧或无法确认更新时间时：
+When source dates are old or update time cannot be confirmed:
 
-- 明确标注“可能过时”。
-- 用其它来源补证。
-- 对关键结论降低置信度。
+- mark as "possibly stale".
+- use another source for confirmation.
+- lower confidence for key conclusions.
 
-## 用户时间词
+## User Relative Dates
 
-用户使用相对时间词时，最终回答应尽量使用绝对日期说明。例如：
+When the user uses relative dates, final answers should use absolute dates when possible. For example:
 
-- “今天” → “2026-05-19”
-- “昨天” → “2026-05-18”
-- “最近” → 说明采用的搜索范围或来源日期。
+- "today" -> "2026-05-19"
+- "yesterday" -> "2026-05-18"
+- "recent" -> state the search range or source dates used.

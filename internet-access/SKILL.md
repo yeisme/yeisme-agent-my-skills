@@ -1,86 +1,86 @@
 ---
 name: internet-access
-description: 使用场景：当用户需要从互联网获取信息、搜索资料、提取网页内容、核验来源、读取在线服务状态或与网站/浏览器交互时使用；指导 agent 按任务目标选择本地 CLI，例如 firecrawl、来源专用 CLI、agent-browser、playwright、browser-use、curl 和 jq，再降级到托管 API 或内置浏览能力。
+description: Use when the user needs to get information from the internet, search the web, extract web content, verify sources, inspect online service state, or interact with websites/browsers; guides agents to choose local CLI tools first, such as firecrawl, source-specific CLIs, agent-browser, playwright, browser-use, curl, and jq, before falling back to hosted APIs or built-in browsing.
 ---
 
-# 互联网信息获取与交互
+# Internet Information Access And Interaction
 
-## 目的
+## Purpose
 
-指导 agent 从互联网获取、验证和处理信息，并在必要时与网页或在线服务交互。这个 skill 的核心不是“搜索一下”，而是让 agent 选择合适的信息获取路径：搜索、提取、结构化查询、交叉验证、浏览器交互，或可复用自动化。
+Guide agents to gather, verify, and process information from the internet, and to interact with websites or online services when needed. The core of this skill is not "search the web"; it is choosing the right information path: discovery, extraction, structured queries, cross-checking, browser interaction, or reusable automation.
 
-这是说明型 skill，不是脚本封装型 skill。agent 应直接调用真实的本地 CLI，并根据当前环境中实际存在的工具调整做法。
+This is an instruction skill, not a script wrapper. Agents should call real local CLI tools directly and adapt to the tools that actually exist in the current environment.
 
-## 建议的 Skill 命令
+## Recommended Skill Command
 
-推荐使用 `internet-access` 作为 skill 名称，因为它覆盖：
+Use `internet-access` as the skill name because it covers:
 
-- 获取信息：搜索资料、找来源、查文档、查 release、查包版本。
-- 验证信息：多来源核验、时效性检查、官方来源优先。
-- 提取信息：从 URL、文档站点、GitHub、包 registry 或 API 中抽取内容。
-- 与互联网交互：必要时打开浏览器、点击、筛选、截图、下载或登录后读取状态。
+- Information gathering: search, source discovery, docs, releases, package versions.
+- Verification: multi-source checks, freshness checks, official-source priority.
+- Extraction: pulling content from URLs, documentation sites, GitHub, package registries, or APIs.
+- Internet interaction: opening browsers, clicking, filtering, screenshots, downloads, or reading logged-in state.
 
-不建议命名为 `web-search`，因为真实需求不只是搜索；也不建议立即拆成独立 browser skill，因为浏览器是信息获取流程的升级路线，和搜索天然重叠。
+Do not name this skill `web-search`; the real need is broader than search. Do not split a separate browser skill yet; browser work is an escalation path inside information access and overlaps naturally with search.
 
-## 什么时候使用
+## When To Use
 
-以下任务触发这个 skill：
+Use this skill for:
 
-- 互联网信息获取、网页搜索、在线调研和来源收集。
-- 事实核验、时效性检查和多来源交叉验证。
-- 从 URL 提取可读正文。
-- 查找文档、release、issue、仓库或 changelog。
-- 查询 GitHub、npm、PyPI、Cargo、Go module、标准文档或厂商文档。
-- 浏览器自动化、需要登录的工作流、动态页面处理。
+- Internet information gathering, web search, online research, and source collection.
+- Fact checking, freshness checks, and multi-source validation.
+- Extracting readable content from URLs.
+- Finding docs, releases, issues, repositories, or changelogs.
+- Querying GitHub, npm, PyPI, Cargo, Go modules, standards docs, or vendor docs.
+- Browser automation, logged-in workflows, and dynamic page handling.
 
-不要把这个 skill 用于本地文件搜索、代码执行、数据库查询或纯离线分析。
+Do not use this skill for local file search, code execution, database queries, or purely offline analysis.
 
-## 默认工具策略
+## Default Tool Strategy
 
-不要把工具优先级理解成固定列表。先判断任务目标和目标来源，再选择最合适的本地工具：
+Do not treat tool priority as a fixed list. First identify the task goal and likely source, then choose the best local tool:
 
-1. 目标来源已知时，优先使用来源专用 CLI 或 API：
-   - GitHub 目标：`gh`。
-   - npm/PyPI/Cargo/Go 包：`npm`、`pip`、`cargo`、`go`。
-   - JSON endpoint 或官方 API：`curl` + `jq`。
-2. 目标来源未知、需要找资料时，优先用通用发现/提取工具：
-   - `firecrawl`：通用网页搜索、抓取、crawl 和内容提取。
-3. 当前任务发生在 Yeisme/Hermes/OpenWebUI 本地部署里时，先读 `routing/local_research_infra.md`，复用本地 Firecrawl、SearXNG 和 Research Harness 约束。
-4. 页面真实交互或动态状态是答案的一部分时，才用浏览器工具：
-   - `agent-browser`、`browser-use`、`npx playwright` 或项目已有浏览器自动化命令。
-5. 本地通用降级工具：
-   - `curl`、`jq`、`pup`、`htmlq`、`lynx`、`w3m` 等。
-6. 当本地 CLI 不存在、被阻塞或不足以完成任务时，再使用内置浏览器/搜索工具。
-7. 只有 CLI 不能完成任务且凭证已存在时，才直接调用托管 API。
+1. If the target source is known, prefer the source-specific CLI or API:
+   - GitHub target: `gh`.
+   - npm/PyPI/Cargo/Go package target: `npm`, `pip`, `cargo`, `go`.
+   - JSON endpoint or official API: `curl` + `jq`.
+2. If the target source is unknown and discovery is needed, prefer generic discovery/extraction tools:
+   - `firecrawl`: general web search, scrape, crawl, and content extraction.
+3. If the task is in a Yeisme/Hermes/OpenWebUI local deployment context, first read `routing/local_research_infra.md` and reuse the local Firecrawl, SearXNG, and Research Harness constraints.
+4. Use browser tools only when real page interaction or dynamic state is part of the answer:
+   - `agent-browser`, `browser-use`, `npx playwright`, or an existing project browser automation command.
+5. Local generic fallback tools:
+   - `curl`, `jq`, `pup`, `htmlq`, `lynx`, `w3m`.
+6. If local CLIs are missing, blocked, or insufficient, then use built-in browsing/search tools.
+7. Call hosted APIs directly only when CLI options cannot complete the task and credentials already exist.
 
-`gh` 不属于通用搜索工具，也不是所有互联网任务的默认依赖。它只在目标是 GitHub，或搜索结果已经指向 GitHub 仓库、issue、release、discussion 时优先使用。这样可以避免用浏览器解析 GitHub 页面，也能直接拿到结构化字段。
+`gh` is not a general web search tool and is not a default dependency for every internet task. Use it only when the target is GitHub, or when search results already point to a GitHub repository, issue, release, or discussion and structured fields are needed. This avoids parsing GitHub pages in a browser and gives structured data directly.
 
-## 来源优先级
+## Source Priority
 
-按信息类型选择来源，不要把所有任务都当成网页搜索：
+Choose sources by information type instead of treating every task as web search:
 
-| 信息类型 | 优先工具 | 说明 |
+| Information type | Preferred tool | Notes |
 | --- | --- | --- |
-| 官方文档/网页正文 | `firecrawl search`、`firecrawl scrape` | 先搜索，再抓取权威 URL。 |
-| GitHub 仓库、issue、release | `gh` | 结构化字段优先，不用浏览器解析页面。 |
-| npm/PyPI/Cargo/Go 包 | 对应包管理器 CLI | 版本、发布时间、repository、依赖信息优先走 registry。 |
-| API 返回值 | `curl` + `jq` | 适合官方 API、JSON endpoint 和健康检查。 |
-| 动态页面/登录后状态 | `agent-browser` 或 `browser-use` | 需要真实页面状态时才使用。 |
-| 可重复浏览器流程 | `npx playwright` 或项目已有 Playwright 命令 | 适合测试、回归和长期自动化。 |
+| Official docs / web page text | `firecrawl search`, `firecrawl scrape` | Search first, then scrape authoritative URLs. |
+| GitHub repos, issues, releases | `gh` | Prefer structured fields; avoid browser page parsing. |
+| npm/PyPI/Cargo/Go packages | Package manager CLI | Versions, release time, repository, and dependency data should come from the registry. |
+| API values | `curl` + `jq` | Good for official APIs, JSON endpoints, and health checks. |
+| Dynamic pages / logged-in state | `agent-browser` or `browser-use` | Use only when real page state matters. |
+| Repeatable browser flows | `npx playwright` or existing project Playwright commands | Best for tests, regressions, and long-term automation. |
 
-不要默认假设必须导出 API key。本地 CLI 能工作时，优先用本地 CLI。规划前按任务探测工具，不需要每次检查所有工具：
+Do not assume an API key must be exported. If a local CLI works, use it first. Before planning, probe only the tools relevant to the route:
 
 ```bash
 command -v firecrawl
 ```
 
-如果任务指向 GitHub：
+For GitHub targets:
 
 ```bash
 command -v gh
 ```
 
-如果任务需要浏览器交互：
+For browser interaction:
 
 ```bash
 command -v agent-browser
@@ -88,127 +88,128 @@ command -v browser-use
 command -v npx
 ```
 
-如果任务需要 JSON/API：
+For JSON/API work:
 
 ```bash
 command -v curl
 command -v jq
 ```
 
-然后直接使用真实 CLI：
+Then run real CLI commands directly:
 
 ```bash
 firecrawl search "GitHub" --limit 5
 ```
 
-除非用户明确要求可复用自动化，否则不要新增本地封装脚本。这个 skill 的目标是教 agent 判断该用什么工具、如何透明地使用工具，而不是把判断隐藏到容易过期的脚本里。
+Do not create local wrapper scripts unless the user explicitly asks for reusable automation. This skill teaches agents how to choose and transparently use tools; it should not hide decisions inside brittle scripts.
 
-## 四阶段模型
+## Four-Stage Model
 
-按任务需要从轻到重推进：
+Move from light to heavy as the task requires:
 
-1. **发现**：用搜索或结构化 CLI 找到候选来源。
-2. **提取**：从 URL、仓库、registry 或 API 中取出正文和元数据。
-3. **验证**：优先官方/一手来源，必要时用独立来源交叉核验。
-4. **交互**：只有静态信息不够时，才使用浏览器查看真实 UI 状态、点击、筛选、截图或下载。
+1. **Discover**: use search or structured CLIs to find candidate sources.
+2. **Extract**: pull text and metadata from URLs, repositories, registries, or APIs.
+3. **Verify**: prioritize official/primary sources and cross-check with independent sources when needed.
+4. **Interact**: use a browser only when static information is insufficient and real UI state, clicks, filters, screenshots, or downloads are needed.
 
-典型路径：
-
-```text
-firecrawl search → firecrawl scrape → gh/npm/curl 结构化查询 → agent-browser 交互 → Playwright 固化
-```
-
-更准确的决策顺序：
+Typical path:
 
 ```text
-目标来源已知 → 来源专用 CLI/API
-目标来源未知 → firecrawl search 做发现
-已有 URL → firecrawl scrape 或 curl
-静态内容不足 → agent-browser/browser-use
-需要长期重复 → npx playwright 或项目已有测试命令
+firecrawl search -> firecrawl scrape -> gh/npm/curl structured query -> agent-browser interaction -> Playwright hardening
 ```
 
-## 任务意图优先
+More precise decision order:
 
-先判断用户意图，再选择 route 和工具：
+```text
+Known target source -> source-specific CLI/API
+Unknown source -> firecrawl search for discovery
+Known URL -> firecrawl scrape or curl
+Static content insufficient -> agent-browser/browser-use
+Needs long-term repetition -> npx playwright or project command
+```
 
-| 意图 | 目标 | 常见路线 |
+## Task Intent First
+
+Classify the user's intent before choosing a route and tool:
+
+| Intent | Goal | Common route |
 | --- | --- | --- |
-| `lookup` | 查一个事实、版本、URL、状态 | `lightweight.md` |
-| `research` | 多来源调研、背景、比较 | `standard.md` |
-| `deep-research` | 大样本调研、市场扫描、200-300 个实例论证 | `deep_research.md` + `evidence_policy.md` |
-| `verify` | 核验一个说法是否真实、过时或有争议 | `standard.md` + `evidence_policy.md` |
-| `extract` | 从 URL/API/仓库/registry 抽字段 | `source_priority.md` + `standard.md` |
-| `interact` | 打开网页操作、截图、下载、登录后查看 | `autonomous.md` + `browser_tools.md` |
-| `automate` | 可重复执行的浏览器流程 | `browser_tools.md`，必要时沉淀项目脚本 |
+| `local-research-infra` | Use or debug Yeisme/Hermes/OpenWebUI local research infrastructure | `local_research_infra.md` |
+| `lookup` | Find one fact, version, URL, or status | `lightweight.md` |
+| `research` | Multi-source research, background, comparison | `standard.md` |
+| `deep-research` | Large-sample research, market scan, 200-300 evidence examples | `deep_research.md` + `evidence_policy.md` |
+| `verify` | Check whether a claim is true, stale, or disputed | `standard.md` + `evidence_policy.md` |
+| `extract` | Extract fields from a URL/API/repo/registry | `source_priority.md` + `standard.md` |
+| `interact` | Operate a web page, screenshot, download, inspect logged-in state | `autonomous.md` + `browser_tools.md` |
+| `automate` | Build a repeatable browser flow | `browser_tools.md`, then project automation if needed |
 
-详细规则见 `routing/task_intent.md`。
+See `routing/task_intent.md` for detailed rules.
 
-## 路由
+## Routes
 
-选择能满足任务的最小路线：
+Choose the smallest route that satisfies the task:
 
-- `routing/task_intent.md`：先判断用户是要 lookup、research、verify、extract、interact 还是 automate。
-- `routing/lightweight.md`：快速事实、定义、单来源核验和聚焦查询。
-- `routing/standard.md`：多来源调研、比较、分析和交叉验证。
-- `routing/deep_research.md`：深度研究、大样本搜索、200-300 个候选实例、证据矩阵和分层抽样。
-- `routing/query_strategy.md`：查询扩展、批次设计、搜索覆盖和偏差控制。
-- `routing/evidence_ledger.md`：候选来源、纳入样本、字段抽取和证据矩阵的台账结构。
-- `routing/research_budget.md`：不同规模研究的时间/样本预算、停止条件和升级规则。
-- `routing/autonomous.md`：浏览器交互、登录流程、动态内容、表单和多步骤网页工作流。
-- `routing/source_priority.md`：按目标来源选择 `firecrawl`、`gh`、包管理器、`curl`/`jq` 或浏览器工具。
-- `routing/local_research_infra.md`：Yeisme/Hermes/OpenWebUI 本地搜索基础设施，Firecrawl、SearXNG、Research Harness 和 Gateway 搜索策略。
-- `routing/browser_tools.md`：选择 `agent-browser`、`playwright`、`browser-use` 或静态抓取的具体规则。
-- `routing/evidence_policy.md`：证据等级、来源可信度和引用要求。
-- `routing/freshness_policy.md`：什么时候必须查新信息，如何处理日期和时效性。
-- `routing/output_contract.md`：不同任务类型的稳定输出格式。
+- `routing/task_intent.md`: classify lookup, research, verify, extract, interact, or automate.
+- `routing/lightweight.md`: quick facts, definitions, single-source checks, focused queries.
+- `routing/standard.md`: multi-source research, comparison, analysis, and cross-checking.
+- `routing/deep_research.md`: deep research, large-sample search, 200-300 candidate examples, evidence matrices, and stratified sampling.
+- `routing/query_strategy.md`: query expansion, batch design, search coverage, and bias control.
+- `routing/evidence_ledger.md`: candidate sources, included samples, field extraction, and evidence ledger shape.
+- `routing/research_budget.md`: research scale, time/sample budgets, stopping conditions, and escalation rules.
+- `routing/autonomous.md`: browser interaction, login flows, dynamic content, forms, and multi-step web workflows.
+- `routing/source_priority.md`: choose `firecrawl`, `gh`, package managers, `curl`/`jq`, or browser tools by source.
+- `routing/local_research_infra.md`: Yeisme/Hermes/OpenWebUI local search infrastructure, Firecrawl, SearXNG, Research Harness, and Gateway search policy.
+- `routing/browser_tools.md`: choose `agent-browser`, Playwright, `browser-use`, or static extraction.
+- `routing/evidence_policy.md`: evidence levels, source credibility, and citation rules.
+- `routing/freshness_policy.md`: when to fetch current information and how to handle dates.
+- `routing/output_contract.md`: stable output formats for each task type.
 
-路由不明确时先读 `routing/decision_tree.md`。当结果太薄、互相冲突、过时，或页面需要交互时，升级路线。
+If the route is unclear, read `routing/decision_tree.md`. Escalate when results are thin, conflicting, stale, or require page interaction.
 
-## 搜索与浏览器边界
+## Search And Browser Boundary
 
-默认先做搜索和静态提取，不要一开始就开浏览器。浏览器是升级路线，适合解决“搜索结果无法直接回答”的问题。
+Search and static extraction are the default. Do not open a browser first. Browser tools are escalation paths for cases where search results cannot answer the question directly.
 
-继续使用搜索/抓取的情况：
+Continue with search/extraction when:
 
-- 用户需要事实、来源、文档、release、仓库、包版本或比较结论。
-- `firecrawl search`、`firecrawl scrape`、`gh` 或包管理器 CLI 已能返回足够信息。
-- 页面是静态文档、博客、README、release notes 或 API 文档。
+- The user needs facts, sources, docs, releases, repositories, package versions, or comparison conclusions.
+- `firecrawl search`, `firecrawl scrape`, `gh`, or package manager CLIs return enough information.
+- The page is static documentation, a blog, README, release notes, or API docs.
 
-升级到浏览器的情况：
+Escalate to browser tools when:
 
-- 需要点击、筛选、登录、填写表单、下载、截图或读取动态状态。
-- 静态抓取缺少关键内容，或页面内容依赖 JavaScript 渲染。
-- 需要验证页面真实交互、可见文本、弹窗、分页、无限滚动或认证后的状态。
-- 用户明确要求“打开网页操作”、“浏览器里看一下”、“截图”、“帮我点/填/下载”。
+- Clicking, filtering, login, form filling, downloads, screenshots, or dynamic state are needed.
+- Static extraction misses key content or the page depends on JavaScript rendering.
+- The task requires validating visible text, dialogs, pagination, infinite scroll, or authenticated state.
+- The user explicitly asks to open a page, inspect it in a browser, take a screenshot, click, fill, or download.
 
-如果浏览器任务开始变成长期复用能力，例如固定站点登录、定时监控、批量下载或端到端回归测试，再考虑创建专用浏览器 skill 或项目脚本。
+If browser tasks become long-term reusable work, such as fixed-site login, scheduled monitoring, batch downloads, or end-to-end regression tests, consider a dedicated browser skill or project script.
 
-## 什么时候拆专用浏览器 Skill
+## When To Split A Dedicated Browser Skill
 
-暂时不要拆分；保持在 `internet-access` 内部路由处理。只有满足以下任一条件时，再创建独立浏览器操作 skill：
+Do not split yet; keep browser routing inside `internet-access`. Create a separate browser-operation skill only if one of these becomes true:
 
-- 浏览器任务本身成为主要目标，而不是为了获取信息服务。
-- 需要长期维护登录态、profile、站点特定流程或下载目录。
-- 需要沉淀 Playwright fixtures、selectors、截图基线、回放或回归测试规范。
-- 多个项目都会复用同一套浏览器操作策略。
+- Browser operation itself becomes the main goal, not a support path for information access.
+- Long-lived login state, profiles, site-specific flows, or download directories must be maintained.
+- Playwright fixtures, selectors, screenshot baselines, replays, or regression-test rules need to be preserved.
+- Multiple projects reuse the same browser operation strategy.
 
-如果只是“为了查信息而打开网页”，继续留在本 skill 的 `autonomous` 路线。
+If the browser is only used to get information, keep using the `autonomous` route inside this skill.
 
-## 工作流
+## Workflow
 
-1. 重述信息需求，判断是否需要时效性、引用来源或网页交互。
-2. 判断是否处于 Yeisme/Hermes/OpenWebUI 本地研究基础设施语境；如果是，先套用 `local_research_infra.md`。
-3. 用 `command -v` 检查当前路线可能需要的本地工具，不要机械检查无关工具。
-4. 选择路线：lightweight、standard、deep-research 或 autonomous。
-5. 直接运行真实的本地 CLI 命令。
-6. 保留有用证据：URL、标题、日期、执行过的命令和置信度限制。
-7. 对重要结论做独立来源交叉验证。
-8. 当本地工具缺失、结果过时或需要认证访问时，明确说明限制。
+1. Restate the information need and decide whether freshness, citations, or web interaction are required.
+2. Check whether the task is in a Yeisme/Hermes/OpenWebUI local research infrastructure context; if so, apply `local_research_infra.md`.
+3. Use `command -v` only for tools relevant to the current route.
+4. Choose a route: lightweight, standard, deep-research, or autonomous.
+5. Run real local CLI commands directly.
+6. Preserve useful evidence: URL, title, date, command type, and confidence limits.
+7. Cross-check important conclusions with independent sources.
+8. State limitations when tools are missing, results are stale, or authentication is required.
 
-## 常见本地 CLI 模式
+## Common Local CLI Patterns
 
-### 通用搜索
+### General Search
 
 ```bash
 firecrawl search "GitHub" --limit 5
@@ -217,20 +218,20 @@ firecrawl view-config
 firecrawl search "Open WebUI Research Harness" --api-url http://localhost:32741 --limit 5 --json
 ```
 
-### 抓取或提取已知 URL
+### Scrape Or Extract A Known URL
 
 ```bash
 firecrawl scrape "https://github.com/"
 firecrawl scrape "https://docs.firecrawl.dev/"
 ```
 
-### Crawl 文档站点
+### Crawl A Documentation Site
 
 ```bash
 firecrawl crawl "https://docs.firecrawl.dev/" --limit 20
 ```
 
-### GitHub 专项调研
+### GitHub-Specific Research
 
 ```bash
 gh search repos "agent framework language:TypeScript" --limit 10
@@ -239,14 +240,14 @@ gh release list --repo openai/openai-python --limit 10
 gh issue list --repo openai/openai-python --state open --limit 20
 ```
 
-### GitHub API 降级方案
+### GitHub API Fallback
 
 ```bash
 curl -L "https://api.github.com/repos/openai/openai-python" | jq '{name, description, stargazers_count, pushed_at, html_url}'
 curl -L "https://api.github.com/repos/openai/openai-python/releases?per_page=5" | jq '.[].tag_name'
 ```
 
-### 包元数据
+### Package Metadata
 
 ```bash
 npm view playwright version description repository time --json
@@ -255,7 +256,7 @@ cargo search tokio --limit 5
 go list -m -versions golang.org/x/tools
 ```
 
-### 浏览器交互证据
+### Browser Interaction Evidence
 
 ```bash
 agent-browser skills get core --full
@@ -263,52 +264,9 @@ agent-browser open "https://example.com"
 agent-browser snapshot
 agent-browser screenshot /tmp/example.png
 browser-use state
+npx playwright codegen "https://example.com"
 ```
 
-### HTTP 降级方案
+## Validation
 
-```bash
-curl -L "https://example.com" | head
-curl -L "https://api.github.com/repos/openai/openai-python" | jq '{name, description, stargazers_count, pushed_at, html_url}'
-```
-
-## 输出标准
-
-快速回答：给出答案和来源链接。调研任务：给出简短综合、由来源支持的发现和信息缺口。自动化任务：说明尝试了什么、使用了哪些工具、哪些成功、哪些失败，以及产生了哪些产物。
-
-只要答案依赖外部信息，就包含来源 URL。对可能近期变化的信息，优先使用新的本地搜索结果，不要只依赖记忆。
-
-输出应体现任务类型：
-
-- 获取信息：答案、关键来源、时间敏感性。
-- 核验信息：结论、支持来源、冲突来源、置信度。
-- 提取内容：来源 URL、抽取字段、缺失字段。
-- 浏览器交互：工具、最终 URL、操作结果、截图/下载路径、阻塞点。
-
-正式输出格式见 `routing/output_contract.md`。如果任务涉及最新版本、价格、政策、API、release、法律/规则、负责人或其它高变动事实，必须按 `routing/freshness_policy.md` 处理。
-
-## 深度研究边界
-
-不要默认把普通 research 升级成 deep-research。只有满足以下任一条件时才进入 `routing/deep_research.md`：
-
-- 用户明确要求“深度研究”、“全网调研”、“系统性扫描”、“尽可能全面”。
-- 用户要求真实搜索大量实例，例如 50、100、200、300 个候选来源或案例。
-- 任务需要市场地图、竞品清单、生态扫描、开源项目普查、供应商长名单、论文/案例系统综述。
-- 结论需要建立在样本覆盖率、分类统计或证据矩阵上，而不是少量来源综合。
-
-深度研究必须分阶段执行：先建立查询计划和采样框架，再批量发现候选来源，去重分类，抽取字段，最后综合。不能直接把 200 条搜索结果堆进最终回答。
-
-大样本研究必须遵守：
-
-- `routing/query_strategy.md`：先设计查询矩阵，再批量搜索。
-- `routing/evidence_ledger.md`：用统一字段记录候选、去重、纳入和排除原因。
-- `routing/research_budget.md`：先确认规模、预算和停止条件，避免无限搜索。
-
-## 护栏
-
-- 技术结论优先使用官方文档、项目仓库、release notes、标准、论文和厂商文档。
-- 对重要或不稳定结论使用多个独立来源。
-- 把搜索摘要当作线索，而不是最终证据；除非用户只需要快速查询。
-- 不在回复中暴露 secret、cookie、token 或私有 profile 路径。
-- 未经用户明确确认，不执行购买、账号变更、破坏性操作或不可逆提交。
-- 如果本地工具缺失，说明哪个命令不可用，并选择下一条可行路线。
+For simple lookups, validate by citing the source. For research and verification, validate by cross-checking important claims. For deep research, validate counts, dedupe rules, included samples, categories, and evidence levels. For browser tasks, validate final URL, visible state, screenshots, downloaded files, or structured observations.

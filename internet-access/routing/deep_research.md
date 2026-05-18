@@ -1,75 +1,75 @@
-# Deep Research 路线
+# Deep Research Route
 
-## 目的
+## Purpose
 
-处理系统性、大样本、可审计的互联网研究。适用于用户明确要求深度研究、全网调研、市场/竞品/生态扫描，或要求真实搜索 50、100、200、300 个候选实例来支撑结论。
+Handle systematic, large-sample, auditable internet research. Use this when the user explicitly asks for deep research, broad web research, market/competitor/ecosystem scans, or real search over 50, 100, 200, or 300 candidate examples to support a conclusion.
 
-Deep Research 不是“多搜几次”。它要求先定义研究问题和纳入标准，再批量发现候选来源，去重、分类、抽取字段、建立证据矩阵，最后综合结论。查询设计见 `query_strategy.md`，证据记录见 `evidence_ledger.md`，规模和停止条件见 `research_budget.md`。
+Deep Research is not "search more". It requires defining the research question and inclusion criteria first, then discovering candidate sources in batches, deduplicating, classifying, extracting fields, building an evidence matrix, and synthesizing conclusions. Query design lives in `query_strategy.md`; evidence tracking lives in `evidence_ledger.md`; scale and stopping conditions live in `research_budget.md`.
 
-## 什么时候使用
+## When To Use
 
-使用本路线：
+Use this route when:
 
-- 用户明确要求“深度研究”、“全网调研”、“系统性扫描”、“尽可能全面”。
-- 用户要求大量真实搜索实例，例如 50、100、200、300 个案例。
-- 任务是市场地图、竞品长名单、生态扫描、开源项目普查、供应商筛选、论文/案例综述。
-- 结论需要分类统计、趋势判断、覆盖率或样本框。
+- The user explicitly says "deep research", "broad web research", "systematic scan", or "as comprehensive as possible".
+- The user asks for many real examples, such as 50, 100, 200, or 300 cases.
+- The task is a market map, competitor longlist, ecosystem scan, open-source project survey, vendor shortlist, or paper/case review.
+- The conclusion needs category statistics, trends, coverage, or a sample frame.
 
-不要使用本路线：
+Do not use this route when:
 
-- 用户只要快速事实。
-- 普通 5-10 个来源就能回答。
-- 用户没有要求样本覆盖率或大量实例。
-- 任务其实是打开网页操作或下载文件。
+- The user only needs a quick fact.
+- A normal 5-10 source search can answer the question.
+- The user did not request sample coverage or many examples.
+- The task is actually opening a web page, operating a browser, or downloading files.
 
-## 研究分层
+## Research Tiers
 
-按规模选择研究强度：
+Choose research intensity by scale:
 
-| 规模 | 候选来源 | 纳入样本 | 适用场景 |
+| Tier | Candidate sources | Included samples | Best for |
 | --- | ---: | ---: | --- |
-| quick scan | 20-50 | 10-20 | 初步判断、轻量竞品扫描 |
-| standard scan | 50-120 | 20-50 | 一般深度研究、技术路线比较 |
-| large scan | 120-300 | 50-150 | 市场地图、生态扫描、案例归纳 |
-| exhaustive attempt | 300+ | 100+ | 用户明确要求尽可能全面，且时间允许 |
+| quick scan | 20-50 | 10-20 | Initial judgement, light competitor scan |
+| standard scan | 50-120 | 20-50 | General deep research, technical comparison |
+| large scan | 120-300 | 50-150 | Market maps, ecosystem scans, case synthesis |
+| exhaustive attempt | 300+ | 100+ | User explicitly asks for broad coverage and time allows |
 
-候选来源是搜索/CLI/API 找到的原始结果；纳入样本是去重、过滤和确认相关性后的记录。不要把候选数当作证据数。
+Candidate sources are raw results found by search/CLI/API. Included samples are deduplicated, filtered, and confirmed records. Do not treat candidate count as evidence count.
 
-## 工作流
+## Workflow
 
-### 1. 定义研究问题
+### 1. Define The Research Question
 
-先写清楚：
+Write down:
 
-- 研究问题。
-- 时间范围。
-- 地域/语言范围。
-- 来源类型：官方、GitHub、registry、论文、新闻、社区、公司官网等。
-- 纳入标准。
-- 排除标准。
-- 目标样本量。
+- Research question.
+- Time range.
+- Geography/language scope.
+- Source types: official, GitHub, registry, papers, news, communities, company sites.
+- Inclusion criteria.
+- Exclusion criteria.
+- Target sample size.
 
-示例：
+Example:
 
 ```text
-目标：找 200 个 AI agent 开发平台或框架候选。
-纳入：有公开网站、GitHub repo、文档或产品页；与 agent workflow/runtime/tool use 相关。
-排除：纯聊天机器人、无公开来源、重复镜像、明显停更且无使用证据。
+Goal: find 200 candidate AI agent development platforms or frameworks.
+Include: public website, GitHub repo, docs, or product page; related to agent workflow/runtime/tool use.
+Exclude: pure chatbots, no public source, duplicate mirrors, clearly inactive projects without usage evidence.
 ```
 
-### 2. 设计查询批次
+### 2. Design Query Batches
 
-不要只用一个 query。按 `query_strategy.md` 建立查询矩阵，并按维度拆分：
+Do not use a single query. Build a query matrix from `query_strategy.md` and split by dimensions:
 
-- 核心关键词。
-- 同义词。
-- 来源限定。
-- 技术栈。
-- 场景。
-- 地域/语言。
-- 年份/时效。
+- Core keywords.
+- Synonyms.
+- Source filters.
+- Technology stack.
+- Use case.
+- Geography/language.
+- Year/freshness.
 
-示例命令：
+Example commands:
 
 ```bash
 firecrawl search "AI agent framework open source" --limit 20
@@ -81,117 +81,117 @@ gh search repos "AI agent framework language:Python" --limit 100
 npm search agent framework --json
 ```
 
-### 3. 批量发现候选
+### 3. Discover Candidates In Batches
 
-每个查询批次记录：
+For each query batch, record:
 
-- query。
-- 工具。
-- 返回数量。
-- 主要来源类型。
-- 明显偏差。
+- query.
+- tool.
+- returned count.
+- primary source type.
+- obvious bias.
 
-建议每批 10-30 条，避免单次结果过长。需要 200-300 个候选时，用多个批次覆盖不同角度。
+Use 10-30 results per batch to keep output manageable. For 200-300 candidates, use many batches that cover different angles.
 
-每批结果都应进入 `evidence_ledger.md` 定义的候选台账，不要只保存在临时上下文里。
+Each batch result should enter the candidate ledger defined in `evidence_ledger.md`. Do not keep it only in temporary context.
 
-### 4. 去重与过滤
+### 4. Deduplicate And Filter
 
-去重 key 优先级：
+Dedupe key priority:
 
-1. 规范 URL。
-2. GitHub `owner/repo`。
-3. package name。
-4. 产品/公司名 + domain。
+1. canonical URL.
+2. GitHub `owner/repo`.
+3. package name.
+4. product/company name + domain.
 
-过滤：
+Filter out:
 
-- 明显无关。
-- 重复镜像。
-- 低质量聚合页。
-- 无法访问且无替代来源。
-- 与研究定义不匹配。
+- clearly irrelevant results.
+- duplicate mirrors.
+- low-quality aggregators.
+- inaccessible sources without substitutes.
+- items outside the research definition.
 
-### 5. 字段抽取
+### 5. Extract Fields
 
-根据任务抽取字段。常用字段：
+Extract fields based on the task. Common fields:
 
-| 字段 | 说明 |
+| Field | Description |
 | --- | --- |
-| name | 项目/产品/组织名 |
-| url | 权威 URL |
+| name | Project/product/organization name |
+| url | Authoritative URL |
 | source_type | docs / GitHub / registry / paper / blog / company |
-| category | 分类 |
+| category | Classification |
 | evidence_level | L1-L5 |
-| last_updated | 更新时间 |
+| last_updated | Update time |
 | status | active / inactive / unclear |
-| notes | 关键说明 |
+| notes | Key notes |
 
-GitHub 示例：
+GitHub example:
 
 ```bash
 gh repo view openai/openai-python --json nameWithOwner,description,stargazerCount,pushedAt,url
 ```
 
-npm 示例：
+npm example:
 
 ```bash
 npm view @playwright/test version time repository --json
 ```
 
-### 6. 分类和抽样
+### 6. Classify And Sample
 
-大样本不能只列链接。必须做分类：
+Large samples cannot be only link lists. They must be classified:
 
-- 类型：开源/商业/研究/工具/平台。
-- 场景：开发者工具、客服、数据分析、浏览器自动化、DevOps、企业流程。
-- 成熟度：活跃、早期、停更、不明确。
-- 证据等级：L2/L3/L4/L5。
+- Type: open source, commercial, research, tool, platform.
+- Scenario: developer tools, customer support, data analysis, browser automation, DevOps, enterprise workflows.
+- Maturity: active, early, inactive, unclear.
+- Evidence level: L2/L3/L4/L5.
 
-如果样本太多，最终回答给分类统计和代表样本；完整清单分批输出或写入用户指定文件。没有用户要求时，不要创建新文件。
+If the sample is too large, the final answer should include category statistics and representative samples. Output the full list in batches or write it to a user-specified file. If the user did not ask for a file, do not create one.
 
-### 7. 综合结论
+### 7. Synthesize Conclusions
 
-结论必须基于：
+Conclusions must be based on:
 
-- 样本数量。
-- 去重数量。
-- 纳入/排除标准。
-- 分类统计。
-- 代表样本。
-- 证据等级。
+- sample count.
+- deduped count.
+- inclusion/exclusion criteria.
+- category statistics.
+- representative samples.
+- evidence levels.
 
-禁止声称“全面覆盖”除非用户给了足够时间和明确搜索范围。更稳妥说法是“在本轮查询范围内”。
+Do not claim "complete coverage" unless the user gave enough time and a clearly bounded search scope. Safer phrasing: "within this query scope".
 
-### 8. 停止条件
+### 8. Stopping Conditions
 
-按 `research_budget.md` 判断是否停止、扩展或降级。常见停止条件：
+Use `research_budget.md` to decide whether to stop, expand, or degrade. Common stopping conditions:
 
-- 已达到用户要求的候选数或纳入样本数。
-- 新查询批次的新增有效样本率低于阈值。
-- 关键类别都已有代表样本。
-- 时间或工具预算耗尽，且继续搜索边际收益低。
-- 用户要求的 200/300 个实例无法在当前工具条件下可靠完成，需要报告已覆盖范围和下一步。
+- Target candidate count or included sample count is reached.
+- New valid-sample rate drops below the threshold in later query batches.
+- Key categories each have representative samples.
+- Time or tool budget is exhausted and marginal value is low.
+- The requested 200/300 examples cannot be completed reliably with current tools; report covered scope and next steps.
 
-## 输出格式
+## Output Format
 
-使用 `output_contract.md` 的 `deep-research` 输出。必须包含：
+Use the `deep-research` output in `output_contract.md`. Include:
 
-- 研究问题。
-- 查询批次。
-- 查询矩阵。
-- 候选来源数。
-- 去重后来源数。
-- 纳入样本数。
-- 分类统计。
-- 证据矩阵或代表样本。
-- 限制和偏差。
+- research question.
+- query batches.
+- query matrix.
+- candidate source count.
+- deduped source count.
+- included sample count.
+- category statistics.
+- evidence matrix or representative samples.
+- limits and bias.
 
-## 质量护栏
+## Quality Guardrails
 
-- 不把搜索摘要当最终证据。
-- 不把候选数量当纳入样本数量。
-- 不把 GitHub stars 当唯一质量指标。
-- 不用 3-5 个来源支撑“市场全景”结论。
-- 不声称“全网完整”。
-- 如果用户要求 200/300 个实例，但工具或时间不足，先报告可完成的批次数、已覆盖范围和下一步。
+- Do not treat search snippets as final evidence.
+- Do not treat candidate count as included sample count.
+- Do not use GitHub stars as the only quality signal.
+- Do not support a "market landscape" conclusion with 3-5 sources.
+- Do not claim "the whole web" or "complete coverage".
+- If the user asks for 200/300 examples but tools or time are insufficient, first report feasible batches, covered scope, and next steps.

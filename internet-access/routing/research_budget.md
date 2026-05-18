@@ -1,92 +1,92 @@
-# 研究预算与停止条件
+# Research Budget And Stopping Conditions
 
-## 目的
+## Purpose
 
-控制深度研究的工作量、样本量和停止点，避免无限搜索，也避免用少量来源冒充大样本研究。
+Control effort, sample size, and stopping points for deep research. Avoid endless search, and avoid presenting a few sources as large-sample research.
 
-## 预算维度
+## Budget Dimensions
 
-执行前确认或自行设定：
+Before execution, confirm or set:
 
-- 目标候选数。
-- 目标纳入样本数。
-- 查询批次数。
-- 每批返回数量。
-- 来源类型覆盖。
-- 时间范围。
-- 是否需要完整台账。
-- 是否允许创建文件。
+- target candidate count.
+- target included sample count.
+- query batch count.
+- results per batch.
+- source type coverage.
+- time range.
+- whether a full ledger is required.
+- whether file creation is allowed.
 
-## 默认预算
+## Default Budgets
 
-| 任务 | 查询批次 | 候选来源 | 纳入样本 | 输出 |
+| Task | Query batches | Candidate sources | Included samples | Output |
 | --- | ---: | ---: | ---: | --- |
-| quick scan | 3-5 | 20-50 | 10-20 | 摘要 + 代表样本 |
-| standard scan | 5-10 | 50-120 | 20-50 | 分类统计 + 证据表 |
-| large scan | 10-20 | 120-300 | 50-150 | 分类统计 + 代表样本 + 台账 |
-| exhaustive attempt | 20+ | 300+ | 100+ | 需要明确范围和交付方式 |
+| quick scan | 3-5 | 20-50 | 10-20 | Summary + representative samples |
+| standard scan | 5-10 | 50-120 | 20-50 | Category stats + evidence table |
+| large scan | 10-20 | 120-300 | 50-150 | Category stats + representative samples + ledger |
+| exhaustive attempt | 20+ | 300+ | 100+ | Requires explicit scope and delivery format |
 
-## 停止条件
+## Stopping Conditions
 
-满足以下任一条件可以停止：
+Stop when any of these is true:
 
-- 达到用户指定样本目标。
-- 连续两个查询批次新增有效样本率低于 20%。
-- 每个关键类别已有至少 3 个代表样本。
-- 主要一手来源已经覆盖。
-- 继续搜索只增加重复或低质量来源。
-- 时间、工具或访问权限达到限制。
+- The user-specified sample target is reached.
+- Two consecutive query batches add fewer than 20% new valid samples.
+- Each key category has at least 3 representative samples.
+- Major primary sources are covered.
+- Further search adds mostly duplicates or low-quality sources.
+- Time, tools, or access permissions reach the limit.
 
-## 升级条件
+## Escalation Conditions
 
-从 standard 升级到 deep-research：
+Escalate from standard to deep-research when:
 
-- 用户要求 50+ 真实案例。
-- 用户要求“全网”、“系统性”、“尽可能全面”。
-- 结论需要分类统计或覆盖率。
-- 初步搜索显示生态复杂，5-10 个来源不足以回答。
+- The user asks for 50+ real cases.
+- The user asks for "the whole web", "systematic", or "as comprehensive as possible".
+- The conclusion needs category statistics or coverage.
+- Initial search shows a complex ecosystem and 5-10 sources are insufficient.
 
-从 deep-research 升级到浏览器：
+Escalate from deep-research to browser when:
 
-- 静态来源无法确认关键样本。
-- 需要截图或页面真实状态。
-- 需要登录后查看数据。
+- Static sources cannot confirm key samples.
+- Screenshots or real page state are needed.
+- Logged-in data is required.
 
-从 Hermes/OpenWebUI Research Harness 升级到 CLI deep-research：
+Escalate from Hermes/OpenWebUI Research Harness to CLI deep-research when:
 
-- 用户要求 100/200/300 个实例，超过当前 OpenWebUI 阀值或单轮 trace 预算。
-- 需要完整候选台账、去重表、分类矩阵或跨批次统计。
-- Research Harness trace 显示 `search_scarcity`、`domain_scarcity` 或预算被 clamp。
-- 需要混合 `firecrawl`、`gh`、包管理器、registry 和 API 数据。
+- The user asks for 100/200/300 examples, beyond current OpenWebUI valves or one-run trace budget.
+- A full candidate ledger, dedupe table, classification matrix, or cross-batch statistics are required.
+- Research Harness trace shows `search_scarcity`, `domain_scarcity`, or budget clamp.
+- The task needs mixed `firecrawl`, `gh`, package manager, registry, and API data.
 
-升级后仍可复用 Research Harness 的 query buckets 和 trace 作为第一批 evidence，但完整研究按 `deep_research.md` 和 `evidence_ledger.md` 管理。
+After escalation, you may reuse Research Harness query buckets and trace as the first evidence batch, but manage the full research through `deep_research.md` and `evidence_ledger.md`.
 
-## 降级条件
+## Degradation Conditions
 
-从 deep-research 降级到 standard：
+Degrade from deep-research to standard when:
 
-- 用户其实只需要判断方向。
-- 样本要求没有明确价值。
-- 工具不可用，无法可靠收集样本。
-- 时间不足以完成大样本去重和抽取。
+- The user really needs only directional judgment.
+- The requested sample size has no clear value.
+- Tools are unavailable and samples cannot be collected reliably.
+- Time is insufficient for large-sample dedupe and extraction.
 
-降级时必须说明：
+When degrading, state:
 
 ```markdown
-这个任务可以先用 standard scan 给出方向性结论；若要 200+ 样本，需要追加批次、去重和证据台账。
+This task can first use a standard scan for a directional conclusion. A 200+ sample result requires additional batches, deduplication, and an evidence ledger.
 ```
 
-## 报告未完成的大样本任务
+## Reporting Incomplete Large-Sample Work
 
-如果用户要求 200/300 个实例但当前轮次无法可靠完成，输出：
+If the user asks for 200/300 examples but the current run cannot complete it reliably, output:
 
-- 已执行查询批次。
-- 已发现候选数量。
-- 去重后数量。
-- 已纳入样本数量。
-- 当前覆盖类别。
-- 主要缺口。
-- 下一步查询计划。
-- 如果来自 Hermes/OpenWebUI Research Harness，还要输出 trace path、coverage limits、预算 clamp 情况和是否需要改用宿主 CLI 批量继续。
+- query batches executed.
+- candidates discovered.
+- deduped count.
+- included sample count.
+- current category coverage.
+- main gaps.
+- next query plan.
+- if Research Harness was involved, trace path, coverage limits, budget clamp, and whether host CLI batch continuation is needed.
 
-不要把未完成任务包装成完整研究。
+Do not package incomplete work as a complete study.

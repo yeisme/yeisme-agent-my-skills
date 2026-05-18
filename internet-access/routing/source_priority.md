@@ -1,30 +1,30 @@
-# 来源与工具优先级
+# Source And Tool Priority
 
-## 目的
+## Purpose
 
-把“用哪个工具”从固定列表改成来源驱动决策。互联网信息获取的关键不是永远先搜索，而是先判断信息最可能在哪个一手来源里。
+Replace fixed tool ordering with source-driven decisions. The key to internet information access is not always searching first; it is identifying where the most authoritative source likely lives.
 
-## 总规则
+## General Rules
 
-优先级按来源确定：
+Priority is source-driven:
 
-1. 用户给了明确来源：直接使用该来源的专用 CLI、API 或抓取命令。
-2. 当前任务明确发生在 Yeisme/Hermes/OpenWebUI 本地部署里：先套用 `local_research_infra.md`，确认本地 Firecrawl、SearXNG、Research Harness 和 Gateway 策略。
-3. 用户只给主题：先用 `firecrawl search` 找候选来源。
-4. 搜索结果指向结构化来源：切换到来源专用 CLI/API。
-5. 静态内容无法回答：升级到浏览器工具。
-6. 需要反复执行：再考虑 Playwright 或项目自动化。
+1. If the user gave an explicit source, use that source's CLI, API, or scrape command directly.
+2. If the task clearly happens in a Yeisme/Hermes/OpenWebUI local deployment, apply `local_research_infra.md` first to confirm local Firecrawl, SearXNG, Research Harness, and Gateway policy.
+3. If the user gave only a topic, use `firecrawl search` to find candidate sources.
+4. If search results point to structured sources, switch to the source-specific CLI/API.
+5. If static content cannot answer, escalate to browser tools.
+6. If the workflow must be repeated, consider Playwright or project automation.
 
-## `gh` 是否多余
+## Is `gh` Redundant?
 
-`gh` 不多余，但它不是通用搜索工具。它只在 GitHub 相关任务中优先：
+`gh` is not redundant, but it is not a general search tool. Use it first only for GitHub-related tasks:
 
-- 用户给出 GitHub repo、issue、PR、release、organization 或 user。
-- 搜索结果已经指向 GitHub，且需要结构化字段。
-- 需要查 stars、更新时间、release、issue 状态、PR 状态、repository metadata。
-- 需要避免用浏览器解析 GitHub 页面。
+- The user gives a GitHub repo, issue, PR, release, organization, or user.
+- Search results already point to GitHub and structured fields are needed.
+- Stars, update time, releases, issue state, PR state, or repository metadata are needed.
+- Browser page parsing for GitHub should be avoided.
 
-示例：
+Examples:
 
 ```bash
 gh repo view openai/openai-python --json name,description,stargazerCount,pushedAt,url
@@ -33,16 +33,16 @@ gh issue list --repo openai/openai-python --state open --limit 20
 gh search repos "agent framework language:TypeScript" --limit 10
 ```
 
-不要在这些场景优先用 `gh`：
+Do not prioritize `gh` when:
 
-- 用户问的是普通网页、新闻、标准、博客、产品文档或厂商文档。
-- 目标来源不是 GitHub。
-- 只需要 broad web discovery。
-- GitHub 页面只是搜索结果之一，还没有确定它是主要来源。
+- The user asks about general web pages, news, standards, blogs, product docs, or vendor docs.
+- The target source is not GitHub.
+- The task only needs broad web discovery.
+- A GitHub page is only one search result and has not been established as the main source.
 
-## `firecrawl` 的位置
+## Role Of `firecrawl`
 
-`firecrawl` 是通用发现和静态提取工具：
+`firecrawl` is the general discovery and static extraction tool:
 
 ```bash
 firecrawl search "Model Context Protocol registry" --limit 8
@@ -50,29 +50,29 @@ firecrawl scrape "https://docs.firecrawl.dev/"
 firecrawl crawl "https://docs.firecrawl.dev/" --limit 20
 ```
 
-优先使用 `firecrawl` 的场景：
+Use `firecrawl` first when:
 
-- 用户只给主题，需要找来源。
-- 目标是网页正文、文档、博客、官方页面。
-- 已有 URL，需要提取主要内容。
-- 需要 crawl 文档站点。
+- The user gives only a topic and sources must be found.
+- The target is web page text, docs, blogs, or official pages.
+- A URL is known and main content must be extracted.
+- A documentation site needs to be crawled.
 
-不要在这些场景只依赖 `firecrawl`：
+Do not rely only on `firecrawl` when:
 
-- GitHub、npm、PyPI、Cargo、Go module 等有结构化 CLI/API。
-- 需要网页真实 UI 状态。
-- 静态抓取缺少关键动态内容。
+- GitHub, npm, PyPI, Cargo, Go modules, or other sources have structured CLIs/APIs.
+- Real web UI state is needed.
+- Static extraction misses key dynamic content.
 
-## Hermes/OpenWebUI 本地搜索基础设施
+## Hermes/OpenWebUI Local Search Infrastructure
 
-当任务明确是本仓库的 Hermes、OpenWebUI、MCP Gateway 或 Research Harness 联网能力时，使用 `local_research_infra.md` 的平台策略：
+When the task is explicitly about this repository's Hermes, OpenWebUI, MCP Gateway, or Research Harness internet capability, use `local_research_infra.md`:
 
-- 宿主 shell 中优先 `firecrawl` CLI，必要时显式连接本地 Firecrawl API。
-- OpenWebUI 内部 Web Search 使用 SearXNG，Web Loader 使用 Firecrawl。
-- Research Harness 用于规划 query buckets、trace、source diversity 和质量检查。
-- 不把 BigModel/Zai `web-search-prime` 作为默认联网搜索后端。
+- In the host shell, prefer the `firecrawl` CLI, with explicit local Firecrawl API URL when needed.
+- Inside OpenWebUI, Web Search uses SearXNG and Web Loader uses Firecrawl.
+- Research Harness is for query buckets, traces, source diversity, and quality checks.
+- Do not use BigModel/Zai `web-search-prime` as the default internet search backend.
 
-常见命令：
+Common commands:
 
 ```bash
 firecrawl view-config
@@ -80,11 +80,11 @@ firecrawl search "Open WebUI Research Harness" --api-url http://localhost:32741 
 curl -fsS "http://localhost:32742/search?q=openwebui&format=json" | jq '.results[:3][] | {title, url}'
 ```
 
-如果这些端口和本机不一致，以 `docs/service-ports.md`、当前 `.env` 和 `firecrawl view-config` 为准。
+If these ports differ on the machine, use `docs/service-ports.md`, the current `.env`, and `firecrawl view-config` as the source of truth.
 
-## 包管理器 CLI
+## Package Manager CLIs
 
-包版本、发布时间、repository、依赖元数据优先使用 registry CLI：
+Package versions, release times, repository links, and dependency metadata should come from registry CLIs first:
 
 ```bash
 npm view @playwright/test version time repository --json
@@ -93,25 +93,25 @@ cargo search tokio --limit 5
 go list -m -versions golang.org/x/tools
 ```
 
-如果包管理器 CLI 不足，再搜索官方 registry 页面或源码仓库。
+If the package manager CLI is insufficient, search the official registry page or source repository.
 
 ## `curl` + `jq`
 
-适合已知 JSON endpoint、官方 API、健康检查或 GitHub API 降级：
+Use for known JSON endpoints, official APIs, health checks, or GitHub API fallback:
 
 ```bash
 curl -L "https://api.github.com/repos/openai/openai-python" | jq '{name, description, stargazers_count, pushed_at, html_url}'
 ```
 
-使用规则：
+Rules:
 
-- 只对稳定 endpoint 使用。
-- 不把 token 或私有 headers 写入最终回答。
-- API 返回和网页显示冲突时，说明差异并给出来源。
+- Use only for stable endpoints.
+- Do not write tokens or private headers into the final answer.
+- If API output conflicts with the web page, explain the difference and cite both.
 
-## 浏览器工具
+## Browser Tools
 
-只有当页面真实状态本身重要时才升级浏览器：
+Escalate to a browser only when real page state matters:
 
 ```bash
 agent-browser open "https://example.com"
@@ -119,4 +119,4 @@ agent-browser snapshot
 agent-browser screenshot /tmp/example.png
 ```
 
-如果只是为了读取静态文档，不要用浏览器。
+Do not use a browser just to read static documentation.

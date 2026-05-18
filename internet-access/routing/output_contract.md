@@ -1,169 +1,169 @@
-# 输出契约
+# Output Contract
 
-## 目的
+## Purpose
 
-让互联网信息获取任务的最终回答稳定、可审计、不过度冗长。
+Make internet information access answers stable, auditable, and not overly long.
 
-## 通用要求
+## General Requirements
 
-所有依赖互联网的回答都应包含：
+Every internet-dependent answer should include:
 
-- 结论或结果。
-- 来源 URL 或来源名称。
-- 关键限制或不确定性。
-- 如果涉及高变动信息，说明时效性。
+- conclusion or result.
+- source URL or source name.
+- key limitations or uncertainty.
+- freshness notes for high-change information.
 
-## `lookup` 输出
+## `lookup` Output
 
 ```markdown
-**答案**：[直接答案]
+**Answer**: [direct answer]
 
-**来源**：[URL 或结构化来源]
+**Source**: [URL or structured source]
 ```
 
-如果是版本/状态：
+For version/status:
 
 ```markdown
-**答案**：[当前版本/状态]
-**更新时间**：[来源中的更新时间，如果有]
-**来源**：[URL]
+**Answer**: [current version/status]
+**Updated**: [source update time, if available]
+**Source**: [URL]
 ```
 
-## `research` 输出
+## `research` Output
 
 ```markdown
-**摘要**
-[3-5 句话]
+**Summary**
+[3-5 sentences]
 
-**发现**
-- [发现]（来源）
-- [发现]（来源）
+**Findings**
+- [finding] (source)
+- [finding] (source)
 
-**限制**
-- [信息缺口、过时风险或冲突]
+**Limits**
+- [information gap, staleness risk, or conflict]
 
-**来源**
-- [标题/域名] - [URL]
+**Sources**
+- [title/domain] - [URL]
 ```
 
-## `local-research-infra` 输出
+## `local-research-infra` Output
 
 ```markdown
-**链路判断**
-- 场景：[宿主 CLI / OpenWebUI 内部 / Hermes Research Harness / Gateway 策略]
-- 推荐路线：[firecrawl CLI / SearXNG + Firecrawl loader / Research Harness / 浏览器升级]
+**Route Decision**
+- Context: [host CLI / OpenWebUI internal / Hermes Research Harness / Gateway policy]
+- Recommended route: [firecrawl CLI / SearXNG + Firecrawl loader / Research Harness / browser escalation]
 
-**本地配置依据**
-- Firecrawl：[URL/配置来源]
-- SearXNG：[URL/配置来源]
-- Research Harness：[profile、trace 或阀值]
-- 禁用项：[例如 BigModel/Zai web-search-prime]
+**Local Configuration Evidence**
+- Firecrawl: [URL/config source]
+- SearXNG: [URL/config source]
+- Research Harness: [profile, trace, or valve]
+- Disabled backend: [for example, BigModel/Zai web-search-prime]
 
-**已验证**
-- [命令或检查项，不包含密钥]
+**Verified**
+- [commands or checks, without secrets]
 
-**下一步**
-- [继续搜索、扩大预算、查看 trace、调整 query、升级浏览器或运行健康检查]
+**Next Step**
+- [continue search, expand budget, inspect trace, adjust query, escalate browser, or run health check]
 ```
 
-## `deep-research` 输出
+## `deep-research` Output
 
 ```markdown
-**研究问题**
-[要回答的问题和边界]
+**Research Question**
+[question and boundaries]
 
-**方法**
-- 查询批次：[数量]
-- 候选来源：[数量]
-- 去重后来源：[数量]
-- 纳入样本：[数量]
-- 排除规则：[规则]
+**Method**
+- Query batches: [count]
+- Candidate sources: [count]
+- Deduped sources: [count]
+- Included samples: [count]
+- Exclusion rules: [rules]
 
-**分类统计**
-| 类别 | 数量 | 代表样本 |
+**Category Statistics**
+| Category | Count | Representative samples |
 | --- | ---: | --- |
 | [category] | [n] | [source] |
 
-**关键发现**
-- [发现]（证据/样本）
+**Key Findings**
+- [finding] (evidence/sample)
 
-**证据矩阵**
-| 样本 | 类别 | 关键字段 | 来源 |
+**Evidence Matrix**
+| Sample | Category | Key fields | Source |
 | --- | --- | --- | --- |
 | [name] | [category] | [fields] | [URL] |
 
-**限制**
-- [覆盖率、搜索偏差、访问限制、时间范围]
+**Limits**
+- [coverage, search bias, access limits, time range]
 ```
 
-如果用户要求 200/300 个实例，最终回答可以给分类统计和代表样本，但必须说明完整样本表保存在哪里，或分批输出。
+If the user asks for 200/300 examples, the final answer may show category statistics and representative samples, but it must say where the full sample table is stored or continue in batches.
 
-如果完整样本过大：
+If the full sample is too large:
 
-- 用户明确要求生成文件时，按用户指定路径保存。
-- 用户没有指定路径时，不默认创建文件；先给出分类统计和代表样本，并说明可继续输出完整台账。
-- 如果已经创建文件，必须说明路径、记录数和字段。
+- If the user explicitly asks for a file, save it to the user-specified path.
+- If no path is specified, do not create a file by default; show category statistics and representative samples, then say the full ledger can be continued.
+- If a file was created, state the path, record count, and fields.
 
-## `verify` 输出
+## `verify` Output
 
 ```markdown
-**结论**：[成立 / 不成立 / 部分成立 / 证据不足]
+**Conclusion**: [true / false / partially true / insufficient evidence]
 
-**依据**
-- [支持证据]（来源）
-- [反向或冲突证据]（来源）
+**Basis**
+- [supporting evidence] (source)
+- [contrary or conflicting evidence] (source)
 
-**置信度**：[高 / 中 / 低]
-**注意事项**：[时效性、范围或定义问题]
+**Confidence**: [high / medium / low]
+**Notes**: [freshness, scope, or definition issue]
 ```
 
-## `extract` 输出
+## `extract` Output
 
 ```markdown
-**抽取结果**
-| 字段 | 值 | 来源 |
+**Extracted Results**
+| Field | Value | Source |
 | --- | --- | --- |
 | [field] | [value] | [URL/API/CLI] |
 
-**缺失字段**
-- [无法获取的字段及原因]
+**Missing Fields**
+- [field that could not be obtained and why]
 ```
 
-## `interact` 输出
+## `interact` Output
 
 ```markdown
-**执行摘要**
-- 工具：[agent-browser / browser-use / Playwright]
-- 最终 URL：[URL]
-- 完成：[成功操作]
-- 阻塞：[权限、登录、验证码、付费或其它限制]
+**Execution Summary**
+- Tool: [agent-browser / browser-use / Playwright]
+- Final URL: [URL]
+- Completed: [successful operations]
+- Blocked: [permission, login, CAPTCHA, paywall, or other limits]
 
-**证据**
-- 截图：[路径]
-- 下载：[路径]
-- 其它：[console/errors/network，如有]
+**Evidence**
+- Screenshot: [path]
+- Download: [path]
+- Other: [console/errors/network, if any]
 ```
 
-## `automate` 输出
+## `automate` Output
 
 ```markdown
-**自动化建议**
-- 推荐方式：[项目已有命令 / npx playwright / agent-browser 探索后固化]
-- 原因：[为什么需要可重复自动化]
-- 风险：[登录态、selector、速率限制、条款]
-- 验证命令：[可直接运行的命令]
+**Automation Recommendation**
+- Recommended method: [existing project command / npx playwright / agent-browser exploration then hardening]
+- Reason: [why repeatable automation is needed]
+- Risks: [login state, selectors, rate limits, terms]
+- Verification command: [real command]
 ```
 
-## 失败或阻塞输出
+## Failure Or Blocked Output
 
 ```markdown
-**结果**：未能完成。
+**Result**: Could not complete.
 
-**原因**：[工具缺失 / 权限不足 / 需要登录 / 页面阻塞 / 来源不可用]
+**Reason**: [missing tool / insufficient permissions / login required / page blocked / source unavailable]
 
-**已尝试**
-- [命令或工具]
+**Tried**
+- [command or tool]
 
-**下一步**
-- [需要用户提供什么或建议的降级路径]
+**Next Step**
+- [what is needed from the user or recommended fallback]
 ```
