@@ -22,6 +22,7 @@
 
 再判断任务来源属于哪一类：
 
+- 本地研究基础设施：任务明确指向 Yeisme、Hermes、OpenWebUI、Research Harness、MCP Gateway、SearXNG 或本地 Firecrawl 后端。
 - 已知来源查询：用户已经给出 GitHub 仓库、包名、URL、API endpoint 或具体网站。
 - 未知来源发现：用户只给主题，需要找资料和来源。
 - 核验/比较：用户需要多来源证据和结论。
@@ -66,6 +67,24 @@ command -v npx
 选择最适合信息来源的工具。例如：GitHub 元数据用 `gh`，通用网页搜索或抓取用 `firecrawl`，AI agent 交互式浏览用 `agent-browser`，可重复回归流程用 `npx playwright` 或项目已有 Playwright 命令。
 
 ## 路线选择
+
+### 0. Local Research Infra
+
+当任务发生在本仓库的 Hermes/OpenWebUI/MCP Gateway 搜索和研究能力里，先使用 `local_research_infra.md`。
+
+信号：
+
+- 用户提到 Hermes、OpenWebUI、Open WebUI、Research Harness、SearXNG、Firecrawl backend、MCP Gateway 联网搜索。
+- 需要判断本地搜索链路该用 Firecrawl CLI、OpenWebUI Web Search、Research Harness 还是浏览器。
+- 需要排查搜索质量、搜索预算、query 生成、trace、source diversity 或本地端口配置。
+
+示例：
+
+```text
+优化 OpenWebUI Hermes 的 Research Harness 搜索质量。
+为什么 Open WebUI 搜索结果太少，帮我看本地 Firecrawl/SearXNG 配置。
+Hermes agent 做深度研究时应该怎么调用本地搜索工具？
+```
 
 ### 1. Lightweight
 
@@ -163,6 +182,7 @@ Python 最早是什么时候发布的？
 
 | 需求 | 优先使用 | 降级方案 |
 | --- | --- | --- |
+| Hermes/OpenWebUI 本地研究链路 | `local_research_infra.md` + 本地 `firecrawl`/SearXNG/Research Harness | 普通 `firecrawl search`、内置搜索 |
 | 未知来源发现 | `firecrawl search "query" --limit 5` | 内置搜索或托管 API |
 | URL 内容提取 | `firecrawl scrape "URL"` | `curl -L "URL"` 加解析工具 |
 | GitHub 仓库/issue/release 数据 | `gh ... --json ...` | GitHub API、`firecrawl search` |

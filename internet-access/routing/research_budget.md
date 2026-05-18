@@ -52,6 +52,15 @@
 - 需要截图或页面真实状态。
 - 需要登录后查看数据。
 
+从 Hermes/OpenWebUI Research Harness 升级到 CLI deep-research：
+
+- 用户要求 100/200/300 个实例，超过当前 OpenWebUI 阀值或单轮 trace 预算。
+- 需要完整候选台账、去重表、分类矩阵或跨批次统计。
+- Research Harness trace 显示 `search_scarcity`、`domain_scarcity` 或预算被 clamp。
+- 需要混合 `firecrawl`、`gh`、包管理器、registry 和 API 数据。
+
+升级后仍可复用 Research Harness 的 query buckets 和 trace 作为第一批 evidence，但完整研究按 `deep_research.md` 和 `evidence_ledger.md` 管理。
+
 ## 降级条件
 
 从 deep-research 降级到 standard：
@@ -78,5 +87,6 @@
 - 当前覆盖类别。
 - 主要缺口。
 - 下一步查询计划。
+- 如果来自 Hermes/OpenWebUI Research Harness，还要输出 trace path、coverage limits、预算 clamp 情况和是否需要改用宿主 CLI 批量继续。
 
 不要把未完成任务包装成完整研究。

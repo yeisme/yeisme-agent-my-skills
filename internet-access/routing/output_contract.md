@@ -46,6 +46,26 @@
 - [标题/域名] - [URL]
 ```
 
+## `local-research-infra` 输出
+
+```markdown
+**链路判断**
+- 场景：[宿主 CLI / OpenWebUI 内部 / Hermes Research Harness / Gateway 策略]
+- 推荐路线：[firecrawl CLI / SearXNG + Firecrawl loader / Research Harness / 浏览器升级]
+
+**本地配置依据**
+- Firecrawl：[URL/配置来源]
+- SearXNG：[URL/配置来源]
+- Research Harness：[profile、trace 或阀值]
+- 禁用项：[例如 BigModel/Zai web-search-prime]
+
+**已验证**
+- [命令或检查项，不包含密钥]
+
+**下一步**
+- [继续搜索、扩大预算、查看 trace、调整 query、升级浏览器或运行健康检查]
+```
+
 ## `deep-research` 输出
 
 ```markdown

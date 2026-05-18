@@ -45,12 +45,13 @@ description: 使用场景：当用户需要从互联网获取信息、搜索资�
    - JSON endpoint 或官方 API：`curl` + `jq`。
 2. 目标来源未知、需要找资料时，优先用通用发现/提取工具：
    - `firecrawl`：通用网页搜索、抓取、crawl 和内容提取。
-3. 页面真实交互或动态状态是答案的一部分时，才用浏览器工具：
+3. 当前任务发生在 Yeisme/Hermes/OpenWebUI 本地部署里时，先读 `routing/local_research_infra.md`，复用本地 Firecrawl、SearXNG 和 Research Harness 约束。
+4. 页面真实交互或动态状态是答案的一部分时，才用浏览器工具：
    - `agent-browser`、`browser-use`、`npx playwright` 或项目已有浏览器自动化命令。
-4. 本地通用降级工具：
+5. 本地通用降级工具：
    - `curl`、`jq`、`pup`、`htmlq`、`lynx`、`w3m` 等。
-5. 当本地 CLI 不存在、被阻塞或不足以完成任务时，再使用内置浏览器/搜索工具。
-6. 只有 CLI 不能完成任务且凭证已存在时，才直接调用托管 API。
+6. 当本地 CLI 不存在、被阻塞或不足以完成任务时，再使用内置浏览器/搜索工具。
+7. 只有 CLI 不能完成任务且凭证已存在时，才直接调用托管 API。
 
 `gh` 不属于通用搜索工具，也不是所有互联网任务的默认依赖。它只在目标是 GitHub，或搜索结果已经指向 GitHub 仓库、issue、release、discussion 时优先使用。这样可以避免用浏览器解析 GitHub 页面，也能直接拿到结构化字段。
 
@@ -156,6 +157,7 @@ firecrawl search → firecrawl scrape → gh/npm/curl 结构化查询 → agent-
 - `routing/research_budget.md`：不同规模研究的时间/样本预算、停止条件和升级规则。
 - `routing/autonomous.md`：浏览器交互、登录流程、动态内容、表单和多步骤网页工作流。
 - `routing/source_priority.md`：按目标来源选择 `firecrawl`、`gh`、包管理器、`curl`/`jq` 或浏览器工具。
+- `routing/local_research_infra.md`：Yeisme/Hermes/OpenWebUI 本地搜索基础设施，Firecrawl、SearXNG、Research Harness 和 Gateway 搜索策略。
 - `routing/browser_tools.md`：选择 `agent-browser`、`playwright`、`browser-use` 或静态抓取的具体规则。
 - `routing/evidence_policy.md`：证据等级、来源可信度和引用要求。
 - `routing/freshness_policy.md`：什么时候必须查新信息，如何处理日期和时效性。
@@ -196,12 +198,13 @@ firecrawl search → firecrawl scrape → gh/npm/curl 结构化查询 → agent-
 ## 工作流
 
 1. 重述信息需求，判断是否需要时效性、引用来源或网页交互。
-2. 用 `command -v` 检查当前路线可能需要的本地工具，不要机械检查无关工具。
-3. 选择路线：lightweight、standard 或 autonomous。
-4. 直接运行真实的本地 CLI 命令。
-5. 保留有用证据：URL、标题、日期、执行过的命令和置信度限制。
-6. 对重要结论做独立来源交叉验证。
-7. 当本地工具缺失、结果过时或需要认证访问时，明确说明限制。
+2. 判断是否处于 Yeisme/Hermes/OpenWebUI 本地研究基础设施语境；如果是，先套用 `local_research_infra.md`。
+3. 用 `command -v` 检查当前路线可能需要的本地工具，不要机械检查无关工具。
+4. 选择路线：lightweight、standard、deep-research 或 autonomous。
+5. 直接运行真实的本地 CLI 命令。
+6. 保留有用证据：URL、标题、日期、执行过的命令和置信度限制。
+7. 对重要结论做独立来源交叉验证。
+8. 当本地工具缺失、结果过时或需要认证访问时，明确说明限制。
 
 ## 常见本地 CLI 模式
 
@@ -210,6 +213,8 @@ firecrawl search → firecrawl scrape → gh/npm/curl 结构化查询 → agent-
 ```bash
 firecrawl search "GitHub" --limit 5
 firecrawl search "OpenAI Responses API docs" --limit 10
+firecrawl view-config
+firecrawl search "Open WebUI Research Harness" --api-url http://localhost:32741 --limit 5 --json
 ```
 
 ### 抓取或提取已知 URL

@@ -9,10 +9,11 @@
 优先级按来源确定：
 
 1. 用户给了明确来源：直接使用该来源的专用 CLI、API 或抓取命令。
-2. 用户只给主题：先用 `firecrawl search` 找候选来源。
-3. 搜索结果指向结构化来源：切换到来源专用 CLI/API。
-4. 静态内容无法回答：升级到浏览器工具。
-5. 需要反复执行：再考虑 Playwright 或项目自动化。
+2. 当前任务明确发生在 Yeisme/Hermes/OpenWebUI 本地部署里：先套用 `local_research_infra.md`，确认本地 Firecrawl、SearXNG、Research Harness 和 Gateway 策略。
+3. 用户只给主题：先用 `firecrawl search` 找候选来源。
+4. 搜索结果指向结构化来源：切换到来源专用 CLI/API。
+5. 静态内容无法回答：升级到浏览器工具。
+6. 需要反复执行：再考虑 Playwright 或项目自动化。
 
 ## `gh` 是否多余
 
@@ -61,6 +62,25 @@ firecrawl crawl "https://docs.firecrawl.dev/" --limit 20
 - GitHub、npm、PyPI、Cargo、Go module 等有结构化 CLI/API。
 - 需要网页真实 UI 状态。
 - 静态抓取缺少关键动态内容。
+
+## Hermes/OpenWebUI 本地搜索基础设施
+
+当任务明确是本仓库的 Hermes、OpenWebUI、MCP Gateway 或 Research Harness 联网能力时，使用 `local_research_infra.md` 的平台策略：
+
+- 宿主 shell 中优先 `firecrawl` CLI，必要时显式连接本地 Firecrawl API。
+- OpenWebUI 内部 Web Search 使用 SearXNG，Web Loader 使用 Firecrawl。
+- Research Harness 用于规划 query buckets、trace、source diversity 和质量检查。
+- 不把 BigModel/Zai `web-search-prime` 作为默认联网搜索后端。
+
+常见命令：
+
+```bash
+firecrawl view-config
+firecrawl search "Open WebUI Research Harness" --api-url http://localhost:32741 --limit 5 --json
+curl -fsS "http://localhost:32742/search?q=openwebui&format=json" | jq '.results[:3][] | {title, url}'
+```
+
+如果这些端口和本机不一致，以 `docs/service-ports.md`、当前 `.env` 和 `firecrawl view-config` 为准。
 
 ## 包管理器 CLI
 

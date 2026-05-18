@@ -53,6 +53,31 @@ firecrawl search "site:docs.firecrawl.dev search scrape crawl" --limit 8
 
 输出：摘要、发现、来源、限制。
 
+### `local-research-infra`
+
+目标：在 Yeisme/Hermes/OpenWebUI 本地部署中，选择或排查搜索、抓取、Research Harness 和浏览器升级路线。
+
+信号：
+
+- “Hermes/OpenWebUI 的 research”
+- “Open WebUI 搜索”
+- “Research Harness”
+- “SearXNG/Firecrawl 本地服务”
+- “MCP Gateway 联网搜索”
+- “web-search-prime”
+
+默认路线：`local_research_infra.md`，必要时再组合 `standard.md`、`deep_research.md` 或 `browser_tools.md`
+
+示例命令：
+
+```bash
+firecrawl view-config
+firecrawl search "Open WebUI Research Harness" --api-url http://localhost:32741 --limit 5 --json
+curl -fsS "http://localhost:32742/search?q=openwebui&format=json" | jq '.results[:3][] | {title, url}'
+```
+
+输出：本地链路选择、使用的服务/CLI、端口或配置来源、trace/预算/覆盖限制、下一步排障路径。
+
 ### `deep-research`
 
 目标：对一个主题做系统性、大样本、可审计的互联网研究。
@@ -176,7 +201,7 @@ npx playwright test --headed
 如果一个任务同时包含多个意图，按以下顺序处理：
 
 ```text
-lookup/extract → verify → research → deep-research → interact → automate
+local-research-infra → lookup/extract → verify → research → deep-research → interact → automate
 ```
 
 示例：用户要求“验证这个库是否还活跃，并打开官网看看是否有最新文档”。先用 `gh`/registry/搜索核验活跃度，再在静态信息不足时升级浏览器。
