@@ -1,3 +1,0 @@
-display_name: Yeisme Claude Skills Layout
-short_description: Design and enforce downstream repositories that use .claude/skills for active runtime skills and .claude/skills-available for optional skills.
-default_prompt: Review this repository's skill layout and migrate it to .claude/skills plus categorized .claude/skills-available if needed.

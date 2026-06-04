@@ -1,0 +1,3 @@
+display_name: Yeisme Eikona CLI Runtime
+short_description: Develop Eikona CLI image generation, reference editing, provider adapters, run evidence, project library, MCP integration, and release behavior.
+default_prompt: Change or review cli/eikona while preserving JSON CLI contracts, run evidence, provider adapter boundaries, reference-image behavior, secret hygiene, Chinese user-facing output, and Go validation commands.

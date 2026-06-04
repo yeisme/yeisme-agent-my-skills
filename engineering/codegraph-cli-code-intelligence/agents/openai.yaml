@@ -1,0 +1,3 @@
+display_name: CodeGraph CLI Code Intelligence
+short_description: Use the CodeGraph CLI to inspect code structure, calling relationships, and change impact before editing or reviewing implementation files.
+default_prompt: Use CodeGraph CLI to inspect this codebase, identify the affected symbols and files, then propose the smallest safe implementation and verification plan.

@@ -1,0 +1,3 @@
+display_name: Golang Cobra Viper CLI Architecture
+short_description: Design and review Yeisme Go CLIs with Cobra/Viper defaults, clean command/config/output boundaries, and reusable internal modules.
+default_prompt: Design or refactor this Yeisme Go CLI around Cobra, Viper, shared output/config modules, focused tests, and conservative common-module extraction.

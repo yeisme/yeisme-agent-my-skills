@@ -1,0 +1,3 @@
+display_name: Yeisme Claude Skills Layout
+short_description: Design and enforce repositories that use skillctl-managed .claude/skills and .agents/skills active runtimes.
+default_prompt: Review this repository's skill layout and migrate it to skillctl-managed .claude/skills plus .agents/skills active runtimes if needed.

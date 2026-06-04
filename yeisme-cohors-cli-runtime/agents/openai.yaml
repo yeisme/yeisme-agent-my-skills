@@ -1,3 +1,0 @@
-display_name: Yeisme Cohors CLI Runtime
-short_description: Develop Cohors CLI workflow, daemon, TUI, command-center, eval, output style, and Generic CLI Runtime behavior.
-default_prompt: Change or review cli/cohors while preserving local-first run evidence, structured CLI runtime contracts, terminal output style, Chinese user-facing output, and Go validation commands.
