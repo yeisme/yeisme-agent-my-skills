@@ -11,11 +11,12 @@ Use this skill when planning, implementing, reviewing, or shipping changes in th
 
 - Use Git flow style branches:
   - `main`: stable integration branch.
-  - `develop`: optional shared integration branch when multiple features are active.
+  - `develop`: default shared integration branch for every Yeisme subproject; start normal feature/fix work from here and keep `.gitmodules` tracking `develop`.
   - `feature/<name>`: normal feature work.
   - `fix/<name>`: bug fixes.
   - `hotfix/<name>`: urgent production fixes from `main`.
   - `release/<version>`: release stabilization.
+- Prefer GitPulse for repository status, branch/worktree inspection, commit review, and PR-oriented flows before falling back to raw `git`/`gh`.
 - Prefer `git worktree` for isolated parallel work instead of switching one dirty checkout between tasks.
 - Prefer `Taskfile.yml` for project commands.
 - Prefer `nerdctl compose` with `compose.yml` for local services and deployment-like orchestration.
@@ -37,7 +38,7 @@ git worktree list
 
 ```bash
 git fetch origin
-git worktree add ../yeisme-agent-<topic> -b feature/<topic> main
+git worktree add ../yeisme-agent-<topic> -b feature/<topic> develop
 cd ../yeisme-agent-<topic>
 ```
 
@@ -58,14 +59,14 @@ For a normal feature:
 
 ```bash
 git fetch origin
-git switch -c feature/<topic> origin/main
+git switch -c feature/<topic> origin/develop
 ```
 
 For a fix:
 
 ```bash
 git fetch origin
-git switch -c fix/<topic> origin/main
+git switch -c fix/<topic> origin/develop
 ```
 
 For a hotfix:
@@ -92,10 +93,10 @@ git push -u origin <branch>
 Use CLI plus skills for GitHub work by default:
 
 ```bash
-gh pr create --base main --head <branch>
+gh pr create --base develop --head <branch>
 ```
 
-Do not use GitHub MCP when `gh` can perform the job with less context and clearer auditability.
+Do not use GitHub MCP when GitPulse or `gh` can perform the job with less context and clearer auditability. For stable releases, open a separate `develop` → `main` PR after validation.
 
 ## Taskfile Policy
 
