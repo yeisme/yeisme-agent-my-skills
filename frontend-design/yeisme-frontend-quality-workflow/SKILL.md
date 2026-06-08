@@ -20,6 +20,7 @@ Use this skill for frontend toolchain and UI quality work in Yeisme projects.
 - Design references: `@storybook/addon-designs`.
 - Quality gates: Lighthouse, Axe, keyboard navigation, ARIA, color contrast, console errors, network failures.
 - Real integration testing: Playwright plus browser-use for browser workflows that should exercise the app like a user.
+- TypeScript Web/Node test layering: Vitest, Testing Library, MSW, Supertest or framework injection, Testcontainers or docker compose, and limited Playwright browser E2E.
 
 ## Boundaries
 
@@ -34,6 +35,7 @@ Use this skill for frontend toolchain and UI quality work in Yeisme projects.
 - Do not accept axios in new frontend code; HTTP should use native `fetch` through a typed API client.
 - Do not accept new untyped JavaScript frontend app files.
 - Do not use npm, pnpm, or yarn commands for new frontend work; use Bun unless the owning project already mandates a different package manager.
+- Do not add a second test framework when the owning TypeScript Web/Node project already has a suitable runner and harness.
 - Do not accept a page whose controls only look real. Visible interactive controls must open, close, select, filter, preview, dismiss, navigate, submit, or expose an intentional disabled/pending state.
 - Do not use browser-use as a replacement for deterministic Playwright assertions; use it for exploratory or high-level real browser flows, then keep stable assertions in Playwright.
 - Do not block a narrow backend-only change on Storybook or Lighthouse unless UI behavior changed.
@@ -126,7 +128,20 @@ bunx storybook@latest init
    - multi-page task completion
    - exploratory smoke runs after large UI changes
    - flows with dynamic content where strict selectors are brittle
-13. Report results as diagnostics, not prose only:
+13. For ordinary TypeScript Web/Node testing, keep the test layer explicit:
+   - `unit`: Vitest for pure functions, single objects, and complex rules
+   - `integration`: Vitest for service/repository, component/store/API mock, or API handler + app harness
+   - `component`: one complete frontend page or backend service component with real or controlled dependencies and mocked external boundaries
+   - `system`: multiple services started together for system-level behavior
+   - `e2e`: user or automation entry through the full business chain; browser paths use Playwright, CLI/API paths do not require a browser
+14. Use the default TypeScript Web/Node stack unless the project already has an equivalent:
+   - Vitest as the main test runner
+   - Testing Library + MSW for frontend component/page integration tests
+   - Supertest, Fastify `inject()`, or framework injection for backend HTTP/API integration tests
+   - Testcontainers or the project's docker compose/test harness for PostgreSQL, Redis, MQ, MinIO, and other real dependencies
+   - Playwright for a small number of critical browser E2E paths
+15. Keep CI checks separated: run typecheck such as `tsc --noEmit` separately because Playwright does not type-check the app.
+16. Report results as diagnostics, not prose only:
 
 ```text
 Diagnostics:
@@ -147,6 +162,8 @@ Diagnostics:
 Use Bun for new frontend work unless the owning project already mandates another package manager. Examples:
 
 ```bash
+bun run typecheck
+bun test
 bun run storybook
 bun run build-storybook
 bunx chromatic --project-token "$CHROMATIC_PROJECT_TOKEN"

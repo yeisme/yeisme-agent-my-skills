@@ -1,0 +1,3 @@
+display_name: Project Integration Test Evidence
+short_description: Ensure Yeisme integration tests write redacted run evidence under each owning project's temp/integration-test-runs directory.
+default_prompt: Design or implement integration test evidence for this Yeisme subproject so each integration test run writes summary.json, stdout.log, stderr.log, command.txt, env.json, and artifacts under the project's temp/integration-test-runs directory.

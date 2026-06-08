@@ -165,6 +165,43 @@ CLI 输出变更要覆盖：
 - stdout/stderr 分离
 - secret redaction
 
+命令级 e2e、process e2e、stdout/stderr golden、fixture 文件树和完整用户流程默认使用 `github.com/rogpeppe/go-internal/testscript`。不要为这些场景手写大量 shell wrapper 或自定义 golden runner，除非子项目已有更强的本地 harness。
+
+推荐形态：
+
+```go
+package e2e
+
+import (
+	"testing"
+
+	"github.com/rogpeppe/go-internal/testscript"
+)
+
+func TestScripts(t *testing.T) {
+	testscript.Run(t, testscript.Params{
+		Dir: "testdata/script",
+	})
+}
+```
+
+推荐目录：
+
+```text
+tests/e2e/
+  cli_script_test.go
+testdata/script/
+  status.txt
+  config-errors.txt
+  workflow-happy-path.txt
+```
+
+常用命令：
+
+```bash
+go test ./tests/e2e -run TestScripts -count=1
+```
+
 ## 边界
 
 - 本 skill 不替代子项目 runtime skill；业务规则以子项目 `AGENTS.md` 和对应 domain skill 为准。

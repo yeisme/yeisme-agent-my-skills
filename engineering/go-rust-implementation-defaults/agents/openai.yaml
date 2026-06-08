@@ -1,0 +1,3 @@
+display_name: Language Escalation Defaults
+short_description: Decide when Yeisme capabilities should stay TypeScript/Bun, consume packages, fork native runtimes, or escalate to Go/Rust.
+default_prompt: Review this Yeisme architecture or implementation plan and decide which capabilities should stay in TypeScript/Bun, which should consume prebuilt native packages, which Cohors Pi/OMP dependencies should stay as released packages versus temporary Git refs or forked scoped packages, and which truly justify Go or Rust based on measured performance, system boundaries, or distribution needs; keep Cohors TypeScript/Bun-first and do not default Pi/OMP integration to source submodules.

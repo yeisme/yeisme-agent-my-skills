@@ -1,6 +1,6 @@
 ---
 name: backend-system-workflow
-description: Use when designing, implementing, reviewing, optimizing, or testing backend services, APIs, workers, queues, state machines, persistence, concurrency, observability, permissions, artifacts, or Go/Golang runtime code in this repository; enforce backend boundaries, data consistency, idempotency, concurrency control, performance evidence, and operational readiness.
+description: Use when designing, implementing, reviewing, optimizing, or testing backend services, APIs, workers, queues, state machines, ORM/database access, persistence, concurrency, observability, permissions, artifacts, or Go/Golang runtime code in this repository; enforce backend boundaries, data consistency, idempotency, concurrency control, performance evidence, and operational readiness.
 ---
 
 # Backend System Workflow
@@ -25,6 +25,7 @@ Backend acceptance requires explicit treatment of:
 
 - ownership boundary and layering
 - data model and relationships
+- ORM or typed query builder selection and repository boundary
 - state machine and transition authority
 - idempotency and duplicate delivery
 - transactions and concurrency control
@@ -54,6 +55,7 @@ For Cohors, Agent Team, MCP Gateway, and engineering consoles, the backend shoul
    - observability, health, diagnostics, or audit
 3. Define or update the backend contract before implementation:
    - entities and relationships
+   - ORM/query builder choice, repository boundary, and any raw SQL exception
    - allowed states and transitions
    - idempotency keys and dedupe rules
    - permission checks and actor model
@@ -64,7 +66,7 @@ For Cohors, Agent Team, MCP Gateway, and engineering consoles, the backend shoul
    - API / Handler: parsing, auth context, validation dispatch, response mapping
    - Application Service / Use Case: transaction boundary, orchestration, idempotency, permission checks
    - Domain Logic: invariants, state transitions, pure rules where possible
-   - Repository / External Gateway: persistence and third-party calls, no hidden business decisions
+   - Repository / External Gateway: ORM/query builder persistence and third-party calls, no hidden business decisions
    - DB / Queue / Third-party API: migrations, constraints, indexes, retries, timeouts
 5. Add migrations and constraints with the model change. Do not only update ORM structs or TypeScript types.
 6. Add tests for unhappy paths, duplicate requests, illegal transitions, permissions, concurrent claims, retries, timeout, cancellation, transaction rollback, pagination boundaries, and external failures.
@@ -129,6 +131,14 @@ observability:
   diagnostics: health or diagnostics endpoint updated
 
 storage:
+  access_layer: repository + ORM/query builder
+  default_orm:
+    go: GORM-only
+    typescript_node: Drizzle ORM
+    python: SQLAlchemy 2.x
+  raw_sql_exceptions:
+    allowed_only_for: [migration_ddl, database_rpc, listen_notify, queue_claim_database_primitive, maintenance_script, legacy_compatibility]
+    requirements: [centralized_boundary, parameter_binding, identifier_allowlist, documented_reason, integration_or_concurrency_test]
   migration: required
   indexes: [run_id, status, created_at, lease_expires_at]
   constraints: [status enum/check, unique idempotency key, foreign key policy]
@@ -169,6 +179,81 @@ Critical entities should normally include:
 - `last_error`
 
 Do not represent important lifecycle state as arbitrary strings without transition rules. Do not let direct DB field updates be the state machine.
+
+## ORM And Database Access Rules
+
+Application code must not hardcode SQL strings for direct `SELECT`, `INSERT`, `UPDATE`, `DELETE`, DDL, or table/column-name interpolation.
+
+Defaults:
+
+- Go subprojects use `GORM` as the application ORM for any relational persistence, local index, repository, or database-backed projection.
+- Go subprojects must not add `database/sql`, `sqlx`, `ent`, `bun`, or another ORM/query builder as the ordinary business access layer. Drivers such as SQLite/PostgreSQL/MySQL may appear only underneath GORM or in documented migration/fixture boundaries.
+- TypeScript/Node projects use `Drizzle ORM` unless the owning subproject already has a documented ORM choice.
+- Python backend projects use `SQLAlchemy 2.x` unless the owning subproject already has a documented ORM choice.
+- Other languages follow the owning subproject's existing ORM or document the selection in that subproject's `AGENTS.md`.
+
+Required boundaries:
+
+- Handlers and controllers must not call `db.Query`, `db.Exec`, `pool.query`, or equivalent raw database primitives.
+- Application services may define transaction and orchestration boundaries, but persistence calls go through repositories.
+- Repositories should use ORM/query builder APIs for CRUD, filtering, pagination, joins, upserts, deletes, and state transitions.
+- State changes must go through domain/application transition methods, not ad hoc status-field SQL.
+
+Raw SQL exceptions are allowed only for migration/DDL, database RPC/functions, database primitives that an ORM cannot express safely, `LISTEN/NOTIFY`, `FOR UPDATE SKIP LOCKED`, maintenance scripts, test fixtures, or legacy compatibility work. Go exceptions must not become the ordinary business read/write path around GORM. Exceptions must be centralized in a repository, migration, `db/rpc`, or explicit adapter; use parameter binding; source identifiers from an allowlist; document why GORM or the project ORM is insufficient; and include integration, migration, or concurrency validation.
+
+## Test Layering And Default Tools
+
+Name tests by the boundary they exercise:
+
+- `unit`: pure domain rules, pure functions, or one object.
+- `integration`: collaboration inside one service, or one service plus one real dependency such as repository + PostgreSQL.
+- `component`: one complete service or CLI component with real dependencies and mocked external boundaries, without UI.
+- `system`: multiple services started together to verify system-level behavior.
+- `e2e`: starts from a user or automation entry and covers the full business chain, such as CLI -> Gateway -> MCP -> Tool -> DB/MQ -> audit/cache/event.
+
+Default tool policy:
+
+- Reuse the owning subproject's existing runner, fixtures, and harness before adding a new framework.
+- Go CLI/tool command-level e2e, process e2e, golden stdout/stderr, fixture file trees, and full user flows should use `github.com/rogpeppe/go-internal/testscript` by default.
+- Go service, repository, API, and concurrency tests should use standard `testing`, `httptest`, `testing/fstest`, table-driven tests, subtests, race detector, benchmarks, and pprof unless the project already has a stronger harness.
+- TypeScript/Node backend projects should use Vitest when no runner exists; HTTP/API integration should use Supertest, Fastify `inject()`, or the framework's existing injection harness.
+- Real PostgreSQL, Redis, Kafka, MinIO, and queue dependencies should use Testcontainers or the project's existing docker compose/test harness. Do not substitute SQLite for PostgreSQL/MySQL unless production is SQLite.
+- E2E and system tests should cover only critical flows. Do not promote every integration case into a full-stack or browser flow.
+
+Go `testscript` skeleton:
+
+```go
+package e2e
+
+import (
+	"testing"
+
+	"github.com/rogpeppe/go-internal/testscript"
+)
+
+func TestScripts(t *testing.T) {
+	testscript.Run(t, testscript.Params{
+		Dir: "testdata/script",
+	})
+}
+```
+
+Recommended layout:
+
+```text
+tests/e2e/
+  cli_script_test.go
+testdata/script/
+  status.txt
+  config-errors.txt
+  workflow-happy-path.txt
+```
+
+Focused command:
+
+```bash
+go test ./tests/e2e -run TestScripts -count=1
+```
 
 ## State Machine Rules
 
@@ -314,6 +399,8 @@ Minimum backend tests should go beyond happy path:
 
 - unit tests for domain rules and state transitions
 - integration tests for DB, migrations, repository, and API
+- component tests for one complete service or CLI component with real dependencies and mocked external boundaries
+- system tests for multi-service behavior when the project starts multiple services together
 - contract tests for request/response and error shape
 - concurrency tests for worker claim, duplicate mutation, and cancellation races
 - permission tests for each role and forbidden action
@@ -351,6 +438,9 @@ Reject or rewrite AI-generated backend code that:
 - puts complex business logic in handlers
 - updates lifecycle state directly without transition rules
 - lacks transactions for multi-write mutations
+- hardcodes raw SQL in handlers, services, or ordinary business logic instead of using the project ORM/query builder
+- adds relational persistence to a Go subproject without GORM
+- adds `database/sql`, `sqlx`, `ent`, `bun`, or another Go database access layer for ordinary business persistence
 - lacks idempotency for repeated actions
 - performs select-then-update task claims
 - omits indexes, constraints, or migrations

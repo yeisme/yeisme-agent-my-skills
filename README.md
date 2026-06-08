@@ -108,13 +108,15 @@ find .skills/yeisme -maxdepth 2 -mindepth 2 -type l -print
 - `yeisme-mcp-gateway-maintainer`：维护 `mcp/gateway` 的 TypeScript 网关、CLI 渲染、健康检查、路由、审计和测试。
 - `yeisme-mcp-registry-onboarding`：新增或审查 `mcp/registry.json` 中的 MCP 后端、凭证、客户端渲染、网关暴露和权限策略。
 - `yeisme-apigateway-auth-sync`：维护 `apigateway` 中 Codex、Gemini CLI 认证同步 sidecar 和 new-api 渠道行为。
-- `yeisme-cohors-cli-runtime`：开发 `cli/cohors` 的 workflow、daemon、Team Room、trace、CLI/TUI 输出风格、eval 和 Generic CLI Runtime。
+- `yeisme-cohors-cli-runtime`：开发 `cli/cohors` 的 workflow、daemon、Team Room、trace、CLI/TUI 输出风格、eval、Generic CLI Runtime 和 Pi/OMP package 边界。
 - `yeisme-eikona-cli-runtime`：开发 `cli/eikona` 的生图、参考图编辑、provider adapter、run evidence、项目库、Web UI 和 release 行为。
 - `yeisme-taskbridge-cli-runtime`：开发 `cli/taskbridge` 的任务控制面、provider 同步、action file、Agent JSON 合同和 Go CLI 行为。
 - `performance-profiler`：为项目软件建立性能基线、定位瓶颈，并用重复测量产出优化前后证据。
+- `project-integration-test-evidence`：为所有子项目的 integration、component、system 和 e2e 测试运行生成所属项目 `temp/integration-test-runs/<run-id>/` 下的脱敏证据目录。
 - `ui-spec-frontend-workflow`：把 PRD、线框图、截图或高保真 UI 图转成 React UI Spec、组件树、前端实现、动画约束和截图回归闭环。
 - `yeisme-frontend-quality-workflow`：维护 Storybook、Tailwind stories、Chromatic、addon-designs、Lighthouse、Axe、Playwright 和 browser-use 前端质量门禁。
-- `backend-system-workflow`：设计、实现或审查后端 API、worker、状态机、持久化、并发、权限、可观测性、迁移、测试和性能门禁。
+- `backend-system-workflow`：设计、实现或审查后端 API、worker、状态机、ORM/数据库访问、Go GORM-only 持久化、并发、权限、可观测性、迁移、测试和性能门禁。
+- `go-rust-implementation-defaults`：为 Yeisme 工具、后台、CLI、MCP、daemon、worker、gateway 和系统能力判断是否保持 TypeScript/Bun 主线，或升级到 prebuilt native package、Pi/OMP forked package、Go、Rust。
 - `codegraph-cli-code-intelligence`：通过 CodeGraph CLI 索引代码、查询上下文、做调用关系和改动影响分析，先缩小实现边界再修改代码。
 - `yeisme-repo-routing`：判断新文件、workflow、skill、MCP、CLI、agent、gateway 和文档应该落在哪一层。
 - `yeisme-claude-skills-layout`：为 Yeisme 项目设计、迁移或审查由 `skillctl` 管理的 `.claude/skills` 与 `.agents/skills` 双 active runtime。
