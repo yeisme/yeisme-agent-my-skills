@@ -1,0 +1,3 @@
+display_name: Yeisme Auctra CLI Runtime
+short_description: Develop or document Auctra CLI/TUI text creation pipelines, review-safe agent contracts, runtime provider boundaries, run evidence, and exports.
+default_prompt: Change or review cli/auctra while preserving the specialized text creation CLI identity, human-review gate, shared text engine, provider SDK boundary, .auctra evidence integrity, JSON/agent output contracts, Chinese content exception, and Go validation commands.

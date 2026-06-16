@@ -1,0 +1,3 @@
+display_name: Golang GoReleaser Distribution
+short_description: Configure GoReleaser package-manager distribution, release credentials, signing, SBOMs, and post-release verification for Go projects.
+default_prompt: For this Go project, design or review GoReleaser distribution across GitHub Releases, Homebrew, Scoop, Chocolatey, nFPM Linux packages, release credentials, signing, SBOMs, and post-release install verification.

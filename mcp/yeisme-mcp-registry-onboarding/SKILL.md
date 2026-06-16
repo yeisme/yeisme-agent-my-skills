@@ -36,7 +36,7 @@ Use this skill for registry-driven MCP onboarding and maintenance.
    - concise `notes`
    - compact default response policy
 4. Keep `clients` explicit for Codex, Gemini, OpenCode, and Crush.
-5. Place the backend in an existing group or add a group with Chinese title/description and a docs path.
+5. Place the backend in an existing group or add a group with English title/description and a docs path.
 6. If adding env vars, update `mcp/mcp.env.example` with placeholders only.
 7. Avoid broad rewrites of `registry.json`; preserve existing formatting and ordering where practical.
 

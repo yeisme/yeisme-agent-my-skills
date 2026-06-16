@@ -40,7 +40,7 @@ Use this skill for `cli/cohors`, the local-first agent team command system.
    - the CEO agent prompt must explicitly ask for current work progress, next work content, and skill/prompt improvements; it must cite local evidence paths or run ids.
    - CEO thinking must go through Generic CLI Runtime and leave durable evidence under `.cohors/runs/<run_id>/`, including workflow, logs, trace, and normalized `yeisme-result`.
    - dangerous actions remain previews; the CEO agent does not approve, delete, push, deploy, or mutate project files unless a separate explicit workflow grants that boundary.
-5. Keep user-visible docs, logs, help text, and reports in Chinese unless the string is a protocol field, code identifier, or third-party term.
+5. Keep user-visible docs, logs, help text, reports, and `--explain` summaries in English unless the user explicitly requests another language for that artifact or the content is Chinese-language product content.
 6. Add tests at the package closest to the behavior. Prefer fixtures in `testdata/workflows/` for workflow contracts.
 7. For Cohors plan/work-item execution, keep task state in `openspec/changes/cohors-<topic>/` with `proposal.md`, `design.md`, `tasks.md`, and `specs/**/spec.md`. If a task checklist appears under `docs/checklists`, `docs/work-items/active/<topic>/`, `docs/plans/active`, root project-doc mirrors, root `openspec/` for code work, or another ad hoc directory, migrate it to `openspec/changes/cohors-<topic>/` before continuing. Close ordinary completed changes by synchronizing local `docs/**` and specs, then moving the change to `openspec/changes/archive/YYYY-MM-DD-cohors-<topic>/`.
 
@@ -48,12 +48,12 @@ Use this skill for `cli/cohors`, the local-first agent team command system.
 
 When designing or changing Cohors CLI/TUI output:
 
-- Use the high-level human output skeleton: `状态`, `重点`, optional `风险`, optional `证据`, and one `推荐下一步`.
+- Use the high-level human output skeleton: `Status`, `Highlights`, optional `Risks`, optional `Evidence`, and one `Recommended next step`.
 - Keep default text output human-oriented; scripts must use `--json`.
 - Do not mix ANSI color, progress text, logs, or suggestions into `--json` stdout.
-- Use stable projection data, not parsed Chinese CLI text, as the source for CLI, TUI, tests, and snapshots.
+- Use stable projection data, not parsed localized CLI text, as the source for CLI, TUI, tests, and snapshots.
 - Treat `--agent` as the preferred new agent-facing flag; keep `--format ai` compatibility where existing Cohors commands already expose it.
-- Preserve Chinese-visible text by default; command names, flags, schema fields, paths, and third-party names may remain English.
+- Preserve English visible text by default; command names, flags, schema fields, paths, and third-party names remain English or existing stable names.
 - Provide `NO_COLOR` / `--color never` safe rendering when color is involved.
 - TUI must keep dangerous actions as copyable command previews unless daemon-audited structured actions and confirmation paths exist.
 - TUI mouse support is required for tabs, rows, scrolling, focus changes, and visible clickable regions.
@@ -112,10 +112,10 @@ Default stack:
 Cobra-like CLI requirements:
 
 - Every command exposes stable metadata: command id, path, summary, description, usage, aliases, flags, examples, and exit codes.
-- Help text is generated from metadata and uses Chinese descriptions with runnable command examples.
+- Help text is generated from metadata and uses English descriptions with runnable command examples.
 - Unknown commands and invalid flags should return usage errors with a concrete suggestion when possible.
 - Commands return typed Pi projections; renderers produce human summary, `--json`, `--agent`, `--events`, and `--explain` from that same projection.
-- `--json` stdout is JSON only. `--agent` stdout is stable ASCII `key=value`. Human output uses `状态`, `重点`, optional `风险`, optional `证据`, and one `推荐下一步`.
+- `--json` stdout is JSON only. `--agent` stdout is stable ASCII `key=value`. Human output uses `Status`, `Highlights`, optional `Risks`, optional `Evidence`, and one `Recommended next step`.
 
 OMP-like TUI requirements:
 

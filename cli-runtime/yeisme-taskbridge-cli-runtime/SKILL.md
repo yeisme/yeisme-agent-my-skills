@@ -25,7 +25,7 @@ Use this skill for `cli/taskbridge`, the Go CLI that bridges local task control-
    - dangerous actions require `--confirm` or an action-file confirmation gate.
    - `--dry-run` must not mutate local storage or call remote write APIs.
    - sync/audit output must describe what was compared or written, not just that a command ran.
-3. Keep CLI help, docs, text output, and user-facing errors in Chinese unless the string is a schema field, command, code identifier, or third-party term.
+3. Keep CLI help, docs, text output, and user-facing errors in English unless the user explicitly requests another language for that artifact or the content is Chinese-language product content.
 4. Add tests close to the behavior:
    - command wiring and envelope behavior in `cmd/`
    - control-plane classification in `internal/controlplane`

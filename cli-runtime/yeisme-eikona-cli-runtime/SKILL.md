@@ -1,6 +1,6 @@
 ---
 name: yeisme-eikona-cli-runtime
-description: Use when changing, testing, reviewing, or designing Eikona CLI behavior under cli/eikona, including image generation, reference-image editing, provider adapters, run evidence, project library, replacement safety, MCP integration, and Go release checks.
+description: Use when changing, testing, reviewing, documenting, or designing Eikona CLI behavior under cli/eikona, including image generation, reference-image editing, command docs, agent invocation contracts, provider adapters, run evidence, project library, replacement safety, MCP integration, and Go release checks.
 ---
 
 # Yeisme Eikona CLI Runtime
@@ -15,19 +15,24 @@ Use this skill for `cli/eikona`, the agent-facing visual asset runtime and evide
 - Provider protocol adapters live in `internal/adapters/*`; adapters must not print CLI output or bypass runtime storage.
 - Run/job/artifact evidence lifecycle lives in `internal/runtime` and `internal/runstore`.
 - Project library, prompt memory, sessions, replacement ledger, index, HTTP playground helpers, and MCP integration live under their matching `internal/*` modules.
-- In a `cli/eikona` session, human-facing product, design, runtime, protocol, governance, evaluation, and delivery docs live in local `docs/**`; code behavior docs live in `README.md` and `AGENTS.md`. Root project-doc mirrors are not valid owners and must not be required for closeout.
+- In a `cli/eikona` session, human-facing product, design, runtime, protocol, governance, evaluation, command, and delivery docs live in local `docs/**`; code behavior docs live in `README.md` and `AGENTS.md`. Root project-doc mirrors are not valid owners and must not be required for closeout.
+- Agent-facing command guidance lives in `cli/eikona/docs/commands/README.md`; cross-agent invocation rules live in `cli/eikona/docs/commands/agent-integration.md`.
 - Eikona task lifecycle follows the repository-wide OpenSpec rules in `docs/workflows/execution-slice-lifecycle.md`; migrated Eikona notes live in `cli/eikona/openspec/changes/archive/2026-05-11-eikona-checklists-index/legacy/README.md`. Execution task state must stay under `cli/eikona/openspec/changes/eikona-<slug>/` or its archive, not docs checklists, plans, or ad hoc work-item directories.
 
 ## Workflow
 
-1. Start inside `cli/eikona` and read `AGENTS.md`, `README.md`, and the nearest package before editing.
+1. Start inside `cli/eikona` and read `AGENTS.md`, `README.md`, and the nearest package or command doc before editing.
+   - For CLI command documentation, read `docs/commands/README.md` and the matching `docs/commands/<command>.md` first.
+   - For other agents calling Eikona, read `docs/commands/agent-integration.md` first and prefer CLI `--json`/`--agent` contracts before adding MCP-only behavior.
 2. Preserve Eikona product contracts:
    - `--json` output must remain machine-readable and stable for agents, Cohors, CI, and shell scripts.
    - new or changed CLI output must follow `ai-native-cli-output-contract`: human summary by default, strict `--json`, `--agent` for low-token parsing, optional `--events`, and secret-safe stdout/stderr separation.
-   - human output, help text, docs, logs, and user-visible errors should be Chinese unless the string is a protocol key, command, model id, provider id, or code identifier.
+   - human output, help text, docs, logs, and user-visible errors should be English unless the user explicitly requests another language for that artifact or the content is Chinese-language product content.
    - every successful provider artifact must be written through the run evidence store under `runs/<run_id>/outputs/`.
    - provider requests in tests must use `httptest` or fixture adapters; do not call real remote providers in automated tests.
    - secrets must never be written to YAML examples, traces, provider jobs, artifact manifests, test snapshots, or README output.
+   - command examples in docs, help, skills, plans, reviews, and final responses must be real user-runnable commands such as `eikona workflow run ...`; do not expose local wrappers or agent-only prefixes.
+   - command docs must cover every visible subcommand and explicitly mark hidden/internal entries such as `models`, `worker`, and disabled `video` when relevant.
 3. For OpenAI-compatible image generation:
    - new docs, examples, defaults, and prompts must recommend `openai:gpt-image-2`.
    - `openai:gpt_image_2` is legacy compatibility only.
@@ -41,7 +46,13 @@ Use this skill for `cli/eikona`, the agent-facing visual asset runtime and evide
    - run lifecycle and artifact manifests in `internal/runtime`
    - project library, sessions, prompt memory, and replacement safety in their matching `internal/*` packages
    - MCP and HTTP playground helpers in `internal/mcp`, `internal/playground`, and related request/projection packages
-5. For Eikona plan/checklist work, keep `proposal.md`, `design.md`, `tasks.md`, and `specs/**/spec.md` under `cli/eikona/openspec/changes/eikona-<slug>/`; migrate any misplaced checklist or root `openspec/` implementation task before continuing. Do not leave completed execution changes active. After closeout, update readiness/specs, record verification in `tasks.md` or `design.md`, and archive ordinary changes to `cli/eikona/openspec/changes/archive/YYYY-MM-DD-eikona-<slug>/`.
+5. For agent invocation design, keep the contract simple:
+   - one-off generation uses `eikona "<prompt>" --json` or `eikona generate ... --json`;
+   - multi-step work uses `eikona workflow validate/plan/draw/run --json` and `workflow run --background`;
+   - status polling uses `eikona wait/status/inspect --json` or low-token `--agent`;
+   - artifact handoff uses `eikona assets handoff <artifact_id> --json` before project writes;
+   - long-lived integrations can use `eikona mcp`, but ordinary CLI output remains the primary contract.
+6. For Eikona plan/checklist work, keep `proposal.md`, `design.md`, `tasks.md`, and `specs/**/spec.md` under `cli/eikona/openspec/changes/eikona-<slug>/`; migrate any misplaced checklist or root `openspec/` implementation task before continuing. Do not leave completed execution changes active. After closeout, update readiness/specs, record verification in `tasks.md` or `design.md`, and archive ordinary changes to `cli/eikona/openspec/changes/archive/YYYY-MM-DD-eikona-<slug>/`.
 
 ## Validation
 

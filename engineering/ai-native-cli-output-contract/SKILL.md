@@ -11,19 +11,19 @@ Use this skill whenever a command-line interface is created or changed. It enfor
 
 All CLI output must follow "one core, multiple renderers":
 
-- `summary`: default human output; concise Chinese text for operators.
+- `summary`: default human output; concise English text for operators.
 - `--agent`: stable low-token key=value lines for agents and shell glue.
 - `--json`: strict machine envelope for scripts, CI, SDKs, and schema validation.
 - `--events`: NDJSON event stream for long-running automation.
-- `--explain`: Chinese reviewable reasoning summary with conclusion, evidence, confidence, risk, and next action.
+- `--explain`: English reviewable reasoning summary with conclusion, evidence, confidence, risk, and next action.
 
 Every mode must come from the same command projection. Do not parse localized human text to build JSON, TUI state, tests, or agent output.
 
 Structured project assets must be CLI-authored. For config, profile/policy, run receipt, event log, review decision, sync mapping, export manifest, OpenSpec task evidence, or any machine-readable metadata, design commands or application services that create and update the files. Agents should invoke commands such as `app project set`, `app profile set`, `app run start`, `app event append`, or `openspec new change`; they should not hand-write JSON, YAML, JSONL, or Markdown metadata files. User prose, note bodies, drafts, and ordinary content files are the exception.
 
-For Pi, OMP, Cohors, Auctra, pinax, GitPulse, skillctl, and similar agent tools, user-visible plans, explanations, reviews, handoffs, run summaries, errors, and `--explain` reports default to Chinese. Machine protocol fields, schema keys, enum values, command names, flags, log keys, JSON envelope fields, `--agent` keys, and third-party API fields remain stable English or existing names.
+For Pi, OMP, Cohors, Auctra, pinax, GitPulse, skillctl, and similar agent tools, user-visible plans, explanations, reviews, handoffs, run summaries, errors, help text, logs, and `--explain` reports default to English. Machine protocol fields, schema keys, enum values, command names, flags, log keys, JSON envelope fields, `--agent` keys, and third-party API fields remain stable English or existing names.
 
-Never output or persist full chain-of-thought, raw prompts, hidden system prompts, unredacted provider payloads, private tool arguments, or model-internal reasoning in stdout, stderr, traces, event logs, run receipts, snapshots, fixtures, golden files, docs, or structured assets. When explanation is needed, provide a redacted Chinese summary: conclusion, key evidence, risk, tradeoff, next step, and evidence references.
+Never output or persist full chain-of-thought, raw prompts, hidden system prompts, unredacted provider payloads, private tool arguments, or model-internal reasoning in stdout, stderr, traces, event logs, run receipts, snapshots, fixtures, golden files, docs, or structured assets. When explanation is needed, provide a redacted English summary: conclusion, key evidence, risk, tradeoff, next step, and evidence references.
 
 When designing a new schema, migration, or test matrix, read `references/contract.md`.
 
@@ -60,10 +60,10 @@ Use command-specific schema under `data`; keep the envelope stable.
 
 Default output is for humans:
 
-- Prefer `状态`, `重点`, optional `风险`, optional `证据`, and one `推荐下一步`.
+- Prefer `Status`, `Highlights`, optional `Risks`, optional `Evidence`, and one `Recommended next step`.
 - Default output must not be a large JSON dump.
 - Keep it short enough to scan; fold detail into `--json`, `--verbose`, or a detail command.
-- User-visible text is Chinese unless it is a command, flag, path, schema key, protocol field, model id, provider id, or third-party name.
+- User-visible text is English unless the user explicitly requested another language for that artifact, or the product content/domain itself is Chinese-language.
 
 `--agent` is for low-token parsing:
 
@@ -90,7 +90,7 @@ Default output is for humans:
 
 `--explain` is for decisions:
 
-- Use Chinese `结论`, `证据`, `置信度`, and optional `风险`, `取舍`, `推荐下一步`.
+- Use English `Conclusion`, `Evidence`, `Confidence`, and optional `Risks`, `Tradeoffs`, `Recommended next step`.
 - Every conclusion must have evidence or be explicitly marked as a hypothesis.
 - Do not expose full chain-of-thought, raw prompts, hidden system prompts, secrets, credentials, cookies, tokens, private tool arguments, or unredacted provider payloads.
 
@@ -119,7 +119,7 @@ Privacy controls are part of the contract:
    - default output is not JSON and has one primary next command.
    - ANSI/progress/logs do not leak into machine stdout.
    - structured assets are created or changed through CLI/service commands, not direct agent-written JSON/YAML/JSONL/Markdown metadata files.
-   - `--explain` is a Chinese reasoning summary with evidence references, not full chain-of-thought.
+   - `--explain` is an English reasoning summary with evidence references, not full chain-of-thought.
    - `--agent` remains stable key=value and does not include localized prose.
    - secrets are redacted in every mode and sidecar.
 7. Update help text and docs with real user-runnable commands only. Do not mention local execution wrappers, shell aliases, or agent-only prefixes.

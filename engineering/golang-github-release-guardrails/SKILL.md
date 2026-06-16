@@ -14,6 +14,8 @@ description: Use when creating, reviewing, or modifying a Go/Golang project that
 
 如果任务同时涉及 Go CLI 架构、Cobra/Viper、配置层、命令边界或公共模块提取，也同时使用 `golang-cobra-viper-cli-architecture`。本 skill 只负责 CI、lint 和 release 护栏。
 
+If the task involves Homebrew, Scoop, Chocolatey, nFPM, DEB/RPM/APK packages, APT repositories, package-manager taps/buckets, cross-repository publisher tokens, SBOMs, signing, or attestations, also use `golang-goreleaser-distribution`; this skill sets the baseline, that skill owns distribution-channel details.
+
 ## 强制规则
 
 任何涉及 GitHub/Git 管理的 Go 项目，都必须具备以下三类文件或等价配置：
@@ -74,7 +76,7 @@ Release workflow 必须满足：
 - 初版门禁要能通过当前代码，优先启用低噪声规则，例如 `govet`、`ineffassign`、`misspell`。
 - 如果项目已有较高质量基础，可以启用 `errcheck`、`staticcheck`、`unused`、`revive`。
 - 若严格规则会引出大量历史问题，不要让首版 CI 变成不可落地的重构项目；先记录专项清理，再逐步打开规则。
-- 禁止无原因的宽泛 `nolint`。局部关闭必须写成 `//nolint:<linter> // 中文原因`。
+- 禁止无原因的宽泛 `nolint`。局部关闭必须写成 `//nolint:<linter> // English reason`。
 
 ## GoReleaser 策略
 
@@ -83,6 +85,7 @@ Release workflow 必须满足：
 - Windows archive 用 zip，其他平台可用 tar.gz。
 - 必须生成 checksums。
 - 如果面向真实用户分发，优先增加 SBOM；需要更高供应链保证时再接入 cosign keyless signing。
+- Distribution-channel details are owned by `golang-goreleaser-distribution`; do not duplicate Homebrew/Scoop/Chocolatey/nFPM token policy here.
 - release hook 不要执行会修改源码的命令，例如 `go mod tidy`；应使用 `go mod download` 和 `go mod verify`。
 
 ## 工作流程

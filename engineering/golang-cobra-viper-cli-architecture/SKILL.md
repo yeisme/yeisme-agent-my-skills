@@ -25,7 +25,7 @@ description: Use when designing, implementing, refactoring, or reviewing a Yeism
 - Cobra / pflag 负责 command tree、flags、completion、help 和 `RunE`。
 - Viper 负责 defaults、config files、environment overrides 和 typed config unmarshal。
 - `internal/*` 承载业务、输出、配置、runner、存储和 provider adapter；命令层只接线和渲染。
-- 默认中文人类输出，机器协议字段保持稳定英文。
+- Default human output is English; machine protocol fields remain stable English.
 
 允许例外，但必须写清原因：
 
@@ -76,7 +76,7 @@ testdata/
 - Cobra command 只解析参数、构造请求、调用 service、选择 renderer。
 - 长逻辑不要写进 `PreRunE` 或 `RunE`；抽到 service 或 use case。
 - 使用 `context.Context` 贯穿命令执行、外部命令、网络请求和长任务。
-- flags 必须有中文说明；命令名、flag 名、schema key 保持英文稳定。
+- Flag help must be English; command names, flag names, and schema keys stay stable English.
 - completion 函数只做轻量读取，不触发危险操作或远程写入。
 - 测试中通过 command factory 创建新实例，避免全局 command 和全局 flag 污染。
 
@@ -94,7 +94,7 @@ testdata/
 ## 输出和错误
 
 - 所有输出模式从同一个 projection 渲染，遵守 `ai-native-cli-output-contract`。
-- 默认 stdout 是中文摘要或表格；`--json` stdout 只能是 JSON；`--agent` 是低 token key=value；诊断和日志写 stderr。
+- Default stdout is an English summary or table; `--json` stdout is JSON only; `--agent` is low-token key=value; diagnostics and logs go to stderr.
 - renderer 不调用业务 service；业务层不拼接本地化 CLI 文案。
 - 错误分为用户输入错误、环境错误、外部依赖错误、内部错误；面向人的错误给出可执行下一步，机器输出保留稳定 error code。
 - 脱敏在 projection 或 renderer 边界统一处理，不依赖调用点自觉。

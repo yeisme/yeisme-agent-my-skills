@@ -30,7 +30,7 @@ OpenCode Zen / Go is now handled as direct `new-api` channel types, not by an au
    - Codex: `auth.json.<email>`
    - Gemini CLI: `oauth_creds.json.<email>`
 5. If script, Dockerfile, requirements, compose, or env inputs change, ensure the Taskfile hash/rebuild logic still includes the changed input.
-6. Keep user-facing logs and docs in Chinese.
+6. Keep user-facing logs and docs in English unless the user explicitly requests another language for that artifact.
 
 ## Validation
 
