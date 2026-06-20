@@ -1,0 +1,3 @@
+display_name: 中文小说场景卡写手
+short_description: turning Chinese novel chapter outlines into executable scene cards with goals, conflict, turns, consequences, dialogue functions, continuity notes, and hooks
+default_prompt: 请使用 中文小说场景卡写手 完成这个中文创作任务。

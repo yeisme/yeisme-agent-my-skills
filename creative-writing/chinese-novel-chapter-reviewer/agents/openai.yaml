@@ -1,0 +1,3 @@
+display_name: 中文小说章节验收编辑
+short_description: Review Chinese novel chapter candidates against goals, escalation, information gain, character movement, continuity delta, hooks, and risk flags before revision or acceptance.
+default_prompt: 请使用 中文小说章节验收编辑 检查这章候选稿是否完成章节目标、冲突升级、信息增量、人物推进、连续性 delta 和章尾钩子，并输出 risk_flags 与修订 handoff。

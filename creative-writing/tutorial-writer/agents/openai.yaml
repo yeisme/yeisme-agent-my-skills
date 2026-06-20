@@ -1,0 +1,3 @@
+display_name: 中文教程写手
+short_description: writing Chinese tutorials, explainers, operation guides, learning guides, or procedural instructions that move readers from not knowing to completing and verifying a task
+default_prompt: 请使用 中文教程写手 完成这个中文创作任务。

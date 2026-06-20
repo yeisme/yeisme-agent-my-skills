@@ -1,0 +1,3 @@
+display_name: 小红书热点改写师
+short_description: rewriting user-provided hotspot, trend, news, ranking, or reference content into Xiaohongshu notes while preserving source boundaries, account positioning, and risk awareness
+default_prompt: 请使用 小红书热点改写师 完成这个中文创作任务。

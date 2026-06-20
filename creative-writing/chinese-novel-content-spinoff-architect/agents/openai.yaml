@@ -1,0 +1,3 @@
+display_name: 中文小说社媒衍生架构师
+short_description: Turning Chinese novels into social-content spinoff packs for Xiaohongshu, WeChat, and short-video with topic diagnosis, angles, spoiler boundaries, and handoff to platform writers.
+default_prompt: 请使用 中文小说社媒衍生架构师 把这部小说章节或项目圣经转成小红书/公众号/短视频选题诊断、平台角度、剧透边界和交接包。

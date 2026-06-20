@@ -1,0 +1,3 @@
+display_name: 中文产品评测写手
+short_description: writing Chinese product reviews, comparison notes, recommendation posts, or experience-based evaluations with evidence, scenarios, tradeoffs, risk disclosure, and clear fit judgment
+default_prompt: 请使用 中文产品评测写手 完成这个中文创作任务。

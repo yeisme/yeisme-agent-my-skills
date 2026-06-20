@@ -1,0 +1,3 @@
+display_name: 中文创作技能安装器
+short_description: installing or enabling the correct creative-writing skill set for cli/auctra through skillctl when a Chinese creative task requires skills not present in the current runtime
+default_prompt: 请使用 中文创作技能安装器 完成这个中文创作任务。

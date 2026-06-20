@@ -1,0 +1,3 @@
+display_name: 中文小说篇幅形态架构师
+short_description: Plan Chinese fiction across short, medium, long-form, serial, and series length forms with structure, density, ending, and handoff guidance.
+default_prompt: 请使用 中文小说篇幅形态架构师 为这个故事选择合适篇幅，并给出结构方案。

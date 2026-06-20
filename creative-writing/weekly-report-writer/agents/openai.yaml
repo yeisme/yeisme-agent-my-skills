@@ -1,0 +1,3 @@
+display_name: 中文周报写手
+short_description: writing Chinese weekly reports, work summaries, progress updates, retrospectives, or planning notes with outcomes, evidence, blockers, priorities, and next-week commitments
+default_prompt: 请使用 中文周报写手 完成这个中文创作任务。

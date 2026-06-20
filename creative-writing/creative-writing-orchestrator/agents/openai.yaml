@@ -1,0 +1,3 @@
+display_name: 中文创作总编排
+short_description: coordinating multi-stage Chinese creative-writing tasks across planning, drafting, editing, review, cross-format transformation, Auctra project work, export, and handoff
+default_prompt: 请使用 中文创作总编排 完成这个中文创作任务。

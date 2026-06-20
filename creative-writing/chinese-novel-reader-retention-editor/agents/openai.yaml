@@ -1,0 +1,3 @@
+display_name: 中文小说读者留存编辑
+short_description: improving Chinese web-novel reader retention, first-three-chapter pull, chapter-end hooks, emotional payoff, serial rhythm, and drop-off risks without violating story logic
+default_prompt: 请使用 中文小说读者留存编辑 完成这个中文创作任务。

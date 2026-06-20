@@ -1,0 +1,3 @@
+display_name: 小红书内容总编排
+short_description: Orchestrating Xiaohongshu content tasks by dispatching the narrowest xhs skill across选题, briefing, note body, title/hooks, viral structure, hotspot rewrite, source-post factory, and personal brand without drafting inside the orchestrator.
+default_prompt: 请使用 小红书内容总编排 把这个小红书任务分派到最合适的子技能，控制阶段、状态和交付顺序，不要在总编排内直接成稿。

@@ -1,0 +1,3 @@
+display_name: 中文小说对白编辑
+short_description: revising Chinese novel dialogue for character voice, subtext, power shifts, rhythm, conflict, exposition control, and removal of template-like lines
+default_prompt: 请使用 中文小说对白编辑 完成这个中文创作任务。

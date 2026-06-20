@@ -1,0 +1,3 @@
+display_name: 中文书评写手
+short_description: writing Chinese book reviews, reading notes, recommendations, or theme essays that go beyond plot summary and include insight, textual evidence, reader fit, and personal takeaway
+default_prompt: 请使用 中文书评写手 完成这个中文创作任务。

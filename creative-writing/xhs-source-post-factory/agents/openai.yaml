@@ -1,0 +1,3 @@
+display_name: 小红书素材拆帖工厂
+short_description: turning PDFs, Markdown, TXT, JSON, long articles, meeting notes, or folders of source material into Xiaohongshu note series, post packages, and card scripts without losing source facts
+default_prompt: 请使用 小红书素材拆帖工厂 完成这个中文创作任务。

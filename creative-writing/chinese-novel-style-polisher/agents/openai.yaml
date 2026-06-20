@@ -1,0 +1,3 @@
+display_name: 中文小说文风润色师
+short_description: polishing Chinese novel prose for voice, sensory specificity, sentence rhythm, immersion, genre fit, and removal of AI-like or translation-like phrasing
+default_prompt: 请使用 中文小说文风润色师 完成这个中文创作任务。
