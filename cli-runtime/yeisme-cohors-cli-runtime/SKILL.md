@@ -40,7 +40,7 @@ Use this skill for `cli/cohors`, the local-first agent team command system.
    - the CEO agent prompt must explicitly ask for current work progress, next work content, and skill/prompt improvements; it must cite local evidence paths or run ids.
    - CEO thinking must go through Generic CLI Runtime and leave durable evidence under `.cohors/runs/<run_id>/`, including workflow, logs, trace, and normalized `yeisme-result`.
    - dangerous actions remain previews; the CEO agent does not approve, delete, push, deploy, or mutate project files unless a separate explicit workflow grants that boundary.
-5. Keep user-visible docs, logs, help text, reports, and `--explain` summaries in English unless the user explicitly requests another language for that artifact or the content is Chinese-language product content.
+5. Keep local project docs and OpenSpec artifacts in Chinese by default. Keep CLI help text, CLI output, logs, user-visible errors, public reports, and `--explain` summaries in English unless the user explicitly requests another language for that artifact or the content is Chinese-language product content.
 6. Add tests at the package closest to the behavior. Prefer fixtures in `testdata/workflows/` for workflow contracts.
 7. For Cohors plan/work-item execution, keep task state in `openspec/changes/cohors-<topic>/` with `proposal.md`, `design.md`, `tasks.md`, and `specs/**/spec.md`. If a task checklist appears under `docs/checklists`, `docs/work-items/active/<topic>/`, `docs/plans/active`, root project-doc mirrors, root `openspec/` for code work, or another ad hoc directory, migrate it to `openspec/changes/cohors-<topic>/` before continuing. Close ordinary completed changes by synchronizing local `docs/**` and specs, then moving the change to `openspec/changes/archive/YYYY-MM-DD-cohors-<topic>/`.
 
@@ -138,6 +138,7 @@ Backend/remote requirements:
 - Local daemon uses Unix socket or Windows named pipe JSON-RPC by default; it must not bind a network port unless `cohors serve` is explicitly used.
 - Optional remote server follows opencode-style C/S shape: headless HTTP server, OpenAPI 3.1 schema, SSE events, `attach` clients, and typed SDK compatibility.
 - Remote server is disabled by default. Non-localhost bind requires explicit `--remote` and authentication through `COHORS_SERVER_TOKEN` or a documented auth mode.
+- Local provider credentials may be stored only in user-level local config, a user-level secret store, or the configured auth backend. Workspace/project config should store account handles, env names, secret refs, route policy, and readiness metadata, not literal secret values.
 - Remote CORS and mDNS are off by default and must be explicitly enabled.
 - Remote endpoints must expose Cohors projections and audited actions, not arbitrary file read, arbitrary shell execution, raw provider payloads, or unredacted secrets.
 - Resource control is part of the design: idle timeout, worker TTL, max concurrency, provider/protocol health TTL, bounded SSE clients, and event ring buffers.

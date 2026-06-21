@@ -1,0 +1,3 @@
+display_name: Pinax Sync And Storage Operator
+short_description: Configure and operate Pinax storage, backend profiles, server/file/S3/rclone Cloud Sync, and remote diagnostics without exposing credentials.
+default_prompt: Inspect or configure Pinax sync/storage for this vault using profile names, remote names, or secret refs only; keep Remote API Mode separate from Cloud Sync.

@@ -12,7 +12,7 @@ Use this skill for registry-driven MCP onboarding and maintenance.
 - Registry source of truth: `mcp/registry.json`.
 - Schema: `mcp/registry.schema.json`.
 - Credential template: `mcp/mcp.env.example`.
-- Real secrets: `mcp/.env.mcp`, `mcp/gateway/.env`, service-specific `.env` files. Do not commit real secrets.
+- Real secrets: user-level local config, a user-level secret store, `mcp/.env.mcp`, `mcp/gateway/.env`, service-specific ignored `.env` files, or deployment secret managers. Do not commit real secrets or introduce shell credential scripts as the persistence path.
 - Add `mcp/<name>/` only for self-hosted code or lifecycle owned by this repo.
 - Remote or package-managed MCPs should normally be registry-only.
 - 联网搜索默认不接入 BigModel/Zai `web-search-prime`；保持该 backend disabled，并让 agent 通过 Firecrawl CLI 直连 `/home/yeshugen/workplace/backend-server-firecrawl`。

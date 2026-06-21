@@ -1,0 +1,3 @@
+display_name: Eikona 小红书信息图导演
+short_description: 将知识、流程、对比或清单内容设计成小红书静态信息图。
+default_prompt: 请把这些内容设计成小红书 3:4 竖版信息图，给出版式、文案层级、视觉风格和 Eikona dry-run 命令。

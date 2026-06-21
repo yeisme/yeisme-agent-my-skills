@@ -1,0 +1,3 @@
+display_name: Pinax Memory Operator
+short_description: Capture and recall Pinax non-vector agent memory records with source citations and bounded agent output.
+default_prompt: Recall or capture Pinax memory for this task using source-cited fact, decision, event, or task records.

@@ -1,0 +1,3 @@
+display_name: Yeisme Evolutionary Change Policy
+short_description: Block generation-breaking updates across CLI, RPC, DB, config, public API, and skill schemas; force incremental backward-compatible evolution with an OpenSpec gate.
+default_prompt: Review this change for backward compatibility across CLI output, RPC/API, database migrations, config/registry, public Go/TS API, and skill schema surfaces. Classify each as additive or breaking. For any breaking surface without an approved OpenSpec change, stop and create the owning change with migration, deprecation window, and rollback before continuing implementation.

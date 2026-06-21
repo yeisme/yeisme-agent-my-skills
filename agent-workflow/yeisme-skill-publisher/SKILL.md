@@ -77,6 +77,7 @@ The body should stay lean:
 Do not add per-skill `README.md`, `CHANGELOG.md`, `QUICK_REFERENCE.md`, or `INSTALLATION_GUIDE.md`. Put human-facing authoring guidance in `docs/skills/` instead.
 
 Do not write local execution wrappers, shell aliases, or agent-only command prefixes into user-facing docs, skill examples, plans, reviews, or final replies. Keep those details inside the execution layer only.
+> Renaming or removing a published skill directory, renaming `SKILL.md` frontmatter keys, or changing `agents/openai.yaml` required keys is a generation-breaking change: profiles and consumers reference skills by name. Follow `yeisme-evolutionary-change-policy`: keep the old name as an alias for one release, update every profile that references it, then remove the old name later.
 
 ## Workflow
 

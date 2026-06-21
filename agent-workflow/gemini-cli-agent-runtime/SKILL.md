@@ -1,0 +1,32 @@
+---
+name: gemini-cli-agent-runtime
+description: Use when configuring, operating, or instructing Gemini CLI in Yeisme projects, including skill activation, MCP Gateway client rendering, tool mapping, profile sync, and safe command examples.
+---
+
+# Gemini CLI Agent Runtime
+
+Use this skill when Gemini CLI is the active agent runtime or when Yeisme docs need Gemini-specific setup and usage guidance.
+
+## Workflow
+
+1. Activate applicable skills with Gemini's skill activation mechanism when available.
+2. Use generated runtime homes from skillctl; do not copy Yeisme source skills into ad hoc locations.
+3. Render MCP Gateway instructions for Gemini and follow registry route policy.
+4. Prefer structured Yeisme CLI output over prose parsing.
+
+## Commands
+
+```bash
+gemini
+mcp-gateway client doctor --client gemini --registry ../registry.json
+mcp-gateway client config gemini --registry ../registry.json --instructions
+mcp-gateway client commands gemini --registry ../registry.json
+dist/omh tools guide --json
+dist/omh skills sync --dry-run --json
+```
+
+## Boundaries
+
+- Do not hand-write MCP endpoint blocks when Gateway can render them.
+- Do not bypass official Hermes for chat-provider payloads or conversation delivery.
+- Do not store unsafe model internals or private tool arguments in evidence.

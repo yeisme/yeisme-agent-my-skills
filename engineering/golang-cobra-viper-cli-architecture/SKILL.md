@@ -25,7 +25,7 @@ description: Use when designing, implementing, refactoring, or reviewing a Yeism
 - Cobra / pflag 负责 command tree、flags、completion、help 和 `RunE`。
 - Viper 负责 defaults、config files、environment overrides 和 typed config unmarshal。
 - `internal/*` 承载业务、输出、配置、runner、存储和 provider adapter；命令层只接线和渲染。
-- Default human output is English; machine protocol fields remain stable English.
+- Default CLI human output is English; local project docs and OpenSpec artifacts default to Chinese; machine protocol fields remain stable English.
 
 允许例外，但必须写清原因：
 
@@ -77,6 +77,9 @@ testdata/
 - 长逻辑不要写进 `PreRunE` 或 `RunE`；抽到 service 或 use case。
 - 使用 `context.Context` 贯穿命令执行、外部命令、网络请求和长任务。
 - Flag help must be English; command names, flag names, and schema keys stay stable English.
+- Public options must be long-flag-first: `--help` teaches `--long-name` as the default surface, docs/examples show the long flag first, and short aliases are optional.
+- Do not mint lowercase short aliases for new Yeisme-specific flags. If a short alias is truly needed, use an uppercase letter such as `-A`; keep lowercase aliases only for established conventions already used by that CLI, such as `-h` or an existing `-v`.
+- Tests for new flags must cover `--help`, the long flag, any uppercase short alias, and the absence or rejection of accidental lowercase aliases.
 - completion 函数只做轻量读取，不触发危险操作或远程写入。
 - 测试中通过 command factory 创建新实例，避免全局 command 和全局 flag 污染。
 
@@ -88,7 +91,8 @@ testdata/
 - defaults 必须同时服务于 Viper 和纯 struct 测试，避免默认值散落在命令层。
 - config path 使用 XDG 优先，兼容旧路径时要有迁移或 fallback 说明。
 - 写配置时只写用户请求的目标文件；不要在普通只读命令中隐式创建或改写配置。
-- secrets、tokens、cookies 和 auth headers 不进示例配置、日志、trace、测试 fixture 或错误详情。
+- 用户级本地 config 或用户级 secret store 可以保存用户显式提交的本地 CLI 凭据；project/repo config、示例配置、日志、trace、测试 fixture、运行证据和错误详情不得包含真实 secrets、tokens、cookies 或 auth headers。
+- env 继续用于 CI、部署和临时 shell 覆盖，但不要创建、推荐或兼容新的 shell credential script 作为本地持久化层。
 - 文件监听、热加载和 profile 合并只有在产品真的需要时才加入。
 
 ## 输出和错误

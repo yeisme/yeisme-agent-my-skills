@@ -19,12 +19,14 @@ Prefer locally configured automation tools because they may already have browser
 command -v agent-browser
 command -v browser-use
 command -v npx
+command -v agent-reach
 command -v firecrawl
 ```
 
 Tool choice:
 
 - Use `agent-browser` first when the task needs an AI agent to observe, click, and read page state step by step.
+- For social, video, community, RSS, podcast, or logged-in platform reads, check Agent Reach first; if it provides a readable backend, avoid browser automation.
 - Use existing project Playwright commands or `npx playwright` for known, repeatable workflows that should become tests or long-term automation.
 - Use `agent-browser` for visual exploration or uncertain UI state; if unavailable, use `browser-use` or built-in browser tools.
 - Fall back to `firecrawl scrape` or `firecrawl crawl` for static extraction.
@@ -37,6 +39,7 @@ Tool choice:
 2. Check local browser/search CLIs and read `browser_tools.md` for tool selection.
 3. Try the lowest-cost reliable path first:
    - structured CLI (use `gh` for GitHub; package managers for package registries)
+   - `agent-reach doctor` and the selected upstream CLI for supported platforms
    - `firecrawl search` / `firecrawl scrape`
    - browser automation when interaction is needed
 4. Preserve evidence: final URL, screenshots or downloaded files if needed, and extracted records.
@@ -54,6 +57,13 @@ GitHub structured data:
 
 ```bash
 gh search repos "stars:>10000 language:TypeScript" --sort stars --limit 10
+```
+
+Agent Reach platform route:
+
+```bash
+agent-reach doctor
+agent-reach install --env=auto --channels=opencli,xiaohongshu
 ```
 
 Browser workflow:

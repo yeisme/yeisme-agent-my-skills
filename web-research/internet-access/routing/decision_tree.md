@@ -11,6 +11,7 @@ Read `task_intent.md` first and assign one primary intent:
 | Intent | Typical request | Default route |
 | --- | --- | --- |
 | `local-research-infra` | "Use/debug Hermes or OpenWebUI research/search" | local_research_infra |
+| `platform` | "Read/search/configure Twitter, Reddit, YouTube, Bilibili, XiaoHongShu, RSS, or Agent Reach" | agent_reach |
 | `lookup` | "Check X current version/URL/release date" | lightweight |
 | `research` | "Research/compare/analyze X" | standard |
 | `deep-research` | "Deep research / broad scan / find 200 examples" | deep_research |
@@ -24,6 +25,7 @@ Read `task_intent.md` first and assign one primary intent:
 Then classify the source shape:
 
 - Local research infrastructure: the task clearly points to Yeisme, Hermes, OpenWebUI, Research Harness, MCP Gateway, SearXNG, or a local Firecrawl backend.
+- Agent Reach platform: the task names Agent Reach or a supported platform with known platform routing, login, cookie, proxy, video, social, community, RSS, or podcast needs.
 - Known source query: the user gave a GitHub repo, package name, URL, API endpoint, or specific site.
 - Unknown source discovery: the user gave only a topic and needs sources found.
 - Verification/comparison: the user needs multi-source evidence and conclusions.
@@ -48,6 +50,13 @@ For GitHub targets:
 
 ```bash
 command -v gh
+```
+
+For Agent Reach platform targets:
+
+```bash
+command -v agent-reach
+agent-reach doctor
 ```
 
 For API/JSON endpoints:
@@ -86,6 +95,27 @@ Optimize OpenWebUI Hermes Research Harness search quality.
 Open WebUI returns too few search results; inspect local Firecrawl/SearXNG configuration.
 How should Hermes agents call local search tools for deep research?
 ```
+
+### 0.5 Agent Reach Platform Route
+
+Use `agent_reach.md` when the task targets Agent Reach or a supported social, video, community, RSS, podcast, or logged-in platform.
+
+Signals:
+
+- The user mentions Agent Reach setup, update, doctor, install, optional channels, cookies, or proxy.
+- The target is Twitter/X, Reddit, YouTube, Bilibili, XiaoHongShu, LinkedIn, V2EX, Xueqiu, Xiaoyuzhou, or RSS.
+- The task needs backend routing rather than ordinary generic web search.
+
+Examples:
+
+```text
+帮我安装 Agent Reach 并检查哪些渠道可用。
+帮我读这个 B 站视频的内容。
+帮我搜推特上大家怎么评价这个产品。
+小红书要怎么配置给 agent 用？
+```
+
+Do not use this route for normal public docs lookup when `firecrawl` or a structured CLI can answer directly.
 
 ### 1. Lightweight
 
@@ -184,6 +214,7 @@ Degrade when:
 | Need | Prefer | Fallback |
 | --- | --- | --- |
 | Hermes/OpenWebUI local research path | `local_research_infra.md` + local `firecrawl`/SearXNG/Research Harness | normal `firecrawl search`, built-in search |
+| Social/video/community platform routing | `agent_reach.md` + selected upstream CLI | static extraction, browser tools |
 | Unknown source discovery | `firecrawl search "query" --limit 5` | built-in search or hosted API |
 | URL content extraction | `firecrawl scrape "URL"` | `curl -L "URL"` plus parser |
 | GitHub repo/issue/release data | `gh ... --json ...` | GitHub API, `firecrawl search` |

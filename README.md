@@ -55,7 +55,7 @@ Requirements:
 - The body must describe when to use the skill, inputs, outputs, workflow, boundaries, and validation.
 - Keep the body concise; move detailed background into `references/`.
 - Examples must show real commands a user can run. Do not put local execution wrappers, shell aliases, or agent-only prefixes in skill bodies, docs, or final replies.
-- User-visible skill guidance defaults to English. Use another language only when explicitly requested for that artifact, for Chinese-language product/content domains, or for quoted/source material.
+- Skill trigger metadata and command examples should stay English or existing stable names for portability. When a skill produces or updates human-authored project docs, plans, reviews, handoffs, or OpenSpec artifacts, those artifacts default to Chinese unless a subproject explicitly marks them as public English documentation.
 
 ## `agents/openai.yaml` Requirements
 
@@ -104,16 +104,27 @@ If Codex/Agent sees duplicate self-built skills, keep only the `.skills/yeisme/<
 
 - `yeisme-skill-publisher`: create, validate, sync, and publish self-built skills under `.skills/yeisme/`.
 - `ai-native-cli-output-contract`: shared CLI contract for default summaries, `--agent`, `--json`, `--events`, `--explain`, envelopes, redaction, and contract tests.
+- `yeisme-evolutionary-change-policy`: block generation-breaking (断代) updates across CLI output, RPC/API, database migrations, config/registry, public Go/TS APIs, and skill schemas; force incremental backward-compatible evolution with an OpenSpec gate.
 - `yeisme-mcp-builder`: create, organize, review, and record self-built MCP capabilities under `mcp/`.
 - `yeisme-mcp-gateway-operator`: operate deployed MCP Gateway instances through `mcp-gateway` CLI, Web UI, TUI, API, and the `/mcp` endpoint.
 - `yeisme-mcp-gateway-maintainer`: maintain `mcp/gateway` Go Gateway behavior, CLI rendering, health checks, routing, audit, and tests.
 - `yeisme-mcp-registry-onboarding`: add or review MCP backends, credentials, client rendering, Gateway exposure, and permission policies in `mcp/registry.json`.
-- `yeisme-apigateway-auth-sync`: maintain Codex/Gemini CLI auth sync sidecars and new-api channel behavior in `apigateway`.
 - `yeisme-cohors-cli-runtime`: develop `cli/cohors` workflow, daemon, Team Room, trace, CLI/TUI output, eval, Generic CLI Runtime, and Pi/OMP package boundaries.
 - `yeisme-auctra-cli-runtime`: develop `cli/auctra` text creation pipelines, material/brief/review/export workflows, runtime provider contracts, run evidence, agent-facing CLI contracts, and TUI behavior.
-- `yeisme-eikona-cli-runtime`: develop `cli/eikona` generation, reference-image editing, provider adapters, run evidence, project library, Web UI, and release behavior.
+- `yeisme-eikona-cli-runtime`: develop or document `cli/eikona` generation, prompt skills/decks, visual assessment, recipe reuse, provider adapters, run evidence, project library, Web/API/MCP surfaces, and release behavior.
 - `yeisme-indagator-cli-runtime`: develop and document `agent/indagator` CLI commands, generated command docs, Cobra/Viper config, parser/manifest/download workflows, and output contracts.
+- `yeisme-gitpulse-cli-runtime`: develop, review, or operate `cli/gitpulse` Git workflow orchestration, worktrees, PR flow, TUI behavior, output contracts, and Go validation.
+- `yeisme-pinax-cli-runtime`: develop, review, or operate `cli/pinax` local indexing, profile management, publish/sync, backend client behavior, credentials, evidence, and Go validation.
+- `pinax-agent-router`: route Pinax operational tasks, including writing or saving Pinax notes, to the narrowest vault, retrieval, memory, sync/storage, or publishing operator skill.
+- `pinax-vault-operator`: safely initialize/select Pinax vaults, write or capture notes, append inbox/journal content, inspect health, snapshot, repair-plan, and organize-plan through real Pinax commands.
+- `pinax-retrieval-operator`: retrieve bounded context from Pinax indexes, search, links, KB, and controlled query commands.
+- `pinax-memory-operator`: capture and recall deterministic Pinax memory records for facts, decisions, events, and tasks.
+- `pinax-sync-storage-operator`: configure and operate Pinax Cloud Sync, S3/COS storage, backend profiles, sync plans, and storage diagnostics without exposing credentials.
+- `yeisme-quaestor-cli-runtime`: develop, review, or operate `cli/quaestor` query/research workflows, output contracts, evidence boundaries, adapters, and Go validation.
 - `yeisme-taskbridge-cli-runtime`: develop `cli/taskbridge` task control plane, provider sync, action files, Agent JSON contract, and Go CLI behavior.
+- `yeisme-hermes-communication-routing`: design or review provider-neutral Yeisme communication delivery through Hermes across notifications, commands, approvals, artifacts, handoffs, and future chat providers.
+- `yeisme-feishu-hermes-integration`: design or review Feishu/Lark collaboration integration through Hermes provider-neutral commands, events, routing, credential safety, and redacted evidence.
+- `yeisme-telegram-hermes-integration`: design or review Telegram integration through Hermes provider-neutral commands, Bot API boundaries, credential safety, chat/thread identity, and redacted evidence.
 - `performance-profiler`: establish performance baselines, locate bottlenecks, and produce before/after optimization evidence.
 - `project-integration-test-evidence`: require integration, component, system, and e2e test runs to write redacted evidence under the owning project's `temp/integration-test-runs/<run-id>/` directory.
 - `ui-spec-frontend-workflow`: turn PRDs, wireframes, screenshots, or high-fidelity UI images into React UI specs, component trees, implementation constraints, animation rules, and screenshot regression loops.
@@ -128,7 +139,7 @@ If Codex/Agent sees duplicate self-built skills, keep only the `.skills/yeisme/<
 - `golang-cobra-viper-cli-architecture`: enforce Yeisme Go CLI defaults around Cobra/Viper, command/config/output boundaries, and shared module extraction.
 - `golang-github-release-guardrails`: enforce GitHub Actions, golangci-lint, and GoReleaser release guardrails for Go projects.
 - `golang-goreleaser-distribution`: configure GoReleaser package-manager distribution, cross-repository release credentials, signing, SBOMs, and post-release install verification for Go projects.
-- `internet-access`: guide agents to use local CLI-first internet research, extraction, and verification workflows before escalating to browsers.
+- `internet-access`: guide agents to use Agent Reach platform routing plus local CLI-first internet research, extraction, verification, and browser escalation workflows.
 - `tui-design-standards`: require mouse support and polished, restrained, Apple-like terminal UI quality when reviewing or implementing TUIs.
 
 ## Validation And Sync

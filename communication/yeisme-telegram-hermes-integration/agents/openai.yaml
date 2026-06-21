@@ -1,0 +1,3 @@
+display_name: Yeisme Telegram Hermes Integration
+short_description: Design or review Telegram integration through Hermes provider-neutral routing without provider SDKs in domain projects.
+default_prompt: Review this Telegram integration plan and ensure it routes through Hermes with provider-neutral commands, redacted evidence, safe bot token handling, and no Telegram SDK or update parsing in domain subprojects.

@@ -1,0 +1,3 @@
+display_name: Windsurf Agent Runtime
+short_description: Configure Windsurf with Yeisme skill profiles, generic Gateway MCP setup guidance, subproject CLI contracts, and safe approval boundaries.
+default_prompt: Configure Windsurf for this Yeisme workspace using profile-managed skills, Gateway generic MCP instructions, subproject CLI contracts, and redacted evidence rules.

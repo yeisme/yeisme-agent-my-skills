@@ -1,0 +1,3 @@
+display_name: Pinax Vault Operator
+short_description: Safely operate Pinax vault setup, default selection, note writing/capture, snapshots, doctor, repair, and organize workflows.
+default_prompt: Safely write or capture this Pinax note or vault content using real Pinax commands and show the verification command.

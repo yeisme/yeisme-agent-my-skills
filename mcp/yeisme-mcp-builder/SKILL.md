@@ -91,7 +91,7 @@ Default to read-only search and explicitly gated execution. `execute` should val
    - timeout and retry behavior
 4. Start with `search` and `execute`; justify any additional tool in the MCP README or design notes.
 5. Add local debug instructions in the MCP directory.
-6. Keep secrets in environment files or documented environment variables. Do not commit real credentials.
+6. Keep real credentials in user-level local config, a user-level secret store, service-local ignored env files, documented environment variables, or deployment secret managers. Do not commit real credentials or add shell credential scripts as the persistence path.
 7. Add tests or a repeatable smoke command when the implementation has executable code.
 
 ## Recommended Layout

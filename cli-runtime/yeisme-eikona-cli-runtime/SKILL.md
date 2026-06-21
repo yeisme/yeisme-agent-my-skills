@@ -1,6 +1,6 @@
 ---
 name: yeisme-eikona-cli-runtime
-description: Use when changing, testing, reviewing, documenting, or designing Eikona CLI behavior under cli/eikona, including image generation, reference-image editing, command docs, agent invocation contracts, provider adapters, run evidence, project library, replacement safety, MCP integration, and Go release checks.
+description: Use when changing, testing, reviewing, documenting, or designing Eikona CLI behavior under cli/eikona, including image generation, reference-image editing, prompt skills, prompt decks, visual assessment, recipe reuse, command docs, agent invocation contracts, provider adapters, run evidence, project library, replacement safety, MCP integration, and Go release checks.
 ---
 
 # Yeisme Eikona CLI Runtime
@@ -14,7 +14,8 @@ Use this skill for `cli/eikona`, the agent-facing visual asset runtime and evide
 - Config precedence and provider credential resolution live in `internal/config`.
 - Provider protocol adapters live in `internal/adapters/*`; adapters must not print CLI output or bypass runtime storage.
 - Run/job/artifact evidence lifecycle lives in `internal/runtime` and `internal/runstore`.
-- Project library, prompt memory, sessions, replacement ledger, index, HTTP playground helpers, and MCP integration live under their matching `internal/*` modules.
+- Project library, prompt memory, prompt skills, prompt decks, sessions, replacement ledger, index, HTTP playground helpers, and MCP integration live under their matching `internal/*` modules.
+- Multi-scenario prompt behavior is layered: `internal/prompts` owns prompt memory and prompt-skill records; `internal/promptdeck` owns immutable deck versions; workflow draw owns deterministic card-pull evidence; `internal/visualmemory` and `internal/stylepack` own authorized reference/style constraints; planned `internal/assessment` and `internal/recipe` work must consume these projections rather than creating parallel stores.
 - In a `cli/eikona` session, human-facing product, design, runtime, protocol, governance, evaluation, command, and delivery docs live in local `docs/**`; code behavior docs live in `README.md` and `AGENTS.md`. Root project-doc mirrors are not valid owners and must not be required for closeout.
 - Agent-facing command guidance lives in `cli/eikona/docs/commands/README.md`; cross-agent invocation rules live in `cli/eikona/docs/commands/agent-integration.md`.
 - Eikona task lifecycle follows the repository-wide OpenSpec rules in `docs/workflows/execution-slice-lifecycle.md`; migrated Eikona notes live in `cli/eikona/openspec/changes/archive/2026-05-11-eikona-checklists-index/legacy/README.md`. Execution task state must stay under `cli/eikona/openspec/changes/eikona-<slug>/` or its archive, not docs checklists, plans, or ad hoc work-item directories.
@@ -24,15 +25,21 @@ Use this skill for `cli/eikona`, the agent-facing visual asset runtime and evide
 1. Start inside `cli/eikona` and read `AGENTS.md`, `README.md`, and the nearest package or command doc before editing.
    - For CLI command documentation, read `docs/commands/README.md` and the matching `docs/commands/<command>.md` first.
    - For other agents calling Eikona, read `docs/commands/agent-integration.md` first and prefer CLI `--json`/`--agent` contracts before adding MCP-only behavior.
+   - For multi-scenario prompt work, read `docs/product/scenario-playbook.md`, `docs/commands/prompts.md`, `docs/commands/workflow.md`, and `docs/commands/style.md` before changing code or docs.
+   - For active design tracks around scoring/tags or recipe reuse, read `openspec/changes/eikona-visual-assessment-tags/` and `openspec/changes/eikona-prompt-skill-reuse-recipes/` if they exist, then keep new implementation tasks in the owning Eikona OpenSpec change.
 2. Preserve Eikona product contracts:
    - `--json` output must remain machine-readable and stable for agents, Cohors, CI, and shell scripts.
    - new or changed CLI output must follow `ai-native-cli-output-contract`: human summary by default, strict `--json`, `--agent` for low-token parsing, optional `--events`, and secret-safe stdout/stderr separation.
-   - human output, help text, docs, logs, and user-visible errors should be English unless the user explicitly requests another language for that artifact or the content is Chinese-language product content.
+   - local project docs and OpenSpec artifacts should be Chinese by default; human CLI output, help text, logs, and user-visible errors should be English unless the user explicitly requests another language for that artifact or the content is Chinese-language product content.
    - every successful provider artifact must be written through the run evidence store under `runs/<run_id>/outputs/`.
    - provider requests in tests must use `httptest` or fixture adapters; do not call real remote providers in automated tests.
-   - secrets must never be written to YAML examples, traces, provider jobs, artifact manifests, test snapshots, or README output.
+   - user-level local Eikona config or the local auth store may store plaintext provider keys when the user explicitly configures them; secrets must never be written to project YAML, YAML examples with real values, traces, provider jobs, artifact manifests, test snapshots, or README output.
+   - Eikona must not create, recommend, or read shell credential scripts for provider keys; use direct user config, `eikona auth set --api-key-stdin`, or process environment for CI and temporary overrides.
    - command examples in docs, help, skills, plans, reviews, and final responses must be real user-runnable commands such as `eikona workflow run ...`; do not expose local wrappers or agent-only prefixes.
    - command docs must cover every visible subcommand and explicitly mark hidden/internal entries such as `models`, `worker`, and disabled `video` when relevant.
+   - do not add isolated scenario commands for Xiaohongshu, short-drama, product, game, docs, or graphic-design variants; scenario differences belong in workflow templates, prompt decks, prompt skills, profiles, style packs, assessment criteria, review policy, and recipe influence evidence.
+   - prompt skills are provenance-bearing reusable prompt sources; prompt decks are versioned card-pull assets; workflows snapshot prompt refs and deck selections into run evidence. Later edits to prompt skills, decks, style packs, or recipes must not reinterpret old runs.
+   - visual assessment and recipe reuse must be evidence-backed and explainable: store scores/tags/corrections/recipe influence as structured evidence, never as hidden reasoning or unbounded prose. Machine-only scores must not silently select winners without append-only human feedback.
 3. For OpenAI-compatible image generation:
    - new docs, examples, defaults, and prompts must recommend `openai:gpt-image-2`.
    - `openai:gpt_image_2` is legacy compatibility only.
@@ -51,6 +58,9 @@ Use this skill for `cli/eikona`, the agent-facing visual asset runtime and evide
    - multi-step work uses `eikona workflow validate/plan/draw/run --json` and `workflow run --background`;
    - status polling uses `eikona wait/status/inspect --json` or low-token `--agent`;
    - artifact handoff uses `eikona assets handoff <artifact_id> --json` before project writes;
+   - scenario prompt exploration uses `eikona prompts catalog search ... --json`, `eikona workflow draw ... --json`, and `eikona workflow run ... --background --json`;
+   - planned visual scoring uses `eikona assess ... --json` after the assessment change lands; until then, use `review`, `feedback`, and objective `quality.check` evidence;
+   - planned recipe reuse uses `eikona recipes ...` and `workflow --recipe` only after the recipe change lands; until then, keep reuse explicit through prompt skills, deck versions, style packs, and feedback evidence;
    - long-lived integrations can use `eikona mcp`, but ordinary CLI output remains the primary contract.
 6. For Eikona plan/checklist work, keep `proposal.md`, `design.md`, `tasks.md`, and `specs/**/spec.md` under `cli/eikona/openspec/changes/eikona-<slug>/`; migrate any misplaced checklist or root `openspec/` implementation task before continuing. Do not leave completed execution changes active. After closeout, update readiness/specs, record verification in `tasks.md` or `design.md`, and archive ordinary changes to `cli/eikona/openspec/changes/archive/YYYY-MM-DD-eikona-<slug>/`.
 
@@ -70,6 +80,13 @@ For broader backend/runtime changes:
 cd cli/eikona
 go test ./... -timeout 180s
 go build -trimpath -o dist/eikona ./cmd/eikona
+```
+
+For documentation, prompt-skill, deck, assessment, or recipe design changes, also run:
+
+```bash
+cd cli/eikona
+openspec validate --all
 ```
 
 If CI, tags, or release artifacts change, also use the Go/GitHub release guardrails skill.

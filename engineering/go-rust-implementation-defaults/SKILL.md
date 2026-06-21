@@ -10,12 +10,15 @@ Use this skill when a Yeisme task involves language choice, backend architecture
 ## Default Policy
 
 Yeisme projects should not default to language migration. Start from the project's main language, then escalate only when the capability needs it.
+> A language or module-path migration is a generation-breaking change even when behavior is preserved. Follow `yeisme-evolutionary-change-policy`: gate it behind an OpenSpec change with a dual-run transition, consumer migration, deprecation window, and rollback before moving a capability across languages or changing a Go module / TS package path.
 
 - Prefer **TypeScript/Bun** for Cohors, agent/team tools, provider orchestration, plugin SDKs, typed clients, output renderers, TUI glue, and fast control-plane iteration.
 - Prefer **Go** for separate backend services, MCP servers, gateways, daemons, workers, long-running processes, sync tools, HTTP/SSE servers, health checks, resource control, and operational tooling when a service/process boundary is clear.
 - Prefer **Rust** for native/system kernels only when the project owns or patches that native layer: parser-heavy code, codecs, filesystem primitives, memory-sensitive hot paths, high-performance hashing/diff kernels, WASM/native libraries, or maintained Rust crates.
 - Prefer **prebuilt native packages** over local Rust development when a maintained package already exposes the needed native binding to TypeScript/Bun.
 - Use **Python** mainly for data experiments, offline scripts, and eval glue, not default long-running backend services.
+
+For Go subprojects, default to **pure Go**. Backend services, MCP/gateway services, daemons, workers, synchronizers, and single-binary CLIs should keep normal build/test/release paths compatible with `CGO_ENABLED=0`. Do not introduce cgo for broad performance claims; the added debugging, cross-compilation, deployment, and release cost is not justified for ordinary Yeisme high-concurrency services or monolithic CLIs.
 
 ## Cohors Rule
 
@@ -55,6 +58,16 @@ If no, keep the capability in TypeScript/Bun or the current project language.
 
 If yes and this is a separate service/process boundary, evaluate Go first.
 
+Before choosing cgo in a Go project, check:
+
+- Is there a pure-Go package, standard-library approach, external process boundary, or existing service integration that solves the requirement?
+- Is the requirement a true platform/system binding, legacy compatibility bridge, or measured correctness constraint rather than a generic performance claim?
+- Can the cgo dependency be isolated behind a narrow adapter without leaking into business logic, CLI output, protocol handling, repositories, or service APIs?
+- Have debugging, cross-compilation, release, container, CI, and operations impacts been documented in the owning OpenSpec design?
+- Does the design preserve a `CGO_ENABLED=0` default build or provide a clear fallback/rollback when that is impossible?
+
+If any answer is no, stay pure Go.
+
 Before choosing local Rust, check:
 
 - Is this a native binding, parser, AST, shell, isolation, filesystem, hashline, codec, or WASM/kernel boundary?
@@ -83,6 +96,7 @@ When documenting the decision:
 - Name the owner language for each layer.
 - State why TS is or is not enough.
 - State why Go or Rust is selected.
+- For Go projects, state how the normal path stays pure Go and `CGO_ENABLED=0`; if cgo is unavoidable, document the exception evidence, adapter boundary, and fallback/rollback.
 - Include fallback behavior and resource budgets.
 - For Cohors Pi / OMP dependencies, state whether the dependency mode is released package, temporary Git ref/patch, forked scoped package, or exceptional submodule, and explain the exit path.
 - Include real validation commands.
@@ -94,6 +108,8 @@ Reference doc: `docs/architecture/language-runtime-strategy.md`.
 - Do not put UI rendering, localized CLI text, approval policy, provider prompt policy, or product state machine into Rust by default.
 - Do not move Cohors features out of TypeScript/Bun without measured performance, system, or distribution evidence.
 - Do not choose local Rust just because another project uses Rust; require ownership of a native package, a system API reason, or an explicit fork/patch/upstream plan.
+- Do not add cgo to Go backends, MCP/gateway services, daemons, workers, synchronizers, or single-binary CLIs for generic performance claims.
+- Do not let cgo become a transitive default release requirement without OpenSpec evidence, an isolated adapter, and deployment/debugging impact notes.
 - Do not choose Go-only for Cohors; Cohors still needs TS/Bun for CLI/control-plane and AI ecosystem integration.
 - Do not default Cohors native/system capabilities to local Rust or a Go sidecar when `@oh-my-pi/pi-natives` can be consumed as a package.
 - Do not default Cohors Pi / OMP integration to Git submodules or vendored upstream source. Prefer package consumption; fork only when maintaining a native/runtime difference.

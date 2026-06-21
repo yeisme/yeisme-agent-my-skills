@@ -164,15 +164,18 @@ Never print:
 - API keys, bearer tokens, cookies, session IDs, private keys, passwords, or authorization headers.
 - Raw prompts that may include user secrets.
 - Full provider requests or responses before redaction.
-- `.env` values or local credential file contents.
+- `.env` values, user-level config secret values, secret-store contents, or local credential file contents.
 
 Allowed:
 
 - Last 4 characters of an ID when useful.
 - Hashes or stable redacted handles.
 - Relative evidence paths after checking they do not include secrets.
+- Credential source metadata such as env var names, configured status, keychain refs, or redacted digests.
 
 Machine output is not exempt from redaction. Sidecar files, traces, test snapshots, and audit logs must follow the same rule.
+
+Local CLI auth/config commands may write real credentials to user-level local config or a user-level secret store, but they must not document shell credential scripts as the persistence path and must not write real credentials to repository project assets.
 
 For sensitive commands, prefer one of:
 

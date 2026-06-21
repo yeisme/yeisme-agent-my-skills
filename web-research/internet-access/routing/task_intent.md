@@ -78,6 +78,31 @@ curl -fsS "http://localhost:32742/search?q=openwebui&format=json" | jq '.results
 
 Output: local route decision, services/CLIs used, port/config evidence, trace/budget/coverage limits, and next debugging path.
 
+### `platform`
+
+Goal: read, search, configure, or diagnose a named social, video, community, RSS, podcast, or logged-in platform through Agent Reach's backend routing.
+
+Signals:
+
+- "Agent Reach"
+- "Twitter/X", "Reddit", "YouTube", "Bilibili", "小红书", "XiaoHongShu", "LinkedIn", "V2EX", "雪球", "Xueqiu", "小宇宙", "Xiaoyuzhou", "RSS"
+- "configure cookies"
+- "which backend is active"
+- "doctor"
+
+Default route: `agent_reach.md`, combined with `standard.md` for synthesis or `browser_tools.md` when visible UI interaction is still required.
+
+Example commands:
+
+```bash
+command -v agent-reach
+agent-reach doctor
+agent-reach install --env=auto --channels=opencli,twitter,reddit,bilibili
+agent-reach configure --from-browser chrome
+```
+
+Output: Agent Reach route decision, platform, active backend, completed read/search/configuration, blocked credentials or proxy needs, and evidence.
+
 ### `deep-research`
 
 Goal: systematic, large-sample, auditable internet research.

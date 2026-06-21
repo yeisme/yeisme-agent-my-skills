@@ -10,10 +10,33 @@ Priority is source-driven:
 
 1. If the user gave an explicit source, use that source's CLI, API, or scrape command directly.
 2. If the task clearly happens in a Yeisme/Hermes/OpenWebUI local deployment, apply `local_research_infra.md` first to confirm local Firecrawl, SearXNG, Research Harness, and Gateway policy.
-3. If the user gave only a topic, use `firecrawl search` to find candidate sources.
-4. If search results point to structured sources, switch to the source-specific CLI/API.
-5. If static content cannot answer, escalate to browser tools.
-6. If the workflow must be repeated, consider Playwright or project automation.
+3. If the task targets a platform covered by Agent Reach, apply `agent_reach.md` to choose and diagnose the backend before using the selected upstream tool.
+4. If the user gave only a topic, use `firecrawl search` to find candidate sources.
+5. If search results point to structured sources, switch to the source-specific CLI/API.
+6. If static content cannot answer, escalate to browser tools.
+7. If the workflow must be repeated, consider Playwright or project automation.
+
+## Role Of Agent Reach
+
+Agent Reach is the preferred route selector for platform-specific internet access when the platform has known friction, login requirements, or multiple backend choices.
+
+Use it for:
+
+- Twitter/X, Reddit, YouTube, Bilibili, XiaoHongShu, LinkedIn, V2EX, Xueqiu, Xiaoyuzhou, RSS, and related optional channel setup.
+- Installing or updating the local capability layer.
+- Running health checks before deciding whether to use `twitter-cli`, OpenCLI, `yt-dlp`, `bili-cli`, `rdt-cli`, `gh`, `feedparser`, or another backend.
+- Cookie, proxy, or browser-session configuration guidance.
+
+Common commands:
+
+```bash
+command -v agent-reach
+agent-reach doctor
+agent-reach doctor --json
+agent-reach install --env=auto --safe
+```
+
+Do not treat Agent Reach as a content wrapper. Once the active backend is clear, use that backend directly and report it in the evidence.
 
 ## Is `gh` Redundant?
 

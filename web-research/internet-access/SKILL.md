@@ -1,6 +1,6 @@
 ---
 name: internet-access
-description: Use when the user needs to get information from the internet, search the web, extract web content, verify sources, inspect online service state, or interact with websites/browsers; guides agents to choose local CLI tools first, such as firecrawl, source-specific CLIs, agent-browser, playwright, browser-use, curl, and jq, before falling back to hosted APIs or built-in browsing.
+description: Use when the user needs to get information from the internet, search the web, extract web content, verify sources, inspect online service state, read social/video/community platforms through Agent Reach, or interact with websites/browsers; guides agents to choose local CLI tools first, such as agent-reach, firecrawl, source-specific CLIs, agent-browser, playwright, browser-use, curl, and jq, before falling back to hosted APIs or built-in browsing.
 ---
 
 # Internet Information Access And Interaction
@@ -31,6 +31,7 @@ Use this skill for:
 - Extracting readable content from URLs.
 - Finding docs, releases, issues, repositories, or changelogs.
 - Querying GitHub, npm, PyPI, Cargo, Go modules, standards docs, or vendor docs.
+- Reading or searching social, video, community, RSS, podcast, and logged-in platforms through Agent Reach when direct static extraction is insufficient or platform-specific routing is useful.
 - Browser automation, logged-in workflows, and dynamic page handling.
 
 Do not use this skill for local file search, code execution, database queries, or purely offline analysis.
@@ -43,15 +44,16 @@ Do not treat tool priority as a fixed list. First identify the task goal and lik
    - GitHub target: `gh`.
    - npm/PyPI/Cargo/Go package target: `npm`, `pip`, `cargo`, `go`.
    - JSON endpoint or official API: `curl` + `jq`.
-2. If the target source is unknown and discovery is needed, prefer generic discovery/extraction tools:
+2. If the target is a supported social, video, community, RSS, podcast, or logged-in platform, use Agent Reach as the capability selector and health checker, then call the selected upstream tool directly. Read `routing/agent_reach.md`.
+3. If the target source is unknown and discovery is needed, prefer generic discovery/extraction tools:
    - `firecrawl`: general web search, scrape, crawl, and content extraction.
-3. If the task is in a Yeisme/Hermes/OpenWebUI local deployment context, first read `routing/local_research_infra.md` and reuse the local Firecrawl, SearXNG, and Research Harness constraints.
-4. Use browser tools only when real page interaction or dynamic state is part of the answer:
+4. If the task is in a Yeisme/Hermes/OpenWebUI local deployment context, first read `routing/local_research_infra.md` and reuse the local Firecrawl, SearXNG, and Research Harness constraints.
+5. Use browser tools only when real page interaction or dynamic state is part of the answer:
    - `agent-browser`, `browser-use`, `npx playwright`, or an existing project browser automation command.
-5. Local generic fallback tools:
+6. Local generic fallback tools:
    - `curl`, `jq`, `pup`, `htmlq`, `lynx`, `w3m`.
-6. If local CLIs are missing, blocked, or insufficient, then use built-in browsing/search tools.
-7. Call hosted APIs directly only when CLI options cannot complete the task and credentials already exist.
+7. If local CLIs are missing, blocked, or insufficient, then use built-in browsing/search tools.
+8. Call hosted APIs directly only when CLI options cannot complete the task and credentials already exist.
 
 `gh` is not a general web search tool and is not a default dependency for every internet task. Use it only when the target is GitHub, or when search results already point to a GitHub repository, issue, release, or discussion and structured fields are needed. This avoids parsing GitHub pages in a browser and gives structured data directly.
 
@@ -62,6 +64,7 @@ Choose sources by information type instead of treating every task as web search:
 | Information type | Preferred tool | Notes |
 | --- | --- | --- |
 | Official docs / web page text | `firecrawl search`, `firecrawl scrape` | Search first, then scrape authoritative URLs. |
+| Social/video/community platforms | `agent-reach doctor`, then selected upstream CLI | Use for Twitter/X, Reddit, YouTube, Bilibili, XiaoHongShu, LinkedIn, V2EX, Xueqiu, Xiaoyuzhou, RSS, and multi-backend platform routing. |
 | GitHub repos, issues, releases | `gh` | Prefer structured fields; avoid browser page parsing. |
 | npm/PyPI/Cargo/Go packages | Package manager CLI | Versions, release time, repository, and dependency data should come from the registry. |
 | API values | `curl` + `jq` | Good for official APIs, JSON endpoints, and health checks. |
@@ -69,6 +72,13 @@ Choose sources by information type instead of treating every task as web search:
 | Repeatable browser flows | `npx playwright` or existing project Playwright commands | Best for tests, regressions, and long-term automation. |
 
 Do not assume an API key must be exported. If a local CLI works, use it first. Before planning, probe only the tools relevant to the route:
+
+For multi-platform internet capability and platform routing:
+
+```bash
+command -v agent-reach
+agent-reach doctor
+```
 
 ```bash
 command -v firecrawl
@@ -115,6 +125,7 @@ Move from light to heavy as the task requires:
 Typical path:
 
 ```text
+agent-reach doctor -> selected upstream CLI for platform tasks
 firecrawl search -> firecrawl scrape -> gh/npm/curl structured query -> agent-browser interaction -> Playwright hardening
 ```
 
@@ -122,6 +133,7 @@ More precise decision order:
 
 ```text
 Known target source -> source-specific CLI/API
+Known social/video/community platform -> Agent Reach route -> selected upstream CLI
 Unknown source -> firecrawl search for discovery
 Known URL -> firecrawl scrape or curl
 Static content insufficient -> agent-browser/browser-use
@@ -153,6 +165,7 @@ Choose the smallest route that satisfies the task:
 - `routing/lightweight.md`: quick facts, definitions, single-source checks, focused queries.
 - `routing/standard.md`: multi-source research, comparison, analysis, and cross-checking.
 - `routing/deep_research.md`: deep research, large-sample search, 200-300 candidate examples, evidence matrices, and stratified sampling.
+- `routing/agent_reach.md`: Agent Reach installation, doctor checks, platform routing, optional channels, credential boundaries, and selected upstream tool use.
 - `routing/query_strategy.md`: query expansion, batch design, search coverage, and bias control.
 - `routing/evidence_ledger.md`: candidate sources, included samples, field extraction, and evidence ledger shape.
 - `routing/research_budget.md`: research scale, time/sample budgets, stopping conditions, and escalation rules.
@@ -200,12 +213,13 @@ If the browser is only used to get information, keep using the `autonomous` rout
 
 1. Restate the information need and decide whether freshness, citations, or web interaction are required.
 2. Check whether the task is in a Yeisme/Hermes/OpenWebUI local research infrastructure context; if so, apply `local_research_infra.md`.
-3. Use `command -v` only for tools relevant to the current route.
-4. Choose a route: lightweight, standard, deep-research, or autonomous.
-5. Run real local CLI commands directly.
-6. Preserve useful evidence: URL, title, date, command type, and confidence limits.
-7. Cross-check important conclusions with independent sources.
-8. State limitations when tools are missing, results are stale, or authentication is required.
+3. If the request names Twitter/X, Reddit, YouTube, Bilibili, XiaoHongShu, LinkedIn, V2EX, Xueqiu, Xiaoyuzhou, RSS, or general Agent Reach setup, read `routing/agent_reach.md` and run `agent-reach doctor` when available.
+4. Use `command -v` only for tools relevant to the current route.
+5. Choose a route: lightweight, standard, deep-research, autonomous, or Agent Reach platform route.
+6. Run real local CLI commands directly.
+7. Preserve useful evidence: URL, title, date, command type, active backend, and confidence limits.
+8. Cross-check important conclusions with independent sources.
+9. State limitations when tools are missing, results are stale, or authentication is required.
 
 ## Common Local CLI Patterns
 
@@ -217,6 +231,19 @@ firecrawl search "OpenAI Responses API docs" --limit 10
 firecrawl view-config
 firecrawl search "Open WebUI Research Harness" --api-url http://localhost:32741 --limit 5 --json
 ```
+
+### Agent Reach Platform Routing
+
+```bash
+command -v agent-reach
+agent-reach doctor
+agent-reach install --env=auto --safe
+agent-reach install --env=auto --channels=opencli,twitter,reddit,bilibili
+agent-reach configure --from-browser chrome
+agent-reach configure proxy http://user:pass@ip:port
+```
+
+After Agent Reach reports the active backend, call the upstream tool directly instead of treating `agent-reach` as a content wrapper.
 
 ### Scrape Or Extract A Known URL
 

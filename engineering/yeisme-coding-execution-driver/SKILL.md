@@ -187,6 +187,7 @@ Stop and ask only when continuing would risk one of these:
 - a missing credential, service, dependency, or artifact that cannot be worked around locally
 - repeated verification failure after evidence-driven recursive debugging has isolated a blocker that requires user input
 - the next required leaf is outside the user's requested scope or permission boundary
+- a generation-breaking change (per `yeisme-evolutionary-change-policy`: removing/renaming/retyping a released CLI field, RPC/API method or field, database column, config key, public Go/TS symbol, package path, or skill schema) that has no approved OpenSpec change with migration + deprecation + rollback; stop and create the owning change before continuing
 
 When blocked, report:
 
@@ -207,10 +208,10 @@ Always run a verification command before claiming completion. Prefer, in order:
 
 If a check cannot run, say why and name the next best evidence used.
 
-For plan/checklist/work-item workflows, also apply the OpenSpec lifecycle in `docs/workflows/execution-slice-lifecycle.md` before claiming completion:
+For formal delivery plan/checklist/work-item workflows, also apply the OpenSpec lifecycle in `docs/workflows/execution-slice-lifecycle.md` before claiming completion. Bounded exploratory MVPs, prototypes, spikes, UI/UX extensions, local refactors, and focused bug investigations may finish with local verification and a concise outcome summary, as long as they remain reversible and do not touch stable contracts, persistence schemas, cross-project boundaries, production behavior, credentials, or external side effects:
 
 - choose the owner first: root `openspec/` is for repository-level design and handoff only; code implementation, test fixes, behavior changes, verification evidence, and closeout belong in the owning `<subproject>/openspec/changes/<change-id>/`
-- if tracked work was created under `docs/**/checklists`, `docs/**/plans/active`, `work-items/active`, root `openspec/` for code work, or another ad hoc directory, migrate it to the correct owner OpenSpec change before continuing
+- if formal tracked work was created under `docs/**/checklists`, `docs/**/plans/active`, `work-items/active`, root `openspec/` for code work, or another ad hoc directory, migrate it to the correct owner OpenSpec change before continuing
 - update `proposal.md`, `design.md`, `tasks.md`, and `specs/**/spec.md` as needed
 - record verification evidence in `tasks.md` or the verification section of `design.md`
 - sync any owning readiness, roadmap, README, document-map, or `openspec/specs/` paths

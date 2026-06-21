@@ -9,7 +9,7 @@ description: Use when investigating, measuring, benchmarking, profiling, or opti
 
 Measure before optimizing. Turn a vague "it feels slow" request into a specific workload, baseline, bottleneck hypothesis, targeted change, and repeatable before/after evidence.
 
-Use this with the domain skill for the owning subproject, such as `yeisme-mcp-gateway-maintainer`, `yeisme-cohors-cli-runtime`, `yeisme-apigateway-auth-sync`, or `yeisme-mcp-builder`.
+Use this with the domain skill for the owning subproject, such as `yeisme-mcp-gateway-maintainer`, `yeisme-cohors-cli-runtime`, or `yeisme-mcp-builder`.
 
 For backend work, also pair with `backend-system-workflow` so optimization does not bypass state-machine, transaction, idempotency, concurrency, permission, or observability requirements.
 

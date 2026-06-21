@@ -41,6 +41,7 @@ Backend acceptance requires explicit treatment of:
 - performance baseline and profiling evidence when relevant
 
 For Cohors, Agent Team, MCP Gateway, and engineering consoles, the backend should usually be an event-driven task state system, not a thin CRUD app.
+> Database migrations and API/RPC contracts evolve incrementally. `DROP COLUMN`/`DROP TABLE`, narrowing a type, adding `NOT NULL` without a default, renaming a populated column, and changing an HTTP method/path or proto field number are generation-breaking changes. Follow `yeisme-evolutionary-change-policy`: gate them behind an OpenSpec change with expand-then-contract migrations, a deprecation window, and a rollback before touching the schema or wire format.
 
 ## Required Workflow
 
@@ -344,7 +345,7 @@ Differentiate at least:
 - internal error
 - retryable vs non-retryable failure
 
-Do not leak secrets, tokens, authorization headers, private request bodies, or internal stack traces into user-facing errors.
+Do not leak secrets, tokens, authorization headers, private request bodies, or internal stack traces into user-facing errors. Backend and deployment surfaces should use their secret manager, platform credentials, or environment injection; local CLI helpers may use user-level config or a user-level secret store, but project/repo config, fixtures, docs, logs, traces, and evidence must not contain real credentials. Do not introduce shell credential scripts as a persistence mechanism.
 
 ## Permission And Audit Rules
 

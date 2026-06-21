@@ -8,6 +8,7 @@ description: Use when designing, implementing, testing, or reviewing CLI output 
 Use this skill whenever a command-line interface is created or changed. It enforces one shared projection rendered through multiple modes instead of letting each command hand-roll unrelated text, JSON, and agent output.
 
 ## Contract
+> Removing, renaming, or retyping any released envelope field, `status` enum value, `--agent` key, `--events` type, or command name is a generation-breaking change. Follow `yeisme-evolutionary-change-policy`: stop and gate it behind an OpenSpec change with a migration, deprecation window, and rollback before editing the renderer.
 
 All CLI output must follow "one core, multiple renderers":
 
@@ -21,7 +22,7 @@ Every mode must come from the same command projection. Do not parse localized hu
 
 Structured project assets must be CLI-authored. For config, profile/policy, run receipt, event log, review decision, sync mapping, export manifest, OpenSpec task evidence, or any machine-readable metadata, design commands or application services that create and update the files. Agents should invoke commands such as `app project set`, `app profile set`, `app run start`, `app event append`, or `openspec new change`; they should not hand-write JSON, YAML, JSONL, or Markdown metadata files. User prose, note bodies, drafts, and ordinary content files are the exception.
 
-For Pi, OMP, Cohors, Auctra, pinax, GitPulse, skillctl, and similar agent tools, user-visible plans, explanations, reviews, handoffs, run summaries, errors, help text, logs, and `--explain` reports default to English. Machine protocol fields, schema keys, enum values, command names, flags, log keys, JSON envelope fields, `--agent` keys, and third-party API fields remain stable English or existing names.
+For Pi, OMP, Cohors, Auctra, pinax, GitPulse, skillctl, and similar agent tools, CLI help text, default command summaries, logs, user-visible errors, and `--explain` reports default to English. Human-authored project docs, OpenSpec plans, reviews, handoffs, and run summaries default to Chinese unless a subproject explicitly marks the artifact as public English documentation. Machine protocol fields, schema keys, enum values, command names, flags, log keys, JSON envelope fields, `--agent` keys, and third-party API fields remain stable English or existing names.
 
 Never output or persist full chain-of-thought, raw prompts, hidden system prompts, unredacted provider payloads, private tool arguments, or model-internal reasoning in stdout, stderr, traces, event logs, run receipts, snapshots, fixtures, golden files, docs, or structured assets. When explanation is needed, provide a redacted English summary: conclusion, key evidence, risk, tradeoff, next step, and evidence references.
 
@@ -97,8 +98,23 @@ Default output is for humans:
 Privacy controls are part of the contract:
 
 - For commands likely to touch credentials, provide `--no-output`, `--output none`, or an equivalent sidecar-only path when the product surface supports it.
+- Local CLI auth/config commands may write real credentials only to user-level local config or a user-level secret store. Output, events, logs, evidence, docs, and fixtures must show only credential status, source type, env name, path, keychain ref, or redacted digest.
+- Do not document shell credential scripts as the local persistence mechanism; use CLI/service-authored config or environment variables for CI and temporary overrides.
 - Sidecar, trace, audit, and test snapshot output must use the same redaction policy as stdout.
 - Reasoning summaries may be persisted only through CLI/service-authored structured evidence after redaction; never by direct agent-written metadata files.
+
+## Command Line Parameter Rules
+
+Design flags for readable long-form usage first:
+
+- Every public option must have a clear long flag, and `--help` must document long flags as the default teaching surface.
+- Short flags are optional convenience aliases, not the primary contract. Do not add one-letter aliases for every flag.
+- Lowercase short flags are reserved for established CLI conventions already common in the product or ecosystem, such as `-h` for help or `-v` for verbose when the project already uses it.
+- New Yeisme-specific short aliases must use uppercase letters, for example `-A`, so they do not consume conventional lowercase namespace or collide with future ecosystem expectations.
+- Do not create ambiguous pairs where the same concept has multiple short aliases, or where `-a` and `-A` mean unrelated actions in the same command family.
+- Help, docs, examples, and generated command references should show the long flag first. Mention uppercase short aliases only as optional shortcuts.
+
+Tests for command-line parameter changes should cover `--help` output, long-flag behavior, any accepted uppercase short alias, and rejection or absence of unintended lowercase short aliases.
 
 ## Implementation Workflow
 

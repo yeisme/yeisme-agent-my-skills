@@ -1,0 +1,3 @@
+display_name: Pinax Agent Router
+short_description: Route Pinax note writing, vault, retrieval, memory, publish, or sync/storage tasks to the smallest safe operator skill before running commands.
+default_prompt: Route this Pinax note or vault task to the right operator skill and show the first safe command to run.

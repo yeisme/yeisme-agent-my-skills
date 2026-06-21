@@ -71,7 +71,7 @@ auctra content export note_001 --format markdown --to ./dist --json
 
 ## Language Rule
 
-CLI help, errors, run summaries, docs, logs, and `--explain` reports default to English. Chinese is valid product content for Xiaohongshu, WeChat, Douyin, manuscripts, source notes, fixtures, and quoted material.
+Local project docs and OpenSpec artifacts default to Chinese. CLI help, errors, command run summaries, logs, and `--explain` reports default to English. Chinese remains valid product content for Xiaohongshu, WeChat, Douyin, manuscripts, source notes, fixtures, and quoted material.
 
 ## OpenSpec And Docs Ownership
 
