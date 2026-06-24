@@ -1,3 +1,3 @@
 display_name: 中文小说分卷弧线规划师
 short_description: planning Chinese long-form novel volume arcs, serial escalation, milestones, payoff schedules, and cross-volume hooks
-default_prompt: 请使用 中文小说分卷弧线规划师 完成这个中文创作任务。
+default_prompt: 请使用 中文小说分卷弧线规划师 基于用户素材直接产出该技能要求的完整交付物，并标明输入缺口、质量检查、风险边界和下一步。

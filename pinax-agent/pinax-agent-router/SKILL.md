@@ -7,6 +7,10 @@ description: Use when an agent needs to operate Pinax for local-first notes, inc
 
 Route Pinax user-agent work to the smallest suitable Pinax operator skill. Root sessions normally keep only this router active; load the specific Pinax operator only after classifying the task.
 
+## Intake Index Rule
+
+Agent-authored Pinax notes are captured through the vault's unified intake index first. For newly generated, imported, or saved notes whose final taxonomy has not already been approved, the destination must be `notes/index/` via commands such as `pinax note add "Title" --dir index --stdin --json`. Do not use bare `pinax note add` for agent-generated notes, because it can create root-level notes. Do not place notes directly into topic folders such as `notes/tools/**`, `notes/research/**`, or `notes/media/**` unless the user explicitly named that target path or an approved organize plan selected it.
+
 ## Use When
 
 - A user or agent wants to add, write, save, capture, search, organize, recall, sync, publish, or diagnose Pinax knowledge.
@@ -20,7 +24,7 @@ For Pinax code implementation, use `yeisme-pinax-cli-runtime` plus the normal co
 
 | User goal | Skill to load | First commands |
 | --- | --- | --- |
-| Set up or select a vault, write/capture Pinax notes, inspect health, snapshot before writes | `pinax-vault-operator` | `pinax vault list --json`, `pinax note add ... --stdin --json`, `pinax vault doctor --json` |
+| Set up or select a vault, write/capture Pinax notes, inspect health, snapshot before writes | `pinax-vault-operator` | `pinax vault list --json`, `pinax note add ... --dir index --stdin --json`, `pinax vault doctor --json` |
 | Search notes, refresh indexes, use KB context, query structured note data | `pinax-retrieval-operator` | `pinax index refresh --json`, `pinax search "..." --agent`, `pinax kb context "..." --json` |
 | Store or recall durable facts, decisions, events, and tasks for agents | `pinax-memory-operator` | `pinax memory context "..." --agent`, `pinax memory capture ... --json` |
 | Configure Cloud Sync, S3/COS, storage, backend profiles, or sync runs | `pinax-sync-storage-operator` | `pinax cloud status --json`, `pinax storage status --json`, `pinax sync diff --target cloud --json` |
@@ -33,7 +37,7 @@ For Pinax code implementation, use `yeisme-pinax-cli-runtime` plus the normal co
 3. Pick one operator skill from the route table.
 4. Load only the chosen operator skill from the runtime profile or `.skills/yeisme/pinax-agent/<skill>/SKILL.md`; do not bulk-load all Pinax skills.
 5. Prefer `--json` for structured automation and `--agent` for low-token context.
-6. For note writes, draft the body first when useful, then use `pinax note add "<title>" --stdin --json` or `pinax inbox capture "<title>" --stdin --json` instead of hand-writing Markdown files.
+6. For note writes, draft the body first when useful, then use `pinax note add "<title>" --dir index --stdin --json` for agent-authored notes that need later classification, or `pinax inbox capture "<title>" --stdin --json` for raw temporary capture, instead of hand-writing Markdown files.
 7. For writes, use `--dry-run` or plan commands first when available.
 8. Before high-risk local changes, create a snapshot with `pinax version snapshot --message "before agent changes" --json`.
 9. Never edit `.pinax/**`, SQLite files, receipts, sync state, backend registries, or cloud config by hand.
@@ -49,4 +53,5 @@ For Pinax code implementation, use `yeisme-pinax-cli-runtime` plus the normal co
 
 - A routed answer names the selected operator skill and why.
 - Commands shown to the user are real `pinax` commands.
+- Newly generated notes without an explicit approved destination are created under `notes/index/`, not the vault root or a guessed topic folder.
 - The router does not directly perform broad content edits when a narrower operator skill applies.

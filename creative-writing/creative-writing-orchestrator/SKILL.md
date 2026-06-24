@@ -28,11 +28,12 @@ description: Use when coordinating multi-stage Chinese creative-writing tasks ac
 ## 工作流
 
 1. 将请求拆成阶段：创作简报、结构、初稿、润色、校验和导出。
-2. 每个阶段交给范围最窄的工作技能。
-3. Auctra 工作优先使用 `auctra material`、`auctra text`、`auctra review` 和 `auctra export`。
-4. 跨格式改写时保留原始意图，例如小说章节转小红书笔记、公众号文章或改编交接包。
-5. 小说改编先产出改编诊断、媒介结构和交接包，再交给 `screenplay-scene-writer`、`short-video-scriptwriter`、`podcast-scriptwriter` 等具体写手。
-6. 返回简洁完成报告，包含输出路径、未解决问题和下一步。
+2. 任务类型不明确或涉及多个候选技能时，先运行或引用 `skillctl route`，再决定 owner skill。
+3. 每个阶段交给范围最窄的工作技能。
+4. Auctra 工作优先使用 `auctra material`、`auctra text`、`auctra review` 和 `auctra export`。
+5. 跨格式改写时保留原始意图，例如小说章节转小红书笔记、公众号文章或改编交接包。
+6. 小说改编先产出改编诊断、媒介结构和交接包，再交给 `screenplay-scene-writer`、`short-video-scriptwriter`、`podcast-scriptwriter` 等具体写手。
+7. 返回简洁完成报告，包含输出路径、未解决问题和下一步。
 
 ## 质量门槛
 

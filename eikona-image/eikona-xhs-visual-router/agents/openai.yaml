@@ -1,3 +1,3 @@
 display_name: Eikona 小红书视觉路由器
-short_description: 将小红书静态图需求路由到封面、卡片、信息图或漫画视觉指挥技能。
-default_prompt: 请判断这个小红书静态图需求应该使用封面、图文卡片、信息图还是漫画视觉技能，并给出下一步 Eikona 命令。
+short_description: 将小红书静态图需求路由到封面、卡片、信息图或漫画视觉导演，并保持 Eikona review/handoff 链路。
+default_prompt: 请判断这个小红书静态图需求应该使用封面、图文卡片、信息图还是漫画视觉技能，并输出视觉 brief、推荐导演、Eikona 命令和 review/handoff 下一步。

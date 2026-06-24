@@ -112,6 +112,11 @@ If Codex/Agent sees duplicate self-built skills, keep only the `.skills/yeisme/<
 - `yeisme-cohors-cli-runtime`: develop `cli/cohors` workflow, daemon, Team Room, trace, CLI/TUI output, eval, Generic CLI Runtime, and Pi/OMP package boundaries.
 - `yeisme-auctra-cli-runtime`: develop `cli/auctra` text creation pipelines, material/brief/review/export workflows, runtime provider contracts, run evidence, agent-facing CLI contracts, and TUI behavior.
 - `yeisme-eikona-cli-runtime`: develop or document `cli/eikona` generation, prompt skills/decks, visual assessment, recipe reuse, provider adapters, run evidence, project library, Web/API/MCP surfaces, and release behavior.
+- `eikona-xhs-visual-router`: route Xiaohongshu static visual requests to the smallest Eikona image director while preserving review, feedback, and handoff evidence.
+- `eikona-xhs-cover-director`: design Xiaohongshu title-safe cover visuals, candidate directions, Eikona commands, and review handoff steps.
+- `eikona-xhs-card-series-director`: split Xiaohongshu posts into 3/6/9-page static card series with page plans, prompts, Eikona commands, and review handoff steps.
+- `eikona-xhs-infographic-director`: turn sourced facts, processes, comparisons, or checklists into Xiaohongshu infographics with fact-preserving Eikona evidence.
+- `eikona-xhs-comic-director`: design original-character Xiaohongshu comic-style static posts with page briefs, Eikona commands, and review handoff steps.
 - `yeisme-indagator-cli-runtime`: develop and document `agent/indagator` CLI commands, generated command docs, Cobra/Viper config, parser/manifest/download workflows, and output contracts.
 - `yeisme-gitpulse-cli-runtime`: develop, review, or operate `cli/gitpulse` Git workflow orchestration, worktrees, PR flow, TUI behavior, output contracts, and Go validation.
 - `yeisme-pinax-cli-runtime`: develop, review, or operate `cli/pinax` local indexing, profile management, publish/sync, backend client behavior, credentials, evidence, and Go validation.

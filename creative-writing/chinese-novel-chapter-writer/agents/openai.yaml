@@ -1,3 +1,3 @@
 display_name: 中文小说章节写手
 short_description: drafting, continuing, or rewriting a Chinese novel chapter from outline, scene cards, character profiles, continuity ledger, reader contract, and style constraints
-default_prompt: 请使用 中文小说章节写手 完成这个中文创作任务。
+default_prompt: 请使用 中文小说章节写手 基于用户素材直接产出该技能要求的完整交付物，并标明输入缺口、质量检查、风险边界和下一步。

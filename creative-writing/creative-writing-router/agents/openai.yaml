@@ -1,3 +1,3 @@
 display_name: 中文创作路由器
 short_description: routing Chinese creative-writing or Auctra content tasks to the narrowest suitable writing, editing, script, platform-content, review, export, or installer skill without drafting inside the router
-default_prompt: 请使用 中文创作路由器 完成这个中文创作任务。
+default_prompt: 请使用 中文创作路由器 先用 skillctl 判断这个中文创作请求应交给哪个最小写作 skill，并输出路由理由、输入缺口和下一步，不要直接成稿。

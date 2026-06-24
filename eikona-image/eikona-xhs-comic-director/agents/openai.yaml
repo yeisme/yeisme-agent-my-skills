@@ -1,3 +1,3 @@
 display_name: Eikona 小红书漫画图文导演
-short_description: 设计小红书漫画风格静态图文、情景短漫和故事化卡片。
-default_prompt: 请把这个主题设计成小红书漫画风格静态图文，包含页序、画面、对白、旁白和 Eikona dry-run 命令。
+short_description: 设计小红书漫画风格静态图文、情景短漫和故事化卡片，并保持原创角色与 Eikona review/handoff 链路。
+default_prompt: 请把这个主题设计成小红书漫画风格静态图文，包含页序、原创角色设定、画面、对白、旁白、Eikona 命令和 review/feedback/handoff 下一步。

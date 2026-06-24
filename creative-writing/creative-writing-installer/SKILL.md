@@ -26,10 +26,11 @@ description: Use when installing or enabling the correct creative-writing skill 
 ## 工作流
 
 1. 根据路由器或 route 结果识别缺失技能。
-2. 优先选择最小 set，例如 `creative-writing-xhs` 或 `creative-writing-chinese-novel`。
-3. 先运行 dry-run，展示将启用哪些技能。
-4. 只有在用户明确同意或流程已批准时执行 `--yes`。
-5. 安装后重新运行路由或校验。
+2. 没有明确 route 结果时，先运行 `skillctl route --target cli/auctra --json` 或要求用户提供 route 输出。
+3. 优先选择最小 set，例如 `creative-writing-xhs` 或 `creative-writing-chinese-novel`。
+4. 先运行 dry-run，展示将启用哪些技能。
+5. 只有在用户明确同意或流程已批准时执行 `--yes`。
+6. 安装后重新运行路由或校验。
 
 ## 质量门槛
 

@@ -26,6 +26,7 @@ Use this skill for `cli/eikona`, the agent-facing visual asset runtime and evide
    - For CLI command documentation, read `docs/commands/README.md` and the matching `docs/commands/<command>.md` first.
    - For other agents calling Eikona, read `docs/commands/agent-integration.md` first and prefer CLI `--json`/`--agent` contracts before adding MCP-only behavior.
    - For multi-scenario prompt work, read `docs/product/scenario-playbook.md`, `docs/commands/prompts.md`, `docs/commands/workflow.md`, and `docs/commands/style.md` before changing code or docs.
+   - For Xiaohongshu static visual creation tasks, read the on-demand `eikona-xhs-visual-router` skill first, then keep execution on Eikona `generate` or `workflow` commands with review, feedback, and handoff evidence.
    - For active design tracks around scoring/tags or recipe reuse, read `openspec/changes/eikona-visual-assessment-tags/` and `openspec/changes/eikona-prompt-skill-reuse-recipes/` if they exist, then keep new implementation tasks in the owning Eikona OpenSpec change.
 2. Preserve Eikona product contracts:
    - `--json` output must remain machine-readable and stable for agents, Cohors, CI, and shell scripts.
@@ -59,6 +60,7 @@ Use this skill for `cli/eikona`, the agent-facing visual asset runtime and evide
    - status polling uses `eikona wait/status/inspect --json` or low-token `--agent`;
    - artifact handoff uses `eikona assets handoff <artifact_id> --json` before project writes;
    - scenario prompt exploration uses `eikona prompts catalog search ... --json`, `eikona workflow draw ... --json`, and `eikona workflow run ... --background --json`;
+   - Xiaohongshu creative direction uses the on-demand `eikona-xhs-*` skills for brief and prompt design, while this runtime skill remains responsible for CLI contracts, evidence, provider safety, and generated artifact lifecycle;
    - planned visual scoring uses `eikona assess ... --json` after the assessment change lands; until then, use `review`, `feedback`, and objective `quality.check` evidence;
    - planned recipe reuse uses `eikona recipes ...` and `workflow --recipe` only after the recipe change lands; until then, keep reuse explicit through prompt skills, deck versions, style packs, and feedback evidence;
    - long-lived integrations can use `eikona mcp`, but ordinary CLI output remains the primary contract.
