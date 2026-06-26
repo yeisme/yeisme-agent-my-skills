@@ -1,0 +1,3 @@
+display_name: Pinax Proof Maintenance Operator
+short_description: Run Pinax proof loops, doctor/stats, metadata/repair/organize, version snapshot/restore, and record maintenance with approval gates.
+default_prompt: Run a read-only Pinax proof loop or maintenance diagnosis first, then plan, snapshot, and request approval before any apply or restore command.

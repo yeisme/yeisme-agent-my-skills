@@ -1,0 +1,3 @@
+display_name: Yeisme Local Backup Sync Policy
+short_description: Guide Git-managed project state plus S3/rclone/cloud-drive backup flows without default real-time sync.
+default_prompt: Review this Yeisme project backup plan against the local-first Git plus S3/rclone backup policy.

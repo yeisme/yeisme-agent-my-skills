@@ -119,12 +119,17 @@ If Codex/Agent sees duplicate self-built skills, keep only the `.skills/yeisme/<
 - `eikona-xhs-comic-director`: design original-character Xiaohongshu comic-style static posts with page briefs, Eikona commands, and review handoff steps.
 - `yeisme-indagator-cli-runtime`: develop and document `agent/indagator` CLI commands, generated command docs, Cobra/Viper config, parser/manifest/download workflows, and output contracts.
 - `yeisme-gitpulse-cli-runtime`: develop, review, or operate `cli/gitpulse` Git workflow orchestration, worktrees, PR flow, TUI behavior, output contracts, and Go validation.
-- `yeisme-pinax-cli-runtime`: develop, review, or operate `cli/pinax` local indexing, profile management, publish/sync, backend client behavior, credentials, evidence, and Go validation.
-- `pinax-agent-router`: route Pinax operational tasks, including writing or saving Pinax notes, to the narrowest vault, retrieval, memory, sync/storage, or publishing operator skill.
-- `pinax-vault-operator`: safely initialize/select Pinax vaults, write or capture notes, append inbox/journal content, inspect health, snapshot, repair-plan, and organize-plan through real Pinax commands.
-- `pinax-retrieval-operator`: retrieve bounded context from Pinax indexes, search, links, KB, and controlled query commands.
-- `pinax-memory-operator`: capture and recall deterministic Pinax memory records for facts, decisions, events, and tasks.
-- `pinax-sync-storage-operator`: configure and operate Pinax Cloud Sync, S3/COS storage, backend profiles, sync plans, and storage diagnostics without exposing credentials.
+- `yeisme-pinax-cli-runtime`: develop, review, or operate `cli/pinax` local indexing, proof-loop, project workspace, templates, assets/prompt collections, plugin/API/MCP, profile management, publish/sync daemon, backend client behavior, credentials, evidence, and Go validation.
+- `pinax-agent-router`: route generic note completion and Pinax operational tasks, including writing/saving notes, retrieval, memory, proof, project, template, asset/prompt, sync/storage, publish, API, plugin, and MCP work, to the narrowest operator skill.
+- `pinax-vault-operator`: safely initialize/select Pinax vaults, write or capture notes through `notes/index`, append inbox/journal content, manage drafts, import/export Markdown, and handle ordinary note lifecycle through real Pinax commands.
+- `pinax-retrieval-operator`: retrieve bounded context from Pinax indexes, search, links/backlinks/orphans, KB, saved views, folders, database/dataview, and controlled query commands.
+- `pinax-memory-operator`: capture and recall deterministic Pinax memory records for facts, decisions, events, and tasks; avoid reserved `memory link/prune` workflows.
+- `pinax-sync-storage-operator`: configure and operate Pinax Cloud Sync, sync daemon/logs/conflicts, S3/rclone storage, backend profiles, backend object diagnostics, sync plans, and storage diagnostics without exposing credentials.
+- `pinax-proof-maintenance-operator`: run Pinax proof loops, doctor/stats, metadata/repair/organize plans and applies, version snapshot/restore, and record-ledger maintenance with snapshot and approval gates.
+- `pinax-project-workspace-operator`: manage Pinax project workspaces, learning packs, subprojects, boards, work items, personal plans, TaskBridge action drafts, and plan snapshots.
+- `pinax-template-authoring-operator`: manage Pinax templates, template-backed note creation, template previews/renders/runs, managed index pages, inbox/draft indexes, and journal template workflows.
+- `pinax-asset-prompt-operator`: manage Pinax assets, note attachments, prompt assets, content collections, and local graph projections through bounded commands.
+- `pinax-integration-publish-operator`: operate Pinax publish, plugin, local API, API token, profile alias, MCP, and briefing workflows with read-only defaults and credential-safe approvals.
 - `yeisme-quaestor-cli-runtime`: develop, review, or operate `cli/quaestor` query/research workflows, output contracts, evidence boundaries, adapters, and Go validation.
 - `yeisme-taskbridge-cli-runtime`: develop `cli/taskbridge` task control plane, provider sync, action files, Agent JSON contract, and Go CLI behavior.
 - `yeisme-hermes-communication-routing`: design or review provider-neutral Yeisme communication delivery through Hermes across notifications, commands, approvals, artifacts, handoffs, and future chat providers.
@@ -134,10 +139,12 @@ If Codex/Agent sees duplicate self-built skills, keep only the `.skills/yeisme/<
 - `project-integration-test-evidence`: require integration, component, system, and e2e test runs to write redacted evidence under the owning project's `temp/integration-test-runs/<run-id>/` directory.
 - `ui-spec-frontend-workflow`: turn PRDs, wireframes, screenshots, or high-fidelity UI images into React UI specs, component trees, implementation constraints, animation rules, and screenshot regression loops.
 - `yeisme-frontend-quality-workflow`: maintain Storybook, Tailwind stories, Chromatic, addon-designs, Lighthouse, Axe, Playwright, and browser-use frontend quality gates.
+- `yeisme-frontend-design-router`: route frontend design, UI generation, redesign, Open Design, Taste, Impeccable, browser visual QA, component sourcing, and canvas UI tasks to the smallest non-conflicting skill chain.
 - `backend-system-workflow`: design, implement, or review backend APIs, workers, state machines, ORM/database access, Go GORM-only persistence, concurrency, permissions, observability, migrations, tests, and performance gates.
 - `go-rust-implementation-defaults`: decide whether Yeisme tools, backends, CLI, MCP, daemons, workers, Gateway, and system capabilities should stay on TypeScript/Bun or move to prebuilt native packages, Pi/OMP forked packages, Go, or Rust.
 - `codegraph-cli-code-intelligence`: use CodeGraph CLI to index code, query context, inspect call graphs, and analyze impact before implementation.
 - `yeisme-repo-routing`: decide where new files, workflows, skills, MCP code, CLI code, agent assets, Gateway assets, and docs belong.
+- `yeisme-local-backup-sync-policy`: guide cross-project Git-managed local state plus S3-compatible, rclone, and cloud-drive backup/restore policy for `.eikona`, `.auctra`, `.indagator`, `.scaena`, `.pinax`, and `.gitpulse`, while keeping real-time sync as a separate design.
 - `yeisme-claude-skills-layout`: design, migrate, or review the `.claude/skills` and `.agents/skills` dual active runtime managed by `skillctl`.
 - `yeisme-git-worktree-flow`: use Git flow, `git worktree`, `Taskfile`, and `nerdctl compose.yml` for development.
 - `yeisme-coding-execution-driver`: turn coding tasks into live checklists, execution loops, verification checkpoints, and explicit stop conditions.

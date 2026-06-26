@@ -1,3 +1,3 @@
 display_name: UI Spec Frontend Workflow
-short_description: Enforce Tailwind CSS 4 utilities, tokens, component recipes, UI Spec, page patterns, React animation rules, and screenshot regression before frontend UI code is accepted.
-default_prompt: Turn this product idea, PRD, wireframe, or UI image into a Tailwind CSS 4 and design-system constrained React workflow: UI Spec, page pattern, low-fidelity wireframe, component recipes, implementation, animation policy, and screenshot-based visual review.
+short_description: Use Open Design discovery first when available, choose one design direction layer, then enforce Tailwind CSS 4 tokens, page patterns, component recipes, React animation rules, and screenshot regression.
+default_prompt: Turn this product idea, PRD, wireframe, Open Design handoff, or UI image into a React workflow: Open Design discovery, single design direction selection, UI Spec, page pattern, low-fidelity wireframe, component recipes, implementation, animation policy, and screenshot-based visual review.

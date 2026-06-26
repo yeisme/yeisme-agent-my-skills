@@ -1,3 +1,3 @@
 display_name: Yeisme Pinax CLI Runtime
-short_description: Maintain Pinax vault/index, proof-loop, profile, publish/sync, backend client, credential, evidence, and Go CLI behavior under cli/pinax.
-default_prompt: Change or review cli/pinax while preserving local-first vault/index boundaries, proof-loop safety, profile and publish/sync contracts, credential safety, structured asset mutation through commands, and task check validation.
+short_description: Maintain Pinax vault/index, proof-loop, project, template, asset/prompt, plugin/API/MCP, profile, publish/sync daemon, backend, credential, evidence, and Go CLI behavior.
+default_prompt: Change or review cli/pinax while preserving local-first vault/index boundaries, proof-loop safety, project/template/asset/prompt contracts, plugin/API/MCP and publish/sync behavior, credential safety, structured asset mutation through commands, and task check validation.

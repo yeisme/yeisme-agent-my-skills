@@ -1,0 +1,3 @@
+display_name: Pinax Template Authoring Operator
+short_description: Manage Pinax templates, template-backed note creation, render runs, managed index pages, inbox/draft indexes, and journal template workflows.
+default_prompt: Author or use a Pinax template by recommending, inspecting, validating, previewing, then writing only through pinax template, note add --template, or index page commands.

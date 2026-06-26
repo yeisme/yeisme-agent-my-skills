@@ -1,0 +1,3 @@
+display_name: Pinax Project Workspace Operator
+short_description: Manage Pinax project workspaces, learning packs, boards, work items, daily/weekly/monthly plans, TaskBridge action drafts, and plan snapshots.
+default_prompt: Manage this Pinax project workspace or planning task by inspecting the project first, using dry-run plans where available, and writing only through pinax project or pinax plan commands.

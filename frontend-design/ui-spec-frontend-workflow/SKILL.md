@@ -1,6 +1,6 @@
 ---
 name: ui-spec-frontend-workflow
-description: Use when turning product ideas, PRDs, wireframes, screenshots, or high-fidelity UI images into React/web frontend implementation or visual fixes; enforce the default SaaS operations console style, design-system assembly, UI Spec, page patterns, component tree, React animation rules, and screenshot regression before code is accepted.
+description: Use when turning product ideas, PRDs, wireframes, screenshots, high-fidelity UI images, or Open Design handoffs into React/web frontend implementation or visual fixes; enforce Open Design first-use discovery, single design direction selection, the default SaaS operations console style, design-system assembly, UI Spec, page patterns, component tree, React animation rules, and screenshot regression before code is accepted.
 ---
 
 # UI Spec Frontend Workflow
@@ -40,6 +40,40 @@ Frontend implementation must be driven by:
 - screenshot regression evidence
 
 If a reference image and UI Spec conflict, follow the UI Spec and call out the conflict.
+
+If Open Design is available, use it as the first discovery and handoff tool before inventing a local visual direction. Open Design does not replace the owning project's implementation checks or acceptance evidence.
+
+## Design Stack Selection
+
+Use one clear design direction layer for non-trivial UI work. Do not stack Taste, Anthropic frontend-design, UI UX Pro Max, Impeccable, and local Yeisme rules as equal authorities.
+
+Default order:
+
+1. Run Open Design discovery when the CLI is available:
+
+```bash
+od status --json
+od skills list
+od design-systems list
+```
+
+Use Open Design for reference collection, design-system selection, Studio exploration, image/prototype generation, and handoff artifacts. Treat its output as design input that must still be translated into the owning app's tokens, components, tests, and evidence.
+
+2. Choose exactly one aesthetic direction layer:
+
+- Taste Skill or `design-taste-frontend`: use for landing pages, brand sites, portfolios, marketing pages, creative redesigns, and one-off campaign pages. Do not make it the default authority for dashboards, dense tables, settings, admin consoles, or multi-step product flows.
+- Anthropic `frontend-design`, the local project design system, or this Yeisme SaaS operations console posture: use for product UI, dashboards, internal tools, agent consoles, MCP/admin surfaces, and form-heavy workflows.
+- UI UX Pro Max or other design knowledge retrieval: use as a candidate database for style, layout, and component options; do not auto-accept the first industry-template recommendation.
+
+3. Use Impeccable-style checks after implementation as a quality gate, not as the only taste source. Prefer deterministic findings, browser evidence, and project-specific exceptions over vague taste commentary.
+
+4. Treat component supply and screenshot-to-code tools as sources, not direction setters. 21st.dev Magic, shadcn registry components, OpenUI, and screenshot-to-code can speed up local components or reference reconstruction, but the UI Spec still owns product posture, tokens, states, and acceptance.
+
+For canvas-like product UI, choose the interaction substrate before designing screens:
+
+- Use `@xyflow/react` for Dify/n8n/agent workflow canvases, node graphs, execution DAG editors, routing diagrams, and inspector-driven node configuration. React Flow owns the frontend interaction layer only; backend services own DAG validation, execution semantics, persistence, audit, and scheduling.
+- Use `tldraw` for free-form whiteboards, reference boards, moodboards, loose annotation, visual thinking, and material arrangement.
+- Use X6 or another heavier graph library only for complex enterprise diagramming needs that React Flow cannot express.
 
 ## Inputs
 

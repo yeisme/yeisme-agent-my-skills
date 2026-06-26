@@ -1,6 +1,6 @@
 ---
 name: pinax-memory-operator
-description: Use when an agent needs to capture, list, recall, or provide bounded context from Pinax non-vector memory records such as facts, decisions, events, and tasks.
+description: Use when an agent needs to capture, list, recall, or provide bounded deterministic context from Pinax non-vector memory records such as facts, decisions, events, and tasks; avoid recommending unimplemented memory link/prune workflows.
 ---
 
 # Pinax Memory Operator
@@ -27,16 +27,17 @@ pinax memory stats --json
 ## Workflow
 
 1. Recall first with `pinax memory context "<task>" --agent` before adding duplicate memory.
-2. Capture only source-cited, stable information. Prefer concise `subject`, `predicate`, and `object` fields.
-3. Use `fact` for stable facts, `decision` for chosen direction, `event` for releases/incidents, and `task` for future commitments.
-4. Include `--source` whenever possible. Use vault-relative paths, OpenSpec paths, or redacted evidence references.
-5. Use `--dry-run` before bulk or uncertain capture.
-6. Do not use `memory link` or `memory prune` until those commands are implemented beyond the reserved entry points.
+2. Use `memory context` or `memory recall` for deterministic ranking based on typed records, source citations, lifecycle state, subject/entity matching, and recency. Do not present it as vector or semantic similarity.
+3. Capture only source-cited, stable information. Prefer concise `subject`, `predicate`, and `object` fields.
+4. Use `fact` for stable facts, `decision` for chosen direction, `event` for releases/incidents, and `task` for future commitments.
+5. Include `--source` whenever possible. Use vault-relative paths, OpenSpec paths, or redacted evidence references.
+6. Use `--dry-run` before bulk or uncertain capture when the command supports it.
+7. Do not recommend `pinax memory link` or `pinax memory prune` as ordinary operator actions yet. They are reserved/experimental command entries until Pinax has fully reviewed user-facing workflows for them.
 
 ## Safety Boundaries
 
 - Do not store secrets, tokens, provider payloads, raw prompts, hidden prompts, private tool arguments, or full chain-of-thought in memory.
-- Do not hand-edit `.pinax/memory/ledger.sqlite`.
+- Do not hand-edit `.pinax/memory/ledger.sqlite` or any memory projection file.
 - Do not capture unverified LLM guesses as `confirmed`; use a source or leave the candidate out.
 - Cloud Sync treats memory as a local rebuildable projection, not a remote source of truth.
 

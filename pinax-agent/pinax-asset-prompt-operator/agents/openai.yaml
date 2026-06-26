@@ -1,0 +1,3 @@
+display_name: Pinax Asset Prompt Operator
+short_description: Manage Pinax assets, note attachments, prompt assets, content collections, and local graph projections through bounded commands.
+default_prompt: Handle this Pinax asset, attachment, prompt, collection, or graph task by inspecting first, using dry-run where available, and writing only through Pinax commands.

@@ -1,3 +1,3 @@
 display_name: Pinax Retrieval Operator
-short_description: Use Pinax index refresh, search, links, KB context, and controlled query commands to retrieve bounded agent context.
-default_prompt: Refresh or inspect the Pinax index as needed, retrieve bounded context for this task, and cite the source paths or facts used.
+short_description: Use Pinax index, search, links, KB, view, folder, database, dataview, and controlled query commands to retrieve bounded agent context.
+default_prompt: Refresh or inspect Pinax projections as needed, retrieve bounded context for this task, and cite the source paths or facts used.

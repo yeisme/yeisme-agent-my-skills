@@ -1,6 +1,6 @@
 ---
 name: yeisme-frontend-quality-workflow
-description: Use when adding, changing, testing, or reviewing frontend tooling and UI quality gates in this repository, including default SaaS operations console style conformance, Storybook design-system stories, Tailwind CSS in Storybook, Chromatic or Playwright visual regression, @storybook/addon-designs, Lighthouse, Axe accessibility checks, browser-use driven real browser integration tests, and Cohors-style diagnostics summaries.
+description: Use when adding, changing, testing, or reviewing frontend tooling and UI quality gates in this repository, including Impeccable-style deterministic detection, default SaaS operations console style conformance, Storybook design-system stories, Tailwind CSS in Storybook, Chromatic or Playwright visual regression, @storybook/addon-designs, Lighthouse, Axe accessibility checks, browser-use driven real browser integration tests, and Cohors-style diagnostics summaries.
 ---
 
 # Yeisme Frontend Quality Workflow
@@ -39,6 +39,35 @@ Use this skill for frontend toolchain and UI quality work in Yeisme projects.
 - Do not accept a page whose controls only look real. Visible interactive controls must open, close, select, filter, preview, dismiss, navigate, submit, or expose an intentional disabled/pending state.
 - Do not use browser-use as a replacement for deterministic Playwright assertions; use it for exploratory or high-level real browser flows, then keep stable assertions in Playwright.
 - Do not block a narrow backend-only change on Storybook or Lighthouse unless UI behavior changed.
+
+## Deterministic Quality Gate
+
+Use an Impeccable-style gate for AI-generated or AI-modified frontend work: deterministic checks first, browser evidence second, subjective design commentary last.
+
+When Impeccable is installed and the local Node.js version supports it, prefer these checks for frontend files or deployed pages:
+
+```bash
+npx impeccable detect src/
+npx impeccable detect --json .
+npx impeccable detect https://example.com
+```
+
+Do not casually upgrade a project to Node.js 24 only to run Impeccable. If the tool is unavailable, reproduce the same gate with the project's existing lint, typecheck, Storybook, Playwright, Axe, Lighthouse, and targeted source scans.
+
+The gate should check at least:
+
+- off-token colors, hardcoded hex values, radius drift, shadow drift, and typography drift
+- new naked CSS selectors, route-specific CSS, and unapproved global style changes
+- text overflow, clipped controls, overlapping overlays, horizontal scroll, and mobile breakage
+- missing loading, empty, error, disabled, hover, selected, focus, dense data, and mobile states
+- fake controls that look clickable but do not open, select, filter, preview, navigate, submit, or expose an intentional pending/disabled state
+- keyboard navigation, focus return, dialog/menu escape behavior, ARIA, contrast, and accessible names
+- console errors, failed network requests, hydration/runtime warnings, and broken asset loads
+- admin-console posture violations such as marketing heroes, decorative gradients, low-density stat-card filler, and all-centered layouts
+
+Open Design Studio, Stagewise, Onlook, browser-use, and similar browser tools may accelerate exploration and visual diagnosis. Final acceptance still needs reproducible evidence through Playwright, Storybook, Chromatic, Axe, Lighthouse, the local test runner, or an explicit manual fallback when infrastructure is out of scope.
+
+Taste or brand guidance is useful before implementation, but it is not a substitute for product UI quality gates.
 
 ## Workflow
 

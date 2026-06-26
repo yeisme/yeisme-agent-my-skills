@@ -1,0 +1,3 @@
+display_name: Pinax Integration Publish Operator
+short_description: Operate Pinax publish, plugin, API, token, profile, MCP, and briefing workflows with read-only defaults and credential-safe approvals.
+default_prompt: Handle this Pinax publish, plugin, API, token, profile, MCP, or briefing task by starting read-only, redacting credentials, and asking before writes or exposed services.
