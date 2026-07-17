@@ -9,7 +9,7 @@ Use this skill when opencode is the active agent runtime or when Yeisme instruct
 
 ## Workflow
 
-1. Use OMH and skillctl to inspect desired skill assignments before assuming runtime skill availability.
+1. Use OMH plus `scripts/skills.sh profile show <owner>` to inspect desired skill assignments before assuming runtime skill availability.
 2. Configure MCP through Gateway render commands for opencode.
 3. Prefer Yeisme CLI `--json` and `--agent` output for automation.
 4. Keep external side effects behind the owning CLI, MCP Gateway policy, or explicit user approval.

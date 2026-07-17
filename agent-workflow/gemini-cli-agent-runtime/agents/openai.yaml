@@ -1,3 +1,3 @@
 display_name: Gemini CLI Agent Runtime
 short_description: Configure Gemini CLI with Yeisme skill activation, MCP Gateway client rendering, route policy, and structured CLI usage.
-default_prompt: Configure Gemini CLI for this Yeisme workspace with Gateway-rendered MCP config, skillctl-managed skills, and safe JSON or agent output contracts.
+default_prompt: Configure Gemini CLI for this Yeisme workspace with Gateway-rendered MCP config, profile-generated skills, and safe JSON or agent output contracts.

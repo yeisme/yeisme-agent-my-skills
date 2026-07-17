@@ -10,11 +10,11 @@ Use this skill when the user asks to create, change, publish, package, install, 
 ## Source And Targets
 
 - Author source skills in `.skills/yeisme/<module>/<skill-name>/`.
-- Assign runnable copies through `.skills/profiles/root.txt` and `.skills/profiles/targets/<subproject>.txt`, then materialize them with `skillctl` or the compatibility commands in `scripts/skills.sh`.
-- Use `.agents/skills/` and `.claude/skills/` as generated active runtime copies. Use `.skillctl/available/` for reviewed inactive inventory.
+- Assign runnable copies through `.skills/profiles/root.txt` and `.skills/profiles/targets/<subproject>.txt`, then materialize them with `scripts/skills.sh`.
+- Use `.agents/skills/` and `.claude/skills/` as generated active runtime copies. Keep inactive reviewed skills in the source layer.
 - Keep `mcp/` for MCP implementations only.
 
-Do not treat `.agents/skills/`, `.claude/skills/`, `.skillctl/available/`, or `.codex/skills/` as the publishing source for self-built skills. `.skills/yeisme/` is the publishing source, `.skills/imported/` is reserved for third-party/imported skills, profile files define scope, and `.agents` plus `.claude` are generated runtime homes.
+Do not treat `.agents/skills/`, `.claude/skills/`, or `.codex/skills/` as the publishing source for self-built skills. `.skills/yeisme/` is the publishing source, `.skills/imported/` is reserved for third-party/imported skills, profile files define scope, and `.agents` plus `.claude` are generated runtime homes.
 
 Do not sync self-built project skills into `.codex/skills/` in this repository. Do not put external skills, symlinks, or local runtime copies into `.skills/yeisme/`.
 
@@ -85,7 +85,7 @@ Do not write local execution wrappers, shell aliases, or agent-only command pref
 2. Confirm the requested capability is a reusable agent workflow. If it is an MCP implementation, put the implementation under `mcp/` and only create a skill if the workflow needs agent guidance.
 3. Create or update the skill in `.skills/yeisme/<module>/<skill-name>/`.
 4. Keep metadata in `agents/openai.yaml` consistent with `SKILL.md`.
-5. If the skill should be available in a root or subproject session, add it to `.skills/profiles/root.txt` or the relevant `.skills/profiles/targets/<subproject>.txt`.
+5. If the skill should be available in a root or subproject session, add it with `scripts/skills.sh profile add <target> <skill-name>`.
 6. Run:
 
 ```bash
@@ -114,7 +114,7 @@ scripts/skills.sh list-custom
 
 ## Publishing Notes
 
-For other users, document either:
+For other users, document:
 
 ```bash
 git clone <repo-url>
@@ -123,8 +123,8 @@ scripts/skills.sh sync-root
 scripts/skills.sh sync-subprojects
 ```
 
-or:
+For reviewed third-party skills, require an explicit ref:
 
 ```bash
-scripts/skills.sh install-custom <repo-url> [ref]
+scripts/skills.sh import <repo-url> <ref> <module>
 ```

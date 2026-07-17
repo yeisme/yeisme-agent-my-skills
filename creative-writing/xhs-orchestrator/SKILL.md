@@ -70,4 +70,4 @@ description: Use when planning, briefing, drafting, optimizing, or reviewing Xia
 - 检查是否读取了任务所需 reference，而不是全量加载。
 - 检查 handoff 是否包含生命周期阶段、目标 worker、素材证据、约束、风险和下一步。
 - 确认所有 blocking 风险都有下一步处理者。
-- 路由 smoke 可在仓库根目录运行 `skillctl route --task "写一篇小红书笔记，主题是打工人周末复盘" --target cli/auctra --json`。
+- 来源搜索 smoke 可在仓库根目录运行 `scripts/skills.sh search "小红书 周末复盘"`，语义分派仍由本 orchestrator 完成。

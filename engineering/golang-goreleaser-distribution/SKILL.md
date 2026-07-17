@@ -54,7 +54,7 @@ Do not invent a second buildinfo, version, token, or release branch convention b
 | SBOM | Enable `sboms` for archive artifacts for user-facing distribution. |
 | Linux packages | Use `nfpms` for `.deb`, `.rpm`, and `.apk`; install binaries to `/usr/bin`; include license/readme docs under `/usr/share/doc/<project>` or `/usr/share/licenses/<project>`. |
 | APT repository | Do not claim nFPM alone creates an APT repository. If a real APT/yum/alpine repository is required, use GoReleaser Pro Cloudsmith or a separately approved repository publisher with its own token. Otherwise publish `.deb` as a GitHub Release asset and document direct package install. |
-| Homebrew | Default to `homebrew_casks`, copying the `cli/skillctl/.goreleaser.yaml` pattern. Use legacy `brews`/Formula only when an existing project already relies on formula semantics. Do not add both cask and formula for the same binary without an explicit project decision. |
+| Homebrew | Default to `homebrew_casks`, copying the `cli/taskbridge/.goreleaser.yaml` pattern. Use legacy `brews`/Formula only when an existing project already relies on formula semantics. Do not add both cask and formula for the same binary without an explicit project decision. |
 | Scoop | Use `scoops`, `yeisme/scoop-bucket`, and `directory: bucket` to match existing Yeisme configs. |
 | Chocolatey | Use `chocolateys` to generate `nupkg`; keep `skip_publish: true` in first-pass configs unless `CHOCOLATEY_API_KEY`, package metadata, and moderation readiness are explicitly present. |
 
@@ -223,7 +223,7 @@ scoops:
 
 ## Post-release Verification
 
-Every release-distribution change needs at least one archive checksum verification and one install smoke. Follow the `cli/skillctl/docs/ci-cd.md` pattern:
+Every release-distribution change needs at least one archive checksum verification and one install smoke. Follow the `cli/taskbridge` release workflow pattern:
 
 ```bash
 gh release download <tag> --repo <owner>/<repo> --pattern '*checksums.txt' --pattern '*linux*amd64*'

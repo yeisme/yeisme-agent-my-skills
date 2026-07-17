@@ -10,7 +10,7 @@ description: Use when routing Chinese creative-writing or Auctra content tasks t
 ## 输入
 
 - 用户请求、目标读者、语言、内容类型、已有 Auctra 项目上下文。
-- 可选的 `skillctl route` 结果、已启用技能列表、目标子项目。
+- 可选的来源搜索结果、已启用技能列表、目标子项目。
 
 ## 输出
 
@@ -28,7 +28,7 @@ description: Use when routing Chinese creative-writing or Auctra content tasks t
 1. 识别内容家族：中文小说、小红书、公众号、短视频、剧本、产品评测、直播、播客、书评、旅行攻略、教程、周报。
 2. 中文小说内继续识别任务形态：短篇/中篇/长篇/系列文、类型契约、搜索关键词预设、场景思路、场景卡、章节写作、作品拆解、主题拆分、全媒介改编或修订。
 3. 优先选择具体工作技能；只有跨格式、跨阶段或 Auctra 项目任务才使用总编排。
-4. 若技能未启用，交给安装器通过 `skillctl` 启用。
+4. 若技能未启用，优先按需读取；只有高频需求才交给安装器写入 profile 并同步 runtime。
 5. Auctra 项目内结构化变更必须走 Auctra 命令，不手写 `.auctra/**` 状态。
 6. 默认保留用户语言；创作输出默认中文。
 
@@ -40,7 +40,7 @@ description: Use when routing Chinese creative-writing or Auctra content tasks t
 
 ## Auctra 轻集成
 
-- 路由 smoke 可在仓库根目录运行 `skillctl route --task "写一篇中文书评，不能只复述剧情" --target cli/auctra --json`。
+- 来源搜索 smoke 可在仓库根目录运行 `scripts/skills.sh search "中文书评"`，语义分派仍由本 router 完成。
 - 需要安装集合时交给 `creative-writing-installer`。
 - 小说短篇/中篇/系列篇幅选择优先交给 `chinese-novel-length-form-architect`。
 - 小说类型契约、读者承诺、知名小说结构参考和搜索关键词预设优先交给 `chinese-novel-genre-contract-strategist`；已有作品/样章拆解时交给 `chinese-novel-analysis-decomposer`。
@@ -63,4 +63,4 @@ description: Use when routing Chinese creative-writing or Auctra content tasks t
 
 - 确认路由表覆盖用户内容家族。
 - 检查是否错误推荐了总编排或安装器。
-- 如果 `skillctl route` 结果和人工判断冲突，说明原因并给出最小下一步。
+- 如果多个 skill description 与人工判断冲突，说明 owner、阶段和最小下一步。

@@ -65,6 +65,6 @@ For skill/profile/source changes from repository root:
 ```bash
 scripts/skills.sh validate-custom
 scripts/skills.sh validate-profiles
-go run ./cli/skillctl/cmd/skillctl --root . sync cli/taskbridge --agent-home all --yes
+scripts/skills.sh sync-target cli/taskbridge
 scripts/skills.sh validate-subprojects-runtime
 ```

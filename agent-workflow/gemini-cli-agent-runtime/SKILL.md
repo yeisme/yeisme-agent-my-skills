@@ -10,7 +10,7 @@ Use this skill when Gemini CLI is the active agent runtime or when Yeisme docs n
 ## Workflow
 
 1. Activate applicable skills with Gemini's skill activation mechanism when available.
-2. Use generated runtime homes from skillctl; do not copy Yeisme source skills into ad hoc locations.
+2. Use runtime homes generated from profiles by `scripts/skills.sh`; do not copy Yeisme source skills into ad hoc locations.
 3. Render MCP Gateway instructions for Gemini and follow registry route policy.
 4. Prefer structured Yeisme CLI output over prose parsing.
 
