@@ -1,0 +1,4 @@
+interface:
+  display_name: "Eikona 网关快速接入"
+  short_description: "安全配置图像网关、准确模型 ID 与跨项目 Eikona 凭据"
+  default_prompt: "Use $eikona-gateway-bootstrap to configure this image gateway through stdin, verify the exact model ID, and keep credentials out of project files."

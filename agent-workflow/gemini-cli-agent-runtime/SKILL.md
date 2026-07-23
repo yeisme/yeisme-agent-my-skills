@@ -21,12 +21,12 @@ gemini
 mcp-gateway client doctor --client gemini --registry ../registry.json
 mcp-gateway client config gemini --registry ../registry.json --instructions
 mcp-gateway client commands gemini --registry ../registry.json
-dist/omh tools guide --json
-dist/omh skills sync --dry-run --json
+scripts/skills.sh list-runtime
+scripts/skills.sh profile show <owner>
 ```
 
 ## Boundaries
 
 - Do not hand-write MCP endpoint blocks when Gateway can render them.
-- Do not bypass official Hermes for chat-provider payloads or conversation delivery.
+- Do not bypass official Connectors for chat-provider payloads or conversation delivery.
 - Do not store unsafe model internals or private tool arguments in evidence.

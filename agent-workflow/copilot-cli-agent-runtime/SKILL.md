@@ -27,8 +27,8 @@ Use this skill when Copilot CLI is the active agent runtime or when instructions
 copilot
 gh auth status
 mcp-gateway client doctor --client codex --registry ../registry.json
-dist/omh skills active --json
-dist/omh tools guide --json
+scripts/skills.sh list-runtime
+scripts/skills.sh profile show <owner>
 ```
 
 ## Boundaries

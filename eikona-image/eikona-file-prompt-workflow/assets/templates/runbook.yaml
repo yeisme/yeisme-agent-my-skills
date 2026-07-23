@@ -1,0 +1,17 @@
+schema_version: eikona.batch.v1
+goal: "<collection goal>"
+defaults:
+  kind: image.generate
+  model: openai:gpt-image-2
+  size: 1024x1024
+matrix:
+  prompt_files:
+    - prompts/01-<direction>.md
+    - prompts/02-<direction>.md
+limits:
+  max_jobs: 4
+  max_parallel: 1
+  allow_unknown_cost: false
+  fail_fast: true
+policy:
+  approval_required: true

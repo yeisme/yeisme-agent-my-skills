@@ -11,6 +11,10 @@ Operate the local Pinax Markdown vault safely. Use this for vault setup, default
 
 Agent-authored notes must enter the unified intake index before later classification. Unless the user explicitly names a final target directory or an approved `pinax organize plan` selects one, create generated or imported notes under `notes/index/` with `--dir index`. Never create agent-generated notes in the vault root, and never guess a topic folder from the title.
 
+## Form-First Capture
+
+Before writing agent-authored notes, normalize loose input into a small form: `title`, `kind`, `source`, `summary`, `body`, `tags`, `privacy`, and `next_action`. Use the form to choose between `pinax note add --dir index`, `pinax inbox capture`, `pinax draft create`, or a project/task command. Do not turn unstructured chat directly into a topic-folder note.
+
 ## Use When
 
 - The task asks to add, write, create, save, or import Pinax notes; capture inbox items; create or manage drafts; append journal entries; or export Markdown.
@@ -21,13 +25,13 @@ Agent-authored notes must enter the unified intake index before later classifica
 ## Command Patterns
 
 ```bash
-pinax vault list --json
+pinax vault list --agent
 pinax config get vault --json
 pinax vault register ./my-notes --name work --default
 pinax init ./my-notes --title "My Notes" --json
 pinax note add "Title" --dir index --body "Content" --json
 pinax note add "AI workflow monetization" --dir index --stdin --json
-pinax note list --recent --limit 20 --json
+pinax note list --recent --limit 20 --agent
 pinax note show "Research Log" --view rendered --json
 pinax note move "Research Log" archive --json
 pinax note archive "Research Log" --json
@@ -39,18 +43,18 @@ pinax journal daily append --body "Today I learned..." --json
 pinax import markdown ./incoming --dir index --json
 pinax export markdown --tag research --to ./export --json
 pinax vault validate --json
-pinax vault stats --json
+pinax vault stats --agent
 ```
 
 ## Workflow
 
-1. Resolve the vault first: `pinax vault list --json`; only use `--vault` when overriding the configured default.
+1. Resolve the vault first: `pinax vault list --agent`; only use `--vault` when overriding the configured default.
 2. If the user asked for a Pinax note but did not explicitly approve a vault write, provide the note body as a draft and show the exact `pinax note add ... --dir index --stdin --json` command.
 3. For direct note creation, prefer `pinax note add --dir index` or `pinax inbox capture`; use `--stdin` for long generated bodies and do not write Markdown files directly unless the user explicitly wants prose file editing.
 4. For inbox/draft review pages, use `pinax inbox index preview|create|refresh` or `pinax draft index preview|create|refresh`; do not hand-edit managed index pages.
 5. For ordinary single-note maintenance, use `pinax note move`, `pinax note archive`, `pinax note rename`, `pinax note tag`, or `pinax note property` instead of editing frontmatter by hand.
 6. Stop and route to `pinax-proof-maintenance-operator` before `metadata apply`, `repair apply`, `organize apply`, `version restore`, broad note moves, or destructive operations that need snapshot/approval gates.
-7. Use `--json` for automation and parse the `status`, `facts`, `actions`, and `error` fields.
+7. Use `--agent` for read/list/status commands; use `--json` for writes and parse the `status`, `facts`, `actions`, and `error` fields.
 
 ## Safety Boundaries
 
@@ -64,5 +68,5 @@ pinax vault stats --json
 ## Validation
 
 - After setup: `pinax vault validate --json`.
-- After capture: `pinax search "<title or keyword>" --json` or `pinax note list --json`, and confirm unclassified generated notes have paths beginning with `notes/index/`.
+- After capture: `pinax search "<title or keyword>" --agent` or `pinax note list --agent`, and confirm unclassified generated notes have paths beginning with `notes/index/`.
 - After inbox/draft index changes: `pinax inbox index preview --json` or `pinax draft index preview --json`.

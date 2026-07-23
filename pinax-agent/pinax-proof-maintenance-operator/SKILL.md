@@ -19,29 +19,29 @@ Run Pinax proof-loop and high-risk maintenance workflows with explicit diagnosti
 pinax proof loop run --vault ./my-notes --json
 pinax proof loop run --vault ./my-notes --apply --yes --json
 pinax vault doctor --vault ./my-notes --json
-pinax vault stats --vault ./my-notes --json
+pinax vault stats --vault ./my-notes --agent
 pinax metadata plan --vault ./my-notes --json
 pinax metadata apply --vault ./my-notes --yes --json
 pinax repair plan --vault ./my-notes --save --json
 pinax repair apply --vault ./my-notes --plan repair-abc123 --yes --snapshot-message "pre-repair snapshot" --json
 pinax organize plan --vault ./my-notes --save --json
-pinax organize list --vault ./my-notes --json
+pinax organize list --vault ./my-notes --agent
 pinax organize apply --vault ./my-notes --plan organize-abc123 --yes --snapshot-message "pre-organization snapshot" --json
 pinax version snapshot --vault ./my-notes --message "before maintenance" --json
 pinax version restore notes/a.md --revision snap_123 --plan --vault ./my-notes --json
 pinax version restore apply --vault ./my-notes --plan restore-abc123 --yes --json
-pinax record status --vault ./my-notes --json
+pinax record status --vault ./my-notes --agent
 pinax record adopt --vault ./my-notes --plan --json
 ```
 
 ## Workflow
 
-1. Inspect first with `pinax vault doctor --json`, `pinax vault stats --json`, or `pinax proof loop run --json`.
+1. Inspect first with `pinax vault doctor --json`, `pinax vault stats --agent`, or `pinax proof loop run --json`.
 2. Prefer a read-only proof loop before manual sequencing. `pinax proof loop run --json` covers capture/retrieve/diagnose/plan/snapshot/apply readiness in one bounded projection.
 3. Generate and inspect plans before any apply: `pinax metadata plan`, `pinax repair plan --save`, or `pinax organize plan --save`.
 4. Before `metadata apply`, `repair apply`, `organize apply`, `version restore`, broad record adoption, or any high-risk write, create a fresh snapshot with `pinax version snapshot --message "before maintenance" --json`.
 5. Require explicit user approval before commands with `--yes`, `--apply`, restore, destructive cleanup, or bulk moves.
-6. After an apply, run the matching diagnostic again, such as `pinax vault doctor --json`, `pinax proof loop run --json`, or `pinax record status --json`.
+6. After an apply, run the matching diagnostic again, such as `pinax vault doctor --json`, `pinax proof loop run --json`, or `pinax record status --agent`.
 7. If an operation reports partial success, conflict, snapshot required, or approval required, stop and surface the exact next safe command.
 
 ## Safety Boundaries

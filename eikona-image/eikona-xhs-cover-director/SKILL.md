@@ -19,21 +19,22 @@ description: Use when designing Xiaohongshu cover images, first-frame visuals, o
 1. 提炼封面任务：一句主标题、视觉主体、背景、风格和构图。
 2. 设计 3 个封面方向：真实生活感、信息型、强情绪钩子型；每个方向说明适合的标题位置和风险。
 3. 为推荐方向输出 Eikona 提示词，明确中文标题留白、3:4 竖版安全区、主体大小和禁用项。
-4. 给出本地验证命令、真实生成命令，以及生成后的 review/feedback/handoff 命令。
-5. 如果用户提供参考图，先确认来源和权限；权限未知时不生成自动上传 provider 的命令。
+4. 加载 `eikona-file-prompt-workflow`，将 brief 和候选保存到 `prompts/xhs/cover/<collection>/`；推荐方向使用独立 prompt 文件，多方向使用 runbook。
+5. 给出本地验证命令、真实生成命令，以及生成后的 review/feedback/handoff 命令。
+6. 如果用户提供参考图，先确认来源和权限；权限未知时不生成自动上传 provider 的命令。
 
 ## 命令示例
 
 本地验证：
 
 ```bash
-eikona generate --model fixture:image --aspect 3:4 --size 1024x1536 --prompt "小红书护肤笔记封面，真实浴室台面，温和晨光，主体是一瓶精华和毛巾，顶部留出清晰中文标题区域，干净明亮，真实摄影感" --agent
+eikona generate --model fixture:image --aspect 3:4 --size 1024x1536 --input prompts/xhs/cover/skincare-morning/prompts/01-clean-lifestyle.md --dry-run --json
 ```
 
 真实生成：
 
 ```bash
-eikona generate --model openai:gpt-image-2 --aspect 3:4 --size 1024x1536 --prompt "小红书护肤笔记封面，真实浴室台面，温和晨光，主体是一瓶精华和毛巾，顶部留出清晰中文标题区域，干净明亮，真实摄影感" --agent
+eikona generate --model openai:gpt-image-2 --aspect 3:4 --size 1024x1536 --input prompts/xhs/cover/skincare-morning/prompts/01-clean-lifestyle.md --json
 eikona review packet <run_id> --json
 eikona feedback accept <run_id> --artifact <artifact_id> --reason title_safe --reason composition --json
 eikona assets handoff <artifact_id> --agent
@@ -42,7 +43,7 @@ eikona assets handoff <artifact_id> --agent
 ## 输出
 
 - 3 个候选方向及推荐排序。
-- 推荐方向的完整视觉 brief 和 Eikona prompt。
+- 推荐方向的完整视觉 brief、分类目录、prompt 文件和可选 runbook。
 - 本地验证、真实生成、review、feedback、handoff 命令。
 
 ## 质量标准

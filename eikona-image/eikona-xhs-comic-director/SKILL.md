@@ -19,21 +19,22 @@ description: Use when designing Xiaohongshu comic-style static posts, situationa
 1. 拆出漫画页序：冲突、误区、发现、解决、总结或互动。
 2. 为每页写画面描述、角色动作、对白气泡和旁白。
 3. 统一角色设定、服装、表情、画风和色彩，避免每页角色长相漂移。
-4. 输出逐页 prompt、整组生成命令和 review/feedback/handoff 下一步。
-5. 涉及知识科普时，先确认事实来源；高风险建议必须保守表达。
+4. 加载 `eikona-file-prompt-workflow`，按 `prompts/xhs/comic/<collection>/prompts/NN-<story-beat>.md` 保存逐页 prompt，并用 runbook 保持角色和画风约束。
+5. 输出集合 README、逐页 prompt、runbook 和 review/feedback/handoff 下一步。
+6. 涉及知识科普时，先确认事实来源；高风险建议必须保守表达。
 
 ## 命令示例
 
 本地验证：
 
 ```bash
-eikona generate --model fixture:image --aspect 3:4 --size 1024x1536 --count 4 --prompt "小红书漫画风格图文，四页，主题是新手护肤误区，原创角色，柔和配色，中文对白气泡清晰，轻松真实" --agent
+eikona run -f prompts/xhs/comic/skincare-mistakes/runbook.yaml --dry-run --json
 ```
 
 真实生成：
 
 ```bash
-eikona generate --model openai:gpt-image-2 --aspect 3:4 --size 1024x1536 --count 4 --prompt "小红书漫画风格图文，四页，主题是新手护肤误区，原创角色，统一服装和发型，柔和配色，中文对白气泡清晰，轻松真实" --agent
+eikona run -f prompts/xhs/comic/skincare-mistakes/runbook.yaml --background --json
 eikona review packet <run_id> --json
 eikona feedback accept <run_id> --artifact <artifact_id> --reason character_consistency --reason story_clarity --json
 eikona assets handoff <artifact_id> --agent
@@ -42,7 +43,7 @@ eikona assets handoff <artifact_id> --agent
 ## 输出
 
 - 页序表：页码、剧情功能、画面、动作、对白、旁白。
-- 原创角色设定和统一画风约束。
+- 原创角色设定、分类目录、集合 README、逐页 prompt 文件和统一画风 runbook。
 - 本地验证、真实生成、review、feedback、handoff 命令。
 
 ## 质量标准

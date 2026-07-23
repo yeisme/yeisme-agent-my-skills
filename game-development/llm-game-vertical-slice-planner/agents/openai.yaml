@@ -1,0 +1,4 @@
+interface:
+  display_name: "LLM 游戏垂直切片规划师"
+  short_description: "把 LLM 游戏概念压缩成可试玩、可测量、可止损的短周期原型。"
+  default_prompt: "Use $llm-game-vertical-slice-planner to turn this LLM game concept into a measurable vertical-slice plan."

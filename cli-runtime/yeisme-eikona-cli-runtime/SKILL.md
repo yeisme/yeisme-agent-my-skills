@@ -1,11 +1,13 @@
 ---
 name: yeisme-eikona-cli-runtime
-description: Use when changing, testing, reviewing, documenting, or designing Eikona CLI behavior under cli/eikona, including image generation, reference-image editing, prompt skills, prompt decks, visual assessment, recipe reuse, command docs, agent invocation contracts, provider adapters, run evidence, project library, replacement safety, MCP integration, and Go release checks.
+description: Use when the user explicitly asks to use Eikona/eikona, or when changing, testing, reviewing, documenting, or designing Eikona CLI/runtime behavior under cli/eikona, including generation, external artifact capture, project/global asset scope, Visual Library promotion, download grants, OpenAPI/SDK contracts, prompt files, provider adapters, run evidence, project registry, replacement safety, MCP, and Go release checks.
 ---
 
 # Yeisme Eikona CLI Runtime
 
 Use this skill for `cli/eikona`, the agent-facing visual asset runtime and evidence-backed generation CLI.
+
+If the user explicitly says to use Eikona, `eikona`, or the Eikona CLI for image generation, this route takes precedence over generic built-in image generation tools. Enter `cli/eikona`, follow local `AGENTS.md`, and use Eikona commands such as `eikona generate ... --json` / `--agent`. Only fall back to another image tool if the user explicitly changes the route or Eikona is unavailable and the user approves the fallback.
 
 ## Boundary
 
@@ -14,6 +16,7 @@ Use this skill for `cli/eikona`, the agent-facing visual asset runtime and evide
 - Config precedence and provider credential resolution live in `internal/config`.
 - Provider protocol adapters live in `internal/adapters/*`; adapters must not print CLI output or bypass runtime storage.
 - Run/job/artifact evidence lifecycle lives in `internal/runtime` and `internal/runstore`.
+- External capture, path-free delivery, and project service boundaries live in `internal/api/artifactimport`, `internal/api/artifactdelivery`, and `internal/api/projectservice`; they must reuse app/runstore/index facades instead of creating parallel persistence.
 - Project library, prompt memory, prompt skills, prompt decks, sessions, replacement ledger, index, HTTP playground helpers, storage backup/restore, and MCP integration live under their matching `internal/*` modules.
 - Multi-scenario prompt behavior is layered: `internal/prompts` owns prompt memory and prompt-skill records; `internal/promptdeck` owns immutable deck versions; workflow draw owns deterministic card-pull evidence; `internal/visualmemory` and `internal/stylepack` own authorized reference/style constraints; planned `internal/assessment` and `internal/recipe` work must consume these projections rather than creating parallel stores.
 - In a `cli/eikona` session, human-facing product, design, runtime, protocol, governance, evaluation, command, and delivery docs live in local `docs/**`; code behavior docs live in `README.md` and `AGENTS.md`. Root project-doc mirrors are not valid owners and must not be required for closeout.
@@ -27,7 +30,8 @@ Use this skill for `cli/eikona`, the agent-facing visual asset runtime and evide
    - For other agents calling Eikona, read `docs/commands/agent-integration.md` first and prefer CLI `--json`/`--agent` contracts before adding MCP-only behavior.
   - For storage backup/restore work, read `docs/commands/storage.md`, `docs/runtime/storage/storage-and-projection.md`, and root `docs/workflows/local-first-backup-sync.md` before changing code or docs.
   - For multi-scenario prompt work, read `docs/product/scenario-playbook.md`, `docs/commands/prompts.md`, `docs/commands/workflow.md`, and `docs/commands/style.md` before changing code or docs.
-   - For Xiaohongshu static visual creation tasks, read the on-demand `eikona-xhs-visual-router` skill first, then keep execution on Eikona `generate` or `workflow` commands with review, feedback, and handoff evidence.
+   - For creative visual generation requests, read the on-demand `eikona-visual-router` skill first. It will route Scaena subject/readiness work, Auctra handoff, subject asset direction, Xiaohongshu static visuals, ultrawide storyboards, or plain CLI/runtime work to the smallest owner skill.
+   - For temporary image persistence, Visual Library promotion, project/global scope, download grants, or asset APIs, load `eikona-asset-lifecycle` and read `docs/product/external-asset-capture.md` plus `docs/interfaces/api/openapi.yaml`.
    - For active design tracks around scoring/tags or recipe reuse, read `openspec/changes/eikona-visual-assessment-tags/` and `openspec/changes/eikona-prompt-skill-reuse-recipes/` if they exist, then keep new implementation tasks in the owning Eikona OpenSpec change.
 2. Preserve Eikona product contracts:
    - `--json` output must remain machine-readable and stable for agents, Cohors, CI, and shell scripts.
@@ -58,17 +62,29 @@ Use this skill for `cli/eikona`, the agent-facing visual asset runtime and evide
    - project library, sessions, prompt memory, and replacement safety in their matching `internal/*` packages
    - MCP and HTTP playground helpers in `internal/mcp`, `internal/playground`, and related request/projection packages
 5. For agent invocation design, keep the contract simple:
-   - one-off generation uses `eikona "<prompt>" --json` or `eikona generate ... --json`;
-   - multi-step work uses `eikona workflow validate/plan/draw/run --json` and `workflow run --background`;
+   - one-off inline generation uses `eikona "<prompt>" --json` or `eikona generate ... --json`; a prompt stored in a text or Markdown file uses `eikona generate --input <prompt-file> --json` instead. `--input` and `--prompt` are mutually exclusive; use `eikona-file-prompt-workflow` for categorized directories, collection README files, templates, and runbook authoring;
+   - a prompt collection uses `eikona run -f <runbook.yaml> --json`: use `defaults.prompt_file` for a shared file, `jobs[].prompt_file` for named candidates, or `matrix.prompt_files` to expand one job per file. Prompt paths are relative to the runbook and `prompt`, `prompt_file`, and `prompt_ref` are mutually exclusive at each source level;
+   - multi-step workflow work uses `eikona workflow validate/plan/draw/run --json` and `workflow run --background`;
    - status polling uses `eikona wait/status/inspect --json` or low-token `--agent`;
-   - artifact handoff uses `eikona assets handoff <artifact_id> --json` before project writes;
+   - external PNG/JPEG/WebP capture uses `eikona artifacts import <path> --json`; capture always creates run evidence first and never auto-promotes into Visual Library;
+   - artifact handoff uses `eikona assets handoff <artifact_id> --json` before project writes; long-term reuse requires an explicit `eikona library save eikona://artifact/<handle> ... --json` decision;
+   - REST capture requires `Idempotency-Key`, allowed roots for server-side paths, and path-free delivery grants rather than absolute runstore paths;
    - scenario prompt exploration uses `eikona prompts catalog search ... --json`, `eikona workflow draw ... --json`, and `eikona workflow run ... --background --json`;
-   - Xiaohongshu creative direction uses the on-demand `eikona-xhs-*` skills for brief and prompt design, while this runtime skill remains responsible for CLI contracts, evidence, provider safety, and generated artifact lifecycle;
+   - creative direction uses the on-demand `eikona-visual-router`, `eikona-subject-asset-director`, `eikona-xhs-*`, and `eikona-ultrawide-storyboard-director` skills for brief and prompt design; file-backed storage uses `eikona-file-prompt-workflow`; this runtime skill remains responsible for CLI contracts, evidence, provider safety, and generated artifact lifecycle;
+   - Scaena episode/shot/cover/motion generation must first pass `scaena-subject-asset-readiness`; without a current preflight, Eikona may generate only subject candidates or look-development artifacts marked non-production;
    - planned visual scoring uses `eikona assess ... --json` after the assessment change lands; until then, use `review`, `feedback`, and objective `quality.check` evidence;
    - planned recipe reuse uses `eikona recipes ...` and `workflow --recipe` only after the recipe change lands; until then, keep reuse explicit through prompt skills, deck versions, style packs, and feedback evidence;
   - long-lived integrations can use `eikona mcp`, but ordinary CLI output remains the primary contract.
-  - storage backup uses `eikona storage backend set s3 ...`, `eikona storage push ...`, and `eikona storage restore ...`; for cross-project Git plus S3/rclone/cloud-drive policy, use `yeisme-local-backup-sync-policy` on demand.
+  - storage backup uses `eikona storage backend set s3 ...`, `eikona storage push ...`, and `eikona storage restore ...`; for reusable Git plus S3/rclone/cloud-drive policy, use `local-first-backup-sync-policy` on demand.
 6. For Eikona plan/checklist work, keep `proposal.md`, `design.md`, `tasks.md`, and `specs/**/spec.md` under `cli/eikona/openspec/changes/eikona-<slug>/`; migrate any misplaced checklist or root `openspec/` implementation task before continuing. Do not leave completed execution changes active. After closeout, update readiness/specs, record verification in `tasks.md` or `design.md`, and archive ordinary changes to `cli/eikona/openspec/changes/archive/YYYY-MM-DD-eikona-<slug>/`.
+
+## 文件提示词集合约束
+
+- 分类、命名、README、prompt 文档和 runbook 模板由 `eikona-file-prompt-workflow` 统一定义；runtime 不复制第二套目录规范。
+- 一个 `.md` 或 `.txt` 文件对应一个可审阅的提示词方向；文件内容只包含自然语言创作提示，不包含密钥、provider payload、隐藏指令或 run metadata。
+- 对集合先执行 `eikona run -f <runbook.yaml> --dry-run --json`，确认展开的 jobs、模型、尺寸、来源和成本限制后再执行真实 run。
+- CLI 会为单文件和 runbook job 记录 prompt source provenance 与 run-owned snapshot。不得手改 `prompt_sources.json`、snapshot、batch plan、queue 或 run evidence；通过 Eikona CLI 重建或推进它们。
+- Auctra 来源先交给 `eikona-auctra-visual-router`：只能从已接受的 brief/source refs 派生 prompt 文件；Eikona 是 Auctra 生图的默认和优先执行路径。
 
 ## Validation
 
@@ -96,3 +112,11 @@ openspec validate --all
 ```
 
 If CI, tags, or release artifacts change, also use the Go/GitHub release guardrails skill.
+
+## Visual Intent Evidence
+
+The runtime consumes validated `eikona.visual_intent.v1` evidence through `eikona workflow import intent`. It is the only Skill responsible for provider execution and artifact lifecycle. Evidence files (`visual_intent.json`, `skill_receipt.json`, `intent_compile.json`) are written under each run directory and linked through existing runstore paths.
+
+The runtime distinguishes claimed from verified skill identity; unverified receipts cannot support promoted/core evidence. Default model: `openai:gpt-image-2`.
+
+Contract reference: `../eikona-visual-router/references/visual-intent-contract.md`.

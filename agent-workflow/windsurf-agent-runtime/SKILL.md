@@ -20,12 +20,12 @@ Use this skill when Windsurf is the active coding agent or when Yeisme instructi
 windsurf
 mcp-gateway client doctor --client generic --registry ../registry.json
 mcp-gateway client config generic --registry ../registry.json --instructions
-dist/omh skills active --json
-dist/omh tools guide --json
+scripts/skills.sh list-runtime
+scripts/skills.sh profile show <owner>
 ```
 
 ## Boundaries
 
 - Do not duplicate Yeisme skill source into Windsurf-specific folders.
-- Do not bypass Hermes, MCP Gateway, or subproject ownership boundaries.
+- Do not bypass Connectors, MCP Gateway, or subproject ownership boundaries.
 - Do not persist secrets, raw prompts, hidden prompts, provider payloads, private tool arguments, or full chain-of-thought.

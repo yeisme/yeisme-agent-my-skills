@@ -1,0 +1,3 @@
+display_name: Auctra 中文项目启动器
+short_description: starting Chinese Auctra projects with localized layout and gates
+default_prompt: 请使用 Auctra 中文项目启动器 为中文创作者创建或启动 Auctra 项目，并给出真实命令、输入缺口、gate 检查和下一步。

@@ -58,6 +58,8 @@ Every self-built skill must include:
 - `name`: same as the directory name.
 - `description`: clear trigger conditions, task object, and scope; prefer `Use when ...`.
 
+For a product-owning skill, name the product or domain before its current implementation surface. Enumerate every approved surface that should trigger the skill—such as CLI/TUI, API/service/MCP/event, Web/desktop/client, and operational workflows—and identify the stable control-plane contract. Use CLI-only wording only when the nearest `AGENTS.md` or an accepted OpenSpec change explicitly limits the product scope.
+
 The body should stay lean:
 
 - when to use the skill

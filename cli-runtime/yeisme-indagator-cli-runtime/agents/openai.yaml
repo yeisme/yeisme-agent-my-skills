@@ -1,3 +1,0 @@
-display_name: Yeisme Indagator CLI Runtime
-short_description: Develop, document, and verify Indagator CLI commands, generated command docs, Cobra/Viper config, parser/manifest/download workflows, and agent-facing output contracts.
-default_prompt: Change or review agent/indagator CLI commands while preserving generated command docs, Cobra/Viper config behavior, JSON/agent/events output contracts, Connect RPC boundaries, crawler policy, redaction, and Go validation commands.

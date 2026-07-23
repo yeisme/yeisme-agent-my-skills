@@ -19,8 +19,8 @@ Use this skill when a task is being handled by Claude Code or when instructions 
 
 ```bash
 claude
-dist/omh skills active --agent-home claude --json
-dist/omh skills sync --agent-home claude --dry-run --json
+scripts/skills.sh list-runtime
+scripts/skills.sh profile show <owner>
 mcp-gateway client doctor --client codex --registry ../registry.json
 mcp-gateway client config codex --registry ../registry.json --instructions
 ```
@@ -29,4 +29,4 @@ mcp-gateway client config codex --registry ../registry.json --instructions
 
 - Do not edit generated `.claude/skills/` copies as source.
 - Do not store secrets, raw prompts, hidden prompts, provider payloads, private tool arguments, or full chain-of-thought in docs, logs, or evidence.
-- Do not make Claude Code the owner of Hermes provider adapters, MCP implementation, or Yeisme subproject business logic.
+- Do not make Claude Code the owner of Connectors provider adapters, MCP implementation, or Yeisme subproject business logic.

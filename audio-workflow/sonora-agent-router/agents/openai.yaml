@@ -1,0 +1,3 @@
+display_name: Sonora Agent Router
+short_description: Route Sonora voice and audio workflows to the smallest safe command, using --agent by default and --json only for complete nested data.
+default_prompt: 使用 Sonora 路由一个语音或音频资产任务；先选择最小安全命令，默认用 --agent，只有需要完整嵌套数据时才用 --json。

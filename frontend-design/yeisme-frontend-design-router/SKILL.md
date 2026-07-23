@@ -65,6 +65,7 @@ If the next action is obvious and execution is requested, hand off to the first 
 | Component sourcing | 21st.dev Magic, shadcn registry, OpenUI, or existing component library -> local design-system constraints -> implementation skill |
 | Agent workflow, Dify/n8n-like graph, DAG editor, routing canvas | Open Design -> `@xyflow/react` route -> `ui-spec-frontend-workflow` -> implementation skill -> interaction tests |
 | Whiteboard, moodboard, free-form material board | Open Design -> `tldraw` route -> UI Spec -> implementation skill -> interaction tests |
+| Rendered animation, product walkthrough, data-driven clip, or video preview | Open Design or storyboard -> one aesthetic direction -> `remotion-animation-workflow` -> Remotion Studio/still/render evidence |
 
 ## Aesthetic Direction Selection
 
@@ -83,12 +84,31 @@ Do not use Impeccable as the only taste source. Use it primarily after implement
 
 ## Open Design First-Use Check
 
-When Open Design is available, route through it first for discovery and handoff:
+Prefer the official Open Design `od` CLI. Do not treat an HTTP compatibility
+wrapper or GNU coreutils `od` as the native CLI merely because `command -v od`
+returns a path or `od status` returns data.
+
+Inspect the resolved command before discovery:
+
+```bash
+command -v od
+od --help | sed -n '1,40p'
+```
+
+The command is not the official Open Design CLI when help identifies `Open
+Design CLI wrapper`, GNU coreutils, or another compatibility launcher. In that
+case, report native CLI unavailability and use an explicit HTTP/API fallback
+only for the operations it supports. Never silently present fallback output as
+native CLI evidence.
+
+When the official Open Design CLI is available, route through it first for
+discovery and handoff:
 
 ```bash
 od status --json
 od skills list
 od design-systems list
+od projects list
 ```
 
 Use Open Design for:
@@ -101,6 +121,11 @@ Use Open Design for:
 - routing to coding agents
 
 Open Design output is input, not final acceptance. Final frontend acceptance still belongs to the owning project through implementation tests, screenshots, accessibility checks, and quality gates.
+
+Use `od mcp` only where the official daemon CLI files are installed or mounted.
+MCP launchers must receive an explicit native executable and arguments; they
+must not default to a generic `od mcp` lookup that could resolve to a wrapper or
+GNU coreutils.
 
 ## Quality Gate Selection
 
@@ -155,6 +180,7 @@ For React Flow routes, keep frontend and backend ownership separate: React Flow 
 - If a screenshot conflicts with the project design system, route to `ui-spec-frontend-workflow` to resolve the written UI Spec before implementation.
 - If a component generator produces off-system visuals, treat it as source material and restyle through local tokens/components.
 - If browser tools find issues but no deterministic test exists, create or request the narrowest reproducible Playwright/Storybook/manual evidence path.
+- If the requested motion is an ordinary UI transition, do not route to Remotion. Use Remotion only when the output is a timeline-based video, still, or reusable composition preview.
 
 ## Fallback Contract
 
@@ -173,6 +199,7 @@ Do not tell the user to install every possible skill. Do not block routing on in
 - Do not write long product design plans unless routed to a planning skill.
 - Do not perform QA directly; route to quality or visual QA skills.
 - Do not create or modify Open Design projects directly; route to Open Design or the relevant operator.
+- Do not add Remotion dependencies while routing; hand rendered-animation work to `remotion-animation-workflow` first.
 - Do not add this skill to root runtime by default unless the user explicitly asks for a long-lived root default. Frontend execution skills should remain on-demand or subproject-scoped.
 - Do not expose local execution wrappers, shell aliases, or agent-only prefixes in routing output.
 

@@ -1,0 +1,3 @@
+display_name: Remotion Animation Workflow
+short_description: Design and integrate renderable React video workflows without confusing them with ordinary UI motion.
+default_prompt: Use $remotion-animation-workflow to design a Remotion composition, preview, rendering boundary, and verification plan for this frontend project.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Eikona File Prompt Workflow"
+  short_description: "Organize and run categorized file-backed image prompts"
+  default_prompt: "Use $eikona-file-prompt-workflow to organize these image prompts into a categorized library and generate them through Eikona files."

@@ -1,6 +1,6 @@
 ---
 name: yeisme-frontend-quality-workflow
-description: Use when adding, changing, testing, or reviewing frontend tooling and UI quality gates in this repository, including Impeccable-style deterministic detection, default SaaS operations console style conformance, Storybook design-system stories, Tailwind CSS in Storybook, Chromatic or Playwright visual regression, @storybook/addon-designs, Lighthouse, Axe accessibility checks, browser-use driven real browser integration tests, and Cohors-style diagnostics summaries.
+description: Use when adding, changing, testing, or reviewing frontend tooling and UI quality gates in this repository, including Impeccable-style deterministic detection, default SaaS operations console style conformance, Storybook design-system stories, Tailwind CSS in Storybook, Chromatic or Playwright visual regression, @storybook/addon-designs, Lighthouse, Axe accessibility checks, Front-End Checklist rule/MCP lookups, browser-use driven real browser integration tests, and Cohors-style diagnostics summaries.
 ---
 
 # Yeisme Frontend Quality Workflow
@@ -19,6 +19,7 @@ Use this skill for frontend toolchain and UI quality work in Yeisme projects.
 - Interaction regression: dropdowns, dialogs, popovers, sheets, image previews, table controls, forms, keyboard behavior, and overlay states.
 - Design references: `@storybook/addon-designs`.
 - Quality gates: Lighthouse, Axe, keyboard navigation, ARIA, color contrast, console errors, network failures.
+- External rules corpus: Front-End Checklist for launch, accessibility, SEO, security, performance, image, privacy, i18n, HTML, CSS, JavaScript, and testing rule lookups.
 - Real integration testing: Playwright plus browser-use for browser workflows that should exercise the app like a user.
 - TypeScript Web/Node test layering: Vitest, Testing Library, MSW, Supertest or framework injection, Testcontainers or docker compose, and limited Playwright browser E2E.
 
@@ -27,6 +28,8 @@ Use this skill for frontend toolchain and UI quality work in Yeisme projects.
 - Do not add Storybook, Chromatic, Lighthouse, Axe, or browser-use to a project without checking its package manager and frontend framework first.
 - Do not store Chromatic project tokens, browser-use API keys, or service credentials in tracked files.
 - Do not rely on screenshots alone for frontend acceptance. Include structured diagnostics.
+- Do not vendor the full Front-End Checklist rule corpus into this repository. Link to the upstream rules or use its MCP/skills when a task needs that external coverage.
+- Do not treat a Front-End Checklist MCP or website pass as final acceptance unless findings are converted into deterministic local checks, screenshots, Storybook stories, Axe/Lighthouse results, Playwright assertions, or diagnostics evidence.
 - Do not accept AI-generated UI only because it renders. It must preserve design-system tokens, page pattern, component states, density, and responsive behavior.
 - Do not accept frontend work that ignores the default SaaS operations console style unless a local project design system explicitly overrides it.
 - Do not accept new React UI implemented through route/page-specific CSS selectors. Styling must be assembled from Tailwind utilities, tokens, and reusable component recipes; global CSS is reserved for Tailwind entry, tokens, reset, and documented third-party overrides.
@@ -152,25 +155,31 @@ bunx storybook@latest init
    - keyboard navigation checks for dialogs, menus, tabs, forms, tables, command palettes, and route changes
    - interaction checks for overlay open/close, Escape handling, outside click, focus return, disabled actions, loading guards, and image preview behavior
    - console error and failed network request capture in Playwright
-12. Add browser-use only where realistic integration value is higher than deterministic test complexity:
+12. Use Front-End Checklist when a public launch, broad audit, or rule-specific review needs wider coverage than the local gate:
+   - browse https://frontendchecklist.io/rules for manual rule lookup
+   - use the public MCP endpoint `https://mcp.frontendchecklist.io` only in MCP-capable clients or subprojects that explicitly configure it
+   - use `search_rules` before giving frontend accessibility, SEO, security, image, privacy, i18n, or performance recommendations when MCP is available
+   - use `get_workflow`, `get_checklist_rules`, or `get_quick_reference` for launch, accessibility, SEO, security, and performance audits when MCP is available
+   - convert every accepted finding into local evidence through Playwright, Storybook, Chromatic, Axe, Lighthouse, typecheck, lint, tests, diagnostics, or a documented manual fallback
+13. Add browser-use only where realistic integration value is higher than deterministic test complexity:
    - onboarding flows
    - multi-page task completion
    - exploratory smoke runs after large UI changes
    - flows with dynamic content where strict selectors are brittle
-13. For ordinary TypeScript Web/Node testing, keep the test layer explicit:
+14. For ordinary TypeScript Web/Node testing, keep the test layer explicit:
    - `unit`: Vitest for pure functions, single objects, and complex rules
    - `integration`: Vitest for service/repository, component/store/API mock, or API handler + app harness
    - `component`: one complete frontend page or backend service component with real or controlled dependencies and mocked external boundaries
    - `system`: multiple services started together for system-level behavior
    - `e2e`: user or automation entry through the full business chain; browser paths use Playwright, CLI/API paths do not require a browser
-14. Use the default TypeScript Web/Node stack unless the project already has an equivalent:
+15. Use the default TypeScript Web/Node stack unless the project already has an equivalent:
    - Vitest as the main test runner
    - Testing Library + MSW for frontend component/page integration tests
    - Supertest, Fastify `inject()`, or framework injection for backend HTTP/API integration tests
    - Testcontainers or the project's docker compose/test harness for PostgreSQL, Redis, MQ, MinIO, and other real dependencies
    - Playwright for a small number of critical browser E2E paths
-15. Keep CI checks separated: run typecheck such as `tsc --noEmit` separately because Playwright does not type-check the app.
-16. Report results as diagnostics, not prose only:
+16. Keep CI checks separated: run typecheck such as `tsc --noEmit` separately because Playwright does not type-check the app.
+17. Report results as diagnostics, not prose only:
 
 ```text
 Diagnostics:
@@ -200,6 +209,22 @@ bunx lighthouse http://localhost:3000 --view
 bunx playwright test accessibility.spec.ts
 bunx playwright test visual.spec.ts
 bunx playwright test interactions.spec.ts
+npx skills add frontendchecklist/skills
+npx skills add frontendchecklist/skills --skill https
+```
+
+For MCP-capable clients that explicitly opt in, use the public Front-End Checklist endpoint:
+
+```text
+https://mcp.frontendchecklist.io
+```
+
+Useful prompts:
+
+```text
+Use the Front-End Checklist MCP to review this React component and report the highest-confidence findings first.
+Use the Front-End Checklist MCP to audit https://example.com for accessibility, performance, and SEO issues.
+Use the Front-End Checklist MCP to give me a performance checklist in markdown format.
 ```
 
 For Playwright + Axe:
@@ -209,6 +234,8 @@ bun add -d @axe-core/playwright
 ```
 
 For browser-use, follow the local language runtime selected by the project. Keep credentials in local env or CI secrets and wrap any AI-assisted browser run with deterministic Playwright assertions for the final gate.
+
+For Front-End Checklist, use the website, MCP, or optional skills as external guidance. Do not copy the upstream rule corpus into this repository; record links and local verification evidence instead.
 
 If the external `browser-use` skill is available, use it only as an exploratory or smoke-test aid. Do not treat browser-use success as final acceptance unless the result is converted into deterministic Playwright assertions, Storybook stories, Chromatic baselines, or diagnostics evidence.
 

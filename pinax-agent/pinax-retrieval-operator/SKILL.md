@@ -22,17 +22,17 @@ pinax index doctor --json
 pinax index lookup diagram --scope all --json
 pinax index page preview ideas --json
 pinax search "release workflow" --agent
-pinax note links "Release Plan" --json
-pinax note backlinks "Release Plan" --json
-pinax note orphans --json
+pinax note links "Release Plan" --agent
+pinax note backlinks "Release Plan" --agent
+pinax note orphans --agent
 pinax kb doctor --json
-pinax kb context "prepare the next release" --limit 8 --json
-pinax kb search "project context" --limit 8 --json
-pinax view list --json
-pinax folder list --json
-pinax folder show notes/research --json
-pinax database view list --json
-pinax dataview table --from notes --limit 20 --json
+pinax kb context "prepare the next release" --limit 8 --agent
+pinax kb search "project context" --limit 8 --agent
+pinax view list --agent
+pinax folder list --agent
+pinax folder show notes/research --agent
+pinax database view list --agent
+pinax dataview table --from notes --limit 20 --agent
 pinax query run "SELECT title, path FROM notes LIMIT 10" --json
 ```
 
@@ -44,7 +44,7 @@ pinax query run "SELECT title, path FROM notes LIMIT 10" --json
 4. Use `pinax view`, `pinax folder list/show`, `pinax database view`, `pinax dataview`, or `pinax query` only through their controlled Pinax surfaces; do not read SQLite files directly.
 5. Use `pinax memory context` through `pinax-memory-operator` for durable decisions or facts; do not use KB as a decision ledger.
 6. Use `pinax kb context` only when semantic similarity over larger note bodies is required.
-7. Prefer `--agent` for low-token facts and `--json` when another tool needs structured records.
+7. Prefer `--agent` for low-token facts, context packs, lists, and search results. Use `--json` when another tool needs full structured records or when validating index/KB health.
 8. Keep returned context bounded by `--limit` and cite `path`, `title`, or source facts in the response.
 9. Use `pinax index sync` only when a workflow explicitly requires the record/proof-loop sync semantics; for ordinary stale search recovery, prefer `pinax index refresh`.
 

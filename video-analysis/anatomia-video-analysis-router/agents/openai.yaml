@@ -1,0 +1,4 @@
+interface:
+  display_name: "Anatomia Video Analysis Router"
+  short_description: "Route and run Anatomia video decomposition workflows."
+  default_prompt: "Use $anatomia-video-analysis-router to choose a domain profile and start or resume a video analysis."

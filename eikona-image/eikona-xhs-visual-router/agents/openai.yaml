@@ -1,3 +1,4 @@
-display_name: Eikona 小红书视觉路由器
-short_description: 将小红书静态图需求路由到封面、卡片、信息图或漫画视觉导演，并保持 Eikona review/handoff 链路。
-default_prompt: 请判断这个小红书静态图需求应该使用封面、图文卡片、信息图还是漫画视觉技能，并输出视觉 brief、推荐导演、Eikona 命令和 review/handoff 下一步。
+interface:
+  display_name: "Eikona 小红书视觉路由器"
+  short_description: "路由小红书封面、卡片、信息图和漫画静态视觉请求"
+  default_prompt: "Use $eikona-xhs-visual-router to route this Xiaohongshu request to the right Eikona static visual director."

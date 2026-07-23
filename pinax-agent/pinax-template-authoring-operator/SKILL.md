@@ -17,9 +17,9 @@ Operate Pinax templates and template-authored notes. Templates are CLI-managed a
 
 ```bash
 pinax template init --vault ./my-notes --json
-pinax template list --vault ./my-notes --json
-pinax template recommend --intent "论文" --vault ./my-notes --json
-pinax template show idea.research_seed --vault ./my-notes --json
+pinax template list --vault ./my-notes --agent
+pinax template recommend --intent "论文" --vault ./my-notes --agent
+pinax template show idea.research_seed --vault ./my-notes --agent
 pinax template inspect idea.research_seed --vault ./my-notes --json
 pinax template validate weekly --vault ./my-notes --json
 pinax template preview weekly --title "Client Meeting" --var client=Acme --vault ./my-notes --agent
@@ -27,15 +27,15 @@ pinax template render weekly --title "Client Meeting" --save-run weekly-demo --v
 pinax note add "某篇小说是怎么写成的" --template idea.research_seed --dir index --vault ./my-notes --json
 pinax note add "临时线索" --template sticky.capture --dir index --vault ./my-notes --json
 pinax journal daily append --body "Template result summary" --vault ./my-notes --json
-pinax index page preview ideas --template index.ideas --vault ./my-notes --json
+pinax index page preview ideas --template index.ideas --vault ./my-notes --agent
 pinax index page create ideas --template index.ideas --vault ./my-notes --json
-pinax inbox index preview --vault ./my-notes --json
+pinax inbox index preview --vault ./my-notes --agent
 pinax draft index refresh --vault ./my-notes --json
 ```
 
 ## Workflow
 
-1. Use `pinax template recommend --intent "..." --json` before inventing a new template name.
+1. Use `pinax template recommend --intent "..." --agent` before inventing a new template name.
 2. Inspect and validate templates before rendering: `pinax template inspect <name> --json` and `pinax template validate <name> --json`.
 3. Use `pinax template preview` for read-only review. Use `template render --save-run` only when a render receipt is useful.
 4. For agent-authored notes created from templates, still follow the intake rule: pass `--dir index` unless the user named a final destination or an approved template output path is explicitly intended.
@@ -51,6 +51,6 @@ pinax draft index refresh --vault ./my-notes --json
 
 ## Validation
 
-- Before writing: `pinax template preview <name> --json` or `pinax index page preview <name> --json` succeeds.
-- After template note creation: `pinax note show "<title>" --json` or `pinax search "<title>" --json` finds the note.
+- Before writing: `pinax template preview <name> --agent` or `pinax index page preview <name> --agent` succeeds.
+- After template note creation: `pinax note show "<title>" --agent` or `pinax search "<title>" --agent` finds the note.
 - After managed index writes: run the matching preview command again.

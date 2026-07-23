@@ -1,11 +1,11 @@
 ---
 name: screenplay-scene-writer
-description: Use when writing or revising Chinese screenplay, stage, radio-drama, or scene scripts with scene objective, conflict, action line, dialogue, subtext, blocking, and producible transition.
+description: Use when writing, revising, or converting Chinese screenplay, stage, radio-drama, or scene scripts from story material into producible scenes with scene objective, conflict, visible action, dialogue, subtext, blocking, and transition.
 ---
 
 # 中文场景剧本写手
 
-写能被表演、拍摄或录制的中文场景。
+写能被表演、拍摄或录制的中文场景。核心区别：小说是给读者阅读的，剧本是给剧组拍摄或演出的；剧本只写最终观众能看到、听到，且制作团队能执行的内容。
 
 ## 输入
 
@@ -16,25 +16,32 @@ description: Use when writing or revising Chinese screenplay, stage, radio-drama
 
 - 标准化场景稿：场景标头、动作线、对白、停顿、转场。
 - 人物目标、潜台词、权力变化和制作限制说明。
+- 小说材料转译说明：哪些心理、背景、文学描写被改成动作、表情、道具、环境声、对白或转场。
 - 可选改写版或排练提示。
 
 ## 参考资料
 
 只在任务需要对应细节时读取参考资料，避免把所有模板一次性加载进上下文：
+- `references/screenplay-vs-novel.md`：需要把小说、散文式叙述、心理描写或作者讲述改成可拍剧本时读取。
 - `../short-video-scriptwriter/references/audio-video-live-script-playbook.md`：需要短视频、剧本、直播或播客时间线与制作限制时读取。
 
 ## 工作流
 
 1. 明确场景目标、地点/时间、人物、冲突、转折点和制作限制。
 2. 定义每个角色想要什么、隐瞒什么。
-3. 动作线写可见行为，不写小说式内心说明。
-4. 对白要有潜台词和权力变化。
-5. 以清晰结果或可制作转场收束。
+3. 如果输入是小说或梗概，先标出不能直接拍摄的内容：内心独白、作者解释、抽象感受、细腻文学比喻、背景概述和时间跳跃。
+4. 将不可拍内容转成可拍元素：动作、表情、道具、场面调度、环境声、对白、沉默、字幕、闪回、蒙太奇或可执行转场。
+5. 动作线写可见行为，不写小说式内心说明；环境只写拍得到、听得到、能影响表演或镜头的信息。
+6. 对白要能被演员说出口，有潜台词和权力变化；不能用对白替作者解释一切。
+7. 以清晰结果或可制作转场收束。
 
 ## 质量门槛
 
 - 场景有目标和冲突。
 - 动作可制作、可表演。
+- 所有情绪必须通过动作、表情、对白、沉默、道具或声画细节表现，不直接写“他很害怕”“她终于释怀”等不可见判断。
+- 不写摄影机拍不到的内容，例如“想起”“放下”“无法原谅”“初恋般的味道”，除非已转成闪回、照片、对白、动作或声音线索。
+- 时间跨度、回忆和背景信息必须有可制作方案，例如字幕、闪回、蒙太奇、新闻/文件/照片、角色行为或渐进式对白。
 - 对白不解释画面已经能呈现的内容。
 
 ## Auctra 轻集成

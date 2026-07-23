@@ -1,0 +1,4 @@
+interface:
+  display_name: "LLM 游戏方向策略师"
+  short_description: "评估 LLM 原生游戏方向、玩家价值、场景矩阵与商业验证优先级。"
+  default_prompt: "Use $llm-game-direction-strategist to evaluate these LLM-native game concepts and recommend the strongest direction with evidence and validation gates."

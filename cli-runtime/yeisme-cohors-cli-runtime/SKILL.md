@@ -1,11 +1,11 @@
 ---
 name: yeisme-cohors-cli-runtime
-description: Use when changing, testing, reviewing, or designing Cohors CLI behavior under cli/cohors, including workflow execution, daemon JSON-RPC, Team Room, trace, TUI, templates, evals, command-center actions, and Generic CLI Runtime workers.
+description: Use when changing, testing, reviewing, or designing the accepted Cohors Personal Company product runtime under cli/cohors, including its current CLI/read-only TUI scope, run projections, bounded adapters, evidence, and any explicitly approved workflow, daemon, Team Room, trace, template, eval, or command-center expansion.
 ---
 
 # Yeisme Cohors CLI Runtime
 
-Use this skill for `cli/cohors`, the local-first agent team command system.
+Use this skill for `cli/cohors`, the local-first Personal Company product runtime currently delivered through a bounded CLI and read-only single-screen TUI. Product framing does not authorize deferred daemon, Team Room, worker, memory, or Web scope without an accepted OpenSpec change.
 
 ## Boundary
 

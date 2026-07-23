@@ -1,0 +1,4 @@
+interface:
+  display_name: "Eikona Asset Lifecycle"
+  short_description: "Persist temporary images and curate durable Eikona assets"
+  default_prompt: "Use $eikona-asset-lifecycle to capture this temporary image, preserve provenance, choose project or global scope, and promote or deliver it safely."

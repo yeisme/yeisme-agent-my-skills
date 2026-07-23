@@ -1,3 +1,3 @@
 display_name: Yeisme Quaestor CLI Runtime
-short_description: Maintain Quaestor query/research workflows, output contracts, evidence boundaries, and Go CLI behavior under cli/quaestor.
-default_prompt: Change or review cli/quaestor while preserving query and research workflow boundaries, CLI output contracts, evidence redaction, adapter separation, and Go validation commands.
+short_description: Maintain Quaestor's research product runtime, evidence and quantitative workflows, CLI/API/client contracts, adapters, redaction, and Go behavior.
+default_prompt: Change or review cli/quaestor as a research product engine while preserving evidence-ledger and quantitative workflow boundaries, CLI and app-service/API projections, approved-client ownership, output contracts, evidence redaction, adapter separation, and Go validation commands.

@@ -1,0 +1,3 @@
+display_name: 中文小说草稿对比诊断师
+short_description: Compare Chinese novel drafts against baselines to find concrete gaps and regressions.
+default_prompt: 请使用 中文小说草稿对比诊断师 对比这份章节候选稿、章节卡、旧版和读者契约，列出差距、退步、证据、风险等级和修订 handoff。

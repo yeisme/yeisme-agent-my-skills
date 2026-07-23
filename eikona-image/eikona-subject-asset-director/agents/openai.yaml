@@ -1,0 +1,4 @@
+interface:
+  display_name: "Eikona 主体资产导演"
+  short_description: "规划角色定妆候选、参考资产包、一致性审阅与修复交付。"
+  default_prompt: "Use $eikona-subject-asset-director to create reviewable subject candidates, reference bundles, consistency checks, and correction handoffs through Eikona."

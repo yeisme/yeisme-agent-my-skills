@@ -47,10 +47,34 @@ Promote a skill only when it is required at session start, protects a high-frequ
 
 ## Sync And Validation
 
+Skill synchronization is a final-gate operation, not an implementation-loop
+command. Assign one root sync owner and wait until all writers affecting
+`.skills/yeisme/**`, `.skills/imported/**`, `.skills/profiles/**`,
+`.agents/skills/**`, `.claude/skills/**`, or `scripts/skills.sh` have finished.
+Freeze those paths before generation.
+
+Before syncing, inspect the current source, profile, and runtime changes:
+
+```bash
+git status --short -- .skills/yeisme .skills/imported .skills/profiles .agents/skills .claude/skills scripts/skills.sh
+git diff -- .skills/yeisme .skills/imported .skills/profiles scripts/skills.sh
+```
+
+Abort synchronization when a runtime-only change cannot be explained by its
+source skill and profile, when another writer is active, or when ownership is
+ambiguous. Never resolve a sync conflict by hand-editing `.agents/skills/` or
+`.claude/skills/`; repair the source/profile state, then regenerate.
+
+Use the narrowest supported sync command. Run `sync-root` for root-only source
+or profile changes. Run `sync-target <target>` for one affected subproject.
+Run `sync-subprojects` only when multiple subproject assignments or shared
+source skills genuinely require it.
+
 ```bash
 scripts/skills.sh validate-custom
 scripts/skills.sh validate-profiles
 scripts/skills.sh sync-root
+scripts/skills.sh sync-target <target>
 scripts/skills.sh sync-subprojects
 scripts/skills.sh validate-runtime
 scripts/skills.sh validate-subprojects-runtime

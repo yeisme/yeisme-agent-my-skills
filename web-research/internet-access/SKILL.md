@@ -1,6 +1,6 @@
 ---
 name: internet-access
-description: Use when the user needs to get information from the internet, search the web, extract web content, verify sources, inspect online service state, read social/video/community platforms through Agent Reach, or interact with websites/browsers; guides agents to choose local CLI tools first, such as agent-reach, firecrawl, source-specific CLIs, agent-browser, playwright, browser-use, curl, and jq, before falling back to hosted APIs or built-in browsing.
+description: Use when the user needs to get information from the internet, search the web, extract web content, verify sources, inspect online service state, read social/video/community platforms through Agent Reach, or interact with websites/browsers; uses Firecrawl first for ordinary web discovery, JavaScript-rendered content, crawling, and supported interactions, then escalates to Playwright or other browser tools only when Firecrawl is unavailable or insufficient.
 ---
 
 # Internet Information Access And Interaction
@@ -45,11 +45,15 @@ Do not treat tool priority as a fixed list. First identify the task goal and lik
    - npm/PyPI/Cargo/Go package target: `npm`, `pip`, `cargo`, `go`.
    - JSON endpoint or official API: `curl` + `jq`.
 2. If the target is a supported social, video, community, RSS, podcast, or logged-in platform, use Agent Reach as the capability selector and health checker, then call the selected upstream tool directly. Read `routing/agent_reach.md`.
-3. If the target source is unknown and discovery is needed, prefer generic discovery/extraction tools:
-   - `firecrawl`: general web search, scrape, crawl, and content extraction.
-4. If the task is in a Yeisme/Hermes/OpenWebUI local deployment context, first read `routing/local_research_infra.md` and reuse the local Firecrawl, SearXNG, and Research Harness constraints.
-5. Use browser tools only when real page interaction or dynamic state is part of the answer:
-   - `agent-browser`, `browser-use`, `npx playwright`, or an existing project browser automation command.
+3. For ordinary websites and documentation, use Firecrawl before browser automation:
+   - Unknown source: `firecrawl search`.
+   - Known page, including JavaScript-rendered content: `firecrawl scrape`, using `--wait-for` when needed.
+   - Documentation or multi-page site: `firecrawl map`, `firecrawl crawl`, or `firecrawl download`.
+   - Supported clicks, forms, pagination, or logged-in navigation: `firecrawl interact`.
+4. If the task is in a Yeisme/Connectors/OpenWebUI local deployment context, first read `routing/local_research_infra.md` and reuse the local Firecrawl, SearXNG, and Research Harness constraints.
+5. Escalate to Playwright or another browser tool only when Firecrawl is unavailable, remains incomplete after a reasonable attempt, cannot represent the required browser state, or the task needs visual evidence or reusable UI automation:
+   - Prefer an existing project Playwright command or `npx playwright`.
+   - Use `agent-browser` or `browser-use` for one-off visual inspection when that is the better available browser surface.
 6. Local generic fallback tools:
    - `curl`, `jq`, `pup`, `htmlq`, `lynx`, `w3m`.
 7. If local CLIs are missing, blocked, or insufficient, then use built-in browsing/search tools.
@@ -63,13 +67,16 @@ Choose sources by information type instead of treating every task as web search:
 
 | Information type | Preferred tool | Notes |
 | --- | --- | --- |
-| Official docs / web page text | `firecrawl search`, `firecrawl scrape` | Search first, then scrape authoritative URLs. |
+| Official docs / web page text | `firecrawl search`, `firecrawl scrape` | Handles ordinary and JavaScript-rendered pages; add `--wait-for` when needed. |
+| Documentation site / many pages | `firecrawl map`, `firecrawl crawl`, `firecrawl download` | Prefer Firecrawl before writing a crawler or browser script. |
+| Supported web interaction | `firecrawl interact` | Try before Playwright for clicks, forms, pagination, and supported navigation. |
 | Social/video/community platforms | `agent-reach doctor`, then selected upstream CLI | Use for Twitter/X, Reddit, YouTube, Bilibili, XiaoHongShu, LinkedIn, V2EX, Xueqiu, Xiaoyuzhou, RSS, and multi-backend platform routing. |
 | GitHub repos, issues, releases | `gh` | Prefer structured fields; avoid browser page parsing. |
 | npm/PyPI/Cargo/Go packages | Package manager CLI | Versions, release time, repository, and dependency data should come from the registry. |
 | API values | `curl` + `jq` | Good for official APIs, JSON endpoints, and health checks. |
-| Dynamic pages / logged-in state | `agent-browser` or `browser-use` | Use only when real page state matters. |
-| Repeatable browser flows | `npx playwright` or existing project Playwright commands | Best for tests, regressions, and long-term automation. |
+| Firecrawl-incomplete page / browser-only state | Existing project Playwright command or `npx playwright` | Escalate only after Firecrawl is unavailable or insufficient. |
+| One-off visual inspection | `agent-browser` or `browser-use` | Use when screenshots, accessibility state, or manual UI evidence matters. |
+| Repeatable browser flows | Existing project Playwright command or `npx playwright` | Best for tests, regressions, and long-term automation. |
 
 Do not assume an API key must be exported. If a local CLI works, use it first. Before planning, probe only the tools relevant to the route:
 
@@ -146,7 +153,7 @@ Classify the user's intent before choosing a route and tool:
 
 | Intent | Goal | Common route |
 | --- | --- | --- |
-| `local-research-infra` | Use or debug Yeisme/Hermes/OpenWebUI local research infrastructure | `local_research_infra.md` |
+| `local-research-infra` | Use or debug Yeisme/Connectors/OpenWebUI local research infrastructure | `local_research_infra.md` |
 | `lookup` | Find one fact, version, URL, or status | `lightweight.md` |
 | `research` | Multi-source research, background, comparison | `standard.md` |
 | `deep-research` | Large-sample research, market scan, 200-300 evidence examples | `deep_research.md` + `evidence_policy.md` |
@@ -171,7 +178,7 @@ Choose the smallest route that satisfies the task:
 - `routing/research_budget.md`: research scale, time/sample budgets, stopping conditions, and escalation rules.
 - `routing/autonomous.md`: browser interaction, login flows, dynamic content, forms, and multi-step web workflows.
 - `routing/source_priority.md`: choose `firecrawl`, `gh`, package managers, `curl`/`jq`, or browser tools by source.
-- `routing/local_research_infra.md`: Yeisme/Hermes/OpenWebUI local search infrastructure, Firecrawl, SearXNG, Research Harness, and Gateway search policy.
+- `routing/local_research_infra.md`: Yeisme/Connectors/OpenWebUI local search infrastructure, Firecrawl, SearXNG, Research Harness, and Gateway search policy.
 - `routing/browser_tools.md`: choose `agent-browser`, Playwright, `browser-use`, or static extraction.
 - `routing/evidence_policy.md`: evidence levels, source credibility, and citation rules.
 - `routing/freshness_policy.md`: when to fetch current information and how to handle dates.
@@ -181,18 +188,19 @@ If the route is unclear, read `routing/decision_tree.md`. Escalate when results 
 
 ## Search And Browser Boundary
 
-Search and static extraction are the default. Do not open a browser first. Browser tools are escalation paths for cases where search results cannot answer the question directly.
+Firecrawl discovery, rendered extraction, crawling, and supported interaction are the default for ordinary websites. Do not open a browser first. Playwright and other browser tools are escalation paths for cases where Firecrawl is unavailable or insufficient.
 
 Continue with search/extraction when:
 
 - The user needs facts, sources, docs, releases, repositories, package versions, or comparison conclusions.
 - `firecrawl search`, `firecrawl scrape`, `gh`, or package manager CLIs return enough information.
-- The page is static documentation, a blog, README, release notes, or API docs.
+- The page is documentation, a blog, README, release notes, or API docs, including JavaScript-rendered content that `firecrawl scrape --wait-for` can extract.
+- Firecrawl can complete the required interaction with `firecrawl interact`.
 
 Escalate to browser tools when:
 
-- Clicking, filtering, login, form filling, downloads, screenshots, or dynamic state are needed.
-- Static extraction misses key content or the page depends on JavaScript rendering.
+- A reasonable Firecrawl scrape/interact attempt still misses required browser-only state.
+- Unsupported widgets, complex authentication, downloads, popups, multi-tab behavior, screenshots, or browser diagnostics are needed.
 - The task requires validating visible text, dialogs, pagination, infinite scroll, or authenticated state.
 - The user explicitly asks to open a page, inspect it in a browser, take a screenshot, click, fill, or download.
 
@@ -212,7 +220,7 @@ If the browser is only used to get information, keep using the `autonomous` rout
 ## Workflow
 
 1. Restate the information need and decide whether freshness, citations, or web interaction are required.
-2. Check whether the task is in a Yeisme/Hermes/OpenWebUI local research infrastructure context; if so, apply `local_research_infra.md`.
+2. Check whether the task is in a Yeisme/Connectors/OpenWebUI local research infrastructure context; if so, apply `local_research_infra.md`.
 3. If the request names Twitter/X, Reddit, YouTube, Bilibili, XiaoHongShu, LinkedIn, V2EX, Xueqiu, Xiaoyuzhou, RSS, or general Agent Reach setup, read `routing/agent_reach.md` and run `agent-reach doctor` when available.
 4. Use `command -v` only for tools relevant to the current route.
 5. Choose a route: lightweight, standard, deep-research, autonomous, or Agent Reach platform route.

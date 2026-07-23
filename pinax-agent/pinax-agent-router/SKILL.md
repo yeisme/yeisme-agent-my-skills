@@ -11,6 +11,10 @@ Route Pinax user-agent work to the smallest suitable Pinax operator skill. Root 
 
 Agent-authored Pinax notes are captured through the vault's unified intake index first. For newly generated, imported, or saved notes whose final taxonomy has not already been approved, the destination must be `notes/index/` via commands such as `pinax note add "Title" --dir index --stdin --json`. Do not use bare `pinax note add` for agent-generated notes, because it can create root-level notes. Do not place notes directly into topic folders such as `notes/tools/**`, `notes/research/**`, or `notes/media/**` unless the user explicitly named that target path or an approved organize plan selected it.
 
+## Agent I/O Preference
+
+Prefer form-style intake before writing to a vault. Convert loose user input into explicit fields such as `title`, `kind`, `source`, `summary`, `body`, `tags`, `privacy`, and `next_action`, then route to the narrowest Pinax command. For agent-facing reads, searches, status checks, and context gathering, prefer `--agent` for compact output. Use `--json` for writes, validation, sync results, plan/apply results, and structured error handling.
+
 ## Use When
 
 - A user or agent wants to add, write, complete, draft, save, capture, import, search, organize, recall, sync, publish, diagnose, maintain, or integrate Pinax knowledge.
@@ -25,23 +29,23 @@ For Pinax code implementation, use `yeisme-pinax-cli-runtime` plus the normal co
 
 | User goal or command family | Skill to load | First commands |
 | --- | --- | --- |
-| Set up/select a vault, write/complete/capture notes, inbox, journal, draft, import/export, ordinary note lifecycle | `pinax-vault-operator` | `pinax vault list --json`, `pinax note add ... --dir index --stdin --json`, `pinax inbox capture ... --stdin --json` |
-| Search notes, refresh indexes, KB context, links/backlinks/orphans, query/dataview/database/view/folder inspection | `pinax-retrieval-operator` | `pinax index refresh --json`, `pinax search "..." --agent`, `pinax kb context "..." --json` |
-| Capture or recall durable facts, decisions, events, and tasks | `pinax-memory-operator` | `pinax memory context "..." --agent`, `pinax memory recall "..." --json` |
-| Cloud Sync, sync daemon/logs/conflicts, storage backend, S3/rclone, backend object diagnostics | `pinax-sync-storage-operator` | `pinax cloud status --json`, `pinax sync diff --target cloud --json`, `pinax storage status --json` |
+| Set up/select a vault, write/complete/capture notes, inbox, journal, draft, import/export, ordinary note lifecycle | `pinax-vault-operator` | `pinax vault list --agent`, `pinax note add ... --dir index --stdin --json`, `pinax inbox capture ... --stdin --json` |
+| Search notes, refresh indexes, KB context, links/backlinks/orphans, query/dataview/database/view/folder inspection | `pinax-retrieval-operator` | `pinax index refresh --json`, `pinax search "..." --agent`, `pinax kb context "..." --agent` |
+| Capture or recall durable facts, decisions, events, and tasks | `pinax-memory-operator` | `pinax memory context "..." --agent`, `pinax memory recall "..." --agent` |
+| Cloud Sync, sync logs/conflicts, storage backend, S3/rclone, backend object diagnostics | `pinax-sync-storage-operator` | `pinax cloud status --agent`, `pinax sync diff --target cloud --json`, `pinax storage status --agent` |
 | Proof loop, doctor/stats, metadata/repair/organize apply, snapshot/restore, record ledger, high-risk maintenance | `pinax-proof-maintenance-operator` | `pinax proof loop run --json`, `pinax vault doctor --json`, `pinax version snapshot --message "before maintenance" --json` |
-| Project workspace, learning packs, project board/items, personal daily/weekly/monthly plans, TaskBridge action drafts | `pinax-project-workspace-operator` | `pinax project list --json`, `pinax project board show <project> --json`, `pinax plan daily --dry-run --json` |
-| Templates, template-backed `note add`, index pages, inbox/draft review indexes, journal template workflows | `pinax-template-authoring-operator` | `pinax template recommend --intent "..." --json`, `pinax template preview <name> --json`, `pinax index page preview <name> --json` |
-| Assets, note attachments, prompt assets, content collections, prompt graph rebuild/query | `pinax-asset-prompt-operator` | `pinax asset list --json`, `pinax prompt search "..." --json`, `pinax graph query --kind technique --match "..." --json` |
-| Publish, plugin, local API, API token, backend profile aliases, MCP, briefing | `pinax-integration-publish-operator` | `pinax publish plan --json`, `pinax plugin doctor --json`, `pinax api routes --json` |
+| Project workspace, learning packs, project board/items, personal daily/weekly/monthly plans, TaskBridge action drafts | `pinax-project-workspace-operator` | `pinax project list --agent`, `pinax project board show <project> --agent`, `pinax plan daily --dry-run --json` |
+| Templates, template-backed `note add`, index pages, inbox/draft review indexes, journal template workflows | `pinax-template-authoring-operator` | `pinax template recommend --intent "..." --agent`, `pinax template preview <name> --agent`, `pinax index page preview <name> --agent` |
+| Assets, note attachments, prompt assets, content collections, prompt graph rebuild/query | `pinax-asset-prompt-operator` | `pinax asset list --agent`, `pinax prompt search "..." --agent`, `pinax graph query --kind technique --match "..." --agent` |
+| Publish, plugin, local API, API token, backend profile aliases, MCP, briefing | `pinax-integration-publish-operator` | `pinax publish plan --agent`, `pinax plugin list --agent`, `pinax api routes --agent` |
 
 ## Workflow
 
 1. Classify the word `note`: plain knowledge notes, learning notes, technical notes, meeting notes, reading notes, and prompts like `帮我完成一篇笔记` default to Pinax capture. If the user explicitly asks for an article, blog post, newsletter, Xiaohongshu note, social post, public publishing draft, or another named writing surface without Pinax/vault storage intent, route to the matching writing skill or answer normally.
-2. Confirm the active vault without writing: `pinax vault list --json` and, if needed, `pinax config get vault --json`.
+2. Confirm the active vault without writing: `pinax vault list --agent` and, if needed, `pinax config get vault --json`.
 3. Pick one operator skill from the route table; if more than one applies, start with the operator that owns the first write or remote effect.
 4. Load only the chosen operator skill from the runtime profile or `.skills/yeisme/pinax-agent/<skill>/SKILL.md`; do not bulk-load all Pinax skills.
-5. Prefer `--json` for structured automation and `--agent` for low-token context.
+5. Prefer `--agent` for low-token read/search/status context; use `--json` for writes, validation, sync results, and structured error handling.
 6. For note writes, draft or revise the body only as much as needed to create the vault entry, then use `pinax note add "<title>" --dir index --stdin --json` for agent-authored notes that need later classification, or `pinax inbox capture "<title>" --stdin --json` for raw temporary capture, instead of hand-writing Markdown files. Do not stop after printing `下面是一版整理后的完整笔记` when the user asked to complete a note.
 7. For writes, use `--dry-run`, `preview`, `plan`, or read-only diagnostic commands first when available.
 8. Before high-risk local changes, create a snapshot with `pinax version snapshot --message "before agent changes" --json`.

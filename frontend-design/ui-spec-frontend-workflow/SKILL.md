@@ -49,15 +49,34 @@ Use one clear design direction layer for non-trivial UI work. Do not stack Taste
 
 Default order:
 
-1. Run Open Design discovery when the CLI is available:
+1. Run Open Design discovery when the official CLI is available. First inspect
+the resolved command so an HTTP compatibility wrapper or GNU coreutils `od` is
+not mistaken for the native Open Design CLI:
+
+```bash
+command -v od
+od --help | sed -n '1,40p'
+```
+
+If help identifies `Open Design CLI wrapper`, GNU coreutils, or another
+compatibility launcher, report that the native CLI is unavailable. Use an
+explicit HTTP/API fallback only for supported read or compatibility operations;
+do not present it as native CLI execution.
+
+For the official CLI, run:
 
 ```bash
 od status --json
 od skills list
 od design-systems list
+od projects list
 ```
 
 Use Open Design for reference collection, design-system selection, Studio exploration, image/prototype generation, and handoff artifacts. Treat its output as design input that must still be translated into the owning app's tokens, components, tests, and evidence.
+
+Use `od mcp` only where the official daemon CLI files are installed or mounted.
+Require an explicit native executable and arguments for bridges or automation;
+never default MCP startup to an ambiguous command name.
 
 2. Choose exactly one aesthetic direction layer:
 

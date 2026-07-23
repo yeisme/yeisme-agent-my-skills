@@ -52,7 +52,7 @@ Escalate from deep-research to browser when:
 - Screenshots or real page state are needed.
 - Logged-in data is required.
 
-Escalate from Hermes/OpenWebUI Research Harness to CLI deep-research when:
+Escalate from Connectors/OpenWebUI Research Harness to CLI deep-research when:
 
 - The user asks for 100/200/300 examples, beyond current OpenWebUI valves or one-run trace budget.
 - A full candidate ledger, dedupe table, classification matrix, or cross-batch statistics are required.

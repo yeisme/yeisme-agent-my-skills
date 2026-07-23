@@ -19,7 +19,7 @@ Do not use this route when:
 
 - The task is a normal public documentation lookup or source discovery. Use `firecrawl`, `gh`, package-manager CLIs, or `curl` first.
 - The user needs visible page operation, form submission, screenshots, or dynamic UI state. Use `browser_tools.md` after this route if Agent Reach cannot provide a readable backend.
-- The task belongs to Yeisme/Hermes/OpenWebUI local research infrastructure. Use `local_research_infra.md` first.
+- The task belongs to Yeisme/Connectors/OpenWebUI local research infrastructure. Use `local_research_infra.md` first.
 
 ## Install And Diagnose
 

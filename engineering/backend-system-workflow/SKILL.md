@@ -399,7 +399,7 @@ Recommended minimum JSON fields:
 {
   "ts": "2026-06-10T12:00:00Z",
   "level": "info",
-  "service": "indagator-fetcher",
+  "service": "artifact-fetcher",
   "component": "firecrawl_client",
   "event": "call.completed",
   "request_id": "req_123",
