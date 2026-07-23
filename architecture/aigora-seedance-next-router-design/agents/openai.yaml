@@ -1,0 +1,3 @@
+display_name: Aigora Seedance Next Router
+short_description: Design Aigora Seedance eligibility-first routing, attempt recovery, and evidence boundaries.
+default_prompt: Design an eligibility-first Seedance router for Aigora from the Aigora session root, including sticky attempts, UNKNOWN_ACCEPT reconciliation, callback validation, and test-channel evidence.

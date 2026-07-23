@@ -44,6 +44,9 @@ description: Use when turning Chinese novel ideas into an executable brief with 
 
 - 普通一次性写稿不强制进入 Auctra。
 - 当用户在 Auctra 项目内工作、需要保存素材、审稿或导出时，优先建议 `auctra material`、`auctra text`、`auctra review`、`auctra export` 的真实命令。
+- Auctra 中文项目启动时，brief artifact 应写成可落入 `大纲/` 或 `素材/` 的作者文件；机器状态仍通过 CLI 写入 `.auctra/`。
+- 若项目缺 locale/layout，先建议 `auctra project init ... --locale zh-CN --layout chinese-novel` 或交给 `auctra-i18n-workspace-router`；若进入写章前，建议 `auctra gate check --before chapter_write --json`。
+- 输出 handoff 时标明 phase=`brief`、artifact=`novel_brief`、gate=`chapter_write`、display_path 建议和待补素材。
 
 ## 边界
 

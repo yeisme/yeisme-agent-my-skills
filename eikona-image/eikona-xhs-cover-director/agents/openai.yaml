@@ -1,3 +1,4 @@
-display_name: Eikona 小红书封面导演
-short_description: 设计小红书 3:4 封面图方向、title-safe 提示词、Eikona 命令和 review/handoff 步骤。
-default_prompt: 请为这篇小红书笔记设计 3 个封面方向，给出推荐视觉 brief、使用 openai:gpt-image-2 的 Eikona 命令，以及 review/feedback/handoff 下一步。
+interface:
+  display_name: "Eikona 小红书封面导演"
+  short_description: "设计 3:4 title-safe 封面方向与 Eikona 生成审阅链路"
+  default_prompt: "Use $eikona-xhs-cover-director to create three title-safe 3:4 cover directions and the Eikona review and handoff workflow."

@@ -1,3 +1,4 @@
-display_name: Eikona 小红书信息图导演
-short_description: 将知识、流程、对比或清单内容设计成小红书静态信息图，并保留事实、review 和 handoff 证据。
-default_prompt: 请把这些内容设计成小红书 3:4 竖版信息图，给出事实层级、版式、视觉风格、Eikona 命令和 review/feedback/handoff 下一步。
+interface:
+  display_name: "Eikona 小红书信息图导演"
+  short_description: "把事实、流程和清单转成可审阅的 Eikona 竖版信息图"
+  default_prompt: "Use $eikona-xhs-infographic-director to turn these facts into a clear 3:4 Eikona infographic with review and handoff evidence."

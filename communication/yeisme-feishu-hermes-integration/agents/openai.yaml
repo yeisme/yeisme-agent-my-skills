@@ -1,3 +1,0 @@
-display_name: Yeisme Feishu/Lark Hermes Integration
-short_description: Design or review Feishu/Lark integration through Hermes provider-neutral routing without provider SDKs in domain projects.
-default_prompt: Review this Feishu/Lark integration plan and ensure it routes through Hermes with provider-neutral commands, redacted evidence, safe credential handling, and no Feishu/Lark SDK or webhook parsing in domain subprojects.

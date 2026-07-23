@@ -2,68 +2,28 @@
 
 ## Purpose
 
-Explain when an internet information task should escalate to a browser, and how to choose among `agent-browser`, existing project Playwright commands, `npx playwright`, `browser-use`, and static extraction. This file is an escalation route inside `internet-access`, not a separate skill.
+Explain when an internet information task should escalate from Firecrawl to a browser, and how to choose among existing project Playwright commands, `npx playwright`, `agent-browser`, and `browser-use`. This file is an escalation route inside `internet-access`, not a separate skill.
 
 ## Principle
 
-A browser is not the default search tool. Use search, scraping, or structured CLIs first. Use a browser only when real page state, interaction, or dynamic rendering is part of the answer.
+A browser is not the default web access tool. Use source-specific CLIs or Firecrawl first, including for JavaScript-rendered pages and Firecrawl-supported interactions. Use a browser only when Firecrawl is unavailable or insufficient, or when real visual state and reusable UI automation are required.
 
 Priority:
 
-1. `firecrawl search` / `firecrawl scrape`: search and static content.
-2. `gh` / package manager CLIs: structured sources.
-3. `agent-browser`: interactive AI browsing, accessibility snapshots, clicks, screenshots, debugging.
-4. Existing project Playwright commands or `npx playwright`: repeatable, testable browser workflows that can be committed to a project.
-5. `browser-use`: an alternative interactive browser tool when locally configured and more suitable for the environment.
-
-## When To Use agent-browser
-
-Use `agent-browser` when:
-
-- The page must be opened to inspect real UI state.
-- The task needs clicks, fills, pagination, or content reading via accessibility tree `@ref`s.
-- Screenshots, PDFs, console errors, network requests, or page state evidence are needed.
-- The task is one-off exploration and not worth a Playwright script.
-- The user asks to open a page, click something, take a screenshot, or report what the page displays.
-
-Common commands:
-
-```bash
-agent-browser skills get core --full
-agent-browser open "https://example.com"
-agent-browser snapshot
-agent-browser click "@e2"
-agent-browser fill "@e3" "search text"
-agent-browser press Enter
-agent-browser screenshot /tmp/page.png
-agent-browser get url
-agent-browser get title
-agent-browser console
-agent-browser errors
-agent-browser close
-```
-
-If this is the first use or command details are uncertain, read the locally installed core skill:
-
-```bash
-agent-browser skills get core --full
-```
-
-Rules:
-
-- Run `snapshot` first, then operate by `@ref`; do not guess CSS selectors blindly.
-- For user-visible evidence, prefer screenshots or final URL records.
-- Ask the user before login, paid actions, account changes, form submission, or destructive operations.
-- Do not reveal cookies, tokens, profile paths, or credentials in final output.
+1. `gh` / package manager CLIs / official APIs: structured sources.
+2. `firecrawl search` / `scrape` / `map` / `crawl` / `download`: discovery and rendered content extraction.
+3. `firecrawl interact`: supported clicks, forms, pagination, and navigation.
+4. Existing project Playwright commands or `npx playwright`: fallback for browser-only state and repeatable, testable workflows.
+5. `agent-browser` or `browser-use`: one-off visual inspection when that browser surface is more suitable.
 
 ## When To Use Playwright
 
 Use an existing project Playwright command or `npx playwright` when:
 
-- The browser flow must run repeatedly.
-- The result belongs in project tests, QA, regression, or monitoring.
-- The page flow is stable and selectors are maintainable.
-- The user explicitly asks for automation scripts, tests, or repeatable execution.
+- Firecrawl is unavailable or remains incomplete after a reasonable `scrape --wait-for` or `interact` attempt.
+- The workflow depends on browser-only state, unsupported widgets, complex authentication, downloads, popups, or multi-tab behavior.
+- The flow must run repeatedly as a test, QA check, regression, monitor, or maintained automation.
+- Console, network, accessibility, screenshot, or trace evidence is required.
 
 Prefer existing project commands:
 
@@ -85,8 +45,32 @@ npx playwright show-report
 Rules:
 
 - If the repository already has Playwright config, follow existing directories, fixtures, and naming.
-- Do not create a Playwright test for a one-off web lookup.
-- Explore uncertain pages with `agent-browser` first, then harden stable flows into Playwright.
+- Do not create a Playwright test when Firecrawl already completes a one-off lookup or extraction.
+- Preserve the Firecrawl failure or limitation that justified browser escalation.
+
+## When To Use agent-browser
+
+Use `agent-browser` when one-off visual exploration is required and it is more efficient than creating or adapting a Playwright flow:
+
+- The user asks to see what the page visibly displays.
+- Accessibility snapshots, clicks, screenshots, console errors, or page state evidence are needed.
+- Firecrawl cannot expose the required visible state and a maintained Playwright artifact is unnecessary.
+
+Common commands:
+
+```bash
+agent-browser skills get core --full
+agent-browser open "https://example.com"
+agent-browser snapshot
+agent-browser screenshot /tmp/page.png
+agent-browser close
+```
+
+Rules:
+
+- Run `snapshot` before operating by `@ref`; do not guess selectors blindly.
+- Ask the user before credentials, payments, account changes, form submission, or destructive operations.
+- Do not reveal cookies, tokens, profile paths, or credentials in final output.
 
 ## When To Use browser-use
 
@@ -94,7 +78,7 @@ Use `browser-use` when:
 
 - It is already configured locally and is more stable than other browser tools in the environment.
 - A real Chrome profile or CDP connection is needed.
-- `agent-browser` is unavailable but interactive browsing is still required.
+- Playwright and `agent-browser` are unavailable but interactive browsing is still required.
 
 Common commands:
 
@@ -112,20 +96,23 @@ browser-use close
 Do not escalate to a browser when:
 
 - `firecrawl search` returns sufficient sources.
-- `firecrawl scrape` extracts the page text.
+- `firecrawl scrape`, including a suitable `--wait-for`, extracts the page text.
+- `firecrawl map`, `crawl`, or `download` covers the documentation or site.
+- `firecrawl interact` completes the required supported interaction.
 - `gh`, `npm view`, `pip index`, `cargo search`, or `go list` returns structured answers.
 - The user only needs explanation, facts, comparisons, or sources, not page interaction evidence.
 
-## Checkpoint Before Escalating From Search To Browser
+## Checkpoint Before Escalating From Firecrawl To Browser
 
 Confirm at least one condition:
 
-- Search found the page, but scraping misses key content.
-- The user cares about the actual visible state of the page, not just docs text.
-- Filters, pagination, menus, login state, or download buttons must be operated.
-- Screenshots/PDFs are needed as evidence.
+- Firecrawl was unavailable or a reasonable scrape/interact attempt still misses key content or state.
+- The user cares about the actual visible state of the page, not just extracted content.
+- Unsupported filters, widgets, authentication, downloads, popups, or multi-tab behavior must be operated.
+- Screenshots, browser traces, console output, or network evidence are needed.
+- The flow must become a repeatable browser test or maintained automation.
 
-If none apply, keep using search, scraping, or structured CLIs.
+If none apply, keep using Firecrawl or structured CLIs.
 
 ## Browser Evidence Output
 
@@ -134,6 +121,7 @@ Browser-route final answers should include:
 - tool used.
 - key URL.
 - completed operations.
+- Firecrawl limitation that required escalation.
 - unfinished or permission-blocked operations.
 - screenshot, downloaded file, or artifact path if produced.
 
@@ -141,8 +129,9 @@ Example:
 
 ```markdown
 **Browser Evidence**
-- Tool: agent-browser
+- Tool: Playwright
 - Final URL: https://example.com/results
+- Firecrawl limit: required browser-only authenticated state
 - Screenshot: /tmp/page.png
 - Limit: login is required for full results
 ```

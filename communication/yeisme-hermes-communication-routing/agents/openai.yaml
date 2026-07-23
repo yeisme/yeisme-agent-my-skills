@@ -1,3 +1,0 @@
-display_name: Yeisme Hermes Communication Routing
-short_description: Route Yeisme communication through Hermes provider-neutral events, commands, and redacted evidence.
-default_prompt: Review this Yeisme communication integration plan and ensure it routes through Hermes with provider-neutral events, safe credentials, redacted evidence, and no chat provider SDKs in domain subprojects.

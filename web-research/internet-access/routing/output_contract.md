@@ -50,7 +50,7 @@ For version/status:
 
 ```markdown
 **Route Decision**
-- Context: [host CLI / OpenWebUI internal / Hermes Research Harness / Gateway policy]
+- Context: [host CLI / OpenWebUI internal / Connectors Research Harness / Gateway policy]
 - Recommended route: [firecrawl CLI / SearXNG + Firecrawl loader / Research Harness / browser escalation]
 
 **Local Configuration Evidence**

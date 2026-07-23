@@ -1,0 +1,4 @@
+interface:
+  display_name: "Eikona 视觉路由器"
+  short_description: "路由 Eikona 资产生命周期、创意导演、Scaena 与 runtime 请求"
+  default_prompt: "Use $eikona-visual-router to select the smallest Eikona lifecycle, creative direction, Scaena readiness, prompt workflow, or runtime skill for this request."

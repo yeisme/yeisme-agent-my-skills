@@ -1,3 +1,4 @@
-display_name: Eikona x Auctra 图文创作路由器
-short_description: 将 Auctra 已接受文字、Story Bible 设定资产或创作者素材转成 Eikona workflow，并把图像产物通过 handoff 导回 Auctra visual candidates。
-default_prompt: 请基于 Auctra 内容或 Story Bible source entity 选择视觉 profile，输出 auctra visual brief 或 story bible visual-brief、auctra visual export-brief、eikona workflow import/run/review，以及 auctra visual import-handoff 的完整下一步命令。
+interface:
+  display_name: "Eikona x Auctra 图文创作路由器"
+  short_description: "把 Auctra accepted source 安全路由为 Eikona 视觉候选"
+  default_prompt: "Use $eikona-auctra-visual-router to export accepted Auctra visual briefs and preserve Scaena readiness gates before production generation."

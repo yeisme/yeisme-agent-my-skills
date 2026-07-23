@@ -1,0 +1,3 @@
+display_name: Orbital Studio Experience
+short_description: Design bounded creative Studio workspaces.
+default_prompt: Use $orbital-studio-experience to design a contract-driven Orbital workspace with bounded Panes, truthful states, safe actions, Agent review boundaries, responsive behavior, and accessibility gates.

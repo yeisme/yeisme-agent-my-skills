@@ -1,0 +1,4 @@
+interface:
+  display_name: "LLM 游戏系统架构师"
+  short_description: "设计规则、LLM、记忆、NPC、叙事、成本与安全边界。"
+  default_prompt: "Use $llm-game-systems-architect to design an auditable architecture for this LLM-native game concept."

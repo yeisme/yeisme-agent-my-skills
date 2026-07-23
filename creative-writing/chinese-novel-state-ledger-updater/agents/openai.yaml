@@ -1,0 +1,3 @@
+display_name: 中文小说状态台账更新器
+short_description: derive post-chapter continuity deltas, character state updates, foreshadowing movements, event index entries, chapter summaries, and Auctra handoff notes without mutating structured state directly
+default_prompt: 请使用 中文小说状态台账更新器 根据章节候选稿或已接受版本提取写后台账更新建议，并标明事实来源、待确认项、Auctra 命令建议和下游 handoff。

@@ -10,13 +10,15 @@ description: Use when planning, drafting, continuing, revising, decomposing, or 
 ## 输入
 
 - 小说目标、已有材料、Auctra 项目状态、目标篇幅/媒介、读者定位、更新时间和交付格式。
-- 用户需要的阶段：立项、篇幅选择、规划、写章、续写、拆解、主题拆分、改编、修订、review、导出或校验。
+- 用户需要的阶段：立项、篇幅选择、规划、写章、续写、拆解、主题拆分、改编、修订、候选稿对比、review、导出或校验。
+- Auctra 项目内任务还需要 locale/layout、phase、artifact、gate 状态；`zh-CN/chinese-novel` 项目应优先使用 display paths，如 `章节/`、`素材/`、`导出/`。
 
 ## 输出
 
 - 端到端工作计划和当前阶段交付物。
 - 篇幅形态、拆解目标、改编媒介、应加载的子技能、需要读取的参考、Auctra 命令建议和 handoff。
 - 完成报告：产物、验证、阻塞、待确认和下一步。
+- Auctra 优化闭环：写前上下文包、写后台账建议、审稿缺陷登记、反馈归因和下一轮修订队列。
 
 ## 参考资料
 
@@ -33,6 +35,7 @@ description: Use when planning, drafting, continuing, revising, decomposing, or 
 - `../chinese-novel-orchestrator/references/chinese-novel-serial-operations.md`：需要安排连载更新节奏、cliffhanger 排程、读者反馈归因、下一章承诺和社媒衍生节奏时读取。
 - `../chinese-novel-orchestrator/references/chinese-novel-chapter-scene-templates.md`：需要章节模板、场景卡字段、章首/章尾模板或场景家族入口时读取。
 - `../chinese-novel-orchestrator/references/chinese-novel-diagram-templates.md`：需要人物关系、时间发展、分卷推进、人物弧线、知识边界或伏笔回收 Mermaid 图预设时读取。
+- `../chinese-novel-orchestrator/references/auctra-novel-workflow-diagrams.md`：需要展示 Auctra 中文小说写章、review、台账、反馈优化闭环或结构化资产边界的 Mermaid 工作流图时读取。
 - `../chinese-novel-orchestrator/references/chinese-novel-revision-gates.md`：需要 review、导出前检查、多轮修订门禁或 blocking/deferred 判定时读取。
 - 类型专项参考：悬疑/推理读取 `chinese-novel-genre-suspense-mystery.md`，言情读取 `chinese-novel-genre-romance.md`，玄幻/奇幻读取 `chinese-novel-genre-xuanhuan-fantasy.md`，都市/职场读取 `chinese-novel-genre-urban-career.md`，科幻读取 `chinese-novel-genre-sci-fi.md`，历史/权谋/宫斗读取 `chinese-novel-genre-historical-power.md`，武侠/仙侠读取 `chinese-novel-genre-wuxia-xianxia.md`，灵异/恐怖读取 `chinese-novel-genre-horror-supernatural.md`，冒险/夺宝/无限流/生存读取 `chinese-novel-genre-adventure-survival.md`。
 - `../chinese-novel-orchestrator/references/chinese-novel-scene-library-suspense.md`：需要线索发现、误导、审讯、跟踪、反转或真相推进模板时读取。
@@ -52,10 +55,14 @@ description: Use when planning, drafting, continuing, revising, decomposing, or 
 
 1. 判断任务类型：原创写作、续写修订、篇幅转换、作品拆解、主题拆分、章节验收、连载运营、媒介改编或导出校验。
 2. 判断承载形态：微型、短篇、中篇、长篇、系列文、连载、短剧、长剧、电影、音频、漫画、游戏或短视频系列。
-3. 按最小范围分派子技能；篇幅先交给 `chinese-novel-length-form-architect`，拆解先交给 `chinese-novel-analysis-decomposer`，章节验收交给 `chinese-novel-chapter-reviewer`，连载运营交给 `chinese-novel-serial-operations-editor`，改编先交给 `chinese-novel-adaptation-architect`，社媒引流交给 `chinese-novel-content-spinoff-architect`。
-4. 需要持久化时使用 Auctra 命令，候选稿先进入 review。
-5. 原创正文要求冲突、转折、角色差异对白、感官细节、阶段回报和结尾钩子；分析/改编要求事实边界、交接包和下一步 owner。
-6. 完成前校验连续性、留存、禁写规则、字数/媒介限制和 handoff。
+3. 按最小范围分派子技能；篇幅先交给 `chinese-novel-length-form-architect`，拆解先交给 `chinese-novel-analysis-decomposer`，写前上下文整理交给 `chinese-novel-context-pack-builder`，写后台账 delta 交给 `chinese-novel-state-ledger-updater`，Auctra review queue 或 review decision handoff 交给 `auctra-novel-review-orchestrator`，Auctra 多轮反馈和规则优化交给 `auctra-novel-optimization-loop`，候选稿/旧版/章节卡对比交给 `chinese-novel-draft-comparator`，章节验收交给 `chinese-novel-chapter-reviewer`，连载运营交给 `chinese-novel-serial-operations-editor`，改编先交给 `chinese-novel-adaptation-architect`，社媒引流交给 `chinese-novel-content-spinoff-architect`。
+4. 写章、续写或审稿前，先用 `chinese-novel-context-pack-builder` 形成最小上下文包；不要让章节写手临时重搜全部项目资料。
+5. 需要持久化时使用 Auctra 命令，候选稿先进入 review；候选稿被 accept/partial 前，写后台账只能作为建议。
+6. 正文或修订完成后，用 `chinese-novel-state-ledger-updater` 提取 continuity_delta、foreshadowing_delta、event_index_entry 和 chapter_summary。
+7. 审稿、用户否定或 repeated defect 出现时，用 `auctra-novel-optimization-loop` 生成 revision_queue、next_context_patch 和 rule_proposals。
+8. 原创正文要求冲突、转折、角色差异对白、感官细节、阶段回报和结尾钩子；分析/改编要求事实边界、交接包和下一步 owner。
+9. 完成前校验连续性、留存、禁写规则、字数/媒介限制和 handoff。
+10. Auctra localized workspace 或新中文项目启动先交给 `auctra-i18n-workspace-router` / `auctra-chinese-project-starter`，再进入小说 planning/write/review。
 
 ## 质量门槛
 
@@ -67,7 +74,11 @@ description: Use when planning, drafting, continuing, revising, decomposing, or 
 ## Auctra 轻集成
 
 - 普通一次性写稿不强制进入 Auctra。
-- 当用户在 Auctra 项目内工作、需要保存素材、审稿或导出时，优先建议 `auctra material`、`auctra text`、`auctra review`、`auctra export` 的真实命令。
+- 当用户在 Auctra 项目内工作、需要保存素材、审稿或导出时，优先建议 `auctra material`、`auctra text`、`auctra review list`、`auctra review accept|reject|partial`、`auctra text export` 的真实命令。
+- 中文小说 Auctra 项目起步命令示例：`auctra project init ./chichao --title "赤巢备案" --genre "玄幻悬疑" --locale zh-CN --layout chinese-novel --json`；之后可用 `auctra scenario doctor --json`、`auctra gate check --before chapter_write --json`、`auctra material add --from 素材/备案制度.md --json`、`auctra chapter import markdown ./章节`。
+- 输出 Auctra 下一步时标明 phase、artifact、gate 和 display_path；不要把 `display_path` 当作 `.auctra/` 机器路径。
+- Auctra 项目内的 pending review、候选稿对比、缺陷矩阵、accept/reject/partial 建议不要由总编排直接完成，先交给 `auctra-novel-review-orchestrator`。
+- Auctra 项目内多轮优化默认采用：`chinese-novel-context-pack-builder` -> `chinese-novel-chapter-writer` -> `auctra-novel-review-orchestrator` -> `chinese-novel-state-ledger-updater` -> `auctra-novel-optimization-loop`，中间所有持久化状态变更都走 Auctra CLI。
 
 ## 边界
 

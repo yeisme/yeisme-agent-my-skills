@@ -1,0 +1,3 @@
+display_name: Auctra 小说优化闭环
+short_description: turn Auctra novel review results, chapter defects, user feedback, repeated issues, context packs, and ledger deltas into revision queues, rule proposals, and next-run optimization handoffs
+default_prompt: 请使用 Auctra 小说优化闭环 汇总这次小说候选稿、审稿结果和用户反馈，产出缺陷登记、修订队列、重复问题规则提案和下一轮 Auctra handoff。

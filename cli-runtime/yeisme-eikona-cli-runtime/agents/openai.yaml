@@ -1,3 +1,4 @@
-display_name: Yeisme Eikona CLI Runtime
-short_description: Develop or document Eikona CLI generation, prompt skills/decks, visual assessment, recipe reuse, command docs, run evidence, project library, MCP integration, and release behavior.
-default_prompt: Change or review cli/eikona while preserving command docs, JSON/agent CLI contracts, prompt skill/deck provenance, run evidence, provider adapter boundaries, reference-image permissions, recipe/assessment evidence, secret hygiene, English user-facing output, and Go validation commands.
+interface:
+  display_name: "Yeisme Eikona CLI Runtime"
+  short_description: "维护 Eikona CLI、run evidence、资产 API 与 provider runtime"
+  default_prompt: "Use $yeisme-eikona-cli-runtime to change or review cli/eikona while preserving CLI output, asset lifecycle, OpenAPI, runstore, provider, and verification contracts."

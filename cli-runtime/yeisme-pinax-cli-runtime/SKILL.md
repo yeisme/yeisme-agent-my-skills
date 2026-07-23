@@ -1,11 +1,11 @@
 ---
 name: yeisme-pinax-cli-runtime
-description: Use when changing, testing, reviewing, documenting, or operating Pinax under cli/pinax, including local knowledge indexing, proof loop, project workspace, templates, assets, prompt collections, plugin/API/MCP, sync daemon, profile management, publish/sync workflows, backend client behavior, and Go CLI validation.
+description: Use when changing, testing, reviewing, documenting, designing, or operating the Pinax local-first knowledge product runtime under cli/pinax, including vault/index workflows, proof loop, project workspace, templates, assets, prompt collections, dashboard and publish projections, plugin/API/MCP, sync daemon, client contracts, profile management, backend behavior, and Go validation.
 ---
 
 # Yeisme Pinax CLI Runtime
 
-Use this skill for `cli/pinax`, the local-first knowledge/vault CLI, agent-safe proof loop, local index projection, project workspace, template authoring, asset/prompt collection management, plugin/API/MCP integration surfaces, and Cloud Sync client/daemon.
+Use this skill for `cli/pinax`, the local-first knowledge product runtime: CLI and app services own durable vault/index mutations, while dashboard, publish, API, MCP, sync, and approved client surfaces consume the same projections and safety rules.
 
 ## Boundary
 

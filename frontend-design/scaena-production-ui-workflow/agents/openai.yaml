@@ -1,0 +1,4 @@
+interface:
+  display_name: "Scaena production UI Workflow"
+  short_description: "Design production-grade Scaena production interfaces"
+  default_prompt: "Use $scaena-production-ui-workflow to design or implement a Scaena production workspace with domain-correct states, interactions, and evidence."

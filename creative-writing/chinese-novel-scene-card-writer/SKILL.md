@@ -58,6 +58,9 @@ description: Use when turning Chinese novel chapter outlines into executable sce
 
 - 普通一次性写稿不强制进入 Auctra。
 - 当用户在 Auctra 项目内工作、需要保存素材、审稿或导出时，优先建议 `auctra material`、`auctra text`、`auctra review`、`auctra export` 的真实命令。
+- Auctra 中文项目中，场景卡 artifact 面向 `大纲/` 或 `章节/` 附近的 display path；引用章节时使用 `章节/ch_001.md` 等 display_path，机器状态仍由 Auctra CLI 管理。
+- 写章前建议 `auctra gate check --before chapter_write --json`；若缺素材，建议 `auctra material add --from 素材/<file>.md --json`。
+- 输出 handoff 时标明 phase=`scene_card`、artifact=`scene_card`、gate=`chapter_write`、章节 display_path、素材 refs 和 risk_flags。
 
 ## 边界
 

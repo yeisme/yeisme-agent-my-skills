@@ -1,0 +1,3 @@
+display_name: Auctra i18n 工作区路由器
+short_description: routing Auctra localized workspace setup and display-path contracts
+default_prompt: 请使用 Auctra i18n 工作区路由器 判断当前 Auctra 项目的 locale/layout、真实 CLI 命令、禁写边界和下一步。

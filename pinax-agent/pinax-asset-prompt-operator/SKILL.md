@@ -18,28 +18,28 @@ Operate Pinax media/binary assets, note attachments, prompt assets, content coll
 ```bash
 pinax asset add ./diagram.png --vault ./my-notes --json
 pinax asset list --vault ./my-notes --agent
-pinax asset show diagram.png --vault ./my-notes --json
+pinax asset show diagram.png --vault ./my-notes --agent
 pinax asset link diagram.png --note "Auth Plan" --vault ./my-notes --json
-pinax asset backlinks diagram.png --vault ./my-notes --json
-pinax asset missing --vault ./my-notes --json
+pinax asset backlinks diagram.png --vault ./my-notes --agent
+pinax asset missing --vault ./my-notes --agent
 pinax asset repair --plan --vault ./my-notes --json
 pinax asset verify --vault ./my-notes --json
 pinax note attach "Auth Plan" ./diagram.png --placement note-folder --embed --vault ./my-notes --json
-pinax note attachments "Auth Plan" --include-paths --vault ./my-notes --json
+pinax note attachments "Auth Plan" --include-paths --vault ./my-notes --agent
 pinax prompt import --from ./novel-character.yaml --vault ./my-notes --json
-pinax prompt search "character portrait" --domain visual_generation --vault ./my-notes --json
+pinax prompt search "character portrait" --domain visual_generation --vault ./my-notes --agent
 pinax prompt resolve pinax://prompt/novel_character_portrait_v1 --vault ./my-notes --agent
 pinax prompt lifecycle novel_character_portrait_v1 --to tested --reason "fixture render passed" --vault ./my-notes --json
 pinax collection import --from ./bundle.json --dry-run --vault ./my-notes --json
 pinax collection import --from ./bundle.json --yes --vault ./my-notes --json
 pinax collection export --to ./eikona-bundle.json --format eikona.prompt_bundle.v1 --vault ./my-notes --json
 pinax graph rebuild --vault ./my-notes --json
-pinax graph query --kind technique --match storyboard --vault ./my-notes --json
+pinax graph query --kind technique --match storyboard --vault ./my-notes --agent
 ```
 
 ## Workflow
 
-1. Inspect before writes with `pinax asset list`, `pinax asset show`, `pinax note attachments`, `pinax prompt search`, `pinax collection doctor`, or `pinax graph query`.
+1. Inspect before writes with `pinax asset list --agent`, `pinax asset show --agent`, `pinax note attachments --agent`, `pinax prompt search --agent`, `pinax collection doctor`, or `pinax graph query --agent`.
 2. For note-local files, prefer `pinax note attach` so the note reference and asset metadata stay consistent.
 3. For vault-wide asset metadata, use `pinax asset add/link/move/remove/repair/verify`; do not edit manifests by hand.
 4. For prompt assets, import schemas through `pinax prompt import` and resolve through `pinax prompt resolve pinax://prompt/<id> --agent` instead of reading SQLite or metadata files.
@@ -57,6 +57,6 @@ pinax graph query --kind technique --match storyboard --vault ./my-notes --json
 ## Validation
 
 - After asset changes: `pinax asset verify --vault <vault> --json`.
-- After attachment changes: `pinax note attachments "<note>" --vault <vault> --json`.
+- After attachment changes: `pinax note attachments "<note>" --vault <vault> --agent`.
 - After prompt imports: `pinax prompt resolve pinax://prompt/<id> --vault <vault> --agent`.
-- After collection import or graph rebuild: `pinax collection doctor --from <bundle> --json` or `pinax graph query --kind <kind> --match <term> --json`.
+- After collection import or graph rebuild: `pinax collection doctor --from <bundle> --json` or `pinax graph query --kind <kind> --match <term> --agent`.

@@ -1,0 +1,3 @@
+display_name: Ordo Agent CLI Worktree Orchestration
+short_description: Guard Agent CLI worktree leases and reconciliation.
+default_prompt: Use the Ordo Agent CLI worktree contract to design or review workspace admission, process identity, leases, reconciliation, candidate retention, and safe cleanup for this task.

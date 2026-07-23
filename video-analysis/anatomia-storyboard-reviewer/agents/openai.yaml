@@ -1,0 +1,4 @@
+interface:
+  display_name: "Anatomia Storyboard Reviewer"
+  short_description: "Review and freeze traceable storyboard revisions."
+  default_prompt: "Use $anatomia-storyboard-reviewer to inspect, revise, validate, and freeze an Anatomia storyboard revision."

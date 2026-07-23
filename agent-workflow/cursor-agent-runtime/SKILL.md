@@ -20,8 +20,8 @@ Use this skill when Cursor is the active coding agent or when Yeisme instruction
 cursor
 mcp-gateway client doctor --client generic --registry ../registry.json
 mcp-gateway client config generic --registry ../registry.json --instructions
-dist/omh skills active --json
-dist/omh tools guide --json
+scripts/skills.sh list-runtime
+scripts/skills.sh profile show <owner>
 ```
 
 ## Boundaries

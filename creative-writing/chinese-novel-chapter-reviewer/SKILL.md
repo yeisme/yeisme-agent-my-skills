@@ -31,10 +31,11 @@ description: Use when reviewing a Chinese novel chapter candidate against chapte
 ## 工作流
 
 1. 对齐验收基线：先确认本章目标、读者承诺、类型回报、上一章遗留问题和下一章承诺。
-2. 逐项检查章节结构：开场压力、场景转折、冲突升级、信息增量、人物状态变化、情绪回报和章尾钩子。
-3. 检查连续性 delta：新增事实、人物状态、伏笔、知识边界、资源变化和未回收问题是否可落台账。
-4. 给每项标记 `pass`、`needs_revision`、`blocking` 或 `deferred`，并说明影响用户阅读的具体后果。
-5. 输出修订 handoff：结构问题交 revision producer，事实冲突交 continuity，留存和钩子交 hook-pacing，对白交 dialogue，文风交 style。
+2. 如果任务重点是比较候选稿与章节卡、旧版、已接受版本或读者契约，先交给 `chinese-novel-draft-comparator` 产出差距矩阵，再基于矩阵做章节验收。
+3. 逐项检查章节结构：开场压力、场景转折、冲突升级、信息增量、人物状态变化、情绪回报和章尾钩子。
+4. 检查连续性 delta：新增事实、人物状态、伏笔、知识边界、资源变化和未回收问题是否可落台账。
+5. 给每项标记 `pass`、`needs_revision`、`blocking` 或 `deferred`，并说明影响用户阅读的具体后果。
+6. 输出修订 handoff：结构问题交 revision producer，事实冲突交 continuity，留存和钩子交 hook-pacing，对白交 dialogue，文风交 style。
 
 ## 质量门槛
 

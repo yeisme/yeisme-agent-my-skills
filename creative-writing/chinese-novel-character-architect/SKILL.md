@@ -44,6 +44,9 @@ description: Use when creating or revising Chinese novel character profiles, voi
 
 - 普通一次性写稿不强制进入 Auctra。
 - 当用户在 Auctra 项目内工作、需要保存素材、审稿或导出时，优先建议 `auctra material`、`auctra text`、`auctra review`、`auctra export` 的真实命令。
+- Auctra 中文项目中，人物 artifact 默认面向 `人物/` display path，并可作为 `素材/` 或 story-bible 输入；不要直接写 `.auctra/**` canon。
+- 若人物设定要进入写章 gate，建议先运行 `auctra gate check --before chapter_write --json`，再把缺口交给 brief/outline/scene-card 技能补齐。
+- 输出 handoff 时标明 phase=`character`、artifact=`character_profile`、gate=`chapter_write`、display_path 建议和仍待确认的知识边界。
 
 ## 边界
 

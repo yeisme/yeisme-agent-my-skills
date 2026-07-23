@@ -10,21 +10,21 @@ Read `task_intent.md` first and assign one primary intent:
 
 | Intent | Typical request | Default route |
 | --- | --- | --- |
-| `local-research-infra` | "Use/debug Hermes or OpenWebUI research/search" | local_research_infra |
+| `local-research-infra` | "Use/debug Connectors or OpenWebUI research/search" | local_research_infra |
 | `platform` | "Read/search/configure Twitter, Reddit, YouTube, Bilibili, XiaoHongShu, RSS, or Agent Reach" | agent_reach |
 | `lookup` | "Check X current version/URL/release date" | lightweight |
 | `research` | "Research/compare/analyze X" | standard |
 | `deep-research` | "Deep research / broad scan / find 200 examples" | deep_research |
 | `verify` | "Verify this claim / is it stale?" | standard |
 | `extract` | "Extract fields from this URL/API/repo" | standard |
-| `interact` | "Open the page, click, screenshot, download, inspect after login" | autonomous |
+| `interact` | "Open the page, click, screenshot, download, inspect after login" | autonomous, Firecrawl first |
 | `automate` | "Make this repeatable" | autonomous + Playwright |
 
 ## Step 2: Identify Target And Source
 
 Then classify the source shape:
 
-- Local research infrastructure: the task clearly points to Yeisme, Hermes, OpenWebUI, Research Harness, MCP Gateway, SearXNG, or a local Firecrawl backend.
+- Local research infrastructure: the task clearly points to Yeisme, Connectors, OpenWebUI, Research Harness, MCP Gateway, SearXNG, or a local Firecrawl backend.
 - Agent Reach platform: the task names Agent Reach or a supported platform with known platform routing, login, cookie, proxy, video, social, community, RSS, or podcast needs.
 - Known source query: the user gave a GitHub repo, package name, URL, API endpoint, or specific site.
 - Unknown source discovery: the user gave only a topic and needs sources found.
@@ -74,26 +74,26 @@ command -v browser-use
 command -v npx
 ```
 
-Pick the tool that best matches the information source. GitHub metadata uses `gh`; general web search or scraping uses `firecrawl`; AI interactive browsing uses `agent-browser`; repeatable regression flows use `npx playwright` or existing project commands.
+Pick the tool that best matches the information source. GitHub metadata uses `gh`; ordinary web discovery, JavaScript-rendered extraction, crawling, and supported interaction use Firecrawl first; Firecrawl-incomplete browser state and repeatable regression flows use `npx playwright` or existing project commands; one-off visual inspection may use `agent-browser` or `browser-use`.
 
 ## Route Selection
 
 ### 0. Local Research Infra
 
-When the task happens inside this repository's Hermes/OpenWebUI/MCP Gateway search and research capability, use `local_research_infra.md` first.
+When the task happens inside this repository's Connectors/OpenWebUI/MCP Gateway search and research capability, use `local_research_infra.md` first.
 
 Signals:
 
-- The user mentions Hermes, OpenWebUI, Open WebUI, Research Harness, SearXNG, Firecrawl backend, or MCP Gateway internet search.
+- The user mentions Connectors, OpenWebUI, Open WebUI, Research Harness, SearXNG, Firecrawl backend, or MCP Gateway internet search.
 - The task needs a decision between Firecrawl CLI, OpenWebUI Web Search, Research Harness, and browser tools.
 - The task involves search quality, search budget, query generation, trace, source diversity, or local port configuration.
 
 Examples:
 
 ```text
-Optimize OpenWebUI Hermes Research Harness search quality.
+Optimize OpenWebUI Connectors Research Harness search quality.
 Open WebUI returns too few search results; inspect local Firecrawl/SearXNG configuration.
-How should Hermes agents call local search tools for deep research?
+How should Connectors agents call local search tools for deep research?
 ```
 
 ### 0.5 Agent Reach Platform Route
@@ -213,16 +213,18 @@ Degrade when:
 
 | Need | Prefer | Fallback |
 | --- | --- | --- |
-| Hermes/OpenWebUI local research path | `local_research_infra.md` + local `firecrawl`/SearXNG/Research Harness | normal `firecrawl search`, built-in search |
+| Connectors/OpenWebUI local research path | `local_research_infra.md` + local `firecrawl`/SearXNG/Research Harness | normal `firecrawl search`, built-in search |
 | Social/video/community platform routing | `agent_reach.md` + selected upstream CLI | static extraction, browser tools |
 | Unknown source discovery | `firecrawl search "query" --limit 5` | built-in search or hosted API |
 | URL content extraction | `firecrawl scrape "URL"` | `curl -L "URL"` plus parser |
 | GitHub repo/issue/release data | `gh ... --json ...` | GitHub API, `firecrawl search` |
 | Package metadata | package manager CLI | registry site/API |
 | JSON/API data | `curl` + `jq` | official docs or browser |
-| Dynamic Web UI exploration | `agent-browser` | `browser-use` or built-in browser |
-| Repeatable browser flow | `npx playwright` or existing project command | explore with `agent-browser`, then harden |
-| Login workflow | local browser automation and existing profile | ask user to confirm access boundaries |
+| JavaScript-rendered page | `firecrawl scrape "URL" --wait-for 3000` | Playwright after Firecrawl remains incomplete |
+| Supported clicks/forms/pagination | `firecrawl interact` | Playwright after Firecrawl remains incomplete |
+| Browser-only UI state | `npx playwright` or existing project command | `agent-browser` or `browser-use` for one-off inspection |
+| Repeatable browser flow | Existing project Playwright command or `npx playwright` | only after Firecrawl cannot represent the workflow |
+| Login workflow | `firecrawl interact` when supported | Playwright with user-confirmed access boundaries |
 
 ## Handling Search And Browser Overlap
 
@@ -230,13 +232,13 @@ Ask what the task is trying to accomplish:
 
 - Goal is "know something": use search for unknown sources, or source-specific CLI/API for known sources.
 - Goal is "get structured fields": prefer source-specific CLI, registry CLI, or `curl` + `jq`.
-- Goal is "what actually happens on the page": escalate to browser.
-- Goal is "repeat this later": explore with a browser first, then consider Playwright or project automation.
+- Goal is "what actually happens on the page": try Firecrawl rendered extraction or interaction first, then escalate to a browser if the needed state is unavailable.
+- Goal is "repeat this later": prototype with Firecrawl first, then use Playwright when a maintained browser workflow is required.
 
 Typical escalation path:
 
 ```text
-source-specific CLI/API -> firecrawl search -> firecrawl scrape -> agent-browser snapshot/click -> Playwright hardening
+source-specific CLI/API -> firecrawl search/scrape/crawl/interact -> Playwright fallback -> optional one-off visual inspection
 ```
 
 Typical cases that should not escalate:

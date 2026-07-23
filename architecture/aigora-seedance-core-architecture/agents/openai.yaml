@@ -1,0 +1,3 @@
+display_name: Aigora Seedance Core Architecture
+short_description: Review Aigora Seedance three-plane ownership, lifecycle boundaries, and implementation gaps.
+default_prompt: Review the Aigora Seedance core architecture from the Aigora session root and distinguish confirmed facts, reference lessons, implementation gaps, and target recommendations.

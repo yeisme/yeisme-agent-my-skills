@@ -1,0 +1,3 @@
+display_name: "Lenis Smooth Scroll Integration"
+short_description: "Integrate Lenis without breaking nested scroll or accessibility."
+default_prompt: "Use $lenis-smooth-scroll-integration to add scoped Lenis scrolling to this frontend and verify reduced motion, cleanup, and nested scroll behavior."

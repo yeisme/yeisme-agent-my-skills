@@ -17,11 +17,11 @@ Use Pinax memory as a deterministic, cited agent memory ledger. It is for durabl
 
 ```bash
 pinax memory context "prepare next release" --entity pinax --limit 12 --agent
-pinax memory recall "release workflow" --entity pinax --json
+pinax memory recall "release workflow" --entity pinax --agent
 pinax memory capture --type fact --subject pinax --predicate release_workflow --object "tag push triggers GitHub Actions" --source docs/operations/release-packaging.md --json
 pinax memory capture --type decision --subject pinax --object "Use structured memory before vector recall" --source openspec/changes/pinax-agent-memory-ledger/design.md --json
-pinax memory list --entity pinax --json
-pinax memory stats --json
+pinax memory list --entity pinax --agent
+pinax memory stats --agent
 ```
 
 ## Workflow
@@ -43,6 +43,6 @@ pinax memory stats --json
 
 ## Validation
 
-- After capture: `pinax memory recall "<keyword>" --entity <entity> --json`.
+- After capture: `pinax memory recall "<keyword>" --entity <entity> --agent`.
 - For agent handoff: `pinax memory context "<task>" --entity <entity> --limit 12 --agent`.
 - Confirm the output contains stable facts and does not include private note bodies or credentials.

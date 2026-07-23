@@ -60,6 +60,9 @@ description: Use when drafting, continuing, or rewriting a Chinese novel chapter
 
 - 普通一次性写稿不强制进入 Auctra。
 - 当用户在 Auctra 项目内工作、需要保存素材、审稿或导出时，优先建议 `auctra material`、`auctra text`、`auctra review`、`auctra export` 的真实命令。
+- Auctra 中文项目中，章节候选稿只能作为 review candidate 或人工草稿 handoff；不要直接覆盖 `.auctra/manuscript/**`。
+- 写章前建议 `auctra gate check --before chapter_write --json`；生成后建议 `auctra review list --status pending --json`，采纳必须由 `review accept|partial` 完成。
+- 输出 handoff 时标明 phase=`chapter_write`、artifact=`chapter_candidate`、gate=`review_required`、display_path（例如 `章节/ch_001.md`）和连续性 delta。
 
 ## 边界
 

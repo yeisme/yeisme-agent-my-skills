@@ -1,0 +1,3 @@
+display_name: Ordo Runtime Canary Evaluation
+short_description: Evaluate protected Ordo runtime canaries safely.
+default_prompt: Evaluate Codex, Claude, and OMP for an Ordo protected canary using hard safety gates, delivery-quality scoring, redacted evidence, and an explicit promotion decision.

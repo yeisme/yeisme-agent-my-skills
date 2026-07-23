@@ -19,21 +19,22 @@ description: Use when designing Xiaohongshu 3/6/9-page static card series, knowl
 1. 将正文拆成页序：封面、问题、步骤/清单、案例、总结和互动页。
 2. 为每页写短标题和 1-3 条卡片文案，避免单页文字过密。
 3. 统一视觉系统：字体风格、背景、图标、留白、颜色、安全边距和页码规则。
-4. 输出整组提示词、逐页提示词、推荐 Eikona 命令和页码命名建议。
-5. 生成后用 review packet 对比整组一致性，再用 feedback 记录被接受的页面或整组候选。
+4. 加载 `eikona-file-prompt-workflow`，按 `prompts/xhs/card-series/<collection>/prompts/NN-<page-role>.md` 保存逐页提示词，并用 runbook 保持统一模型、尺寸和限制。
+5. 输出集合 README、逐页提示词、runbook 和页码命名建议。
+6. 生成后用 review packet 对比整组一致性，再用 feedback 记录被接受的页面或整组候选。
 
 ## 命令示例
 
 本地验证：
 
 ```bash
-eikona generate --model fixture:image --aspect 3:4 --size 1024x1536 --count 3 --prompt "小红书知识卡片系列，统一浅色背景，清晰中文排版，页码 1 到 3，包含封面页、步骤页、总结页，留白充足，适合手机阅读" --agent
+eikona run -f prompts/xhs/card-series/skincare-basics/runbook.yaml --dry-run --json
 ```
 
 真实生成：
 
 ```bash
-eikona generate --model openai:gpt-image-2 --aspect 3:4 --size 1024x1536 --count 3 --prompt "小红书知识卡片系列，统一浅色背景，清晰中文排版，页码 1 到 3，包含封面页、步骤页、总结页，留白充足，适合手机阅读" --agent
+eikona run -f prompts/xhs/card-series/skincare-basics/runbook.yaml --background --json
 eikona review packet <run_id> --json
 eikona feedback accept <run_id> --artifact <artifact_id> --reason series_consistency --reason mobile_readability --json
 eikona assets handoff <artifact_id> --agent
@@ -50,7 +51,7 @@ eikona review packet <run_id> --json
 ## 输出
 
 - 页序表：页码、标题、1-3 条正文、画面主体、版式备注。
-- 统一视觉系统说明和每页 prompt。
+- 统一视觉系统说明、分类目录、集合 README、逐页 prompt 文件和 runbook。
 - 本地验证、真实生成、review、feedback、handoff 命令。
 
 ## 质量标准

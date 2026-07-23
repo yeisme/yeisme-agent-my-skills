@@ -1,0 +1,4 @@
+interface:
+  display_name: "Eikona 产品资产导演"
+  short_description: "生成、捕获、审阅并安全交付产品仓库视觉资产"
+  default_prompt: "Use $eikona-product-asset-director to turn this product context into reviewable Eikona assets and safely hand off or apply the accepted result."

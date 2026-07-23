@@ -55,11 +55,11 @@ Output: summary, findings, sources, limits.
 
 ### `local-research-infra`
 
-Goal: choose or debug search, scraping, Research Harness, and browser escalation in a Yeisme/Hermes/OpenWebUI local deployment.
+Goal: choose or debug search, scraping, Research Harness, and browser escalation in a Yeisme/Connectors/OpenWebUI local deployment.
 
 Signals:
 
-- "Hermes/OpenWebUI research"
+- "Connectors/OpenWebUI research"
 - "Open WebUI search"
 - "Research Harness"
 - "SearXNG/Firecrawl local service"
@@ -186,14 +186,15 @@ Signals:
 - "check after login"
 - "what does the page show"
 
-Default route: `autonomous.md` + `browser_tools.md`
+Default route: `autonomous.md` + `browser_tools.md`; try `firecrawl scrape` or `firecrawl interact` first, then use Playwright only when Firecrawl is unavailable or insufficient.
 
 Example commands:
 
 ```bash
-agent-browser open "https://example.com"
-agent-browser snapshot
-agent-browser screenshot /tmp/example.png
+firecrawl scrape "https://example.com" --wait-for 3000 -o .firecrawl/example.md
+firecrawl scrape "https://example.com"
+firecrawl interact --prompt "Open the relevant section and extract the result"
+npx playwright codegen "https://example.com"
 ```
 
 Output: tool, final URL, operation result, evidence path, blockers.
@@ -210,7 +211,7 @@ Signals:
 - "monitor"
 - "batch download"
 
-Default route: explore with `browser_tools.md`, then consider Playwright or project scripts according to project conventions.
+Default route: prototype with Firecrawl first; if Firecrawl cannot represent the workflow or a maintained browser test is required, use `browser_tools.md` and the project's existing Playwright setup.
 
 Example commands:
 

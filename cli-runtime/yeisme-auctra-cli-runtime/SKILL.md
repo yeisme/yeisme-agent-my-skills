@@ -1,15 +1,15 @@
 ---
 name: yeisme-auctra-cli-runtime
-description: Use when changing, testing, reviewing, documenting, or designing Auctra CLI/TUI behavior under cli/auctra, including text creation pipelines, material/brief/review/export workflows, runtime provider contracts, run evidence, and agent-facing CLI contracts.
+description: Use when changing, testing, reviewing, documenting, or designing the Auctra CLI-first text creation product runtime under cli/auctra, including product workflows, CLI/TUI behavior, app-service boundaries, material/brief/review/export contracts, runtime providers, run evidence, and approved independent-client handoffs.
 ---
 
 # Yeisme Auctra CLI Runtime
 
-Use this skill for `cli/auctra`, the local-first text creation CLI/TUI and agent-callable state engine.
+Use this skill for `cli/auctra`, the local-first text creation product engine whose owned interactive surfaces are CLI/TUI and whose stable projections may support approved independent clients.
 
 ## Product Identity Lock
 
-Auctra is a specialized text creation CLI, not a generic agent and not a provider router.
+Auctra is a specialized text creation product engine, not a generic agent and not a provider router. CLI/TUI remain its owned direct user interfaces; product PRDs, workflow design, and client contract gaps are still in scope even when frontend implementation belongs to a separate approved client.
 
 ```text
 External agent / script -> auctra CLI -> .auctra state -> evidence -> review -> version/export

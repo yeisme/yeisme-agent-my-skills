@@ -1,0 +1,4 @@
+interface:
+  display_name: "Eikona 超宽故事看板导演"
+  short_description: "设计连续空间看板并保持 Scaena production 主体门禁"
+  default_prompt: "Use $eikona-ultrawide-storyboard-director to design a continuous-space board and enforce Scaena readiness before production generation."

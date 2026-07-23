@@ -49,6 +49,9 @@ description: Use when planning Chinese novel structure, chapter outlines, serial
 
 - 普通一次性写稿不强制进入 Auctra。
 - 当用户在 Auctra 项目内工作、需要保存素材、审稿或导出时，优先建议 `auctra material`、`auctra text`、`auctra review`、`auctra export` 的真实命令。
+- Auctra `zh-CN/chinese-novel` 项目中，大纲 artifact 默认面向 `大纲/` display path；章节表应引用 `章节/ch_001.md` 这类 display_path，不手写 `.auctra/manuscript/**`。
+- 写章前建议 `auctra gate check --before chapter_write --json`；已有项目先用 `auctra project next --json` 确认 pending review、materials 和 latest display path。
+- 输出 handoff 时标明 phase=`outline`、artifact=`chapter_outline`、gate=`chapter_write`、需要拆成场景卡的章节和 display_path。
 
 ## 边界
 

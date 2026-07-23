@@ -1,3 +1,0 @@
-display_name: Yeisme GitPulse CLI Runtime
-short_description: Maintain GitPulse Git workflow, worktree, PR, TUI, output contract, and Go CLI behavior under cli/gitpulse.
-default_prompt: Change or review cli/gitpulse while preserving Git workflow orchestration boundaries, CLI output contracts, TUI testability, and Go validation commands.

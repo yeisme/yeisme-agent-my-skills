@@ -73,6 +73,33 @@ Required fields:
 6. Add tests for evidence creation and failure behavior.
 7. Run the real integration command and inspect `temp/integration-test-runs/<run-id>/`.
 
+## Subagent Handoff
+
+For Codex feature delivery, keep implementation and verification in separate
+contexts:
+
+1. One implementer owns tracked production code and all related test/fixture
+   edits for the bounded feature.
+2. A separate test engineer runs the existing integration/component/system/e2e
+   entrypoint and writes evidence under `temp/integration-test-runs/<run-id>/`.
+3. The root receives `summary.json`, the command, exit code, evidence paths, and
+   a compact failure signature. Do not paste full `stdout.log` or `stderr.log`
+   into the root task unless a small excerpt is required to choose the next
+   route.
+4. A deterministic product failure returns to the same implementer as a compact
+   failure packet. Environment flakes stay with the test engineer for
+   classification and do not authorize tracked-file edits.
+5. The test engineer records tracked-file state before and after the run. Any
+   tracked source, test, fixture, snapshot, config, or lockfile change
+   invalidates independent verification.
+
+Classify failed verification as `product`, `test`, `environment`, `flaky`,
+`permission`, or `ambiguous` in the worker envelope. This is a handoff field,
+not a new required `summary.json` schema field.
+
+This separation prevents frequent integration runs from exhausting the root or
+goal context while preserving reproducible evidence on disk.
+
 ## Redaction Rules
 
 Evidence must not contain:
@@ -103,12 +130,6 @@ bun run test:integration
 find temp/integration-test-runs -maxdepth 2 -type f | sort
 ```
 
-```bash
-cd cli/gitpulse
-task test:integration
-find temp/integration-test-runs -maxdepth 2 -type f | sort
-```
-
 ## Boundaries
 
 - Do not store evidence in repository root `temp/` for a subproject test.
@@ -116,6 +137,8 @@ find temp/integration-test-runs -maxdepth 2 -type f | sort
 - Do not redefine all tests as integration tests. Unit tests do not need this evidence path.
 - Do not bypass the AI Native CLI output contract when evidence comes from CLI commands.
 - Do not implement subproject test runners from the root context; enter the owning subproject first.
+- Do not let a test engineer modify tracked source, tests, fixtures, snapshots,
+  or configuration while acting as the independent verifier.
 
 ## References
 

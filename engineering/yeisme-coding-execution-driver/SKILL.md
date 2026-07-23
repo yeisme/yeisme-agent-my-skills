@@ -167,6 +167,19 @@ For each active leaf:
 
 Use reasonable assumptions when local context makes the path clear. Do not ask the user to choose between routine implementation details.
 
+## Parallel Execution And Writer Leases
+
+Use `route-agents` before delegation. The root remains the scope owner and final
+integrator. One bounded feature defaults to one tracked-file writer; parallel
+implementers are allowed only for explicit, non-overlapping path leases with
+independent focused verification and no shared generated outputs.
+
+Each writer contract must name `owned_paths`, `shared_read_paths`,
+`forbidden_paths`, `focused_verification`, integration dependencies, and the
+common worker envelope. Start with at most two writers. If paths overlap, a
+shared generated file changes, or a writer times out with unknown liveness,
+stop adding writers and serialize the work.
+
 ## Progress Updates
 
 During longer sessions, report progress in checklist terms:
@@ -199,12 +212,27 @@ When blocked, report:
 
 ## Verification
 
-Always run a verification command before claiming completion. Prefer, in order:
+Always run a verification command before claiming completion. Use staged
+verification rather than repeatedly running every repository gate after each
+edit.
+
+During `implementing` and `slice-ready`, prefer, in order:
 
 1. The focused test for the changed behavior.
 2. The package or module test suite covering the changed files.
-3. Static checks such as typecheck, lint, validation scripts, or build.
+3. A necessary local typecheck or compile check for the owned slice.
 4. A manual inspection with exact files and rationale when no executable check exists.
+
+Do not repeatedly run repository-wide lint, full builds, complete e2e, or
+strict global validation during implementation. Run those checks only after
+the code, direct tests, and required docs are stable and the task enters
+`final-gate`, unless the task itself is a lint/build/CI repair or the nearest
+`AGENTS.md` explicitly requires a local static check for every slice.
+
+Before repairing a final-gate failure, classify it as `introduced`,
+`pre_existing`, `concurrent`, `environment`, or `ambiguous`. Only an
+`introduced` failure authorizes repair inside the writer's owned paths. Do not
+modify unrelated business logic merely to clear a global warning.
 
 If a check cannot run, say why and name the next best evidence used.
 
@@ -224,5 +252,6 @@ Keep the final response short and concrete:
 
 - summarize what changed
 - list verification commands and results
+- distinguish implementation status from final-gate status
 - call out unverified areas or residual risk
 - mention follow-up only when it directly extends the completed task

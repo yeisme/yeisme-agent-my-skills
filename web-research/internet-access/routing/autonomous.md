@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Handle tasks that require browser interaction, dynamic content, authentication, repeated navigation, downloads, forms, screenshots, or multi-step web workflows. Prefer existing local browsers and CLI tools. Create automation scripts only when the user needs a reusable artifact. See `browser_tools.md` for tool details.
+Handle tasks that require interaction, dynamic content, authentication, repeated navigation, downloads, forms, screenshots, or multi-step web workflows. Try Firecrawl's rendered extraction and interaction capabilities before Playwright, then create browser automation only when Firecrawl is unavailable or insufficient or the user needs a reusable artifact. See `browser_tools.md` for tool details.
 
 ## When To Use
 
@@ -25,11 +25,11 @@ command -v firecrawl
 
 Tool choice:
 
-- Use `agent-browser` first when the task needs an AI agent to observe, click, and read page state step by step.
 - For social, video, community, RSS, podcast, or logged-in platform reads, check Agent Reach first; if it provides a readable backend, avoid browser automation.
-- Use existing project Playwright commands or `npx playwright` for known, repeatable workflows that should become tests or long-term automation.
-- Use `agent-browser` for visual exploration or uncertain UI state; if unavailable, use `browser-use` or built-in browser tools.
-- Fall back to `firecrawl scrape` or `firecrawl crawl` for static extraction.
+- Use `firecrawl scrape --wait-for`, `firecrawl crawl`, or `firecrawl download` for rendered content and documentation sites.
+- Use `firecrawl interact` first for supported clicks, forms, pagination, and navigation.
+- Use existing project Playwright commands or `npx playwright` only when Firecrawl is unavailable or insufficient, or when the workflow should become a maintained test or automation.
+- Use `agent-browser` for one-off visual inspection when screenshots or accessibility state are required and a Playwright artifact is unnecessary.
 - If structured data exists, prefer source-specific CLI/API instead of browser automation; for example, use `gh` only for GitHub.
 - Do not write new wrapper scripts for one-off exploration.
 
@@ -40,8 +40,9 @@ Tool choice:
 3. Try the lowest-cost reliable path first:
    - structured CLI (use `gh` for GitHub; package managers for package registries)
    - `agent-reach doctor` and the selected upstream CLI for supported platforms
-   - `firecrawl search` / `firecrawl scrape`
-   - browser automation when interaction is needed
+   - `firecrawl search` / `firecrawl scrape` / `firecrawl crawl`
+   - `firecrawl interact` for supported interaction
+   - Playwright or another browser tool only after Firecrawl is unavailable or insufficient
 4. Preserve evidence: final URL, screenshots or downloaded files if needed, and extracted records.
 5. Pause for user confirmation only when credentials, permissions, payments, or destructive actions are involved.
 

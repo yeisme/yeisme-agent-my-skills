@@ -1,3 +1,4 @@
-display_name: Eikona 小红书图文卡片导演
-short_description: 将小红书正文拆成 3/6/9 页静态图文卡片，并输出页序、提示词、Eikona 命令和 review/handoff 步骤。
-default_prompt: 请把这篇小红书笔记拆成一组 3:4 静态图文卡片，给出页序、每页文案、统一视觉系统、Eikona 命令和 review/feedback/handoff 下一步。
+interface:
+  display_name: "Eikona 小红书图文卡片导演"
+  short_description: "把内容拆成 3/6/9 页静态卡片并保留 Eikona 证据链"
+  default_prompt: "Use $eikona-xhs-card-series-director to turn this post into a coherent 3/6/9-page Eikona card series with review and handoff steps."

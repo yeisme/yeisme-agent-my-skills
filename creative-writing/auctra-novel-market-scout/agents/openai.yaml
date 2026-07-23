@@ -1,0 +1,3 @@
+display_name: Auctra 小说市场侦察
+short_description: turn an authorized local ranking snapshot into reviewable market insight (reader-demand signals, reusable recipes, advisory project-fit) via the Auctra DecompositionProvider LLM gate
+default_prompt: 请使用 Auctra 小说市场侦察 把授权本地排行榜快照变成可审阅的市场洞察。要求 permission=owned/licensed，绝不抓取平台或保存 secret；signal/recipe/project-fit 只能来自成功的非 simulation LLM decomposition；accept 只走既有 auctra review queue，不自行 promote。
