@@ -26,7 +26,7 @@ description: Use when routing Chinese creative-writing or Auctra content tasks t
 ## 工作流
 
 1. 识别内容家族、locale、phase 和 artifact：中文小说、小红书、Twitter/X 个人品牌与账号矩阵、公众号、短视频、剧本、产品评测、直播、播客、书评、旅行攻略、教程、周报；Auctra 项目先判断是否 `zh-CN/chinese-novel` localized workspace。
-2. 中文小说内继续识别任务形态：短篇/中篇/长篇/系列文、类型契约、搜索关键词预设、场景思路、场景卡、章节写作、作品拆解、主题拆分、全媒介改编、修订、候选稿对比或 Auctra review handoff。
+2. 中文小说内继续识别任务形态：短篇/中篇/长篇/系列文、类型契约、搜索关键词预设、场景思路、场景卡、章节写作、作品拆解、主题拆分、全媒介改编、修订、候选稿对比、人物分析/设计/验压或 Auctra review handoff。
 3. 优先选择具体工作技能；只有跨格式、跨阶段或 Auctra 项目任务才使用总编排。
 4. 若技能未启用，优先按需读取；只有高频需求才交给安装器写入 profile 并同步 runtime。
 5. Auctra 项目内结构化变更必须走 Auctra 命令，不手写 `.auctra/**` 状态。
@@ -47,6 +47,7 @@ description: Use when routing Chinese creative-writing or Auctra content tasks t
 - Auctra localized workspace、`locale`/`layout_preset`、`display_path`、`章节/`、`素材/`、migration plan/apply 或 `.auctra/` 禁写边界优先交给 `auctra-i18n-workspace-router`。
 - 中文 Auctra 项目从零启动、scenario doctor、`auctra gate check`、素材/大纲/人物/首章规划优先交给 `auctra-chinese-project-starter`。
 - Auctra 项目路由输出必须标明 phase（init/import/plan/write/review/export）、artifact（brief/outline/character/scene/chapter/material/export）和 gate（例如 `chapter_write`、`text_generate`）。
+- 人物任务先交给 `character-intelligence-router` 两阶段判断：先在证据分析、人物设计、压力测试、社会知识研究或具体成稿中选一个主 skill；只有某个内在或社会机制实质改变角色选择且拥有独立交付物时，才最多追加一个认知决策、动机价值、情绪调节、身份叙事、声音语用、身体习惯、关系、权力、文化阶层、群体组织或道德意识形态 specialist。普通中文小说人物卡仍用 `chinese-novel-character-architect`。
 - 非 Auctra 项目里的中文小说草稿对比、两个候选稿优劣比较、旧版/新版退步定位优先交给 `chinese-novel-draft-comparator`。
 - 小说短篇/中篇/系列篇幅选择优先交给 `chinese-novel-length-form-architect`。
 - 小说类型契约、读者承诺、知名小说结构参考和搜索关键词预设优先交给 `chinese-novel-genre-contract-strategist`；已有作品/样章拆解时交给 `chinese-novel-analysis-decomposer`。
