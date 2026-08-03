@@ -1,4 +1,0 @@
-interface:
-  display_name: "Eikona x Auctra 图文创作路由器"
-  short_description: "把 Auctra accepted source 安全路由为 Eikona 视觉候选"
-  default_prompt: "Use $eikona-auctra-visual-router to export accepted Auctra visual briefs and preserve Scaena readiness gates before production generation."

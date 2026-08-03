@@ -1,0 +1,4 @@
+[submodule "auctra-novel"]
+	path = auctra-novel
+	url = https://github.com/yeisme/auctra-novel-skills.git
+	branch = main

@@ -1,3 +1,0 @@
-display_name: 中文小说项目圣经管理员
-short_description: maintaining a Chinese long-form novel project bible with reader contract, style bible, world rules, timeline, knowledge boundaries, foreshadowing ledger, forbidden moves, and Auctra-facing author artifacts
-default_prompt: 请使用 中文小说项目圣经管理员 基于用户素材直接产出该技能要求的完整交付物，并标明输入缺口、质量检查、风险边界和下一步。
