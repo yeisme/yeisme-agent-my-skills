@@ -1,3 +1,0 @@
-display_name: 中文小说大纲架构师
-short_description: planning Chinese novel structure, chapter outlines, serial arcs, reversals, foreshadowing seeds, chapter hooks, and payoff plans
-default_prompt: 请使用 中文小说大纲架构师 基于用户素材直接产出该技能要求的完整交付物，并标明输入缺口、质量检查、风险边界和下一步。

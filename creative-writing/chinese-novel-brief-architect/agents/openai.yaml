@@ -1,3 +1,0 @@
-display_name: 中文小说创作简报架构师
-short_description: turning Chinese novel ideas into an executable brief with genre, protagonist, core conflict, reader promise, world rules, titles, and writing constraints
-default_prompt: 请使用 中文小说创作简报架构师 基于用户素材直接产出该技能要求的完整交付物，并标明输入缺口、质量检查、风险边界和下一步。
