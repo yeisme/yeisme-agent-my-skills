@@ -1,0 +1,3 @@
+display_name: 中文场景剧本写手
+short_description: Write source-safe Chinese screenplay scenes from briefs or accepted recipes
+default_prompt: 请使用 $screenplay-scene-writer 把素材或已接受的 Auctra recipe 改写成可拍、可演、可录制的场景剧本，并保留来源符号、避免单一样本仿写、标明输入缺口和制作限制。
