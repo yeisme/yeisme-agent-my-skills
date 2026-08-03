@@ -9,7 +9,7 @@ Use this skill when the user asks to create, change, publish, package, install, 
 
 ## Source And Targets
 
-- Author source skills in `.skills/yeisme/<module>/<skill-name>/`.
+- Author source skills in `.skills/yeisme/<module>/<skill-name>/`, or in a first-party public submodule mounted at `.skills/yeisme/<project>/<module>/<skill-name>/`.
 - Assign runnable copies through `.skills/profiles/root.txt` and `.skills/profiles/targets/<subproject>.txt`, then materialize them with `scripts/skills.sh`.
 - Use `.agents/skills/` and `.claude/skills/` as generated active runtime copies. Keep inactive reviewed skills in the source layer.
 - Keep `mcp/` for MCP implementations only.
@@ -24,6 +24,7 @@ This repository uses a single local install target for project-owned skills:
 
 ```text
 .skills/yeisme/<module>/<skill-name>/     source of truth
+.skills/yeisme/<project>/<module>/<skill-name>/ public project source of truth
 .agents/skills/<skill-name>/ local runnable copy
 .claude/skills/<skill-name>/ Claude Code runnable copy
 ```
@@ -109,7 +110,7 @@ scripts/skills.sh list-custom
 - `scripts/skills.sh sync-root` must write only root-profile skills into root `.agents/skills/` and `.claude/skills/`.
 - `scripts/skills.sh sync-subprojects` must write only each subproject profile into that subproject's generated `.agents/skills/` and `.claude/skills/`.
 - Profile files must not reference `.agents/skills` as a source.
-- `.skills/yeisme/` must contain only module directories plus `README.md`; module directories contain self-built skill directories.
+- `.skills/yeisme/` must contain only module directories, first-party project submodules, plus `README.md` and optional `.gitmodules`; module directories contain self-built skill directories.
 - `.skills/imported/` must contain only module directories plus `README.md`; module directories contain third-party/imported skill directories.
 - Do not add generated caches, local secrets, runtime data, or vendored dependencies.
 - Do not create per-skill README files unless the user explicitly asks for human-facing documentation.

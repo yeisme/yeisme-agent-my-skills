@@ -12,6 +12,7 @@ Keep source, declaration, and runtime responsibilities separate.
 ```text
 .skills/
   yeisme/                      project-owned source skills
+    <project>/                 optional first-party Git submodule with its own modules
   imported/                    reviewed third-party source skills
   profiles/
     root.txt                   root active declaration
@@ -25,6 +26,7 @@ Subprojects use the same two runtime homes. They do not need their own source in
 ## Rules
 
 - Keep `.skills/yeisme/` and `.skills/imported/` as the only source layers.
+- First-party product collections may be mounted as Git submodules below `.skills/yeisme/<project>/`; they remain part of the Yeisme source layer and must not duplicate Skill names in the parent source.
 - Keep `.agents/skills/` and `.claude/skills/` as real generated directories, never symlinks and never maintenance sources.
 - Keep active runtime small. Leave release-only, audit-only, design-only, or rare skills in the source layer for on-demand loading.
 - Do not create `.skillctl/available/`, root `skills/`, `my-skills/`, `agent-skills/`, or project-owned `.codex/skills/` duplicates.
@@ -71,6 +73,7 @@ Validation must check:
 - `.agents/skills` and `.claude/skills` contain the same names and bytes;
 - runtime contents match the declared profile plus explicitly owned generated skills;
 - retired duplicate directories are absent.
+- source submodules and their `.gitmodules` metadata are allowed; generated runtimes must still be derived from the same stable Skill names.
 
 ## Migration
 
