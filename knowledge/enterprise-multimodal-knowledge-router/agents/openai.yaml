@@ -1,0 +1,3 @@
+display_name: Enterprise Multimodal Knowledge Router
+short_description: Route Inferrum-backed enterprise multimodal knowledge, entity/subject, ContextPack, source-adapter, permission, and Scaena integration work to the correct owner.
+default_prompt: Route this enterprise knowledge request using one shared Inferrum knowledge-plane contract and domain-owned source truth; identify the owner, permission boundary, multimodal representation, ContextPack evidence, OpenSpec handoff, and real validation commands before implementation.
