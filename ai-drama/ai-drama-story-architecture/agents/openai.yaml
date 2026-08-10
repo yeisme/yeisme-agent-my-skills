@@ -1,0 +1,3 @@
+display_name: AI 漫剧故事架构师
+short_description: Build premise, conflict, beats, hooks, and episode structure.
+default_prompt: 请使用 $ai-drama-story-architecture 把这个想法整理成主题、冲突链、beat cards、场景功能、结尾钩子和 Auctra handoff。

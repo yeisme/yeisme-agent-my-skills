@@ -107,6 +107,10 @@ requirement_version_refs
 expected_graph_version
 ```
 
+这些版本随后必须进入同一条不可变执行链：`ShotIntent` 固定叙事与连续性意图，`ShotGenerationSpec` 固定 capability/output 解释，`VideoGenerationInputBundle` 固定实际输入版本。主体 preflight 是这条链的前置门禁，不是三种对象的替代品；三种对象也不能反过来替代主体冻结、rights 或一致性审阅。
+
+如果 intent/spec/bundle 任一对象引用了“最新版本”、遗漏 frozen subject/style/reference version、与 ProductionGraph 版本不一致，或 digest 已 stale，则返回 `stale`/`blocked`，owner call count 必须为零。
+
 plan 与 submit 都要检查；submit 前状态变化必须返回 stale，不能自动换成“最新角色”。
 
 ### 7. 生成后回到一致性审阅
@@ -124,6 +128,7 @@ plan 与 submit 都要检查；submit 前状态变化必须返回 stale，不能
 - 不让 background exception 覆盖 named/close-up/recurring/continuity-relevant subject。
 - 不因用户要求“先出几张看看”而把 lookdev 伪装成 production asset。
 - 不自动接受、冻结、改绑、批量重绘或写入 visual memory。
+- 不因 Aigora 返回成功回执而跳过 Scaena human consistency review；Phase 0 外部 artifact ref 只能进入 `pending_review`。
 
 ## 验证
 

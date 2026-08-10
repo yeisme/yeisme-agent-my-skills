@@ -1,13 +1,12 @@
 ---
 name: orbital-studio-experience
-description: Use when designing, implementing, or reviewing Auctra Studio, Scaena production, or Yeisme Workbench creative workspaces that need the Orbital Studio System, bounded Pane layouts, data workspaces, context actions, Agent collaboration, responsive behavior, accessibility, or visual blacklist enforcement without moving canonical domain authority into the client.
+description: Use when designing, implementing, or reviewing Scaena production or Yeisme Workbench workspaces that need the Orbital Studio System, bounded Pane layouts, data workspaces, context actions, Agent collaboration, responsive behavior, accessibility, or visual blacklist enforcement without moving canonical domain authority into the client.
 ---
 
 # Orbital Studio Experience
 
-Apply one shared interaction grammar while preserving three distinct products:
+Apply one shared interaction grammar while preserving two distinct products:
 
-- `Editorial Orbit`: Auctra Studio manuscript, Story World, Scene Matrix, and proposal/review comparison.
 - `Production Orbit`: Scaena production ProductionGraph, shot/asset workspaces, preview, review, and delivery gates.
 - `Operations Orbit`: Yeisme Workbench owner health, Task, Operation, Receipt, Evidence, and safe deep links.
 
@@ -25,7 +24,7 @@ Read the owning product PRD/OpenSpec, public client contract, capability manifes
 
 ## Workflow
 
-1. **Select one variant.** Choose Editorial, Production, or Operations Orbit from the user job and canonical owner. Do not blend all three into one generic dashboard.
+1. **Select one variant.** Choose Production or Operations Orbit from the user job and canonical owner. Do not blend both into one generic dashboard.
 2. **State the page question.** Define what the user must decide or repair on each page before choosing layout or components.
 3. **Map contracts.** For every chart, board, table, graph, Pane, action, Agent entry, and deep link, name the owner projection/action, version, freshness, permission, expected version, receipt, evidence, and recovery path.
 4. **Design the Pane system.** Use a versioned `PaneLayoutV1`, registered Pane kinds, maximum split depth 2, default maximum 3 visible Panes, hard maximum 4, bounded drop zones, and safe object refs. Keep project-shared layouts in the owner `SavedViewV1` service.
@@ -61,4 +60,4 @@ Run the owning subproject's declared contract, component, integration/E2E, acces
 - every action has permission/version/idempotency/recovery semantics;
 - every drag action has keyboard/menu parity;
 - unknown/partial/offline states remain truthful;
-- Editorial, Production, and Operations inputs produce visibly different workspaces while preserving the same safety grammar.
+- Production and Operations inputs produce visibly different workspaces while preserving the same safety grammar.

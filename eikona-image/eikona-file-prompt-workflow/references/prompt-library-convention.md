@@ -15,7 +15,7 @@ prompts/<owner>/<asset-type>/<collection>/<artifact>
 | `collection` | 一个可共同评审的主题或交付单元 | `local-first-cli`, `summer-launch`, `brief-123`, `shot-042` |
 | `artifact` | 集合索引、runbook 或候选 prompt | `README.md`, `runbook.yaml`, `prompts/01-clean-editorial.md` |
 
-不要把 `openai`, `gateway`, `gpt-image-2`, `2026-07-17` 或个人姓名作为稳定顶层分类。provider、模型、尺寸、并发和成本属于 runbook；时间、作者和状态属于集合 README。
+不要把 `openai`, `gateway`, `openai/gpt-5.4-image-2`, `2026-07-17` 或个人姓名作为稳定顶层分类。provider、模型、尺寸、并发和成本属于 runbook；时间、作者和状态属于集合 README。
 
 ## 推荐目录
 
@@ -92,13 +92,13 @@ prompts/
 把：
 
 ```bash
-eikona generate --model openai:gpt-image-2 --prompt "<long prompt>" --json
+eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --prompt "<long prompt>" --json
 ```
 
 迁移为：
 
 ```bash
-eikona generate --model openai:gpt-image-2 --input prompts/<owner>/<asset-type>/<collection>/prompts/01-<direction>.md --json
+eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --input prompts/<owner>/<asset-type>/<collection>/prompts/01-<direction>.md --json
 ```
 
 迁移时不要把 shell 转义符、命令参数、模型名或 `--set` provider options 写进 prompt 文件。

@@ -55,11 +55,11 @@ Output: summary, findings, sources, limits.
 
 ### `local-research-infra`
 
-Goal: choose or debug search, scraping, Research Harness, and browser escalation in a Yeisme/Connectors/OpenWebUI local deployment.
+Goal: choose or debug search, scraping, Research Harness, and browser escalation in a Yeisme/OpenWebUI local deployment.
 
 Signals:
 
-- "Connectors/OpenWebUI research"
+- "OpenWebUI research"
 - "Open WebUI search"
 - "Research Harness"
 - "SearXNG/Firecrawl local service"

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Auctra AI Drama Panel Handoff"
+  short_description: "Compile panel packets and review intake"
+  default_prompt: "Use $auctra-ai-drama-panel-handoff to prepare an Ordo packet or validate a review-only result."

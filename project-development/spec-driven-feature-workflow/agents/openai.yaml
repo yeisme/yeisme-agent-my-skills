@@ -1,0 +1,3 @@
+display_name: "Spec-Driven Feature Workflow"
+short_description: "Create shared feature specifications."
+default_prompt: "Use $spec-driven-feature-workflow to turn this feature request and its design inputs into a shared specification and acceptance plan."

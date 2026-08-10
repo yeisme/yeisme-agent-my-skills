@@ -16,6 +16,8 @@ Default to backup sync, not real-time sync:
 - S3-compatible storage, rclone, NAS, and cloud drives provide backup, restore, migration, and disaster recovery mirrors.
 - Real-time sync, file watchers, background daemons, automatic merge, and conflict resolution require a separate design with explicit conflict, lock, rollback, evidence, and credential boundaries.
 
+Pinax is a product-specific exception to generic mirror ordering: when Pinax owns the vault and the binary supports it, prefer Pinax-native repository-encrypted S3/COS Capsa Sync. Git carries reviewable Markdown plus encrypted declaration/ciphertext; rclone is only an external fallback. Do not replace a working Pinax-native design with raw directory mirroring.
+
 ## Inputs
 
 - Project state directories, for example `.eikona`, `.auctra`, `.scaena`, `.pinax`, `.gitpulse`, `.app`, `.tool`, or another local-first project directory.
@@ -28,7 +30,7 @@ Default to backup sync, not real-time sync:
 2. Classify the requested work:
    - cross-project policy or skill docs: repository workflow docs and skill docs;
    - one product's backup behavior: the owning subproject docs, OpenSpec, and CLI implementation;
-   - Pinax Cloud Sync/S3/rclone operation: route through `pinax-agent-router`, then `pinax-sync-storage-operator`;
+   - Pinax Capsa Sync/S3/rclone operation: route through `pinax-agent-router`, then `pinax-sync-storage-operator`; prefer repository-encrypted S3/COS, then Git companion/fallback, then rclone external fallback;
    - Eikona storage behavior: use `yeisme-eikona-cli-runtime` after reading Eikona storage docs.
 3. Identify Git-managed state directories. For Yeisme defaults:
 
@@ -45,7 +47,7 @@ eikona storage push --backend s3 --yes --json
 eikona storage restore --backend s3 --revision <revision> --to temp/storage-restore --json
 ```
 
-5. For generic repository mirrors, use rclone with explicit excludes:
+5. For generic non-Pinax repository mirrors, use rclone with explicit excludes:
 
 ```bash
 rclone copy . remote:project-backup --exclude '.git/**' --exclude '**/node_modules/**' --exclude '**/temp/**' --exclude '**/dist/**'
@@ -62,7 +64,7 @@ rclone check . remote:project-backup --one-way --exclude '.git/**' --exclude '**
 - Do not commit or upload plaintext secrets, raw provider payloads, raw prompts containing private data, hidden prompts, private tool arguments, full chain-of-thought, local credential stores, SQLite WAL/SHM, vector indexes, caches, thumbnails, `temp/`, `dist/`, or `node_modules`.
 - Do not claim a remote write succeeded unless the owning CLI reports `remote_write=true` or an equivalent success fact.
 - Do not recommend shell credential scripts as a persistence layer.
-- Prefer encrypted envelopes or CLI-generated backup objects over raw local library directory mirroring.
+- Prefer product-native encrypted envelopes and CLI-generated backup objects over raw local directory mirroring. For Pinax, repository-encrypted S3/COS is the preferred target workflow.
 - In Yeisme docs, use `.eikona` as the correct path spelling; `.eikoan` is a typo.
 
 ## Outputs
@@ -97,4 +99,4 @@ openspec validate --all
 go test ./internal/storage ./internal/storagesync ./internal/cli -run 'Storage|S3|Backend|Restore|Push|Pull' -count=1
 ```
 
-For Pinax sync/storage operations, use routed Pinax operator commands and validate with `pinax storage status --json`, `pinax cloud status --json`, and `pinax sync diff --target cloud --json` when available.
+For Pinax sync/storage operations, use routed Pinax operator commands and validate with `pinax sync status --agent`, `pinax sync repo doctor --json`, and `pinax sync diff --target capsa --json` when available.

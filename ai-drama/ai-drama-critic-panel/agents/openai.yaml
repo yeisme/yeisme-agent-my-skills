@@ -1,0 +1,3 @@
+display_name: AI 漫剧多评委评估
+short_description: Blind-score candidates, resolve disagreement, and propose repairs.
+default_prompt: 请使用 $ai-drama-critic-panel 并行评估这些候选，按 rubric 打分、记录分歧和 blocker，并给出 Sol 裁决与下一步。

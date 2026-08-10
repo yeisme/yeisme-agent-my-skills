@@ -1,9 +1,11 @@
 ---
 name: eikona-gateway-bootstrap
-description: Use when a user provides an image gateway base URL, API key, channel name, or exact image model ID and wants an agent to install, configure, verify, or reuse Eikona across projects without writing provider scripts or storing credentials in repositories.
+description: Use when a user provides an image gateway base URL, API key, channel name, or exact image model ID and wants an agent to install, configure, verify, diagnose reference-image support, or reuse Eikona across projects without writing provider scripts or storing credentials in repositories.
 ---
 
 # Eikona 网关快速接入
+
+开始前先读取 `cli/eikona/docs/commands/agent-operability.md`，并报告该文档定义的 evidence vector 与 conservative effective level。`configured=pass` 或 `remote_probed=degraded` 不能授权生成；只有用户明确同意潜在费用时，才可以进入 paid/live gate。
 
 把用户提供的 OpenAI-compatible 图像网关接入 Eikona 用户级 auth store，验证准确模型路由，并把后续生成交给 Eikona evidence、review、feedback 和 handoff 链路。
 
@@ -25,8 +27,10 @@ eikona init --user --json
 ```
 
 2. 选择 Eikona model ref：
-   - GPT Image 默认使用 `openai:gpt-image-2`。
+   - GPT Image 默认使用 `openai/gpt-5.4-image-2`。
+   - `gpt-5.4-image-2` 和 `gpt-image-2` 是兼容短别名；历史 `openai:gpt-image-2` 仅接受为兼容输入，不作为新默认。
    - 普通 OpenAI-compatible gateway 使用 `openai:<exact-model-id>`。
+   - 如果 `/v1/models` 返回的完整 ID 本身包含 slash，例如 `openai/gpt-5.4-image-2`，必须把该 slash ID 原样复制到 Eikona；不要改写成 `openai:gpt-5.4-image-2`。
    - ImageRouter 使用 `imagerouter:<exact-model-id>`。
    - OpenRouter 使用 `openrouter:<exact-model-id>`。
    - 前缀表示 Eikona adapter，不表示营销名称；不要把 `Nano Banana Pro` 自动改写成任何猜测 ID。
@@ -39,12 +43,27 @@ printf '%s\n' "$EIKONA_API_KEY" | eikona auth set gateway \
   --protocol openai \
   --base-url https://gateway.example.com/v1 \
   --api-key-stdin \
-  --default-model openai:gpt-image-2 \
+  --default-model openai/gpt-5.4-image-2 \
   --json
 unset EIKONA_API_KEY
 ```
 
 把 `--default-model` 替换为网关公开的准确 Eikona model ref。只有用户明确要求隔离 channel 时才使用 `eikona --config <path> auth set ...`。不要运行 `eikona auth env`，因为它会把 secret 输出到 stdout。
+
+当前开发网关若 `/v1/models` 返回 `openai/gpt-5.4-image-2`，配置示例必须写成：
+
+```bash
+read -rsp 'Gateway API key: ' EIKONA_API_KEY; echo
+printf '%s\n' "$EIKONA_API_KEY" | eikona auth set gateway \
+  --protocol openai \
+  --base-url http://dev.qxtech.cc:26160/v1 \
+  --api-key-stdin \
+  --default-model openai/gpt-5.4-image-2 \
+  --json
+unset EIKONA_API_KEY
+```
+
+`openai:gpt-5.4-image-2` 是已知歧义错误形式，必须在联网前失败并提示改用 `openai/gpt-5.4-image-2`。
 
 4. 读取脱敏状态并注册当前项目：
 
@@ -52,14 +71,35 @@ unset EIKONA_API_KEY
 eikona auth check gateway --agent
 eikona config inspect --agent
 eikona projects register . --agent
+eikona models readiness openai/gpt-5.4-image-2 --channel gateway --agent
 ```
 
-5. 根据网关协议做真实 smoke generation。GPT Image 的 OpenAI Images-compatible 示例：
+5. 先把纯文生图作为独立基线。只有用户任务需要参考图、且用户同意潜在费用时，才继续验证参考输入；不要把三种能力混成一次 smoke：
+
+| 能力 | Eikona 请求 | 首选接口 | 结论 |
+| --- | --- | --- |
+| 纯文生图 | 无 `--ref` 的 `image.generate` | `/images/generations` | 证明模型和基础路由可用，不证明图生图可用 |
+| 编辑式图生图 | `--ref` + `--reference-mode edit` | multipart `/images/edits` | 输入图是待修改画布 |
+| 参考图条件生成 | `--ref` + `--reference-mode generate` | `/responses` multimodal `input_image` | 输入图只提供风格、布局或主体指导 |
+
+编辑能力 smoke：
+
+```bash
+eikona generate --use-channel gateway --model openai/gpt-5.4-image-2 --ref ./reference.png --reference-mode edit --size 1024x1024 --prompt "Keep the source composition and make the background warmer." --agent
+```
+
+参考条件生成 smoke：
+
+```bash
+eikona generate --use-channel gateway --model openai/gpt-5.4-image-2 --ref style=./reference.png --reference-mode generate --size 2k --aspect 16:9 --prompt "Create a new product page using only the reference's visual language." --agent
+```
+
+6. 根据网关协议做真实 smoke generation。GPT Image 的 OpenAI Images-compatible 示例：
 
 ```bash
 eikona "minimal geometric product image, white background, no text" \
   --channel gateway \
-  --model openai:gpt-image-2 \
+  --model openai/gpt-5.4-image-2 \
   --size 1024x1024 \
   --set api=images \
   --wait \
@@ -89,7 +129,7 @@ eikona "minimal geometric product image, white background, no text" \
   --agent
 ```
 
-6. smoke 成功后，把视觉任务交给 `eikona-product-asset-director` 或匹配的垂直场景 director。切换项目时只需在新项目运行：
+7. smoke 成功后，把视觉任务交给 `eikona-product-asset-director` 或匹配的垂直场景 director。切换项目时只需在新项目运行：
 
 ```bash
 eikona projects register . --agent
@@ -102,6 +142,13 @@ eikona projects list --json
 eikona projects repair-root <project_id> --root /new/project/path --json
 ```
 
+## 参考图失败诊断
+
+1. 使用 `eikona inspect <run_id> --json` 读取当前 CLI 暴露的脱敏失败摘要，并结合 `eikona providers doctor <provider> --agent`。如果输出没有明确区分 endpoint 或 transport，就保持 `unknown/degraded`；不要只凭“带参考图失败”猜根因。
+2. 只有现有证据明确标识 `/images/edits` 为 unsupported 时，才能说明编辑接口不可用。任务意图是“新生成并参考风格”时，可以在获得用户同意后用新的 `--reference-mode generate` run 验证另一语义路径。
+3. 只有现有证据明确标识 multimodal reference input 不受支持时，才记录该 channel 的对应能力缺口。不要继续手工轮换 transport，也不要声称已保留参考图一致性。
+4. 用户接受语义降级后，创建一个新的无 `--ref` run，并把参考图中的可见约束转写为明确产品 brief。失败 run 保留用于审计；认证、限流、内容拒绝、超时、TLS 或 malformed response 不是参考图不支持的证据，不得通过删除参考图掩盖。
+
 ## 输出
 
 - channel、protocol、base URL、credential configured 状态、准确 model ref、transport、project ID 和下一条真实 Eikona 命令。
@@ -113,6 +160,7 @@ eikona projects repair-root <project_id> --root /new/project/path --json
 - 不把 key 写入仓库、项目 `.eikona/config.yaml`、命令参数、日志、trace、run evidence 或 skill 输出。
 - 不调用 `auth env`，不从 human output 解析状态；agent 自动化使用 `--json`、`--agent` 或 `--events`。
 - 如果当前 Eikona runtime 无法把该 channel、adapter 或 transport 路由到网关，停止生成并交给 `yeisme-eikona-cli-runtime`；不要绕过 Eikona 直接调用网关。
+- 不把纯文生图成功描述成编辑式图生图或参考图条件生成成功；三种能力必须分别验证和报告。
 
 ## 验证
 

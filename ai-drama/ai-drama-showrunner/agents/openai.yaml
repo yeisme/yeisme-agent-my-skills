@@ -1,0 +1,3 @@
+display_name: AI 漫剧总制片编剧
+short_description: Plan seasons, episodes, payoffs, hooks, and long arcs.
+default_prompt: 请使用 $ai-drama-showrunner 为这个项目规划季/集功能、人物变化、悬念兑现、结尾钩子和生产优先级。

@@ -1,4 +1,4 @@
 interface:
   display_name: "Anatomia Video Analysis Router"
-  short_description: "Route and run Anatomia video decomposition workflows."
-  default_prompt: "Use $anatomia-video-analysis-router to choose a domain profile and start or resume a video analysis."
+  short_description: "Route video decomposition, storyboard review, and script-learning handoff."
+  default_prompt: "Use $anatomia-video-analysis-router to decompose this authorized video, preserve temporal evidence, and route reviewed observations toward storyboard, Auctra script research, or production handoff."

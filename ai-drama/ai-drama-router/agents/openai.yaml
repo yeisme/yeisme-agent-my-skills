@@ -1,0 +1,3 @@
+display_name: AI 漫剧总路由器
+short_description: Route AI drama tasks to the narrowest skill and owner.
+default_prompt: 请使用 $ai-drama-router 把这个做剧任务路由到最小合适的 Skill，列出输入、门禁、Owner handoff 和下一步。

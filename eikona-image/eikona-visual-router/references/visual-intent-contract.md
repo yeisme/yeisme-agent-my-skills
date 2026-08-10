@@ -52,7 +52,7 @@ eikona workflow validate -f workflow.yaml --json
 eikona workflow plan -f workflow.yaml --json
 ```
 
-Blocked or stale readiness fails compilation. Model defaults to `openai:gpt-image-2`; provider/credential resolution remains runtime responsibility.
+Blocked or stale readiness fails compilation. Model defaults to `openai/gpt-5.4-image-2`; `gpt-5.4-image-2` and `gpt-image-2` are accepted aliases, while provider/credential resolution remains runtime responsibility.
 
 ## Evidence files (per run)
 

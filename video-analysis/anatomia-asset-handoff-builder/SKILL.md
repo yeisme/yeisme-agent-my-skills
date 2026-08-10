@@ -35,7 +35,7 @@ anatomia handoff mediahub analysis:demo --revision analysis-revision:demo:v2 --j
 ## Owner Boundaries
 
 - Scaena owns production review, frozen editing scripts and ProductionGraph/EditTimeline materialization.
-- Eikona owns image generation, artifacts, feedback and visual memory. New image generation defaults remain `openai:gpt-image-2` inside Eikona.
+- Eikona owns image generation, artifacts, feedback and visual memory. New image generation defaults use `openai/gpt-5.4-image-2`; `gpt-5.4-image-2` and `gpt-image-2` remain accepted short aliases.
 - Sonora owns voice, music, SFX generation, rights and audio review.
 - MediaHub owns library ingest, Jellyfin organization, browse and review.
 - Connectors owns chat delivery and provider identity.

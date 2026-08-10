@@ -1,0 +1,3 @@
+display_name: "AI 漫剧视频参考导演"
+short_description: "把 Blender 参考视频编译为镜头约束与生成交接"
+default_prompt: "请使用 $ai-drama-video-reference-director 把这个 Blender 参考视频编译成 Scaena 镜头输入、Seedance 生成计划和连续性审核门禁。"

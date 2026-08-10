@@ -1,0 +1,3 @@
+display_name: "API Contract Parallel Workflow"
+short_description: "Synchronize contracts and isolate frontend/backend delivery lanes."
+default_prompt: "Use $api-contract-parallel-workflow to freeze the API contract, keep preview-critical client work in the current workspace, isolate backend hot-reload work, and define staged integration checkpoints."

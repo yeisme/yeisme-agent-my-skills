@@ -1,6 +1,6 @@
 ---
 name: ordo-runtime-canary-evaluation
-description: Use when planning, running, reviewing, or promoting protected Ordo real-runtime canaries for Codex, Claude Code, OMP, Pi compatibility, or future Hermes adapters, including runtime competition, safety hard gates, quality scoring, redacted evidence, validation cohorts, and first-support decisions.
+description: Use when planning, running, reviewing, or promoting protected Ordo Goal/workspace runtime canaries for Codex, Claude Code, OMP, Pi compatibility, or future Hermes adapters, including current-branch defaults, explicit isolation, safety hard gates, quality scoring, redacted evidence, validation cohorts, and promotion decisions.
 ---
 
 # Ordo Runtime Canary Evaluation
@@ -9,6 +9,7 @@ description: Use when planning, running, reviewing, or promoting protected Ordo 
 
 - Stable offline protocol, planning, worktree, verification, and evidence tests.
 - Isolated fixture repository and one identical bounded software-delivery task.
+- Goal target revision, task binding, workspace mode, and current/isolated branch policy.
 - Runtime doctor facts, explicit operator opt-in, timeout, writer, repair, and side-effect budgets.
 - Redacted cohort id and confirmed consent for validation-ledger runs.
 
@@ -26,6 +27,16 @@ Require all of these hard gates for every runtime:
 - zero duplicate writer, unapproved side effect, secret leak, or tracked-file verifier mutation.
 
 Any missing hard gate keeps the runtime experimental regardless of score.
+
+## Workspace Canary Order
+
+Run the canary in this order:
+
+1. Start with the current repository root/current branch in `observe` mode and one writer. This proves the default policy without manufacturing a worktree.
+2. Run an isolated canary only when the operator has an explicit parallelism reason. The worktree must be below `.agents/worktrees/<safe-target>/<safe-task>` and the branch/worktree identity must be recorded in the target lease.
+3. Promote to `required` only after the current/isolated run has complete evidence, independent verification, redaction checks, and zero duplicate writers. Roll back to `observe` on a deterministic adapter defect; never use a skill to bypass a denial.
+
+Read-only and verifier canary steps do not create writer leases or worktrees. A timeout, retained lease, target drift, unknown session, or path mismatch keeps the run blocked until reconciliation.
 
 ## Runtime Competition
 
@@ -81,3 +92,4 @@ Return admission status, hard-gate results, quality score inputs, selected runti
 - Do not grant Git external-write authority from a successful canary.
 - Do not let a runtime adapter own Ordo DAG, lease, approval, acceptance, or cleanup truth.
 - Do not claim external validation from internal-only cohorts.
+- Do not create an isolated worktree merely because a task is write-capable; isolation must be explicit and project-local.

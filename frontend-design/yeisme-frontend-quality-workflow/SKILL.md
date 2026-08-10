@@ -20,6 +20,7 @@ Use this skill for frontend toolchain and UI quality work in Yeisme projects.
 - Design references: `@storybook/addon-designs`.
 - Quality gates: Lighthouse, Axe, keyboard navigation, ARIA, color contrast, console errors, network failures.
 - External rules corpus: Front-End Checklist for launch, accessibility, SEO, security, performance, image, privacy, i18n, HTML, CSS, JavaScript, and testing rule lookups.
+- Motion gate: `yeisme-ui-motion-quality` for enter/exit, overlay, list continuity, reduced-motion, focus return, and rendering-cost evidence.
 - Real integration testing: Playwright plus browser-use for browser workflows that should exercise the app like a user.
 - TypeScript Web/Node test layering: Vitest, Testing Library, MSW, Supertest or framework injection, Testcontainers or docker compose, and limited Playwright browser E2E.
 
@@ -37,6 +38,7 @@ Use this skill for frontend toolchain and UI quality work in Yeisme projects.
 - Do not accept hand-written SVG icons when `lucide-react` has a suitable icon.
 - Do not accept axios in new frontend code; HTTP should use native `fetch` through a typed API client.
 - Do not accept new untyped JavaScript frontend app files.
+- Do not make `motion`, AutoAnimate, GSAP, React Spring, or another animation library a default dependency; inspect the owning app first and justify any addition with a product need and budget.
 - Do not use npm, pnpm, or yarn commands for new frontend work; use Bun unless the owning project already mandates a different package manager.
 - Do not add a second test framework when the owning TypeScript Web/Node project already has a suitable runner and harness.
 - Do not accept a page whose controls only look real. Visible interactive controls must open, close, select, filter, preview, dismiss, navigate, submit, or expose an intentional disabled/pending state.
@@ -97,6 +99,7 @@ Taste or brand guidance is useful before implementation, but it is not a substit
    - visual blacklist violations to check
    - styling boundary: Tailwind entry + tokens only in CSS, JSX utilities and recipes for component/page styling
    - admin console checks: no hero, no decorative gradients, fixed sidebar/top bar shell when building a management app, compact PageHeader, semantic statuses, restrained radius and shadows, DataTable density, Cmd/Ctrl+K command palette where global search exists
+   - motion contract: use `yeisme-ui-motion-quality` to review spatial continuity, interruptibility, reduced-motion behavior, focus return, and layout/rendering cost
 4. If Storybook is missing, initialize with the package manager used by that frontend, for example:
 
 ```bash

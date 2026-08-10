@@ -1,6 +1,6 @@
 ---
 name: anatomia-video-analysis-router
-description: Use when registering, starting, resuming, inspecting, cancelling, or routing an Anatomia video decomposition job across live-action, anime, CG, short-video, commercial, tutorial, music-video, or documentary profiles through the Anatomia CLI or API.
+description: Use when registering, starting, resuming, inspecting, cancelling, or routing an Anatomia video decomposition job across live-action, anime, CG, short-video, commercial, tutorial, music-video, or documentary profiles through the Anatomia CLI or API, including reviewed video-to-storyboard, video-to-script reconstruction, or Auctra pattern-learning handoff.
 ---
 
 # Anatomia Video Analysis Router
@@ -21,6 +21,7 @@ Use Anatomia as the video-analysis owner. Do not replace it with Scaena, Eikona,
 4. Start the analysis and capture `analysis_ref`, `job_ref`, status, blockers, and event URL.
 5. Resume retryable partial work; never restart a duplicate job with the same fingerprint.
 6. Route review work to `$anatomia-storyboard-reviewer` and export/handoff work to `$anatomia-asset-handoff-builder`.
+7. If the goal is to learn narrative structure or reconstruct a new script, route reviewed temporal/storyboard observations through `$anatomia-scaena-learning-loop`, then `$auctra-screenplay-pattern-research`; do not send raw captions or one model summary directly to Auctra recipe or Scaena production.
 
 ## Commands
 
@@ -39,10 +40,11 @@ anatomia analyze cancel analysis:demo --json
 - Do not write `.anatomia/**` structured state by hand.
 - Do not expose credentials, raw provider payloads, private tool arguments, full reasoning, or host absolute paths.
 - Do not invoke Eikona or Sonora generation unless the user requests a downstream handoff and required approval gates pass.
+- For `recreate`, separate factual observation from inferred story intent and from original adaptation. Do not promise a frame-for-frame, dialogue-for-dialogue, or identity-preserving clone of a third-party work.
 
 ## Output
 
-Return the selected domain/mode/profile, analysis/job refs, status, blockers, available actions, artifact/evidence refs, and the next real command.
+Return the selected domain/mode/profile, analysis/job refs, status, blockers, available actions, artifact/evidence refs, the reviewed script-learning route when requested, and the next real command.
 
 ## Validation
 

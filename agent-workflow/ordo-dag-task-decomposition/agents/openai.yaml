@@ -1,3 +1,3 @@
 display_name: Ordo DAG Task Decomposition
-short_description: Turn approved work into atomic Ordo task DAGs.
-default_prompt: Use Ordo task contracts to decompose this approved change into atomic tasks, explicit dependencies, owned paths, verification commands, and reviewable derived edges.
+short_description: Turn approved OpenSpec Goals into atomic Ordo task DAGs.
+default_prompt: Use Ordo Goal target and task contracts to decompose this approved change into atomic tasks with explicit workspace modes, dependencies, owned paths, verification commands, and reviewable derived edges.

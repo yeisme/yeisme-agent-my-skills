@@ -1,3 +1,0 @@
-display_name: Yeisme TaskBridge Runtime Alias
-short_description: Compatibility alias that routes TaskBridge runtime maintenance to the Connectors-owned task runtime skill.
-default_prompt: Use yeisme-connectors-task-runtime and work in backend-server/connectors while preserving the TaskBridge compatibility command and schema contracts.

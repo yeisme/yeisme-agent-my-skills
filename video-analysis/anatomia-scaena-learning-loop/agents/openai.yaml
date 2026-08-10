@@ -1,4 +1,4 @@
 interface:
   display_name: "Anatomia Scaena Learning Loop"
-  short_description: "Turn verified video outcomes into reviewed product learning."
-  default_prompt: "Use $anatomia-scaena-learning-loop to turn reviewed video analyses and production outcomes into recipes, evaluations, and capability proposals."
+  short_description: "Route verified video learning to Auctra narrative or Scaena production owners."
+  default_prompt: "Use $anatomia-scaena-learning-loop to turn reviewed video analyses and production outcomes into scoped Auctra dramatic evidence, Scaena production learning, evaluations, or capability proposals."

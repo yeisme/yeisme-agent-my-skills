@@ -1,0 +1,3 @@
+display_name: AI 漫剧连续性监督
+short_description: Detect and repair identity, space, action, and timeline drift.
+default_prompt: 请使用 $ai-drama-continuity-supervisor 对这些镜头建立 continuity matrix，标出 blocker、证据和最小修复提案。

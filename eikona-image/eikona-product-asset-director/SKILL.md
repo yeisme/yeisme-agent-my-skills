@@ -7,6 +7,8 @@ description: Use when an agent building a website, application, documentation si
 
 把产品代码、页面用途和品牌约束转成 Eikona visual brief，完成候选生成、审稿、反馈、复用和安全交付，避免 agent 为每个项目重复编写 provider 脚本。
 
+开始前读取 `cli/eikona/docs/commands/agent-operability.md` 并现场收集适用证据。`configured`、fixture 或历史快照都不能授权真实 provider run；任何非 fixture 的 `generate`、`run --background` 或 workflow execution 都需要用户对指定 provider/model 和潜在费用的明确同意。
+
 ## 输入
 
 - 当前项目、框架、目标页面或组件、资产用途和目标路径。
@@ -39,16 +41,20 @@ eikona auth list --agent
 eikona auth check gateway --agent
 ```
 
-3. 形成 visual brief：目标、主体、构图、标题安全区、色彩、风格、尺寸、裁切策略、禁用项和目标文件。用户未指定尺寸时使用原生 `2k`；用户明确给出其他 size 时原样保留。默认真实模型使用 `openai:gpt-image-2`；用户指定其他模型时必须使用网关准确 model ID。
+3. 形成 visual brief：目标、主体、构图、标题安全区、色彩、风格、尺寸、裁切策略、禁用项和目标文件。用户未指定尺寸时使用原生 `2k`；用户明确给出其他 size 时原样保留。默认真实模型使用 `openai/gpt-5.4-image-2`；`gpt-5.4-image-2` 与 `gpt-image-2` 作为兼容短别名，用户指定其他模型时必须使用网关准确 model ID。
+   - 输入图是要被局部修改或重绘的画布时，使用 `reference_mode=edit`。
+   - 输入图只提供风格、布局、主体或品牌语言，且目标是全新画布时，使用 `reference_mode=generate`；产品 UI canary 默认属于这一类。
+   - 网关不支持参考输入时，不得静默删除 reference。先保留失败证据并报告能力缺口；只有用户接受后，才把可见约束转写为明确 brief，创建独立的纯文生图 run，并标注无法保证像素级或 identity/style 一致性。
 4. 加载 `eikona-file-prompt-workflow`，将 brief 索引和 3–4 个候选方向保存到 `prompts/product/<asset-type>/<collection>/`。一个候选一个 prompt 文件，模型和尺寸写入 runbook。
-5. 先检查集合展开，再生成候选。产品 hero 示例：
+5. 先检查集合展开。获得 paid/live gate 的明确同意后，才生成真实候选。产品 hero 示例：
 
 ```bash
 eikona run -f prompts/product/landing-hero/local-first-cli/runbook.yaml --dry-run --json
+# Only after explicit approval for the configured provider/model and potential cost:
 eikona run -f prompts/product/landing-hero/local-first-cli/runbook.yaml --background --json
 ```
 
-网关模型不是 GPT Image 时，保留相同 Eikona 流程，只替换准确 model ref 和网关要求的 `--set api=images|chat`；不要猜 Nano Banana model ID。
+网关模型不是 GPT Image 时，保留相同 Eikona 流程，只替换准确 model ref 和网关要求的 `--set api=responses|images|chat`；不要猜 Nano Banana model ID，也不要假设纯文生图成功等于参考输入可用。
 
 6. 获取 review packet，按实际使用场景检查主体、品牌、文字伪影、文案安全区、桌面/移动裁切、尺寸和版权风险：
 

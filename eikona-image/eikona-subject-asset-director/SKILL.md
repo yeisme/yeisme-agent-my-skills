@@ -45,13 +45,31 @@ description: Use when creating or repairing Eikona character identity sheets, su
 - 一个 `.md`/`.txt` 文件对应一个候选方向；runbook/prompt source/evidence 由 Eikona CLI 创建，不手写结构化 metadata。
 - Prompt 只使用允许公开给 provider 的 source facts；不要包含完整 canon、隐藏剧透、credential、provider payload 或内部推理。
 
+Eikona 默认模型使用完整 canonical ref：`openai/gpt-5.4-image-2`。`gpt-5.4-image-2` 与 `gpt-image-2` 是接受的短别名；历史 `openai:gpt-image-2` 只作为兼容输入。网关其他模型必须复制 `/v1/models` 的完整 ID；`openai:gpt-5.4-image-2` 是禁止的歧义形式。
+
 ### 4. 先 fixture/dry-run，再真实生成
 
 进入 `cli/eikona`，读取本地 `AGENTS.md`，确认实际命令 help。单个 prompt 文件：
 
 ```bash
-eikona generate --model fixture:image --input prompts/scaena/subject-candidate/<subject-ref>/prompts/01-candidate-a.md --dry-run --json
-eikona generate --model openai:gpt-image-2 --input prompts/scaena/subject-candidate/<subject-ref>/prompts/01-candidate-a.md --json
+eikona generate \
+  --model fixture:image \
+  --input prompts/scaena/subject-candidate/<subject-ref>/prompts/01-candidate-a.md \
+  --size 2k \
+  --aspect 2:3 \
+  --dry-run \
+  --json
+
+eikona generate \
+  --use-channel openai \
+  --model openai/gpt-5.4-image-2 \
+  --ref subject=./references/source-subject.png \
+  --reference-mode generate \
+  --input prompts/scaena/subject-candidate/<subject-ref>/prompts/01-candidate-a.md \
+  --size 2k \
+  --aspect 2:3 \
+  --quality high \
+  --json
 ```
 
 需要 reference image 时使用 installed version 支持的 `--reference-image` 语法，并保留顺序。候选集合使用已有 runbook：
@@ -62,12 +80,37 @@ eikona run -f prompts/scaena/subject-candidate/<subject-ref>/runbook.yaml --back
 eikona wait <run_id> --json
 ```
 
-真实远程默认模型保持 `openai:gpt-image-2`。不要为 Scaena 专门创建 provider script 或另一套 scenario command。
+真实生成默认使用 `openai/gpt-5.4-image-2`。不要为 Scaena 专门创建 provider script 或另一套 scenario command。
+
+真实生成前先检查新 Eikona 的用户级 channel readiness：
+
+```bash
+eikona auth check openai --agent
+eikona models readiness openai/gpt-5.4-image-2 --channel openai --agent
+eikona providers doctor openai --channel openai --model openai/gpt-5.4-image-2 --probe --agent
+```
+
+用户级 channel 尚未配置时，必须显式提示用户通过 stdin 保存 key；不要隐式读取 `OPENAI_API_KEY`，也不要推荐 `--from-env OPENAI_API_KEY`：
+
+```bash
+read -rsp 'OpenAI-compatible API key: ' EIKONA_API_KEY; echo
+printf '%s\n' "$EIKONA_API_KEY" | eikona auth set openai \
+  --protocol openai \
+  --base-url http://dev.qxtech.cc:26160/v1 \
+  --api-key-stdin \
+  --default-model openai/gpt-5.4-image-2 \
+  --json
+unset EIKONA_API_KEY
+```
+
+`PROVIDER_UNAVAILABLE`、`PROVIDER_AUTH_MISSING` 或 readiness degraded 时必须保留原始失败 run 和 reference lineage；
+修复 provider 后重试同一 prompt/reference，不得静默删除参考图、改用短模型名或换成其他模型。
 
 ### 5. 生成 review packet，禁止机器自动选定
 
 ```bash
 eikona review packet <run_id> --json
+eikona assets list <run_id> --agent
 ```
 
 按 artifact 比较 identity、face/hair、silhouette、wardrobe、location layout、prop geometry、style adherence、view completeness 与 obvious artifacts。机器分项 assessment 只能作为 evidence；用户/Scaena 必须做明确 decision。
@@ -88,6 +131,22 @@ eikona assets handoff <artifact_id> --agent
 ```
 
 Handoff 必须带 artifact/run refs、digest、mime/dimensions、permission、lineage、feedback、source brief 或 Scaena preflight/correction refs。Scaena 再执行 candidate review/freeze 或 consistency review；本 skill 不手写 `.scaena`、不调用数据库、不自批。
+
+项目文件必须通过 typed asset flow 写入。不要直接复制用户级 runstore 的绝对路径，也不要把 `--output-dir` 当成 production acceptance：
+
+```bash
+eikona assets handoff eikona://artifacts/<run_id>/artifact_001 --audience agent --json
+eikona assets stage eikona://artifacts/<run_id>/artifact_001 \
+  --to outputs/characters/korea-v1/<subject-id>.png \
+  --json
+eikona assets apply eikona://artifacts/<run_id>/artifact_001 \
+  --project current \
+  --to outputs/characters/korea-v1/<subject-id>.png \
+  --yes \
+  --json
+```
+
+`assets apply` 只表示项目文件已写入；主体冻结仍由 Scaena readiness/consistency gate 完成。
 
 ### 7. Correction 只改指定 drift
 

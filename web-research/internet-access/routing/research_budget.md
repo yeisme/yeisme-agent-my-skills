@@ -17,6 +17,17 @@ Before execution, confirm or set:
 - whether a full ledger is required.
 - whether file creation is allowed.
 
+For agent retrieval, also set:
+
+- search result limit and number of query expansions;
+- maximum pages to open or scrape;
+- maximum context tokens returned to the model;
+- maximum Firecrawl credits or upstream provider tokens;
+- dedupe and source-diversity thresholds;
+- cache/freshness profile.
+
+Keep the model-context budget separate from Firecrawl credits. A smaller provider response can save context tokens while a structured extraction mode may still cost additional provider credits.
+
 ## Default Budgets
 
 | Task | Query batches | Candidate sources | Included samples | Output |
@@ -35,6 +46,8 @@ Stop when any of these is true:
 - Each key category has at least 3 representative samples.
 - Major primary sources are covered.
 - Further search adds mostly duplicates or low-quality sources.
+- The requested fields are supported by sufficient independent evidence within the context budget.
+- A second query expansion adds mostly sources already in the same dedupe groups.
 - Time, tools, or access permissions reach the limit.
 
 ## Escalation Conditions
@@ -52,7 +65,7 @@ Escalate from deep-research to browser when:
 - Screenshots or real page state are needed.
 - Logged-in data is required.
 
-Escalate from Connectors/OpenWebUI Research Harness to CLI deep-research when:
+Escalate from OpenWebUI Research Harness to CLI deep-research when:
 
 - The user asks for 100/200/300 examples, beyond current OpenWebUI valves or one-run trace budget.
 - A full candidate ledger, dedupe table, classification matrix, or cross-batch statistics are required.
@@ -90,3 +103,15 @@ If the user asks for 200/300 examples but the current run cannot complete it rel
 - if Research Harness was involved, trace path, coverage limits, budget clamp, and whether host CLI batch continuation is needed.
 
 Do not package incomplete work as a complete study.
+
+## Retrieval Starting Profiles
+
+These are starting values for a reusable agent search layer, not fixed Firecrawl limits:
+
+| Profile | Search limit | Open limit | Context target | Agent fallback |
+| --- | ---: | ---: | ---: | --- |
+| `fast` | 5 | 1 | <= 2k tokens | disabled by default |
+| `balanced` | 6-8 | 2 | <= 4k tokens | only when evidence is thin |
+| `deep` | 8-12 | 3-5 | <= 8k tokens | explicit credit cap |
+
+Before adding semantic or LLM-based deduplication, measure duplicate content as a percentage of the context sent to the model. Prefer URL normalization, canonical content hashes, deterministic near-duplicate grouping, and domain diversity first.

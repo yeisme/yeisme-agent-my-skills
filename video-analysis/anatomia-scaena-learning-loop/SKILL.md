@@ -1,6 +1,6 @@
 ---
 name: anatomia-scaena-learning-loop
-description: Use when turning reviewed Anatomia analyses, dataset decisions, prompt evaluations, Scaena production reviews, quality findings, asset reuse, or real outcomes into scoped learning candidates, recipe or blueprint influence, viral patterns, evaluation evidence, or OpenSpec-ready capability proposals for Anatomia and Scaena production.
+description: Use when turning reviewed Anatomia analyses, video-to-script observations, dataset decisions, prompt evaluations, Scaena production reviews, quality findings, asset reuse, or real outcomes into scoped learning candidates, Auctra dramatic-pattern evidence, Scaena recipe or blueprint influence, evaluation evidence, or OpenSpec-ready capability proposals.
 ---
 
 # Anatomia Scaena Learning Loop
@@ -20,8 +20,9 @@ Build verified product learning. Do not treat model output, one correction, synt
 3. Create a candidate from review diff, evaluation, quality finding, dataset decision, outcome or repeated blocker.
 4. Run a held-out or compatible second-run evaluation with baseline, cost, limitations and redacted evidence.
 5. Record `improved`, `regressed`, `no_observed_change`, or `inconclusive` honestly.
-6. Route validated creator production learning to Scaena recipe/blueprint/pattern review.
-7. Route repeated capability gaps to the owning OpenSpec as a proposal; never modify production code as a learning action.
+6. If the learning concerns hook, conflict, information gap, reversal, payoff, character function, scene rhythm, dialogue, or screenplay reconstruction, route reviewed evidence to `$auctra-screenplay-pattern-research`; Auctra owns dramatic recipe and new screenplay acceptance.
+7. Route validated shot, prompt, asset reuse, consistency, duration, cost, or production learning to Scaena recipe/blueprint/pattern review.
+8. Route repeated capability gaps to the owning OpenSpec as a proposal; never modify production code as a learning action.
 
 ## Planned Commands
 
@@ -45,6 +46,7 @@ These commands are planned contracts until their owning OpenSpec tasks are imple
 - Private creator/project learning does not silently become public or cross-tenant knowledge.
 - Permission revocation invalidates dependent dataset, asset, recipe and pattern eligibility.
 - Second-run influence must identify changed fields and source refs.
+- Video popularity, view counts, comments, or platform labels are not trusted unless sourced and permissioned; a single popular work creates only an exploratory observation, not a production-ready dramatic recipe.
 
 ## Capability Proposals
 
@@ -56,6 +58,7 @@ A proposal must include target owner, repeated evidence, affected users, contrac
 - Never store credentials, raw prompts, provider payloads, private tool arguments, hidden prompts or full reasoning.
 - Never let an Agent approve its own high-risk output or mutate tracked source through the learning workflow.
 - Anatomia owns observation/evaluation candidates; Scaena owns production decisions, outcomes and creator recipes.
+- Auctra owns screenplay pattern evidence, dramatic recipes, project candidates, review and canon. Scaena must not accept raw video observations or Auctra corpus refs as screenplay truth.
 
 ## Output
 

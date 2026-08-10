@@ -36,6 +36,26 @@ Use this skill for:
 
 Do not use this skill for local file search, code execution, database queries, or purely offline analysis.
 
+## Scope And Boundary
+
+This is the canonical skill for interacting with the external open web and online services. "World interaction" here has two directions, and both are first-class:
+
+- **Read from the world**: discover, search, extract, verify, and gather information from websites, docs, repositories, registries, APIs, and platforms.
+- **Act on the world**: operate web pages, submit forms, click, filter, paginate, download, screenshot, inspect logged-in state, and build repeatable browser flows — when the user asks for interaction or evidence, not just an answer.
+
+The read-first preference (Firecrawl and structured CLIs before a browser) is about tool efficiency, not a scope limit that reduces this skill to lookups.
+
+Route to a different skill or tool when the target is outside the open web:
+
+| Target | Use instead |
+| --- | --- |
+| Feishu / Lark workspace data (docs, sheets, messages, calendar, tasks, approvals, wiki) | `lark-*` skills |
+| Gitea repository operations, Cloudflare API, MCP gateway infrastructure | `mcp__yeisme-gateway__*` tools |
+| External Codex agent runtime execution | `codex` / `codex-agent-runtime` skill |
+| Local file search, code execution, database queries, offline analysis | native local tools |
+
+If a task mixes open-web work with one of the above, split by phase: use this skill for the open-web research or interaction, then hand the result to the matching skill for the walled-garden or infrastructure write.
+
 ## Default Tool Strategy
 
 Do not treat tool priority as a fixed list. First identify the task goal and likely source, then choose the best local tool:
@@ -50,7 +70,7 @@ Do not treat tool priority as a fixed list. First identify the task goal and lik
    - Known page, including JavaScript-rendered content: `firecrawl scrape`, using `--wait-for` when needed.
    - Documentation or multi-page site: `firecrawl map`, `firecrawl crawl`, or `firecrawl download`.
    - Supported clicks, forms, pagination, or logged-in navigation: `firecrawl interact`.
-4. If the task is in a Yeisme/Connectors/OpenWebUI local deployment context, first read `routing/local_research_infra.md` and reuse the local Firecrawl, SearXNG, and Research Harness constraints.
+4. If the task is in a Yeisme/OpenWebUI local deployment context, first read `routing/local_research_infra.md` and reuse the local Firecrawl, SearXNG, and Research Harness constraints.
 5. Escalate to Playwright or another browser tool only when Firecrawl is unavailable, remains incomplete after a reasonable attempt, cannot represent the required browser state, or the task needs visual evidence or reusable UI automation:
    - Prefer an existing project Playwright command or `npx playwright`.
    - Use `agent-browser` or `browser-use` for one-off visual inspection when that is the better available browser surface.
@@ -58,6 +78,8 @@ Do not treat tool priority as a fixed list. First identify the task goal and lik
    - `curl`, `jq`, `pup`, `htmlq`, `lynx`, `w3m`.
 7. If local CLIs are missing, blocked, or insufficient, then use built-in browsing/search tools.
 8. Call hosted APIs directly only when CLI options cannot complete the task and credentials already exist.
+
+For agent search, query expansion, or multi-page research, apply `routing/retrieval_optimization.md`: search compactly first, deduplicate before opening pages, keep raw content outside the model context, and track context tokens separately from provider credits.
 
 `gh` is not a general web search tool and is not a default dependency for every internet task. Use it only when the target is GitHub, or when search results already point to a GitHub repository, issue, release, or discussion and structured fields are needed. This avoids parsing GitHub pages in a browser and gives structured data directly.
 
@@ -153,7 +175,7 @@ Classify the user's intent before choosing a route and tool:
 
 | Intent | Goal | Common route |
 | --- | --- | --- |
-| `local-research-infra` | Use or debug Yeisme/Connectors/OpenWebUI local research infrastructure | `local_research_infra.md` |
+| `local-research-infra` | Use or debug Yeisme/OpenWebUI local research infrastructure | `local_research_infra.md` |
 | `lookup` | Find one fact, version, URL, or status | `lightweight.md` |
 | `research` | Multi-source research, background, comparison | `standard.md` |
 | `deep-research` | Large-sample research, market scan, 200-300 evidence examples | `deep_research.md` + `evidence_policy.md` |
@@ -178,7 +200,8 @@ Choose the smallest route that satisfies the task:
 - `routing/research_budget.md`: research scale, time/sample budgets, stopping conditions, and escalation rules.
 - `routing/autonomous.md`: browser interaction, login flows, dynamic content, forms, and multi-step web workflows.
 - `routing/source_priority.md`: choose `firecrawl`, `gh`, package managers, `curl`/`jq`, or browser tools by source.
-- `routing/local_research_infra.md`: Yeisme/Connectors/OpenWebUI local search infrastructure, Firecrawl, SearXNG, Research Harness, and Gateway search policy.
+- `routing/local_research_infra.md`: Yeisme/OpenWebUI local search infrastructure, Firecrawl, SearXNG, Research Harness, and Gateway search policy.
+- `routing/retrieval_optimization.md`: progressive retrieval, compact result contracts, deduplication, cache/freshness, and Firecrawl change gates.
 - `routing/browser_tools.md`: choose `agent-browser`, Playwright, `browser-use`, or static extraction.
 - `routing/evidence_policy.md`: evidence levels, source credibility, and citation rules.
 - `routing/freshness_policy.md`: when to fetch current information and how to handle dates.
@@ -220,14 +243,15 @@ If the browser is only used to get information, keep using the `autonomous` rout
 ## Workflow
 
 1. Restate the information need and decide whether freshness, citations, or web interaction are required.
-2. Check whether the task is in a Yeisme/Connectors/OpenWebUI local research infrastructure context; if so, apply `local_research_infra.md`.
+2. Check whether the task is in a Yeisme/OpenWebUI local research infrastructure context; if so, apply `local_research_infra.md`.
 3. If the request names Twitter/X, Reddit, YouTube, Bilibili, XiaoHongShu, LinkedIn, V2EX, Xueqiu, Xiaoyuzhou, RSS, or general Agent Reach setup, read `routing/agent_reach.md` and run `agent-reach doctor` when available.
 4. Use `command -v` only for tools relevant to the current route.
 5. Choose a route: lightweight, standard, deep-research, autonomous, or Agent Reach platform route.
-6. Run real local CLI commands directly.
-7. Preserve useful evidence: URL, title, date, command type, active backend, and confidence limits.
-8. Cross-check important conclusions with independent sources.
-9. State limitations when tools are missing, results are stale, or authentication is required.
+6. For search or research, choose a retrieval profile and apply progressive retrieval, deduplication, and a context budget before returning provider content to the agent.
+7. Run real local CLI commands directly.
+8. Preserve useful evidence: URL, title, date, command type, active backend, and confidence limits.
+9. Cross-check important conclusions with independent sources.
+10. State limitations when tools are missing, results are stale, or authentication is required.
 
 ## Common Local CLI Patterns
 

@@ -1,0 +1,3 @@
+display_name: "Project Development Router"
+short_description: "Route project work, workspace modes, and shared delivery gates."
+default_prompt: "Use $project-development-router to route this request through contract, current-workspace client preview, isolated backend debugging, integration, staged checkpoints, and visual-quality gates."

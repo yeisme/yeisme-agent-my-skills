@@ -54,13 +54,13 @@ If the next action is obvious and execution is requested, hand off to the first 
 
 | Scenario | Route |
 | --- | --- |
-| General frontend page or product UI | Open Design -> `ui-spec-frontend-workflow` -> local implementation skill -> `yeisme-frontend-quality-workflow` |
+| General frontend page or product UI | Open Design -> `ui-spec-frontend-workflow` -> local implementation skill -> `yeisme-ui-motion-quality` -> `yeisme-frontend-quality-workflow` |
 | Landing page, brand site, portfolio, marketing page | Open Design -> Taste Skill or `design-taste-frontend` -> implementation skill -> Impeccable-style quality gate |
-| Dashboard, SaaS admin, operations console, dense table UI | Open Design -> `ui-spec-frontend-workflow` -> local React/product UI skill -> `yeisme-frontend-quality-workflow` |
+| Dashboard, SaaS admin, operations console, dense table UI | Open Design -> `ui-spec-frontend-workflow` -> local React/product UI skill -> `yeisme-ui-motion-quality` -> `yeisme-frontend-quality-workflow` |
 | Existing page redesign | Open Design current-state capture -> one aesthetic direction skill -> implementation skill -> visual QA |
 | Screenshot, Figma, mockup, or reference implementation | Open Design or screenshot-to-code -> `ui-spec-frontend-workflow` -> implementation skill -> Playwright screenshot comparison |
 | Design direction, IA, style, or UI Spec only | Open Design -> UI UX Pro Max or frontend-design -> UI Spec output only |
-| Frontend quality audit | `yeisme-frontend-quality-workflow` -> Impeccable detect when available -> Playwright/Storybook/Axe/Lighthouse |
+| Frontend quality audit | `yeisme-ui-motion-quality` -> `yeisme-frontend-quality-workflow` -> Impeccable detect when available -> Playwright/Storybook/Axe/Lighthouse |
 | Browser visual diagnosis | Stagewise, Onlook, browser-use, or design-review -> source fix -> deterministic quality gate |
 | Component sourcing | 21st.dev Magic, shadcn registry, OpenUI, or existing component library -> local design-system constraints -> implementation skill |
 | Agent workflow, Dify/n8n-like graph, DAG editor, routing canvas | Open Design -> `@xyflow/react` route -> `ui-spec-frontend-workflow` -> implementation skill -> interaction tests |
@@ -180,6 +180,8 @@ For React Flow routes, keep frontend and backend ownership separate: React Flow 
 - If a screenshot conflicts with the project design system, route to `ui-spec-frontend-workflow` to resolve the written UI Spec before implementation.
 - If a component generator produces off-system visuals, treat it as source material and restyle through local tokens/components.
 - If browser tools find issues but no deterministic test exists, create or request the narrowest reproducible Playwright/Storybook/manual evidence path.
+- If the task concerns ordinary UI motion, load `yeisme-ui-motion-quality` after the implementation or current-state capture; keep its motion budget subordinate to the local UI Spec.
+- If a component refactor is driven by boolean prop proliferation or parallel variants, load `vercel-composition-patterns` as a focused architecture reference, not as a visual authority.
 - If the requested motion is an ordinary UI transition, do not route to Remotion. Use Remotion only when the output is a timeline-based video, still, or reusable composition preview.
 
 ## Fallback Contract
@@ -200,6 +202,7 @@ Do not tell the user to install every possible skill. Do not block routing on in
 - Do not perform QA directly; route to quality or visual QA skills.
 - Do not create or modify Open Design projects directly; route to Open Design or the relevant operator.
 - Do not add Remotion dependencies while routing; hand rendered-animation work to `remotion-animation-workflow` first.
+- Do not add a motion or AutoAnimate dependency while routing; inspect the owning frontend's existing package and use the smallest approved capability.
 - Do not add this skill to root runtime by default unless the user explicitly asks for a long-lived root default. Frontend execution skills should remain on-demand or subproject-scoped.
 - Do not expose local execution wrappers, shell aliases, or agent-only prefixes in routing output.
 

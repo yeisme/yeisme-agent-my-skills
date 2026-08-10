@@ -1,6 +1,6 @@
 ---
 name: pinax-project-workspace-operator
-description: Use when an agent needs to manage Pinax project workspaces, learning packs, subprojects, local boards, project work items, personal daily/weekly/monthly plans, TaskBridge action drafts, or plan snapshots.
+description: Use when an agent needs to manage Pinax project workspaces, learning packs, subprojects, local boards, project work items, personal daily/weekly/monthly plans, local planning action drafts, or plan snapshots.
 ---
 
 # Pinax Project Workspace Operator
@@ -9,7 +9,7 @@ Operate Pinax local project workspaces and planning surfaces. Project Workspace 
 
 ## Use When
 
-- The request mentions `pinax project`, project workspace, learning pack, subproject, board, work item, planning, daily/weekly/monthly plan, TaskBridge action drafts, or plan snapshots.
+- The request mentions `pinax project`, project workspace, learning pack, subproject, board, work item, planning, daily/weekly/monthly plan, local planning action drafts, or plan snapshots.
 - The user wants to organize research, learning, client, content, or tool-candidate work inside one vault.
 - The command family is `pinax project` or `pinax plan`.
 
@@ -28,7 +28,7 @@ pinax project item move item_abc123 doing --vault ./my-notes --json
 pinax plan daily --dry-run --vault ./my-notes --json
 pinax plan weekly --save --yes --vault ./my-notes --json
 pinax plan monthly --dry-run --vault ./my-notes --json
-pinax plan actions --from daily --taskbridge --save --vault ./my-notes --json
+pinax plan actions --from daily --save --vault ./my-notes --json
 pinax plan snapshot --vault ./my-notes --json
 ```
 
@@ -44,10 +44,10 @@ pinax plan snapshot --vault ./my-notes --json
 
 ## Safety Boundaries
 
-- Do not sync project items to GitHub, Gitea, TaskBridge, or providers unless a separate approved integration does that through its owner.
+- Do not sync project items to GitHub, Gitea, or providers unless a separate approved integration does that through its owner.
 - Do not hand-edit `.pinax/projects/**`, `.pinax/project-workspaces/**`, board config, or planning snapshots.
 - Do not create financial, medical, or legal advice claims from learning packs; keep them as study notes and source tracking.
-- Do not execute TaskBridge action drafts from Pinax; Pinax only generates drafts.
+- Do not execute planning action drafts from Pinax; Pinax only generates drafts for local review.
 
 ## Validation
 

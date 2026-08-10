@@ -1,0 +1,4 @@
+interface:
+  display_name: "Yeisme UI Motion Quality"
+  short_description: "审查 Web UI 动效的意图、空间连续性、性能与 reduced-motion 质量。"
+  default_prompt: "Use $yeisme-ui-motion-quality to review this frontend motion implementation, identify high-confidence issues with file and line evidence, and define the smallest accessible, performant fix."

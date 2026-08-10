@@ -40,7 +40,7 @@ If the user explicitly says to use Eikona, `eikona`, or the Eikona CLI for image
    - every successful provider artifact must be written through the run evidence store under `runs/<run_id>/outputs/`.
    - provider requests in tests must use `httptest` or fixture adapters; do not call real remote providers in automated tests.
    - user-level local Eikona config or the local auth store may store plaintext provider keys when the user explicitly configures them; secrets must never be written to project YAML, YAML examples with real values, traces, provider jobs, artifact manifests, test snapshots, or README output.
-   - Eikona must not create, recommend, or read shell credential scripts for provider keys; use direct user config, `eikona auth set --api-key-stdin`, or process environment for CI and temporary overrides.
+   - Eikona must not create, recommend, or read shell credential scripts for provider keys; use direct user config, `eikona auth set <channel> --api-key-stdin`, or process environment for CI and temporary overrides.
    - command examples in docs, help, skills, plans, reviews, and final responses must be real user-runnable commands such as `eikona workflow run ...`; do not expose local wrappers or agent-only prefixes.
    - command docs must cover every visible subcommand and explicitly mark hidden/internal entries such as `models`, `worker`, and disabled `video` when relevant.
    - do not add isolated scenario commands for Xiaohongshu, short-drama, product, game, docs, or graphic-design variants; scenario differences belong in workflow templates, prompt decks, prompt skills, profiles, style packs, assessment criteria, review policy, and recipe influence evidence.
@@ -49,10 +49,17 @@ If the user explicitly says to use Eikona, `eikona`, or the Eikona CLI for image
   - do not add real-time sync, file watchers, automatic bidirectional merge, or multi-device conflict resolution to Eikona without a separate OpenSpec change.
   - visual assessment and recipe reuse must be evidence-backed and explainable: store scores/tags/corrections/recipe influence as structured evidence, never as hidden reasoning or unbounded prose. Machine-only scores must not silently select winners without append-only human feedback.
 3. For OpenAI-compatible image generation:
-   - new docs, examples, defaults, and prompts must recommend `openai:gpt-image-2`.
+   - the canonical Eikona model ref is `openai/gpt-5.4-image-2`; gateway-native IDs must copy `/v1/models` exactly. The accepted short aliases are `gpt-5.4-image-2` and `gpt-image-2`; persisted `openai:gpt-image-2` is a legacy compatibility spelling only.
+   - reject the ambiguous `openai:gpt-5.4-image-2` before provider submission with a repair message pointing to `openai/gpt-5.4-image-2`.
+   - local interactive auth must use an explicitly selected Eikona channel backed by the user-level secret store; never restore implicit `OPENAI_API_KEY` fallback.
    - `openai:gpt_image_2` is legacy compatibility only.
-   - `--reference-image` should preserve reference order and infer `image.edit`.
-   - keep `/images/edits` multipart as the preferred path, and use `/chat/completions` multimodal fallback only for clear gateway compatibility failures.
+   - before selecting a provider workflow or describing readiness, read `cli/eikona/docs/commands/agent-operability.md`; preserve its evidence vector and conservative effective level in the result.
+   - no reference input means `image.generate`; the ordinary OpenAI Images path uses `/images/generations`.
+   - `--reference-image` / `--ref` with `--reference-mode auto|edit` must preserve reference order, infer `image.edit`, and prefer multipart `/images/edits`.
+   - `--reference-mode generate` means the references are guidance rather than the editable canvas; keep `image.generate`, encode ordered refs as multimodal `input_image` content, and prefer `/responses`.
+   - agents must not start an additional transport-switching retry for auth, rate-limit, content-policy, timeout, TLS, or malformed-response failures. Preserve whatever attempts the current runtime records; changing automatic fallback policy requires runtime tests and a separate implementation scope.
+   - never silently remove reference inputs. If evidence proves that the configured gateway supports text-to-image but not reference input, preserve the failed run, explain the capability loss, and start a separate text-only run only when the user requested or accepted that semantic fallback.
+   - do not diagnose missing reference support from a generic failure alone. Inspect the redacted failure facts currently exposed by `eikona inspect <run_id> --json` and provider doctor; if endpoint or transport is not explicit, report `unknown/degraded` rather than inventing a distinction.
    - do not skip TLS verification for self-signed gateways; use system trust or `SSL_CERT_FILE`.
 4. For CLI behavior changes, add tests close to the behavior:
    - command wiring and JSON contracts in `internal/cli`
@@ -68,14 +75,18 @@ If the user explicitly says to use Eikona, `eikona`, or the Eikona CLI for image
    - status polling uses `eikona wait/status/inspect --json` or low-token `--agent`;
    - external PNG/JPEG/WebP capture uses `eikona artifacts import <path> --json`; capture always creates run evidence first and never auto-promotes into Visual Library;
    - artifact handoff uses `eikona assets handoff <artifact_id> --json` before project writes; long-term reuse requires an explicit `eikona library save eikona://artifact/<handle> ... --json` decision;
+   - project-bound generated assets use `eikona assets handoff` → `eikona assets stage --to <project-relative-path>` → `eikona assets apply --project current --yes`; do not copy user-level runstore paths directly;
    - REST capture requires `Idempotency-Key`, allowed roots for server-side paths, and path-free delivery grants rather than absolute runstore paths;
    - scenario prompt exploration uses `eikona prompts catalog search ... --json`, `eikona workflow draw ... --json`, and `eikona workflow run ... --background --json`;
    - creative direction uses the on-demand `eikona-visual-router`, `eikona-subject-asset-director`, `eikona-xhs-*`, and `eikona-ultrawide-storyboard-director` skills for brief and prompt design; file-backed storage uses `eikona-file-prompt-workflow`; this runtime skill remains responsible for CLI contracts, evidence, provider safety, and generated artifact lifecycle;
    - Scaena episode/shot/cover/motion generation must first pass `scaena-subject-asset-readiness`; without a current preflight, Eikona may generate only subject candidates or look-development artifacts marked non-production;
    - planned visual scoring uses `eikona assess ... --json` after the assessment change lands; until then, use `review`, `feedback`, and objective `quality.check` evidence;
    - planned recipe reuse uses `eikona recipes ...` and `workflow --recipe` only after the recipe change lands; until then, keep reuse explicit through prompt skills, deck versions, style packs, and feedback evidence;
-  - long-lived integrations can use `eikona mcp`, but ordinary CLI output remains the primary contract.
-  - storage backup uses `eikona storage backend set s3 ...`, `eikona storage push ...`, and `eikona storage restore ...`; for reusable Git plus S3/rclone/cloud-drive policy, use `local-first-backup-sync-policy` on demand.
+   - long-lived integrations can use `eikona mcp`, but ordinary CLI output remains the primary contract.
+   - storage backup uses `eikona storage backend set s3 ...`, `eikona storage push ...`, and `eikona storage restore ...`; for reusable Git plus S3/rclone/cloud-drive policy, use `local-first-backup-sync-policy` on demand.
+   - OpenAI image calls use `openai/gpt-5.4-image-2` with an explicit channel such as `--use-channel openai`. `gpt-5.4-image-2` and `gpt-image-2` are accepted aliases; new commands and persisted metadata must use the slash-form canonical ref.
+   - CLI, MCP, REST, and Go SDK generation changes must prepare one shared Generation Intent and expose the same prompt-free request summary, ordered reference roles, `model_ref`, and `original_model_ref`.
+   - `assets.apply` remains dry-run unless the caller explicitly supplies `confirm=true`; responses expose project-relative `target_path`, never absolute project or artifact paths.
 6. For Eikona plan/checklist work, keep `proposal.md`, `design.md`, `tasks.md`, and `specs/**/spec.md` under `cli/eikona/openspec/changes/eikona-<slug>/`; migrate any misplaced checklist or root `openspec/` implementation task before continuing. Do not leave completed execution changes active. After closeout, update readiness/specs, record verification in `tasks.md` or `design.md`, and archive ordinary changes to `cli/eikona/openspec/changes/archive/YYYY-MM-DD-eikona-<slug>/`.
 
 ## 文件提示词集合约束
@@ -117,6 +128,6 @@ If CI, tags, or release artifacts change, also use the Go/GitHub release guardra
 
 The runtime consumes validated `eikona.visual_intent.v1` evidence through `eikona workflow import intent`. It is the only Skill responsible for provider execution and artifact lifecycle. Evidence files (`visual_intent.json`, `skill_receipt.json`, `intent_compile.json`) are written under each run directory and linked through existing runstore paths.
 
-The runtime distinguishes claimed from verified skill identity; unverified receipts cannot support promoted/core evidence. Default model: `openai:gpt-image-2`.
+The runtime distinguishes claimed from verified skill identity; unverified receipts cannot support promoted/core evidence. Default model: `openai/gpt-5.4-image-2`.
 
 Contract reference: `../eikona-visual-router/references/visual-intent-contract.md`.

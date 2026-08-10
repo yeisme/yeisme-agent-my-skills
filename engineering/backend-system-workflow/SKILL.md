@@ -43,6 +43,14 @@ Backend acceptance requires explicit treatment of:
 For Cohors, Agent Team, MCP Gateway, and engineering consoles, the backend should usually be an event-driven task state system, not a thin CRUD app.
 > Database migrations and API/RPC contracts evolve incrementally. `DROP COLUMN`/`DROP TABLE`, narrowing a type, adding `NOT NULL` without a default, renaming a populated column, and changing an HTTP method/path or proto field number are generation-breaking changes. Follow `yeisme-evolutionary-change-policy`: gate them behind an OpenSpec change with expand-then-contract migrations, a deprecation window, and a rollback before touching the schema or wire format.
 
+## Backend Workspace And Debugging Defaults
+
+Backend work that runs a hot-reload service, worker, daemon, migration, database, cache, or long-lived diagnostic process defaults to an isolated `feature/<topic>` branch/worktree. Keep ports, runtime/data directories, caches, temporary files, generated outputs, process groups, and logs separate from a client/Web preview running in the current workspace. Use the current workspace only when the backend must consume its uncommitted state or the user/owner explicitly requires it; record the override and keep a single writer.
+
+The agent should debug this lane automatically through a bounded loop: start with the real owner command, wait for a health/readiness signal, reproduce with the smallest focused test or request, inspect structured logs and trace/request IDs, patch only owned backend paths, rerun focused tests, then verify the client-facing contract. Preserve failure evidence and classify it as introduced, pre-existing, concurrent, environmental, or ambiguous before repairing. Never restart a duplicate writer or kill a process outside the recorded lease.
+
+At stable boundaries, report or create narrow checkpoints for contract/schema, backend behavior plus focused tests, and real integration. A child agent returns evidence and a checkpoint manifest; root owns any commit, merge, push, migration apply, or cleanup action under repository authorization.
+
 ## Required Workflow
 
 1. Locate the owning subproject before editing code. Read the nearest `AGENTS.md`, `go.mod` or `package.json`, migrations, API contracts, worker code, storage docs, and existing tests.

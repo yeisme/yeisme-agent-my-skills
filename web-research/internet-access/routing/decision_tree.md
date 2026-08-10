@@ -10,7 +10,7 @@ Read `task_intent.md` first and assign one primary intent:
 
 | Intent | Typical request | Default route |
 | --- | --- | --- |
-| `local-research-infra` | "Use/debug Connectors or OpenWebUI research/search" | local_research_infra |
+| `local-research-infra` | "Use/debug OpenWebUI research/search" | local_research_infra |
 | `platform` | "Read/search/configure Twitter, Reddit, YouTube, Bilibili, XiaoHongShu, RSS, or Agent Reach" | agent_reach |
 | `lookup` | "Check X current version/URL/release date" | lightweight |
 | `research` | "Research/compare/analyze X" | standard |
@@ -24,7 +24,7 @@ Read `task_intent.md` first and assign one primary intent:
 
 Then classify the source shape:
 
-- Local research infrastructure: the task clearly points to Yeisme, Connectors, OpenWebUI, Research Harness, MCP Gateway, SearXNG, or a local Firecrawl backend.
+- Local research infrastructure: the task clearly points to Yeisme, OpenWebUI, Research Harness, MCP Gateway, SearXNG, or a local Firecrawl backend.
 - Agent Reach platform: the task names Agent Reach or a supported platform with known platform routing, login, cookie, proxy, video, social, community, RSS, or podcast needs.
 - Known source query: the user gave a GitHub repo, package name, URL, API endpoint, or specific site.
 - Unknown source discovery: the user gave only a topic and needs sources found.
@@ -80,20 +80,20 @@ Pick the tool that best matches the information source. GitHub metadata uses `gh
 
 ### 0. Local Research Infra
 
-When the task happens inside this repository's Connectors/OpenWebUI/MCP Gateway search and research capability, use `local_research_infra.md` first.
+When the task happens inside this repository's OpenWebUI/MCP Gateway search and research capability, use `local_research_infra.md` first.
 
 Signals:
 
-- The user mentions Connectors, OpenWebUI, Open WebUI, Research Harness, SearXNG, Firecrawl backend, or MCP Gateway internet search.
+- The user mentions OpenWebUI, Open WebUI, Research Harness, SearXNG, Firecrawl backend, or MCP Gateway internet search.
 - The task needs a decision between Firecrawl CLI, OpenWebUI Web Search, Research Harness, and browser tools.
 - The task involves search quality, search budget, query generation, trace, source diversity, or local port configuration.
 
 Examples:
 
 ```text
-Optimize OpenWebUI Connectors Research Harness search quality.
+Optimize OpenWebUI Research Harness search quality.
 Open WebUI returns too few search results; inspect local Firecrawl/SearXNG configuration.
-How should Connectors agents call local search tools for deep research?
+How should OpenWebUI agents call local search tools for deep research?
 ```
 
 ### 0.5 Agent Reach Platform Route
@@ -213,7 +213,7 @@ Degrade when:
 
 | Need | Prefer | Fallback |
 | --- | --- | --- |
-| Connectors/OpenWebUI local research path | `local_research_infra.md` + local `firecrawl`/SearXNG/Research Harness | normal `firecrawl search`, built-in search |
+| OpenWebUI local search path | `local_research_infra.md` + local `firecrawl`/SearXNG/Research Harness | normal `firecrawl search`, built-in search |
 | Social/video/community platform routing | `agent_reach.md` + selected upstream CLI | static extraction, browser tools |
 | Unknown source discovery | `firecrawl search "query" --limit 5` | built-in search or hosted API |
 | URL content extraction | `firecrawl scrape "URL"` | `curl -L "URL"` plus parser |

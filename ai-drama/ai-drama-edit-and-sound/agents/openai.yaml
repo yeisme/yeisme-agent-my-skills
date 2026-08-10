@@ -1,0 +1,3 @@
+display_name: AI 漫剧剪辑与声音
+short_description: Shape attention, timing, sound, subtitles, and assembly.
+default_prompt: 请使用 $ai-drama-edit-and-sound 为这一集设计镜头节奏、信息释放、声音、字幕、时长检查和 assembly proposal。

@@ -130,12 +130,13 @@ When the task is small, these can be concise and inline. When the task is a reus
 7. Apply the design system to the wireframe. Use existing components and tokens; do not introduce unknown visual primitives.
 8. Write a component tree that names the shell, regions, repeated components, state surfaces, responsive substitutions, and interactive controls.
 9. Write the interaction contract before implementation. Every control must name its primitive, states, keyboard behavior, data source, loading/error/empty behavior, and acceptance checks.
-10. Implement using the existing frontend stack. Prefer mature component systems already in the project, such as shadcn/ui, Radix, Tailwind, lucide icons, TanStack Table, TanStack Query, and Motion when present.
+10. Implement using the existing frontend stack. Prefer mature component systems already in the project, such as shadcn/ui, Radix, Tailwind, lucide icons, TanStack Table, TanStack Query, and an already-approved motion capability when present.
 11. Polish only after structure, token usage, and interaction behavior are correct. Polish may adjust spacing, hierarchy, empty states, hover/selected/focus states, density, and responsive behavior. It must not change information architecture.
-12. Apply the React animation policy. Default to Motion, AutoAnimate, and Radix data-state CSS animation; do not introduce GSAP, React Spring, Lottie, or React Transition Group unless the UI Spec requires that category.
-13. Capture screenshots with Playwright or the project's equivalent visual test command at fixed desktop and mobile viewports. Include open states for dropdowns, dialogs, popovers, sheets, and image preview when touched.
-14. Compare current screenshots against the target or UI Spec. Report differences as executable fixes: layout, spacing, hierarchy, density, color, typography, states, animation behavior, interaction behavior, and responsive behavior.
-15. Patch the implementation and re-run the narrowest relevant visual and interaction checks until the main issues are resolved or a blocker is explicit.
+12. Apply the React animation policy. Do not add Motion or AutoAnimate by default; use CSS/Radix state animation or the owning project's existing capability first, and require an explicit UI Spec exception for a new runtime dependency.
+13. Run `yeisme-ui-motion-quality` after implementation to review enter/exit, overlay continuity, list transitions, reduced motion, focus return, and rendering cost.
+14. Capture screenshots with Playwright or the project's equivalent visual test command at fixed desktop and mobile viewports. Include open states for dropdowns, dialogs, popovers, sheets, and image preview when touched.
+15. Compare current screenshots against the target or UI Spec. Report differences as executable fixes: layout, spacing, hierarchy, density, color, typography, states, animation behavior, interaction behavior, and responsive behavior.
+16. Patch the implementation and re-run the narrowest relevant visual and interaction checks until the main issues are resolved or a blocker is explicit.
 
 ## Default Design-System Posture
 
@@ -276,7 +277,7 @@ layout:
       responsive: drawer on mobile
 
 components:
-  approved_libraries: [existing project components, shadcn/ui new-york, Radix, Tailwind CSS 4, lucide-react, React Router 7, TanStack Query 5, TanStack Table 8, React Hook Form, Zod, sonner, Recharts, cmdk, motion, Playwright, MSW]
+  approved_libraries: [existing project components, shadcn/ui new-york, Radix, Tailwind CSS 4, lucide-react, React Router 7, TanStack Query 5, TanStack Table 8, React Hook Form, Zod, sonner, Recharts, cmdk, existing approved motion capability, Playwright, MSW]
   repeated:
     - name: TaskCard
       source: existing component or new component
@@ -399,41 +400,32 @@ When a screenshot, GPT Image output, Figma frame, Stitch output, or visual mock 
 
 ## React Animation Policy
 
-Default React animation stack:
-
-```bash
-bun add motion @formkit/auto-animate
-```
-
-Add Radix primitives only when the owning app needs them and they are not already installed:
-
-```bash
-bun add @radix-ui/react-dialog @radix-ui/react-popover
-```
+Do not install an animation library by default. First inspect the owning app's
+`package.json` and existing tokens/components, then use the current CSS,
+Web Animations, Radix `data-state`, or approved project motion capability. Run
+`yeisme-ui-motion-quality` after implementation for a focused motion review.
 
 Use this selection rule:
 
 | Scenario | Default choice |
 | --- | --- |
-| Page transitions, cards, tabs, drawers, modal panels, hover/tap micro-interactions | `motion` with `motion/react` |
-| List, table row, task card, grid item add/remove/filter/reorder | `@formkit/auto-animate` |
+| Page transitions, cards, tabs, drawers, modal panels, hover/tap micro-interactions | Existing project capability; CSS/Radix first for simple state changes |
+| List, table row, task card, grid item add/remove/filter/reorder | CSS/Web Animations or an existing layout-transition capability; do not add AutoAnimate only for convenience |
 | shadcn/ui or Radix Dialog, Popover, Dropdown, Tooltip, Accordion, Tabs | Radix `data-state` plus Tailwind/CSS animation |
-| Complex marketing scroll animation, SVG timeline, hero animation | GSAP only when explicitly required |
-| Physics, elastic gestures, 3D or react-three-fiber motion | React Spring only when explicitly required |
+| Complex marketing scroll animation, SVG timeline, hero animation | GSAP only when explicitly required and approved by the owning project |
+| Physics, elastic gestures, 3D or react-three-fiber motion | React Spring only when explicitly required and already compatible |
 | Empty-state illustration, loading illustration, success/failure animation asset | Lottie only when an actual animation asset exists |
 | Legacy CSS enter/exit lifecycle | React Transition Group only for existing projects already using it |
 
 Animation rules:
 
-- Default duration range is 120ms to 240ms.
+- Keep ordinary UI transitions short, calm, interruptible, and subordinate to the UI Spec; a 120ms–240ms range is a starting point, not a contract.
 - Use `ease-out` for standard UI motion and `cubic-bezier(0.16, 1, 0.3, 1)` for emphasized but still calm transitions.
 - Do not use large movement, strong bounce, rotation, particles, glow effects, or decorative animation in dashboards, admin screens, engineering tools, or terminal-like web UIs.
-- Do not change layout structure to create animation.
-- Do not use complex absolute positioning for normal UI motion.
+- Do not change layout structure to create animation, and do not gate content visibility on a reveal class.
 - Animation should explain state change: enter, exit, expand, collapse, reorder, select, hover, loading, success, or failure.
-- If the UI Spec does not define animation, add only light fade or slide where it clarifies state change.
-- Always support `prefers-reduced-motion`. With Motion, use reduced-motion APIs or disable nonessential transforms. With CSS, use media queries or project utilities.
-- Verify animation does not create layout shift, text overlap, scroll jumps, or screenshot instability.
+- Always support `prefers-reduced-motion`; remove nonessential transforms while preserving state, focus, error, and content changes.
+- Verify animation does not create layout shift, text overlap, scroll jumps, focus loss, or screenshot instability.
 
 ## React Dependency Rules
 
@@ -475,6 +467,9 @@ Prefer measurable observations:
 Use this skill as the React/frontend workflow constraint. Pair it with:
 
 - `frontend-design` and `web-design-guidelines` when implementing web UI in a subproject that has them in its profile.
+- `yeisme-ui-motion-quality` for the focused enter/exit, overlay, list, reduced-motion, and animation-performance review after implementation.
+- `vercel-react-best-practices` when React rendering, rerenders, bundle size, long lists, or animation performance have measurable evidence.
+- `vercel-composition-patterns` when shared components need compound APIs, context boundaries, or boolean-prop reduction.
 - External `baseline-ui` for AI UI slop baseline checks when available.
 - External `extract-design-system` when the task is to extract starter tokens from a public website.
 - External `tailwind-design-system` when the owning app uses Tailwind CSS v4 or is explicitly creating a v4 token system.

@@ -21,10 +21,15 @@ Use this skill when a task is being handled by Codex or when documentation must 
 
 ## Context-Isolated Feature Delivery
 
-When a feature requires frequent integration/component/system/e2e tests, or
-when test logs and repeated implementation loops would quickly fill the root
-task context, use one shallow Codex DAG instead of developing inline through a
-long-lived goal:
+Use this workflow only after the current user explicitly requests a `subagent`,
+`子 agent`, `子agent`, or delegated/parallel work. Test volume, long logs,
+repeated implementation loops, task complexity, and this skill itself never
+authorize a child agent. Without that request, keep the same work in the root
+thread.
+
+After authorization, a feature with frequent integration/component/system/e2e
+tests, noisy logs, or repeated implementation loops may use one shallow Codex
+DAG instead of developing inline through a long-lived goal:
 
 ```text
 root acceptance packet
@@ -36,6 +41,17 @@ root acceptance packet
 
 Rules:
 
+- After user authorization, use the `balanced` model-and-effort route unless
+  the user pins a cap: Luna / low for exploration and repetitive checks, Luna /
+  medium for high-volume verification, Terra / medium for routine implementation
+  and research, and Terra / high only for bounded multi-module implementation.
+  Use Sol / medium for spec, task decomposition, acceptance criteria, and TDD
+  design; Sol / high for deep debugging, security, high-risk review,
+  concurrency, and integration; Sol / max only for core architecture, durable
+  contracts or migrations, critical trust boundaries, and costly-to-reverse
+  cross-project design. A capability mismatch may trigger one evidence-backed
+  tier or effort upgrade per failure loop. Every Sol / max dispatch must state
+  why it is core design; `ultra` requires an explicit user request.
 - A root goal records only the user objective, accepted scope, current stage,
   and final status. It must not retain full implementation narration or test
   output.
@@ -53,6 +69,27 @@ Rules:
 
 Use `route-agents` with `context_isolated_delivery: true`; add
 `integration_test_heavy: true` when verification is slow or verbose.
+
+## Optional Child Thread Goal
+
+`child_goal_policy` is an additive dispatch field with `schema_version: "1.0"`.
+It defaults to `disabled`; only an explicitly authorized current user may set
+`create_if_available`. When enabled, a child may inspect and manage at most one
+thread-local goal if the runtime offers a goal tool. The goal objective must be
+a strict subset of the dispatch scope ceiling; `descendants` remains `false`.
+Do not set a token budget unless
+the user explicitly requested one, overwrite an incompatible active goal, or
+require a goal tool in another runtime.
+
+Report `created`, `reused`, `unavailable`, or `collision` through optional
+`goal_report`; use `active`, `waiting_root`, `complete`, `blocked`, or
+`liveness_unknown` for state. `complete` is a candidate handoff to root, not
+final acceptance. Mark `blocked` only after the same blocker occurs in three
+consecutive goal turns. A timeout or interrupt neither cancels the goal nor
+releases a writer lease, and the goal never resets repair, model-upgrade, or
+circuit-breaker budgets. Root retains all scope/permission changes, user
+decisions, external actions, descendants, role or model upgrades, and final
+acceptance.
 
 ## Staged Verification
 

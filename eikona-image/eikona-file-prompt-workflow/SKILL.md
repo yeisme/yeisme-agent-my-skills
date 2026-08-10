@@ -42,7 +42,7 @@ eikona generate \
   --json
 
 eikona generate \
-  --model openai:gpt-image-2 \
+  --model openai/gpt-5.4-image-2 \
   --input prompts/product/landing-hero/local-first-cli/prompts/01-clean-editorial.md \
   --size 1536x1024 \
   --json
@@ -94,4 +94,4 @@ eikona run \
 - prompt 文件不含未替换的 `<...>` 占位符。
 - runbook 中引用的文件存在，且路径相对于 runbook 正确。
 - `eikona run -f <runbook> --dry-run --json` 成功并展开预期 job 数。
-- 真实远程示例和新默认使用 `openai:gpt-image-2`。
+- 真实远程示例和新默认使用 `openai/gpt-5.4-image-2`；短别名只作为兼容输入，legacy `openai:gpt-image-2` 不得写入新 runbook。

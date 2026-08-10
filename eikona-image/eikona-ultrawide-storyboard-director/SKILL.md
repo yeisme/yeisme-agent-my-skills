@@ -55,7 +55,7 @@ eikona generate --model fixture:image --aspect 3:1 --size 1536x512 --input promp
 真实生成规划看板：
 
 ```bash
-eikona generate --model openai:gpt-image-2 --aspect 3:1 --size 1536x512 --input prompts/story/storyboard/night-market-conflict/prompts/01-planning-board.md --json
+eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --aspect 3:1 --size 1536x512 --input prompts/story/storyboard/night-market-conflict/prompts/01-planning-board.md --json
 eikona review packet <run_id> --json
 eikona feedback accept <run_id> --artifact <artifact_id> --reason spatial_continuity --reason beat_clarity --json
 eikona assets handoff <artifact_id> --agent
@@ -64,7 +64,7 @@ eikona assets handoff <artifact_id> --agent
 视频参考图必须生成干净电影镜头：
 
 ```bash
-eikona generate --model openai:gpt-image-2 --aspect 16:9 --size 1536x864 --input prompts/story/storyboard/night-market-conflict/prompts/02-clean-video-reference.md --json
+eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --aspect 16:9 --size 1536x864 --input prompts/story/storyboard/night-market-conflict/prompts/02-clean-video-reference.md --json
 ```
 
 ## 输出

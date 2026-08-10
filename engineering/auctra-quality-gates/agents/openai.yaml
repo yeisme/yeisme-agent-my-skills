@@ -1,0 +1,3 @@
+display_name: Auctra Quality Gates
+short_description: Apply Auctra's reproducible quality, CI/CD, lint-debt, release, and integration-evidence gates.
+default_prompt: Use $auctra-quality-gates to improve or review cli/auctra quality gates, CI/CD, release checks, or integration evidence.

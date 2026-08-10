@@ -1,0 +1,3 @@
+display_name: "Vertical Slice Delivery"
+short_description: "Deliver end-to-end feature slices."
+default_prompt: "Use $vertical-slice-delivery to break this feature into an end-to-end slice with dependencies, gates, and verification commands."

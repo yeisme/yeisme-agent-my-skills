@@ -34,12 +34,34 @@ description: Use when reviewing or designing Aigora Seedance core architecture, 
 4. 对 job、attempt、callback、poll、mirror、billing、trace 与 workbench 标明现状、缺口、依赖与验证证据。
 5. 输出简短的风险清单，明确不能泄露原始 prompt、provider payload、签名 URL、凭据或备案材料。
 
+## Scaena 单镜头 Federation 消费边界
+
+审查 Scaena → Aigora 时，把 Scaena 视为 caller/creative production owner，把 Aigora 视为视频 execution owner：
+
+```text
+Scaena frozen ShotIntent/ShotGenerationSpec/bundle
+  -> execution binding + external ref + grant
+  -> Aigora job/attempt/receipt
+  -> Scaena reconcile
+  -> pending-review artifact projection/import receipt
+```
+
+必须核对：
+
+- caller 只提交 refs/digests、capability、scope、purpose、idempotency 和 correlation，不提交 Scaena 私有数据库状态；
+- Aigora `binding_id`、request digest、caller run、scope 与返回 receipt 一致；
+- 首次 accepted/timeout 后若状态未知，Scaena 保存原 `aigora_job_ref`，后续只 reconcile，不重复 submit；
+- terminal receipt 状态只能是 `succeeded`、`failed` 或 `cancelled`，未知状态 fail closed；
+- Phase 0 只接纳安全 artifact refs 并创建 Scaena `pending_review` 投影；真实下载、内容摘要校验、CAS 落盘与 signed URL 隔离属于后续 `aigora-real-video-artifact-delivery-v1`；
+- Aigora 不替 Scaena 做 creative acceptance，Scaena 不持有底层视频 provider credential。
+
 ## 约束
 
 - 不把现有 mock video flow 表述为真实 Seedance provider 集成。
 - 不把 `docs/data-model.md` 的目标实体表述为已落库模型。
 - 不访问网络、密钥、生产 channel 或 callback endpoint。
 - 不执行 route promotion、预算、账单、artifact、配置或 OpenSpec 写操作。
+- 不把 `httptest` federation canary 或安全 ref adoption 描述成真实 provider/CAS 交付。
 
 ## 输出格式
 

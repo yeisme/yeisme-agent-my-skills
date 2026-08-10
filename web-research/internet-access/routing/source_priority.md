@@ -9,7 +9,7 @@ Replace fixed tool ordering with source-driven decisions. The key to internet in
 Priority is source-driven:
 
 1. If the user gave an explicit source, use that source's CLI, API, or scrape command directly.
-2. If the task clearly happens in a Yeisme/Connectors/OpenWebUI local deployment, apply `local_research_infra.md` first to confirm local Firecrawl, SearXNG, Research Harness, and Gateway policy.
+2. If the task clearly happens in a Yeisme/OpenWebUI local deployment, apply `local_research_infra.md` first to confirm local Firecrawl, SearXNG, Research Harness, and Gateway policy.
 3. If the task targets a platform covered by Agent Reach, apply `agent_reach.md` to choose and diagnose the backend before using the selected upstream tool.
 4. For ordinary web discovery, extraction, JavaScript-rendered pages, documentation crawling, and supported interaction, use the matching Firecrawl command first.
 5. If search results point to structured sources, switch to the source-specific CLI/API.
@@ -90,9 +90,9 @@ Do not rely only on `firecrawl` when:
 - Real visual UI state, unsupported browser behavior, or browser diagnostics are required.
 - A reasonable Firecrawl scrape/interact attempt still misses the required content or state.
 
-## Connectors/OpenWebUI Local Search Infrastructure
+## OpenWebUI Local Search Infrastructure
 
-When the task is explicitly about this repository's Connectors, OpenWebUI, MCP Gateway, or Research Harness internet capability, use `local_research_infra.md`:
+When the task is explicitly about this repository's OpenWebUI, MCP Gateway, or Research Harness internet capability, use `local_research_infra.md`:
 
 - In the host shell, prefer the `firecrawl` CLI, with explicit local Firecrawl API URL when needed.
 - Inside OpenWebUI, Web Search uses SearXNG and Web Loader uses Firecrawl.

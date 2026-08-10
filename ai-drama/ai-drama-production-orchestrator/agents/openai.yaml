@@ -1,0 +1,3 @@
+display_name: AI 漫剧生产总编排
+short_description: Orchestrate drama stages, handoffs, approvals, retries, and evidence.
+default_prompt: 请使用 $ai-drama-production-orchestrator 为这部漫剧编排阶段、并行任务、Owner handoff、审批、失败恢复和交付门禁。

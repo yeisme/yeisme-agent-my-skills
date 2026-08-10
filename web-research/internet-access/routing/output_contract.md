@@ -13,6 +13,33 @@ Every internet-dependent answer should include:
 - key limitations or uncertainty.
 - freshness notes for high-change information.
 
+For agent search and research, do not return raw provider payloads by default. Use the compact retrieval contract below and expose full page content only after the agent selects a source.
+
+## Compact Retrieval Contract
+
+Discovery responses should contain stable source IDs and only the fields needed for selection and citation:
+
+```json
+{
+  "query": "...",
+  "results": [
+    {
+      "source_id": "r1",
+      "url": "https://example.com/article",
+      "title": "Page title",
+      "highlight": "Query-relevant passage",
+      "rank": 1,
+      "source_type": "web"
+    }
+  ],
+  "next": "open source_id r1"
+}
+```
+
+After selection, return only the requested passages or structured fields, together with the source URL and fetch/freshness metadata. Keep HTML, full Markdown, screenshots, provider payloads, and duplicate bodies in a cache keyed by `source_id` or canonical URL.
+
+The retrieval layer should report raw, deduped, and selected counts when research quality or cost is relevant. Preserve independent corroboration, but do not repeat syndicated or byte-identical content in the model context.
+
 ## `lookup` Output
 
 ```markdown
@@ -50,7 +77,7 @@ For version/status:
 
 ```markdown
 **Route Decision**
-- Context: [host CLI / OpenWebUI internal / Connectors Research Harness / Gateway policy]
+- Context: [host CLI / OpenWebUI internal / OpenWebUI Research Harness / Gateway policy]
 - Recommended route: [firecrawl CLI / SearXNG + Firecrawl loader / Research Harness / browser escalation]
 
 **Local Configuration Evidence**

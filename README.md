@@ -111,6 +111,8 @@ If Codex/Agent sees duplicate self-built skills, keep only the `.skills/yeisme/<
 - `yeisme-mcp-registry-onboarding`: add or review MCP backends, credentials, client rendering, Gateway exposure, and permission policies in `mcp/registry.json`.
 - `yeisme-cohors-cli-runtime`: develop `cli/cohors` workflow, daemon, Team Room, trace, CLI/TUI output, eval, Generic CLI Runtime, and Pi/OMP package boundaries.
 - `yeisme-auctra-cli-runtime`: develop `cli/auctra` text creation pipelines, material/brief/review/export workflows, runtime provider contracts, run evidence, agent-facing CLI contracts, and TUI behavior.
+- `auctra-quality-gates`: apply Auctra's reproducible quality, CI/CD, lint-debt, release, and integration-evidence gates.
+- `auctra-screenplay-pattern-research`: group and audit Chinese screenplay/short-drama/novel or reviewed video-to-script samples, preserve source symbols through semantic overlays, isolate calibration/holdout/exploratory evidence, build Pattern Lens claims and dramatic recipes, and gate new scripts before Scaena handoff.
 - `yeisme-eikona-cli-runtime`: develop or document `cli/eikona` generation, prompt skills/decks, visual assessment, recipe reuse, provider adapters, run evidence, project library, Web/API/MCP surfaces, and release behavior.
 - `eikona-visual-router`: route Eikona visual generation requests through Scaena readiness, subject asset direction, Auctra handoff, Xiaohongshu static visual directors, ultrawide storyboard direction, or CLI/runtime owners while preserving review and handoff evidence.
 - `eikona-subject-asset-director`: create reviewable character/style/location/prop/wardrobe candidate packs, consistency evidence, correction candidates, and Eikona handoffs without claiming Scaena freeze or acceptance.
@@ -120,36 +122,35 @@ If Codex/Agent sees duplicate self-built skills, keep only the `.skills/yeisme/<
 - `eikona-xhs-infographic-director`: turn sourced facts, processes, comparisons, or checklists into Xiaohongshu infographics with fact-preserving Eikona evidence.
 - `eikona-xhs-comic-director`: design original-character Xiaohongshu comic-style static posts with page briefs, Eikona commands, and review handoff steps.
 - `eikona-ultrawide-storyboard-director`: design 3:1 continuous-space storyboards, action blocking boards, short-drama previs, historical panorama boards, and clean video-reference prompts with Eikona review/handoff steps.
+- `ai-drama/`: independent first-party AI 漫剧 Skills module；包含 `ai-drama-router`、Story/Character/Showrunner、Director/Visual、Edit/Sound、Continuity、Critic Panel、Producer 和 Production Orchestrator，统一 proposal/evidence/owner handoff，不拥有第二套 canonical state。
 - `yeisme-gitpulse-cli-runtime`: develop, review, or operate `cli/gitpulse` Git workflow orchestration, worktrees, PR flow, TUI behavior, output contracts, and Go validation.
 - `yeisme-pinax-cli-runtime`: develop, review, or operate `cli/pinax` local indexing, proof-loop, project workspace, templates, assets/prompt collections, plugin/API/MCP, profile management, publish/sync daemon, backend client behavior, credentials, evidence, and Go validation.
 - `pinax-agent-router`: route generic note completion and Pinax operational tasks, including writing/saving notes, retrieval, memory, proof, project, template, asset/prompt, sync/storage, publish, API, plugin, and MCP work, to the narrowest operator skill.
 - `pinax-vault-operator`: safely initialize/select Pinax vaults, write or capture notes through `notes/index`, append inbox/journal content, manage drafts, import/export Markdown, and handle ordinary note lifecycle through real Pinax commands.
 - `pinax-retrieval-operator`: retrieve bounded context from Pinax indexes, search, links/backlinks/orphans, KB, saved views, folders, database/dataview, and controlled query commands.
 - `pinax-memory-operator`: capture and recall deterministic Pinax memory records for facts, decisions, events, and tasks; avoid reserved `memory link/prune` workflows.
-- `pinax-sync-storage-operator`: configure and operate Pinax Cloud Sync, sync daemon/logs/conflicts, S3/rclone storage, backend profiles, backend object diagnostics, sync plans, and storage diagnostics without exposing credentials.
+- `pinax-sync-storage-operator`: prefer Pinax repository-encrypted S3/COS migration/bootstrap and durable Capsa commit evidence; keep Git as declaration/ciphertext companion and rclone as an external fallback while operating sync, daemon, conflicts, and backend diagnostics safely.
 - `pinax-proof-maintenance-operator`: run Pinax proof loops, doctor/stats, metadata/repair/organize plans and applies, version snapshot/restore, and record-ledger maintenance with snapshot and approval gates.
-- `pinax-project-workspace-operator`: manage Pinax project workspaces, learning packs, subprojects, boards, work items, personal plans, TaskBridge action drafts, and plan snapshots.
+- `pinax-project-workspace-operator`: manage Pinax project workspaces, learning packs, subprojects, boards, work items, personal plans, local planning action drafts, and plan snapshots.
 - `pinax-template-authoring-operator`: manage Pinax templates, template-backed note creation, template previews/renders/runs, managed index pages, inbox/draft indexes, and journal template workflows.
 - `pinax-asset-prompt-operator`: manage Pinax assets, note attachments, prompt assets, content collections, and local graph projections through bounded commands.
 - `pinax-integration-publish-operator`: operate Pinax publish, plugin, local API, API token, profile alias, MCP, and briefing workflows with read-only defaults and credential-safe approvals.
 - `yeisme-quaestor-cli-runtime`: develop, review, or operate `cli/quaestor` query/research workflows, output contracts, evidence boundaries, adapters, and Go validation.
-- `yeisme-connectors-task-runtime`: maintain the Connectors-owned task control plane, compatibility binary/schema, provider sync, Pinax handoff, evidence, and deletion gates.
-- `yeisme-taskbridge-cli-runtime`: one-release compatibility alias for `yeisme-connectors-task-runtime`; do not add new profile assignments.
 - `performance-profiler`: establish performance baselines, locate bottlenecks, and produce before/after optimization evidence.
 - `project-integration-test-evidence`: require integration, component, system, and e2e test runs to write redacted evidence under the owning project's `temp/integration-test-runs/<run-id>/` directory.
 - `ui-spec-frontend-workflow`: turn PRDs, wireframes, screenshots, or high-fidelity UI images into React UI specs, component trees, implementation constraints, animation rules, and screenshot regression loops.
+- `yeisme-ui-motion-quality`: review Web/React motion for intent, spatial continuity, accessibility, reduced motion, and rendering performance without making a new animation library the default.
 - `yeisme-frontend-quality-workflow`: maintain Storybook, Tailwind stories, Chromatic, addon-designs, Lighthouse, Axe, Front-End Checklist rule lookups, Playwright, and browser-use frontend quality gates.
 - `yeisme-frontend-design-router`: route frontend design, UI generation, redesign, Open Design, Taste, Impeccable, browser visual QA, component sourcing, and canvas UI tasks to the smallest non-conflicting skill chain.
 - `remotion-animation-workflow`: design and integrate React-based rendered animations, product walkthroughs, data-driven clips, `<Player>` previews, and server rendering boundaries without using Remotion for ordinary UI motion.
 - `lenis-smooth-scroll-integration`: integrate Lenis into document or custom-container scrolling while preserving reduced motion, cleanup, nested controls, and a single RAF owner.
-- `scaena-production-ui-workflow`: constrain Scaena production browser UI design and implementation with production-stage semantics, subject readiness, dense workspace interaction, state recovery, accessibility, and evidence requirements.
 - `backend-system-workflow`: design, implement, or review backend APIs, workers, state machines, ORM/database access, Go GORM-only persistence, concurrency, permissions, observability, migrations, tests, and performance gates.
 - `go-rust-implementation-defaults`: decide whether Yeisme tools, backends, CLI, MCP, daemons, workers, Gateway, and system capabilities should stay on TypeScript/Bun or move to prebuilt native packages, Pi/OMP forked packages, Go, or Rust.
 - `codegraph-cli-code-intelligence`: use CodeGraph CLI to index code, query context, inspect call graphs, and analyze impact before implementation.
 - `yeisme-repo-routing`: decide where new files, workflows, skills, MCP code, CLI code, agent assets, Gateway assets, and docs belong.
-- `local-first-backup-sync-policy`: guide reusable Git-managed local state plus S3-compatible, rclone, and cloud-drive backup/restore policy while keeping real-time sync as a separate design; Yeisme examples include `.eikona`, `.auctra`, `.scaena`, `.pinax`, and `.gitpulse`.
+- `local-first-backup-sync-policy`: prefer product-native encrypted backup, then define Git/S3/rclone/cloud-drive companion and fallback roles; Pinax specifically uses repository-encrypted S3/COS first, Git second, and rclone only as fallback.
 - `yeisme-claude-skills-layout`: design, migrate, or review the `.claude/skills` and `.agents/skills` dual active runtime generated from source skills and profiles by `scripts/skills.sh`.
-- `yeisme-git-worktree-flow`: use Git flow, `git worktree`, `Taskfile`, and `nerdctl compose.yml` for development.
+- `yeisme-git-worktree-flow`: route preview-critical client work to the current workspace, isolate backend hot-reload work with Git flow/worktrees, and use staged checkpoints, `Taskfile`, and `nerdctl compose.yml` for development.
 - `yeisme-coding-execution-driver`: turn coding tasks into live checklists, execution loops, verification checkpoints, and explicit stop conditions.
 - `scaena-production-operator`: operate resumable Scaena plan/subject/produce/review/assemble/verify stages with duration, asset, preflight, quality, and evidence gates.
 - `scaena-subject-asset-readiness`: block Scaena production visuals until accepted source facts, frozen subject assets, exact shot bindings, generation preflight, and consistency review requirements are satisfied.

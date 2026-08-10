@@ -15,6 +15,8 @@ Own the transition from temporary image bytes to durable evidence, curated reuse
 4. Keep every captured image in `library_state=not_imported` until a human or owning workflow explicitly saves it.
 5. Use a download grant for network delivery. Never return or copy an absolute runstore path.
 
+For new Eikona generations, the canonical remote model ref is `openai/gpt-5.4-image-2`. The short aliases `gpt-5.4-image-2` and `gpt-image-2` are accepted for compatibility; persisted `openai:gpt-image-2` remains legacy-only and must not be used in new commands or metadata.
+
 ## Capture External Images
 
 Preserve prompt, model, and source tool whenever available:
@@ -23,7 +25,7 @@ Preserve prompt, model, and source tool whenever available:
 eikona artifacts import ./icon.png \
   --scope project \
   --prompt "small product icon" \
-  --model openai:gpt-image-2 \
+  --model openai/gpt-5.4-image-2 \
   --source-tool codex-imagegen \
   --json
 ```
@@ -47,6 +49,16 @@ eikona library save eikona://artifact/<artifact_handle> \
 Treat permission and provenance as separate gates. Owned assets with incomplete provenance may be viewed and repaired, but must not enter automatic workflow selection.
 
 Do not use `library save` as a substitute for capture: the run artifact is the immutable source evidence; the Visual Library item is the curated reuse projection.
+
+For an Eikona-generated subject that must become a project file, use the typed handoff flow:
+
+```bash
+eikona assets handoff eikona://artifacts/<run_id>/artifact_001 --audience agent --json
+eikona assets stage eikona://artifacts/<run_id>/artifact_001 --to outputs/characters/korea-v1/subject.png --json
+eikona assets apply eikona://artifacts/<run_id>/artifact_001 --project current --to outputs/characters/korea-v1/subject.png --yes --json
+```
+
+Use `eikona artifacts copy` only for an explicit review/export copy. It does not replace `assets stage`/`assets apply` and does not imply production acceptance.
 
 ## Use the Service API
 
@@ -73,7 +85,7 @@ Read [references/asset-lifecycle-contract.md](references/asset-lifecycle-contrac
 - Never bypass runstore, hand-edit evidence, or invent provenance.
 - Never expose absolute paths, credentials, raw provider payloads, or signed URLs as durable identifiers.
 - Never auto-promote, auto-accept, or widen project assets to global scope.
-- Keep the recommended model spelling `openai:gpt-image-2`.
+- Keep the recommended model spelling `openai/gpt-5.4-image-2`; accept `gpt-5.4-image-2` and `gpt-image-2` as input aliases, but keep the legacy `openai:gpt-image-2` out of new recommendations.
 
 ## Verification
 
