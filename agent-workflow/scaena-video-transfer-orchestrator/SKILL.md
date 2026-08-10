@@ -1,6 +1,6 @@
 ---
 name: scaena-video-transfer-orchestrator
-description: Use when operating an existing-decomposition Scaena video-transfer project, especially validating a reference package, adapting it to a new market, sampling character/style assets, reviewing continuity, preparing a reference-video input bundle, or handing off a motion-preview request; keep Anatomia, canonical state, provider calls, freeze, and production acceptance behind explicit gates.
+description: Use when operating an existing-decomposition Scaena video-transfer project, especially validating a reference package, adapting it to a new market, sampling Eikona character/style assets, preparing pixel-locked character masks, reviewing continuity, creating a first-shot canary, or handing off a reference-video generation request; keep Anatomia, canonical state, provider calls, subject freeze, mask acceptance, cost approval, and production acceptance behind explicit gates.
 ---
 
 # Scaena 视频转绘编排
@@ -33,6 +33,23 @@ package_ready
 ```
 
 用户的“继续”只表示继续检查和提出下一动作，不能自动等价于付费调用、接受候选、冻结主体、绑定镜头或导出。
+
+当用户明确要求“原场景完全保留”“像素锁定”“第一个视频第一个分镜”时，切换到像素锁定 canary 分支：
+
+```text
+source_registered
+  -> chunk_locked
+  -> eikona_candidates_review
+  -> subjects_frozen
+  -> mask_pending_review
+  -> mask_accepted
+  -> manifest_validated
+  -> canary_cost_approved
+  -> provider_task_created_once
+  -> pixel_lock_composite_review
+```
+
+详细经验和停点读取 [references/pixel-lock-production-lessons.md](references/pixel-lock-production-lessons.md)。
 
 ## 交互路由
 
@@ -89,7 +106,7 @@ scaena source-video register --from /workspaces/yeisme-agent/temp/love-strikes-p
 
 Pi/插件只能调用 Scaena typed API、MCP owner 或 Eikona CLI；不得在插件中拼 provider 请求、读取 `.scaena` SQLite、覆盖 manifest/evidence，或把聊天 transcript 当作事实来源。
 
-所有 Eikona 图片 intent 在韩国转绘项目中默认显式使用 `openai:gpt-image-2`。历史 slash ID 与短别名只作为兼容输入，不得写入新的 prompt、skill 或正向命令示例；只有用户明确指定、fixture/dry-run 或 legacy compatibility 调查时才使用其他模型，并记录原因。Pi 不保存 key，凭据只存在 Eikona user-level channel。
+所有 Eikona 图片 intent 在韩国转绘项目中默认显式使用 `openai/gpt-5.4-image-2`。短别名只作为兼容输入，历史 `openai:gpt-image-2` 只允许兼容读取；新的 prompt、skill、runbook 和正向命令必须保存 slash-form canonical ref。若 Eikona 回执出现双 provider 前缀、空 `original_model_ref` 或模型漂移，停止 Scaena handoff 并返回模型规范化 blocker。Pi 不保存 key，凭据只存在 Eikona user-level channel。
 
 ## 结果合同
 
@@ -124,6 +141,9 @@ job_ref=<long-running job ref, when present>
 - 权限、成本、provider 能力或远端模型状态未知；
 - production request 缺少 frozen subject/style/reference、generation preflight 或 exact shot binding；
 - provider 返回成功但没有 artifact digest、owner receipt 或 review 状态；
+- Eikona artifact 仍是 candidate、尚未完成 typed handoff/stage/apply，或 Scaena 没有 frozen `SubjectVersion`；
+- 蒙版仍是 `pending_review`、退回版本没有 supersedes lineage，或审核蒙版外出现非零像素差异；
+- Eikona model ref 不是 canonical `openai/gpt-5.4-image-2`，或回执出现重复 provider 前缀；
 - 生产 bundle 的 `reference_video` 仍是本地路径、`file://` 或瞬时 URL，而不是已登记的 durable source-video ref；
 - 需要替换或删除已有资产但没有明确确认。
 
@@ -145,6 +165,7 @@ go -C /workspaces/yeisme-agent/agent/scaena test ./internal/domain/transferworkf
 - 项目流程：`data/scaena-video-transfer-lab/docs/01-韩国市场转绘交互设计.md`
 - 项目阶段合同：`data/scaena-video-transfer-lab/docs/02-阶段门禁与验收.md`
 - 项目工具合同：`data/scaena-video-transfer-lab/docs/03-Pi交互与工具合同.md`
+- Love Strikes 实测复盘：`data/scaena-video-transfer-lab/docs/08-Love-Strikes-Scaena-Eikona生产复盘.md`
 - 视频参考约束：`$ai-drama-video-reference-director`
 - 主体生产门禁：`$scaena-subject-asset-readiness`
 - Scaena 生产操作：`$scaena-production-operator`

@@ -1,4 +1,4 @@
 interface:
-  display_name: "Scaena 视频转绘编排"
-  short_description: "Route Scaena video-transfer stages and safety gates"
-  default_prompt: "Use $scaena-video-transfer-orchestrator to route an existing-decomposition Scaena video-transfer test through validation, Korea adaptation, subject candidates, review, and motion handoff."
+  display_name: "Scaena 像素锁定视频转绘"
+  short_description: "Route Scaena and Eikona pixel-locked video canaries"
+  default_prompt: "Use $scaena-video-transfer-orchestrator to route an existing video-transfer project through Eikona subject candidates, Scaena mask review, frozen subject admission, and a first-shot pixel-lock canary."
