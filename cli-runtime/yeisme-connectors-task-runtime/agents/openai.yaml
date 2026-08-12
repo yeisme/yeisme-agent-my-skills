@@ -1,0 +1,3 @@
+display_name: Yeisme Connectors Task Runtime
+short_description: Maintain the Connectors-owned task runtime, TaskBridge compatibility contract, provider sync, evidence, and deletion gates.
+default_prompt: Change or review the task-control runtime in backend-server/connectors while preserving connectors task behavior, TaskBridge compatibility schemas, dry-run and confirmation gates, provider credential boundaries, Pinax handoff, redacted evidence, and Go validation commands.

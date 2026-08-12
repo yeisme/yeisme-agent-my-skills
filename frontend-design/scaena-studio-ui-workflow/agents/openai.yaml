@@ -1,0 +1,4 @@
+interface:
+  display_name: "Scaena Studio UI Workflow"
+  short_description: "Design production-grade Scaena Studio interfaces"
+  default_prompt: "Use $scaena-studio-ui-workflow to design or implement a Scaena Studio workspace with domain-correct states, interactions, and evidence."
