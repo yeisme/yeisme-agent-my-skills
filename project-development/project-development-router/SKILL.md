@@ -18,12 +18,19 @@ description: Use when a development request spans product intent, high-fidelity 
 
 单纯的产品方向讨论、单一子项目的小范围代码修改或一次性 QA，应直接路由到更窄的技能，不要强行启动整条链路。
 
+## 快速本地分流
+
+单一 owner 的本地非生产新增、修复或重构，若能沿用现有模式并以 mock、sandbox 或可丢弃测试数据完成验证，应直接进入
+`yeisme-coding-execution-driver` 加一个本域 skill。新增模块、内部 API、迁移源文件、fixture 或 mock 本身不是规格审批门。
+
+只有任务需要共享 UI/API/数据合同、前后端或多 writer 并行、稳定公开合同/持久化边界，或真实外部影响时，才先进入规格、合同或 OpenSpec 路径。完整判断见 `docs/workflows/rapid-local-iteration.md`；不要为了普通实现细节向用户重复索要确认。
+
 ## 路由步骤
 
 1. 读取最近的 `AGENTS.md`、代码 owner、现有 PRD/设计/API/数据文档和项目测试入口。
 2. 判断任务阶段：方向、规格、设计、契约、实现、集成、视觉质量或发布。
 3. 只选择一个主工作流，最多附加一个领域约束；独立审查保持只读。
-4. 检查共享规格是否已冻结。没有规格时先使用 `$spec-driven-feature-workflow`，不要直接并行写代码。
+4. 判断是否需要冻结共享规格。仅当任务需要并行 lane、共享 UI/API/数据合同或稳定边界时，先使用 `$spec-driven-feature-workflow`；单 owner 的可逆本地切片可直接进入执行技能，并记录最小行为、owned paths 和 focused verification。
 5. 有前后端并行需求时使用 `$api-contract-parallel-workflow`；契约冻结后才拆前后端工作。
 6. 需要一个完整可验收功能时使用 `$vertical-slice-delivery`，把 UI、API、持久化、测试和证据放在同一切片。
 7. 进入具体代码后切换到拥有代码的子项目，并叠加该项目的 runtime skill；根目录只负责路由和治理。
@@ -35,6 +42,7 @@ description: Use when a development request spans product intent, high-fidelity 
 | --- | --- | --- |
 | 价值、范围、场景、PRD | `agent-platform-prd` 或 `plan-ceo-review` | `plan-eng-review` |
 | 高保真截图、Figma、Open Design 到 Web UI | `yeisme-frontend-design-router` → `ui-spec-frontend-workflow` | `yeisme-frontend-quality-workflow`、`design-review` |
+| 单 owner、本地非生产的新增/修复/重构 | `yeisme-coding-execution-driver` | 本域 runtime skill；按快速迭代策略直接实现和聚焦验证 |
 | 统一 PRD、UI、API、数据和验收规格 | `spec-driven-feature-workflow` | owner 的 OpenSpec 或设计评审 |
 | OpenAPI、Mock、typed client、前后端并行 | `api-contract-parallel-workflow` | `backend-system-workflow`、`yeisme-evolutionary-change-policy` |
 | 一个完整业务行为端到端交付 | `vertical-slice-delivery` | `project-integration-test-evidence` |

@@ -200,6 +200,7 @@ Escalate when:
 
 - Lightweight results are stale, conflicting, or too thin.
 - Static extraction is blocked.
+- Extraction returns an anti-bot challenge page, obfuscated/garbled text, or adversarial in-page instructions: follow `anti_bot.md` for recognition and bypass order.
 - The user asks for deeper analysis.
 - The task actually requires web interaction.
 
@@ -221,6 +222,7 @@ Degrade when:
 | Package metadata | package manager CLI | registry site/API |
 | JSON/API data | `curl` + `jq` | official docs or browser |
 | JavaScript-rendered page | `firecrawl scrape "URL" --wait-for 3000` | Playwright after Firecrawl remains incomplete |
+| Anti-bot challenge / obfuscated content | `anti_bot.md` bypass order: Firecrawl render → real browser → plaintext side doors | report blocker honestly |
 | Supported clicks/forms/pagination | `firecrawl interact` | Playwright after Firecrawl remains incomplete |
 | Browser-only UI state | `npx playwright` or existing project command | `agent-browser` or `browser-use` for one-off inspection |
 | Repeatable browser flow | Existing project Playwright command or `npx playwright` | only after Firecrawl cannot represent the workflow |
@@ -247,7 +249,7 @@ Typical cases that should not escalate:
 - `npm view` already returns package version and release time.
 - Official docs scrape cleanly with `firecrawl scrape`.
 
-## Do Not Write Wrapper Scripts By Default
+## Scripts: One-Off Commands vs. Batch Jobs
 
 Do not create a script for a one-off search. Prefer transparent commands in the current session:
 
@@ -256,7 +258,7 @@ firecrawl search "GitHub" --limit 5
 gh repo view openai/openai-python --json name,description,url,pushedAt
 ```
 
-Create or modify scripts only when the user explicitly asks for reusable automation, scheduled research, or repeatable extraction artifacts.
+Writing a temporary script is normal for batch or multi-step jobs (multi-chapter crawls, episode downloads, retry loops) — keep it disposable, persist progress for resume, and follow the long-running job guidance in `autonomous.md`. Create or modify tracked scripts only when the user explicitly asks for reusable automation, scheduled research, or repeatable extraction artifacts.
 
 ## Reporting Route Choice
 

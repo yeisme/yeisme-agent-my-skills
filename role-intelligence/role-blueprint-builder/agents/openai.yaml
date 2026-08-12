@@ -1,0 +1,3 @@
+display_name: 角色蓝图构建器
+short_description: 构建有来源、状态、记忆、权限、交互与评测边界的通用 RoleBlueprint。
+default_prompt: 请使用 $role-blueprint-builder 为这个人物、NPC、数字人、顾问、陪伴角色或 Agent 职责设计可审查 RoleBlueprint，并列出阻断缺陷、readiness、owner 和渐进式验证计划。

@@ -20,6 +20,12 @@ description: Use when turning a product idea, PRD, screenshot, Figma/Open Design
 5. 验收矩阵：每个状态的可观察结果、验证入口、测试层级、截图或运行证据。
 6. 垂直切片任务：owner、owned paths、依赖、并行 lane、验证命令和失败重检方式。
 
+## 何时不应先走本技能
+
+本技能不是每个新功能的前置审批门。若工作由单一 owner 在本地非生产环境完成、能沿用已有模式、没有共享或稳定公开合同、没有对非可丢弃数据的真实迁移，也不需要并行 writer，则直接使用 `yeisme-coding-execution-driver` 完成最小可逆切片和 focused verification。新增模块、内部 endpoint、迁移源文件、mock 或 fixture 并不自动要求完整规格。
+
+当工作需要共享 UI/API/数据合同、前后端并行、跨项目 handoff、稳定合同演进，或从本地试验升级为长期交付时，再使用本技能。完整审批边界见 `docs/workflows/rapid-local-iteration.md`。
+
 ## 工作流
 
 ### 1. 定位 owner 与边界
@@ -70,7 +76,7 @@ Verify: <真实项目命令、截图路径或检查入口>
 
 ### 6. 输出可执行任务
 
-任务必须先完成共享合同，再拆出前端 lane、后端 lane、集成 lane 和视觉 lane。标明哪些任务可并行、哪些任务等待 contract、哪些路径禁止修改。跨模块功能使用 `$vertical-slice-delivery` 继续推进。
+需要共享合同的任务必须先完成共享合同，再拆出前端 lane、后端 lane、集成 lane 和视觉 lane。标明哪些任务可并行、哪些任务等待 contract、哪些路径禁止修改。单 owner 的本地快速切片不必为了这些 lane 创建完整规格；跨模块或需要并行的功能使用 `$vertical-slice-delivery` 继续推进。
 
 ## Ready 检查
 

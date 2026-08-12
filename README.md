@@ -103,6 +103,8 @@ If Codex/Agent sees duplicate self-built skills, keep only the `.skills/yeisme/<
 ## Current Self-built Skills
 
 - `yeisme-skill-publisher`: create, validate, sync, and publish self-built skills under `.skills/yeisme/`.
+- `codex-agent-runtime`: configure Codex sessions, skill/runtime mapping, and the default fast local-iteration boundary for Yeisme work.
+- `project-development-router`, `spec-driven-feature-workflow`, and `vertical-slice-delivery`: choose the direct local execution path for reversible one-owner work, or the shared-contract path for parallel and durable delivery.
 - `ai-native-cli-output-contract`: shared CLI contract for default summaries, `--agent`, `--json`, `--events`, `--explain`, envelopes, redaction, and contract tests.
 - `yeisme-evolutionary-change-policy`: block generation-breaking (断代) updates across CLI output, RPC/API, database migrations, config/registry, public Go/TS APIs, and skill schemas; force incremental backward-compatible evolution with an OpenSpec gate.
 - `yeisme-mcp-builder`: create, organize, review, and record self-built MCP capabilities under `mcp/`.
@@ -147,11 +149,11 @@ If Codex/Agent sees duplicate self-built skills, keep only the `.skills/yeisme/<
 - `backend-system-workflow`: design, implement, or review backend APIs, workers, state machines, ORM/database access, Go GORM-only persistence, concurrency, permissions, observability, migrations, tests, and performance gates.
 - `go-rust-implementation-defaults`: decide whether Yeisme tools, backends, CLI, MCP, daemons, workers, Gateway, and system capabilities should stay on TypeScript/Bun or move to prebuilt native packages, Pi/OMP forked packages, Go, or Rust.
 - `codegraph-cli-code-intelligence`: use CodeGraph CLI to index code, query context, inspect call graphs, and analyze impact before implementation.
-- `yeisme-repo-routing`: decide where new files, workflows, skills, MCP code, CLI code, agent assets, Gateway assets, and docs belong.
+- `yeisme-repo-routing`: classify a proposed capability as `fit|split-owner|reject-now` before PRD/Spec work, preserve user-required capabilities across owner splits, and decide where files, workflows, skills, MCP code, CLI code, agent assets, Gateway assets, clients, services, and docs belong.
 - `local-first-backup-sync-policy`: prefer product-native encrypted backup, then define Git/S3/rclone/cloud-drive companion and fallback roles; Pinax specifically uses repository-encrypted S3/COS first, Git second, and rclone only as fallback.
 - `yeisme-claude-skills-layout`: design, migrate, or review the `.claude/skills` and `.agents/skills` dual active runtime generated from source skills and profiles by `scripts/skills.sh`.
 - `yeisme-git-worktree-flow`: route preview-critical client work to the current workspace, isolate backend hot-reload work with Git flow/worktrees, and use staged checkpoints, `Taskfile`, and `nerdctl compose.yml` for development.
-- `yeisme-coding-execution-driver`: turn coding tasks into live checklists, execution loops, verification checkpoints, and explicit stop conditions.
+- `yeisme-coding-execution-driver`: turn coding tasks into live checklists, fast local implementation loops, verification checkpoints, and explicit stop conditions for real high-impact side effects.
 - `scaena-production-operator`: operate resumable Scaena plan/subject/produce/review/assemble/verify stages with duration, asset, preflight, quality, and evidence gates.
 - `scaena-subject-asset-readiness`: block Scaena production visuals until accepted source facts, frozen subject assets, exact shot bindings, generation preflight, and consistency review requirements are satisfied.
 - `golang-cobra-viper-cli-architecture`: enforce Yeisme Go CLI defaults around Cobra/Viper, command/config/output boundaries, and shared module extraction.
@@ -176,6 +178,20 @@ These skills intentionally remain outside the default root profile. Discover the
 ```bash
 scripts/skills.sh search "llm-game"
 scripts/skills.sh resolve llm-game-systems-architect
+```
+
+## Role Intelligence
+
+The `role-intelligence/` module provides on-demand cross-project role design and routing:
+
+- `role-intelligence-router`: classify role requests across authored characters, games, digital humans, personal twins, operational agent roles, memory, and embodiment; choose one primary workflow, one canonical owner, blocking gates, and a progressive next stage.
+- `role-blueprint-builder`: build a reviewable `RoleBlueprint` that separates identity/canon, state/memory, authority/tools, and presentation, with consent, rights, safety, replay, and owner handoff constraints.
+
+These skills remain outside the default root and subproject profiles during the blueprint-only stage. Discover them with:
+
+```bash
+scripts/skills.sh search "role intelligence"
+scripts/skills.sh resolve role-blueprint-builder
 ```
 
 ## Validation And Sync

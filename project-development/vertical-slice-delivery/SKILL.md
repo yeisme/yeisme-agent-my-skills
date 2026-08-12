@@ -43,6 +43,10 @@ accepted
 
 任一验证失败进入 `rework`，修复后回到对应门；`blocked` 必须记录阻塞证据和需要的外部决定。状态转移应说明 actor、幂等性、审计/事件、副作用、重试和失败处理。
 
+### 本地快速路径
+
+对单 owner、可逆、非生产的本地切片，只要写明最小用户行为、owned paths 和 focused verification，就可以从 `requirement_ready` 直接进入实现与验证；不必因为新增模块、内部 API、迁移源代码或 mock 先补一套完整规格。该路径不得用于并行 writer、共享或稳定合同、非可丢弃数据迁移、生产启用或真实外部写入；这些情况仍回到完整的 contract/design 门。
+
 ## 交付步骤
 
 ### 1. 选择最小行为
@@ -55,9 +59,9 @@ accepted
 
 拆掉不能影响首条可交付路径的页面、字段、动画和附加场景。把探索性场景标注为 exploratory，不要伪装成成熟能力。
 
-### 2. 先冻结合同与门禁
+### 2. 按需冻结共享合同与门禁
 
-确认 `$spec-driven-feature-workflow` 的产品、UI、API、数据和验收规格为 ready；有前后端并行时再使用 `$api-contract-parallel-workflow`。contract 未冻结前，不启动依赖它的实现 lane。
+需要共享 UI/API/数据合同、稳定公开表面或前后端并行时，先确认 `$spec-driven-feature-workflow` 的产品、UI、API、数据和验收规格为 ready；有前后端并行时再使用 `$api-contract-parallel-workflow`。单 owner 的本地快速路径不把完整规格当作前置门，但必须使用现有合同或写下最小行为和验证信号。contract 未冻结前，不启动依赖它的并行实现 lane。
 
 ### 3. 创建有 lease 的 lane
 
@@ -74,7 +78,7 @@ accepted
 | evidence | 测试、截图、diff 或运行证据位置 |
 | failure recheck | 失败后回到哪个门、先检查什么 |
 
-前端和后端只有在 contract_ready 后才能并行。若用户没有明确授权使用 subagent，不创建子 agent；可以在同一个 owner 中按 lane 顺序执行。
+前端和后端只有在 contract_ready 后才能并行。若用户没有明确授权使用 subagent，不创建子 agent；单 owner 的本地快速路径可以按 lane 顺序直接执行。
 
 默认 workspace mode 也属于 lane contract：
 
@@ -115,4 +119,4 @@ accepted
 
 ## 边界
 
-本技能不替代产品决策、领域 runtime、发布、部署、生产写入或外部消息发送。它只管理一个功能切片的依赖、状态和证据；代码实现切换到 `yeisme-coding-execution-driver`，UI 视觉门切换到 `ui-spec-frontend-workflow` 与 `yeisme-frontend-quality-workflow`，发布前再使用 `review`/`qa`/`ship`。
+本技能不替代产品决策、领域 runtime、发布、部署、生产写入或外部消息发送。它只管理一个功能切片的依赖、状态和证据；代码实现切换到 `yeisme-coding-execution-driver`，UI 视觉门切换到 `ui-spec-frontend-workflow` 与 `yeisme-frontend-quality-workflow`，发布前再使用 `review`/`qa`/`ship`。快速路径的审批边界遵循 `docs/workflows/rapid-local-iteration.md`。

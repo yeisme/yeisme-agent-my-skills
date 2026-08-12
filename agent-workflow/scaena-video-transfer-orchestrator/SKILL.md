@@ -1,6 +1,6 @@
 ---
 name: scaena-video-transfer-orchestrator
-description: Use when operating an existing-decomposition Scaena video-transfer project, especially validating a reference package, adapting it to a new market, sampling Eikona character/style assets, preparing pixel-locked character masks, reviewing continuity, creating a first-shot canary, or handing off a reference-video generation request; keep Anatomia, canonical state, provider calls, subject freeze, mask acceptance, cost approval, and production acceptance behind explicit gates.
+description: Use when operating an existing-decomposition Scaena video-transfer project, especially validating a reference package, adapting it to a new market, sampling Eikona character/style assets, authoring timestamp-separated prompt files, preserving prompt provenance for an approved corpus, preparing pixel-locked character masks, reviewing continuity, creating a first-shot canary, or handing off a reference-video generation request; keep Anatomia, canonical state, provider calls, training use, subject freeze, mask acceptance, cost approval, and production acceptance behind explicit gates.
 ---
 
 # Scaena 视频转绘编排
@@ -108,6 +108,81 @@ Pi/插件只能调用 Scaena typed API、MCP owner 或 Eikona CLI；不得在插
 
 所有 Eikona 图片 intent 在韩国转绘项目中默认显式使用 `openai/gpt-5.4-image-2`。短别名只作为兼容输入，历史 `openai:gpt-image-2` 只允许兼容读取；新的 prompt、skill、runbook 和正向命令必须保存 slash-form canonical ref。若 Eikona 回执出现双 provider 前缀、空 `original_model_ref` 或模型漂移，停止 Scaena handoff 并返回模型规范化 blocker。Pi 不保存 key，凭据只存在 Eikona user-level channel。
 
+## Seedance 提示词与请求调试
+
+### 文件优先与时间戳分段
+
+长提示词必须优先保存为项目内的普通 Markdown/text 文件，再通过现有 `--prompt-file` 入口加载。目录按 Eikona 的 owner/asset-type/collection 语义组织：
+
+```text
+prompts/scaena/video-transfer/<episode>-<shot-or-chunk>/prompts/01-<direction>.md
+```
+
+一个文件只对应一个 shot/chunk，或一个已经明确审核通过的 merged chunk。文件只放会发送给 Seedance 的自然语言；model、task、URL、credential、审批状态、训练授权和 source absolute range 不得写进 prompt body。
+
+当片段包含多个动作阶段时，必须把时间戳直接写成独立块，方便人看：
+
+```text
+00:00:00.000 --> 00:00:01.600
+女主快速接近教室门，保留原片机位、背景、构图和匆忙步频。
+
+---
+
+00:00:01.600 --> 00:00:03.200
+女主握住教室门把手并向下压，动作连续，门和道具位置不变。
+
+---
+
+00:00:03.200 --> 00:00:04.800
+女主推开教室门进入，保留快迟到的节奏和原片结束构图。
+```
+
+时间必须是当前 provider clip 的相对时间：首段从零开始，按顺序无 gap/overlap，末段等于 clip duration。源视频绝对时间由 shot/chunk binding 保存。详细规则读取 [references/prompt-corpus-and-timeline.md](references/prompt-corpus-and-timeline.md)。
+
+当前真实提交命令：
+
+```bash
+scaena video generate \
+  --project /workspaces/yeisme-agent/data/scaena-video-transfer-lab \
+  --model doubao-seedance-2-0-260128 \
+  --bundle <bundle-ref> \
+  --media-profile <storage-profile> \
+  --prompt-file prompts/scaena/video-transfer/E001-001/prompts/01-source-locked.md \
+  --draw 1 \
+  --candidate-only \
+  --json
+```
+
+提交后必须用 `video task prompt --verify-prompt-file` 校验 hash。Prompt corpus 当前只完成设计：正文可保存在用户项目文件中，但训练晋级必须等待 Scaena corpus CLI 落地，并满足人工 accepted、rights allowed、`training_use=allowed` 和清洗无 blocker。不得因为 provider task 成功就声称可训练。
+
+当用户问“最终提示词是什么”“最终 prompt 有没有被改”“到底上传了哪些图”“为什么多出一个角色”时，不能只复述一句自然语言，也不能输出 raw provider payload。先用紧凑的 prompt provenance 查询；只有问题涉及媒体绑定或参数时才升级到完整请求结构：
+
+```bash
+scaena video task prompt \
+  --project /workspaces/yeisme-agent/data/scaena-video-transfer-lab \
+  --model doubao-seedance-2-0-260128 \
+  --task <task-id> \
+  --agent
+```
+
+`--agent` 只给 task、prompt revision、capture status、source、digest prefix、字节数、delivery、transform 和本地文件校验，避免浪费上下文；它不重复展开安全 `data`。如需核对操作者手上的文件，追加 `--verify-prompt-file prompts/scaena/video-transfer/E001-001/prompts/01-source-locked.md`，只返回 `matched|mismatched|unavailable|not_requested`，绝不回显正文或路径。需要 media ordering、asset refs 或 body 参数时，再运行：
+
+```bash
+scaena video task debug \
+  --project /workspaces/yeisme-agent/data/scaena-video-transfer-lab \
+  --model doubao-seedance-2-0-260128 \
+  --task <task-id> \
+  --json
+```
+
+1. **来源**：`prompt.source`、digest、byte_count。若是 `prompt_file`，正文由操作者在自己的文件中查看；Scaena 不回显或持久化正文。默认交互只报告 digest prefix；只有显式 `--json` 才包含完整安全摘要。
+2. **Scaena 变换**：Tokenspace mixed-reference 路径是 `delivery=verbatim`、`scaena_transform=identity`。这表示 CLI 文本原样装入 `ModelGenerateInput.Prompt`，没有隐式人物、镜头或风格附加词。
+3. **wire content 顺序**：固定 `text → reference_video → reference_image...`。内部 `character_identity` 仅在 adapter 边界映射成 wire `reference_image`；`content[]` 的 asset refs 是判断错误角色是否被上传的唯一证据。
+4. **安全参数**：model、duration、ratio、resolution、audio、API surface 和 filing 是否存在。正文、签名 URL、object key、credential、raw body 均不可输出。
+5. **结果边界**：正确 prompt / binding 只证明输入契约；Seedance 是采样模型，不能证明手部、门把手、人物数量或帧级连续性。只有审核 mask 加源帧 pixel-lock composite 的蒙版外差分为零，才能证明原场景/物品/字幕保留。
+
+对于快照上线前的任务，明确报告 `capture_status=not_captured`，只用冻结 bundle 和确定性 adapter 规则说明已知 media order；不得臆造历史 prompt 或参数。完整方法见 [references/seedance-request-debug.md](references/seedance-request-debug.md)。
+
 ## 结果合同
 
 每次工具调用都投影为短结果：
@@ -130,6 +205,8 @@ job_ref=<long-running job ref, when present>
 在生成或审阅角色资产时，至少检查：身份、脸/发型、轮廓、默认服装、伤口/状态、视线、站位、关键道具和市场细节。A/B 的关系位置和动作因果必须保留；人物外貌可变，但不能让角色在跨镜头中失去可识别身份。
 
 首批核心主体建议为 6 个：女主、男主、现男友、闺蜜、背叛对象、男主女友。归档中可继续扩展到完整角色表，但配角不应阻塞首个 A/B 哨兵镜头。
+
+分镜提示词的连续性检查必须逐时间块执行：每块只描述该时间段真实出现的角色、动作、遮挡、道具和镜头；不存在的角色不得绑定 reference image。Prompt 文本不能覆盖 bundle 的角色 admission，最终上传角色以 `video task debug` 的 `content[]` 为准。
 
 ## 安全停点
 
@@ -166,6 +243,8 @@ go -C /workspaces/yeisme-agent/agent/scaena test ./internal/domain/transferworkf
 - 项目阶段合同：`data/scaena-video-transfer-lab/docs/02-阶段门禁与验收.md`
 - 项目工具合同：`data/scaena-video-transfer-lab/docs/03-Pi交互与工具合同.md`
 - Love Strikes 实测复盘：`data/scaena-video-transfer-lab/docs/08-Love-Strikes-Scaena-Eikona生产复盘.md`
+- Seedance 请求调试：`references/seedance-request-debug.md`
+- Prompt corpus 与时间戳格式：`references/prompt-corpus-and-timeline.md`
 - 视频参考约束：`$ai-drama-video-reference-director`
 - 主体生产门禁：`$scaena-subject-asset-readiness`
 - Scaena 生产操作：`$scaena-production-operator`

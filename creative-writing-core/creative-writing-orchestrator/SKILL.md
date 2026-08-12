@@ -21,19 +21,20 @@ description: Use when coordinating multi-stage Chinese creative-writing tasks ac
 ## 参考资料
 
 只在任务需要对应细节时读取参考资料，避免把所有模板一次性加载进上下文：
-- `../wechat-article-writer/references/platform-nonfiction-playbook.md`：需要公众号、书评、产品评测、教程、周报或旅行攻略结构模板时读取。
-- `../chinese-novel-orchestrator/references/chinese-novel-adaptation-matrix.md`：需要小说转短剧、长电视剧、电影、音频、漫画、游戏剧情或短视频系列的改编交接包时读取。
-- `../chinese-novel-orchestrator/references/chinese-novel-analysis-decomposition.md`：需要先拆解小说主题、结构、人物、场景功能或 IP 价值时读取。
+- `../../content-writing/wechat-article-writer/references/platform-nonfiction-playbook.md`：需要公众号、书评、产品评测、教程、周报或旅行攻略结构模板时读取。
+- `../../auctra-novel/novel-writing/chinese-novel-orchestrator/references/chinese-novel-adaptation-matrix.md`：需要小说转短剧、长电视剧、电影、音频、漫画、游戏剧情或短视频系列的改编交接包时读取。
+- `../../auctra-novel/novel-writing/chinese-novel-orchestrator/references/chinese-novel-analysis-decomposition.md`：需要先拆解小说主题、结构、人物、场景功能或 IP 价值时读取。
 
 ## 工作流
 
 1. 将请求拆成阶段：创作简报、结构、初稿、润色、校验和导出。
-2. 任务类型不明确或涉及多个候选技能时，先读取 router 和匹配的 skill descriptions，再决定 owner skill。
-3. 每个阶段交给范围最窄的工作技能。
-4. Auctra 工作优先使用 `auctra material`、`auctra text`、`auctra review` 和 `auctra export`。
-5. 跨格式改写时保留原始意图，例如小说章节转小红书笔记、公众号文章或改编交接包。
-6. 小说改编先产出改编诊断、媒介结构和交接包，再交给 `screenplay-scene-writer`、`short-video-scriptwriter`、`podcast-scriptwriter` 等具体写手。
-7. 返回简洁完成报告，包含输出路径、未解决问题和下一步。
+2. 任务类型不明确或涉及多个候选技能时，先读取 router、任务角色图和匹配的 skill descriptions，再决定 owner skill。
+3. 用户点名创作者、作品、流派或视觉风格时，先调用 `creative-style-lens-builder` 形成原创风格约束；不把 persona identity 直接传给 writer。
+4. 每个阶段交给范围最窄的工作技能。
+5. Auctra 工作优先使用 `auctra material`、`auctra text`、`auctra review` 和 `auctra export`。
+6. 跨格式改写时保留原始意图，例如小说章节转小红书笔记、公众号文章或改编交接包。
+7. 小说改编先产出改编诊断、媒介结构和交接包，再交给 `screenplay-scene-writer`、`short-video-scriptwriter`、`podcast-scriptwriter` 等具体写手。
+8. 返回简洁完成报告，包含输出路径、未解决问题和下一步。
 
 ## 质量门槛
 
@@ -52,6 +53,7 @@ description: Use when coordinating multi-stage Chinese creative-writing tasks ac
 
 - 不伪造用户经历、数据、采访、截图、平台反馈或真实发布结果。
 - 不执行登录、发布、私信、采集、刷量、规避平台风控或自动化互动。
+- 不复制外部 persona/director skill 的身份卡、表达 DNA、典型片段、标志性口头禅或独特词表。
 - 不把完整思维链、原始提示词、供应商载荷、隐藏系统提示或私密工具参数写入稿件、证据、日志或结构化资产。
 - 需要持久化 Auctra 项目状态时使用 Auctra CLI，不手写 `.auctra/**`、SQLite rows、review 决策或 run evidence。
 

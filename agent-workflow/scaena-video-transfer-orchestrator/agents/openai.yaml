@@ -1,4 +1,4 @@
 interface:
   display_name: "Scaena 像素锁定视频转绘"
-  short_description: "Route Scaena and Eikona pixel-locked video canaries"
-  default_prompt: "Use $scaena-video-transfer-orchestrator to route an existing video-transfer project through Eikona subject candidates, Scaena mask review, frozen subject admission, and a first-shot pixel-lock canary."
+  short_description: "Route timestamped prompt files and pixel-locked Scaena video canaries"
+  default_prompt: "Use $scaena-video-transfer-orchestrator to organize one timestamp-separated prompt file per shot or approved merged chunk, verify the exact prompt digest, preserve Eikona and Scaena ownership boundaries, and route the first pixel-lock canary through subject, mask, cost, and review gates."

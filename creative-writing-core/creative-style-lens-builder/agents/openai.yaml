@@ -1,0 +1,3 @@
+display_name: 创作风格镜头构建器
+short_description: 把人物或作品风格参考拆成原创、可执行、可审查的创作约束。
+default_prompt: 请使用 $creative-style-lens-builder 把我的人物、作品或流派参考转换成原创 StyleLens，列出证据、风格维度、负向相似性约束、owner、门禁和下一步 worker。

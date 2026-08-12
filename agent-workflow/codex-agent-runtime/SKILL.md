@@ -19,6 +19,30 @@ Use this skill when a task is being handled by Codex or when documentation must 
 3. Prefer CLI contracts before prose parsing: use `--json`, `--agent`, or `--events` when a Yeisme CLI exposes them.
 4. Configure MCP access through Gateway-rendered client config rather than hand-writing endpoint blocks.
 
+## Fast Local Iteration Default
+
+Treat an ordinary request to build, extend, fix, refactor, or test a feature as
+authorization to implement it in the local, non-production workspace. A new
+module, internal/local API, migration source file, mock, test, or codebase
+expansion is not an approval gate.
+
+Proceed directly with scoped source, test, fixture, documentation, local
+configuration, and disposable test-data changes; use the existing project
+pattern, choose a minimal reversible implementation, and run the narrowest
+relevant verification. Do not ask the user to approve routine implementation
+details or turn a feature request into a design-review sequence. For an
+external integration, implement and verify the adapter with a mock, sandbox, or
+test endpoint before enabling a live path.
+
+Pause only for a real high-impact side effect: deleting or irreversibly
+migrating non-disposable data; credentials; production or live access-control
+changes; deploy/publish/push actions; charges; real outbound communication; or
+bulk/destructive external writes. A current request that names the exact target
+and side effect supplies the required authority, subject to platform safety
+requirements. Preserve unrelated dirty worktree changes.
+
+See `docs/workflows/rapid-local-iteration.md` for the full decision matrix.
+
 ## Context-Isolated Feature Delivery
 
 Use this workflow only after the current user explicitly requests a `subagent`,

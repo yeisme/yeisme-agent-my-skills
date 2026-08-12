@@ -1,0 +1,3 @@
+display_name: 角色智能路由器
+short_description: 跨创作、游戏、数字人、Agent 职责与记忆场景选择最小角色能力链。
+default_prompt: 请使用 $role-intelligence-router 判断我的角色需求属于创作、交互、游戏、数字人、Agent 职责、记忆还是呈现，并给出 primary skill、canonical owner、阻断门禁和渐进式下一步。

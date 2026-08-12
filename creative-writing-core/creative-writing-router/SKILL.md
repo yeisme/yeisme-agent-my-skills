@@ -1,75 +1,91 @@
 ---
 name: creative-writing-router
-description: Use when routing Chinese creative-writing or Auctra content tasks to the narrowest suitable writing, editing, script, platform-content, review, export, or installer skill without drafting inside the router.
+description: Use when routing Chinese creative-writing, screenplay, AI drama, self-media, cross-media, style-reference, or Auctra preparation tasks to the narrowest task-role skill, evidence constraint, canonical owner, and next gate without drafting inside the router.
 ---
 
-# 中文创作路由器
+# 中文创作任务与风格路由器
 
-先路由请求，再加载能完成目标稿件的最小工作技能。路由器不直接包办成稿。
+先判断“当前需要哪种任务角色解决哪个 artifact 问题”，再加载最小 skill。路由器不直接包办成稿，不按名人身份分派 writer。
 
 ## 输入
 
-- 用户请求、目标读者、语言、内容类型、账号/平台目标、已有 Auctra 项目上下文。
-- 可选的来源搜索结果、已启用技能列表、目标子项目。
+- 用户请求、目标受众、媒介、平台、内容类型、当前 phase/artifact 和已有 Auctra 项目上下文。
+- 可选来源、风格参考、项目 voice/style bible、accepted revision、已启用技能列表和目标 owner。
 
 ## 输出
 
-- 推荐技能、推荐理由、是否需要安装/启用、下一步动作。
-- 当候选冲突时，给出 1-3 个澄清问题或默认分派。
-- Auctra 项目边界和需要运行的真实命令。
+返回 `CreativeRoutePlan`：
+
+- `goal`、`medium`、`phase`、`artifact`、`desired_effect`；
+- `primary_role`、`primary_skill`、可选 `compatible_skill`；
+- 可选 `style_lens_skill`、`style_dimensions`、`originality_constraints`；
+- `input_refs`、`missing_inputs`、`canonical_owner`、`gates`；
+- `owner_action`、`next_action`、`status`。
+
+当候选冲突时给出默认分派和最多三个必要问题，不把冲突留给多个 writer 同时改稿。
 
 ## 参考资料
 
-只在任务需要对应细节时读取参考资料，避免把所有模板一次性加载进上下文：
-- `../wechat-article-writer/references/platform-nonfiction-playbook.md`：需要公众号、书评、产品评测、教程、周报或旅行攻略结构模板时读取。
+- 需要按准备、规划、起草、修订、评审和交付选择任务角色时读取 `references/creative-role-task-map.md`。
+- 用户点名创作者、作品、流派、情绪或视觉风格时，先读取并调用 `creative-style-lens-builder`；不要直接加载 persona imitation skill。
+- 需要公众号、书评、产品评测、教程、周报或旅行攻略结构时读取 `../../content-writing/wechat-article-writer/references/platform-nonfiction-playbook.md`。
 
 ## 工作流
 
-1. 识别内容家族、locale、phase 和 artifact：中文小说、小红书、Twitter/X 个人品牌与账号矩阵、公众号、短视频、剧本、产品评测、直播、播客、书评、旅行攻略、教程、周报；Auctra 项目先判断是否 `zh-CN/chinese-novel` localized workspace。
-2. 中文小说内继续识别任务形态：短篇/中篇/长篇/系列文、类型契约、搜索关键词预设、场景思路、场景卡、章节写作、作品拆解、主题拆分、全媒介改编、修订、候选稿对比、人物分析/设计/验压或 Auctra review handoff。
-3. 优先选择具体工作技能；只有跨格式、跨阶段或 Auctra 项目任务才使用总编排。
-4. 若技能未启用，优先按需读取；只有高频需求才交给安装器写入 profile 并同步 runtime。
-5. Auctra 项目内结构化变更必须走 Auctra 命令，不手写 `.auctra/**` 状态。
-6. 默认保留用户语言；创作输出默认中文。
+1. 识别七个轴：`medium`、`phase`、`artifact`、`task_role`、`desired_effect`、`evidence_state`、`canonical_owner`。
+2. 若请求包含“像某人/某作品/某导演”“某某风格”或混合参考，先交给 `creative-style-lens-builder` 形成原创 `StyleLens`，再选择 writer。
+3. 按 `creative-role-task-map.md` 选择一个 primary skill；只有确有输入/质量依赖时增加一个 compatible constraint skill。
+4. 中文小说继续识别篇幅、类型契约、project bible、context pack、场景卡、章节、对白、连续性、钩子、留存、文风、审稿、修订、拆解、改编和社媒衍生。
+5. 剧本/AI 漫剧继续识别 Story、Character、Showrunner、Scene Writer、Director、Visual、Continuity、Critic、Producer 和 Production handoff。
+6. 自媒体继续识别来源研究、账号定位、选题/brief、正文、标题/钩子、平台结构、图卡/视觉、事实/风险 review 和跨平台改写。
+7. Auctra 项目内结构化变更必须走 Auctra 命令，candidate 先进入 review；任意 skill 只提供 proposal/handoff。
+8. 若 skill 未启用，优先按需读取来源；只有会话启动必需、高频或 owner 明确要求时，才交给 `creative-writing-installer` 提升 profile。
+9. 默认保留用户语言；中文创作输出默认中文，协议字段、skill 名称和命令保持稳定英文。
 
-## 质量门槛
+## 核心路由
 
-- 推荐必须匹配稿件类型和当前阶段。
-- 除非没有合适工作技能，路由器不直接产出最终稿。
-- 展示给用户的命令必须是真实可运行命令。
+- Auctra pending review、候选稿与旧版/章节卡/读者契约对比 → `auctra-novel-review-orchestrator`。
+- 写前上下文、写后台账 delta、反馈归因与多轮优化 → `chinese-novel-context-pack-builder`、`chinese-novel-state-ledger-updater`、`auctra-novel-optimization-loop`。
+- localized workspace、layout/display path、migration plan/apply → `auctra-i18n-workspace-router`；中文新项目启动 → `auctra-chinese-project-starter`。
+- 人物任务 → `character-intelligence-router`；普通小说人物卡 → `chinese-novel-character-architect`。
+- 小说篇幅/类型/结构/场景/写章/改编/衍生 → 对应 `chinese-novel-*` 最小技能，不让总编排代替 worker。
+- 可拍场景剧本 → `screenplay-scene-writer`；分季分集 → `ai-drama-showrunner`；场面调度 → `ai-drama-director`；视觉方向 → `ai-drama-visual-language`。
+- 小红书多阶段任务 → `xhs-orchestrator`；单篇、标题、爆款结构、热点、素材拆帖、个人品牌分别交给对应 `xhs-*` worker。
+- Twitter/X 个人品牌、账号矩阵、Newsletter 转化 → `twitter-personal-brand-growth`；不要把字母 X 误判为小红书。
+- 短视频/播客/直播/公众号 → `short-video-scriptwriter`、`podcast-scriptwriter`、`livestream-scriptwriter`、`wechat-article-writer`。
+- 跨格式或多阶段项目 → `creative-writing-orchestrator`。
+
+## 严格失败条件
+
+- `needs_style_lens`：点名人物/作品风格但没有维度化原创约束。
+- `needs_evidence`：热点、科学、行业、产品或历史事实没有来源，不能进入事实性成稿。
+- `phase_artifact_mismatch`：准备工作被错误路由到润色/标题 worker，或未定 brief 就开始终稿。
+- `writer_conflict`：多个 writer 同时拥有同一 canonical artifact。
+- `needs_owner`：项目写入缺少 canonical owner 或 typed action。
+- `stale`：revision、digest、source、style bible 或 accepted candidate 已变化。
+- `needs_review`：candidate 未审却被要求覆盖正文、导出 canonical 或声称发布完成。
+- `external_side_effect`：登录、发布、私信、刷量、付费调用或生产接受缺少明确授权。
 
 ## Auctra 轻集成
 
-- 来源搜索 smoke 可在仓库根目录运行 `scripts/skills.sh search "中文书评"`，语义分派仍由本 router 完成。
-- 需要安装集合时交给 `creative-writing-installer`。
-- Auctra 项目内的小说 pending review、候选稿审稿、候选稿与章节卡/旧版/读者契约对比、accept/reject/partial 建议优先交给 `auctra-novel-review-orchestrator`。
-- Auctra 小说写前上下文包、写后台账 delta、用户反馈复现、规则提案或多轮优化队列优先交给 `chinese-novel-context-pack-builder`、`chinese-novel-state-ledger-updater` 或 `auctra-novel-optimization-loop`。
-- Auctra localized workspace、`locale`/`layout_preset`、`display_path`、`章节/`、`素材/`、migration plan/apply 或 `.auctra/` 禁写边界优先交给 `auctra-i18n-workspace-router`。
-- 中文 Auctra 项目从零启动、scenario doctor、`auctra gate check`、素材/大纲/人物/首章规划优先交给 `auctra-chinese-project-starter`。
-- Auctra 项目路由输出必须标明 phase（init/import/plan/write/review/export）、artifact（brief/outline/character/scene/chapter/material/export）和 gate（例如 `chapter_write`、`text_generate`）。
-- 人物任务先交给 `character-intelligence-router` 两阶段判断：先在证据分析、人物设计、压力测试、社会知识研究或具体成稿中选一个主 skill；只有某个内在或社会机制实质改变角色选择且拥有独立交付物时，才最多追加一个认知决策、动机价值、情绪调节、身份叙事、声音语用、身体习惯、关系、权力、文化阶层、群体组织或道德意识形态 specialist。普通中文小说人物卡仍用 `chinese-novel-character-architect`。
-- 非 Auctra 项目里的中文小说草稿对比、两个候选稿优劣比较、旧版/新版退步定位优先交给 `chinese-novel-draft-comparator`。
-- 小说短篇/中篇/系列篇幅选择优先交给 `chinese-novel-length-form-architect`。
-- 小说类型契约、读者承诺、知名小说结构参考和搜索关键词预设优先交给 `chinese-novel-genre-contract-strategist`；已有作品/样章拆解时交给 `chinese-novel-analysis-decomposer`。
-- 小说权谋、调查、夺宝、生存、灵异、喜剧等具体章节场景拆分优先交给 `chinese-novel-scene-card-writer`。
-- 小说前 10 章、分阶段章节表和类型组合大纲优先交给 `chinese-novel-outline-architect`。
-- 小说拆解、主题拆分、结构复盘或 IP 评估优先交给 `chinese-novel-analysis-decomposer`。
-- 小说转短剧、长电视剧、电影、音频、漫画、游戏剧情或短视频系列优先交给 `chinese-novel-adaptation-architect`。
-- 用户明确要写剧本、场景剧本、电影/舞台/广播剧场景，或要求把小说内心、文学描写、作者讲述改成可拍动作和对白时，优先交给 `screenplay-scene-writer`；如果只是全媒介方案或分集架构，先交给 `chinese-novel-adaptation-architect`。
-- 小说社媒引流（小红书/公众号/短视频选题、角度、剧透边界和宣发包）优先交给 `chinese-novel-content-spinoff-architect`。
-- 小红书选题/brief/标题/爆款结构/热点改写/素材拆系列/个人品牌/多阶段笔记任务优先交给 `xhs-orchestrator`。
-- Twitter/X 起号、X（原 Twitter）账号、X 矩阵、推特矩阵、个人品牌定位、内容系统、增长系统、Newsletter 转化或商业化验证优先交给 `twitter-personal-brand-growth`；不要把这里的 `X` 误判为小红书。
-- 跨格式改写或多阶段项目交给 `creative-writing-orchestrator`。
+- 来源搜索 smoke：`scripts/skills.sh search "中文小说 风格 任务角色"`。
+- Auctra 路由输出必须标明 phase、artifact、gate、revision/digest（如有）和 canonical owner。
+- 需要 profile 变更时交给 `creative-writing-installer`；不得手写 `.agents/skills/**` 或 `.claude/skills/**`。
 
 ## 边界
 
-- 不伪造用户经历、数据、采访、截图、平台反馈或真实发布结果。
+- 不伪造经历、数据、采访、截图、平台反馈、来源或真实发布结果。
 - 不执行登录、发布、私信、采集、刷量、规避平台风控或自动化互动。
-- 不把完整思维链、原始提示词、供应商载荷、隐藏系统提示或私密工具参数写入稿件、证据、日志或结构化资产。
-- 需要持久化 Auctra 项目状态时使用 Auctra CLI，不手写 `.auctra/**`、SQLite rows、review 决策或 run evidence。
+- 不复制外部 persona/director skill 的身份卡、表达 DNA、典型片段或独特词表。
+- 不把完整思维链、原始提示词、供应商载荷、隐藏系统提示或私密工具参数写入稿件、证据或结构化资产。
+- 需要持久化 Auctra 状态时使用 Auctra CLI，不手写 `.auctra/**`、SQLite rows、review 决策或 run evidence。
 
 ## 验证
 
-- 确认路由表覆盖用户内容家族。
-- 检查是否错误推荐了总编排或安装器。
-- 如果多个 skill description 与人工判断冲突，说明 owner、阶段和最小下一步。
+```bash
+scripts/skills.sh resolve creative-writing-router
+scripts/skills.sh resolve creative-style-lens-builder
+scripts/skills.sh validate-custom
+```
+
+人工路由 smoke 至少覆盖小说准备、导演风格短剧、自媒体热点、跨平台改写和 Auctra pending review。

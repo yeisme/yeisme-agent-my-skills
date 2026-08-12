@@ -1,3 +1,3 @@
 display_name: 中文创作总编排
-short_description: coordinating multi-stage Chinese creative-writing tasks across planning, drafting, editing, review, cross-format transformation, Auctra project work, export, and handoff
-default_prompt: 请使用 中文创作总编排 先拆分多阶段创作任务，再按 owner 和 skill descriptions 路由到最小合适写手，给出阶段计划、handoff、验收和下一步。
+short_description: 协调多阶段中文创作、原创风格镜头、Auctra review 和跨格式 handoff。
+default_prompt: 请使用 $creative-writing-orchestrator 先拆分多阶段创作任务；如有创作者或作品风格参考，先生成原创 StyleLens，再按 owner 路由最小 worker 并给出 handoff、验收和下一步。

@@ -46,6 +46,29 @@ Do not use this skill for:
 
 User-facing command examples in docs, plans, reviews, and final replies must show the real command a human can run. Do not expose local execution wrappers, shell aliases, or agent-only command prefixes outside tool execution.
 
+## Rapid Local Iteration Default
+
+Treat a user request to add or change a capability as direct authorization for
+the bounded local implementation work. Do not block on a confirmation merely
+because the work creates a module, class, interface, internal/local endpoint,
+feature flag, schema or migration source, test fixture, mock, or adapter.
+
+Use the smallest reversible vertical slice that matches existing project
+patterns. Implement local contracts and focused tests first; use mocks,
+sandboxes, or disposable test data for external systems. Make reasonable
+routine decisions and report assumptions after verification instead of asking
+the user to choose implementation minutiae.
+
+Ask only before a real high-impact side effect: deletion or irreversible
+migration of non-disposable data, credential handling, production/live
+access-control changes, deploy/publish/push actions, charges, outbound
+communication, or bulk/destructive external writes. An exact current user
+request for that target and side effect supplies the necessary authority unless
+the platform requires another confirmation. Preserve unrelated dirty worktree
+changes throughout.
+
+See `docs/workflows/rapid-local-iteration.md` for the repository-wide policy.
+
 ## Workspace And Checkpoint Defaults
 
 Choose the workspace before the first write:

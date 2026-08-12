@@ -1,11 +1,26 @@
 ---
 name: yeisme-repo-routing
-description: Use when deciding where new product surfaces, independent clients, backend services, files, workflows, skills, MCP code, CLI entrypoints, agent assets, gateway assets, or documentation should live in this repository.
+description: Use when deciding whether a proposed capability fits a Yeisme project, whether it needs split ownership, and where product surfaces, clients, services, files, workflows, skills, MCP code, CLI entrypoints, agent assets, gateway assets, or documentation should live.
 ---
 
 # Yeisme Repo Routing
 
-Use this skill when the user is adding new repository content and the correct location is unclear.
+Use this skill when a capability is first proposed, when the user wants to merge multiple experiences into one product, or when the correct owner and repository location are unclear.
+
+## Capability Admission Gate
+
+Run this gate before PRD, OpenSpec, CEO review, or implementation:
+
+1. Capture every capability the user explicitly requires in a required-capability ledger. Do not reinterpret a required capability as optional merely because delivery will be staged.
+2. Classify the proposal immediately:
+   - `fit`: the proposed project owns the capability's canonical state, rules, permissions, evidence, and lifecycle.
+   - `split-owner`: one project owns the domain capability while another approved client or control plane composes its visual interaction, navigation, and safe actions through typed contracts.
+   - `reject-now`: the capability should not be built as proposed because it violates a hard product, safety, legal, permission, or repository boundary. State this immediately, with the reason and the nearest viable alternative.
+3. If the proposed project is the wrong owner, say so now. Name the correct owner, consumer, contract boundary, and how the requested user experience remains available.
+4. Treat “merge into one project”, “one workspace”, and “one console” as experience composition by default. They do not authorize feature deletion, canonical-state migration, or copied domain state machines.
+5. Carry the admission decision and required-capability ledger into later PRD, CEO, architecture, engineering, design, and OpenSpec work. Do not wait until the spec is complete to raise a known ownership mismatch.
+
+Full continuity rules are in `docs/workflows/product-capability-admission-and-scope-governance.md`.
 
 ## Routing Table
 
@@ -51,6 +66,8 @@ Use this skill when the user is adding new repository content and the correct lo
 - Do not put self-built skills in `.skills/imported/`; that directory is reserved for third-party skill sources.
 - Do not put third-party skills in `.skills/yeisme/`.
 - Prefer one clear owner directory over duplicating the same workflow in multiple places.
+- Preserve user-required capabilities across owner routing. Moving a capability behind a typed owner contract is not permission to remove it from the product experience.
+- If new evidence later changes an admission decision, state the evidence, affected capabilities, migration or compatibility impact, and required user decision before changing scope.
 - Treat CLI/API/event/resource contracts as reusable product interfaces, not as proof that a project must remain CLI-only.
 - Route independent UI implementations to an approved `client/<name>` owner; keep durable domain state, provider adapters, evidence, and business rules in the domain subproject.
 - Prefer CLI plus skills over MCP when an existing CLI already solves the task with less context and no cross-service reuse requirement.
@@ -63,7 +80,10 @@ Use this skill when the user is adding new repository content and the correct lo
 
 When asked where something belongs, answer with:
 
+- admission decision: `fit`, `split-owner`, or `reject-now`
 - destination path
 - reason
+- required-capability impact: retained, staged, moved behind a contract, or explicitly awaiting a user removal decision
+- experience composition: where the user sees and controls the capability
 - any companion files that should be updated
 - commands to validate or sync, if relevant

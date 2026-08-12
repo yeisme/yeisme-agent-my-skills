@@ -16,6 +16,27 @@ Priority:
 4. Existing project Playwright commands or `npx playwright`: fallback for browser-only state and repeatable, testable workflows.
 5. `agent-browser` or `browser-use`: one-off visual inspection when that browser surface is more suitable.
 
+## Check Embedded Page Data First
+
+Modern SPA pages usually ship their structured data as inline JSON on `window`; one `page.evaluate` (or `agent-browser` eval, or viewing page source for `<script>` blocks) often replaces the entire UI clicking flow. Before driving clicks, pagination, or infinite scroll, check for:
+
+- `window.__NEXT_DATA__` (Next.js), `window.__NUXT__` (Nuxt), `window.__INITIAL_STATE__`, `window._ROUTER_DATA`, and similar framework globals.
+- `<script type="application/json">` or `<script id="__NEXT_DATA__">` blocks in the raw HTML.
+- The XHR/fetch requests the page itself makes (browser network panel or Playwright request interception) — calling the site's own JSON endpoint directly is often the cleanest extraction path.
+
+Typical wins: full item lists, IDs (for example every video `vid`), and clean titles without touching the UI. Only drive the visible UI when no embedded data or underlying endpoint exists.
+
+## Browser Tool Failure Fallback
+
+Browser tools fail in predictable ways; do not burn turns rediscovering the fixes:
+
+1. Run the tool's own health check first: `agent-browser doctor` (and `firecrawl doctor` for Firecrawl-side issues) before assuming the target site is at fault.
+2. If `agent-browser` fails to start (for example CDP channel errors such as `response channel closed`) and `doctor` does not repair it, switch to `npx playwright` instead of retrying the same launch.
+3. If Playwright reports a browser version mismatch (for example it wants `chromium-1234` but only `chromium-1228` is cached), either run `npx playwright install chromium` or point Playwright at the system browser via `executablePath` (for example the installed Chrome/Edge binary) — the system browser path is usually the fastest unblocking move.
+4. If no Playwright browser can launch, fall back to `browser-use` with a real Chrome profile/CDP, or to Firecrawl rendered extraction.
+
+Record which fallback worked; later steps in the same session should reuse it directly.
+
 ## When To Use Playwright
 
 Use an existing project Playwright command or `npx playwright` when:
