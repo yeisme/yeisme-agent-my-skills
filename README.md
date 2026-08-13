@@ -2,6 +2,25 @@
 
 `.skills/yeisme/` is the source directory for this repository's self-built, publishable, syncable skills. These skills guide agent execution. They are not ordinary product docs, MCP implementations, CLI code, agent runtime code, or Gateway implementation code.
 
+This repository is open source under the [MIT License](LICENSE). The default branch contains the latest reviewed public Skills source. Some skills describe integrations with separate Yeisme products; those product repositories are not automatically covered by this repository's license or visibility.
+
+## Install
+
+Clone this Skills source directly:
+
+```bash
+git clone --recurse-submodules https://github.com/yeisme/yeisme-agent-my-skills.git
+cd yeisme-agent-my-skills
+```
+
+When using the parent `yeisme-agent` workspace, install or synchronize through its public Skills commands:
+
+```bash
+scripts/skills.sh install-custom https://github.com/yeisme/yeisme-agent-my-skills.git main
+scripts/skills.sh sync-root
+scripts/skills.sh sync-subprojects
+```
+
 ## Directory Contract
 
 - `.skills/yeisme/`: publishable source for project-owned skills.
