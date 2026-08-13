@@ -1,3 +1,0 @@
-display_name: Yeisme Repo Routing
-short_description: Judge capability fit early, preserve required features, and route owners, clients, services, skills, MCPs, and docs.
-default_prompt: Classify this capability as fit, split-owner, or reject-now before spec work; preserve the required user experience, route canonical ownership, and list the contracts, files, and validation commands needed.

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Yeisme Skill Routing Governance"
-  short_description: "Route skills and protect single-owner runtime synchronization."
-  default_prompt: "Use $yeisme-skill-routing-governance to select the smallest skill set, freeze concurrent skill writers, and update profiles or generated runtimes through the narrowest repository script command."

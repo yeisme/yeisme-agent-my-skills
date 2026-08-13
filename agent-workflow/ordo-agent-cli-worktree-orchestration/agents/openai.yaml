@@ -1,3 +1,0 @@
-display_name: Ordo Agent CLI Worktree Orchestration
-short_description: Guard Ordo Goal workspace routing, worktree leases, and reconciliation.
-default_prompt: Use the Ordo Goal/workspace contract to keep preview-critical client work on the current branch, isolate backend hot-reload work under .agents/worktrees/, verify runtime-resource leases, and review process identity, reconciliation, candidate retention, and safe cleanup.

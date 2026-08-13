@@ -2,3 +2,19 @@
 	path = auctra-novel
 	url = https://github.com/yeisme/auctra-novel-skills.git
 	branch = main
+[submodule "ai-drama"]
+	path = ai-drama
+	url = https://github.com/yeisme/ai-drama-skills.git
+	branch = main
+[submodule "agent-workflow"]
+	path = agent-workflow
+	url = https://github.com/yeisme/agent-workflow-skills.git
+	branch = main
+[submodule "ordo"]
+	path = ordo
+	url = https://github.com/yeisme/ordo-skills.git
+	branch = main
+[submodule "scaena"]
+	path = scaena
+	url = https://github.com/yeisme/scaena-skills.git
+	branch = main

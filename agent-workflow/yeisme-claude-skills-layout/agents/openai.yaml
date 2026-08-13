@@ -1,3 +1,0 @@
-display_name: Yeisme Dual Skills Layout
-short_description: Enforce script-generated .claude and .agents skill runtimes.
-default_prompt: Review this repository's skill layout and migrate it to source skills, declarative profiles, and script-generated .claude/skills plus .agents/skills runtimes.

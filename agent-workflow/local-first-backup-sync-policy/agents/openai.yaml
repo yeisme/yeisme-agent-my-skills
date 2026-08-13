@@ -1,3 +1,0 @@
-display_name: Local First Backup Sync Policy
-short_description: Guide local-first backup roles, preferring product-native encrypted storage and keeping Git/rclone in explicit companion or fallback roles.
-default_prompt: Review this local-first backup plan, preferring the owning product's encrypted backup workflow; for Pinax choose repository-encrypted S3/COS first, Git as companion, and rclone only as fallback.

@@ -1,3 +1,0 @@
-display_name: Yeisme Skill Publisher
-short_description: Create, validate, route, sync, and publish self-built skills.
-default_prompt: Create or update a self-built skill under .skills/yeisme/<module>/, assign it through a profile when needed, validate it, and sync the generated runtimes.

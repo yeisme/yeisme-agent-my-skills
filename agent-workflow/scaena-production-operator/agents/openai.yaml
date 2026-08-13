@@ -1,4 +1,0 @@
-interface:
-  display_name: "Scaena 漫剧生产 Operator"
-  short_description: "把剧本转成可恢复、可审阅并可交付的完整漫剧生产流程。"
-  default_prompt: "Use $scaena-production-operator to plan or resume a Scaena short-drama production with asset budgets, stage gates, repair steps, and compact evidence handoff."

@@ -1,3 +1,0 @@
-display_name: Codex Agent Runtime
-short_description: Configure Codex with explicit-only delegation, optional bounded child goals, staged verification, MCP Gateway, and safe CLI contracts.
-default_prompt: Configure Codex for this Yeisme workspace so child agents run only after explicit user authorization; keep child_goal_policy default-disabled and allow one strict-subset thread-local goal only with create_if_available and a supported goal tool; use staged verification, and retain safe MCP Gateway and CLI contracts without duplicating project-owned skills under .codex/skills.

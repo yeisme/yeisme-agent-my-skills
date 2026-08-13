@@ -1,3 +1,0 @@
-display_name: Crush Agent Runtime
-short_description: Configure Crush with MCP Gateway render commands, Yeisme skill profile expectations, structured CLI output, and approval boundaries.
-default_prompt: Configure Crush for this Yeisme workspace using Gateway-rendered MCP commands, profile-generated skills, and explicit approval for side effects.

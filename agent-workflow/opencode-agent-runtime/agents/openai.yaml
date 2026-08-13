@@ -1,3 +1,0 @@
-display_name: opencode Agent Runtime
-short_description: Configure opencode with MCP Gateway render commands, Yeisme skill profile expectations, CLI contracts, and approval boundaries.
-default_prompt: Configure opencode for this Yeisme workspace using MCP Gateway client render commands, profile-generated skills, and safe CLI output contracts.

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Scaena 主体资产就绪门禁"
-  short_description: "先冻结主体资产与镜头绑定，再允许 Scaena 剧集视觉生成。"
-  default_prompt: "Use $scaena-subject-asset-readiness to inspect subject readiness and return the next safe Scaena command before any episode or shot generation."

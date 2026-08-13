@@ -1,3 +1,0 @@
-display_name: Claude Code Agent Runtime
-short_description: Configure and operate Claude Code with generated .claude skills, Skill tool discipline, MCP Gateway instructions, and Yeisme CLI contracts.
-default_prompt: Configure Claude Code for this Yeisme workspace using profile-generated .claude/skills, repository sync scripts, MCP Gateway instructions, and safe machine-readable CLI output.
