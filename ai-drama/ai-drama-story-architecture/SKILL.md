@@ -11,6 +11,8 @@ description: Use when designing or revising an AI drama premise, theme, conflict
 
 ## 输入
 
+- `DramaFormatContract`：format profile、类型契约、受众承诺、结构单位和回报节拍；
+- `DramaContextPack`：本轮需要的 accepted facts、人物状态、知识边界、连续性和来源；
 - `CreativeBrief`：题材、受众、媒介、时长和目标情绪；
 - `CanonSnapshot`：世界规则、已有角色、时间线和禁用事实；
 - `DirectorProfile` 与 `ProductionConstraintProfile`；

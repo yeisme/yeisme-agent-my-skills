@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI 做剧形态与类型策略"
+  short_description: "先冻结剧型、类型、节奏和观众承诺，再进入后续完整做剧阶段"
+  default_prompt: "请使用 $ai-drama-format-strategist 为这个项目选择媒介、剧型、类型合同、结构单位、节奏回报和下一阶段。"

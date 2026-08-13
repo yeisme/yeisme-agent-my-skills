@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI 做剧上下文包构建器"
+  short_description: "为当前做剧阶段构建最小、版本化、可追溯且权限安全的上下文包"
+  default_prompt: "请使用 $ai-drama-context-pack-builder 根据 DramaRoutePlan 和 Owner refs 构建当前阶段最小上下文包，并标记缺失、过期、权限和引用。"

@@ -1,3 +1,4 @@
-display_name: AI 漫剧生产总编排
-short_description: Orchestrate drama stages, handoffs, approvals, retries, and evidence.
-default_prompt: 请使用 $ai-drama-production-orchestrator 为这部漫剧编排阶段、并行任务、Owner handoff、审批、失败恢复和交付门禁。
+interface:
+  display_name: "AI 做剧生产总编排"
+  short_description: "按矩阵路由和最小上下文包编排跨 Owner 做剧闭环"
+  default_prompt: "请使用 $ai-drama-production-orchestrator 消费 DramaRoutePlan，为每个阶段固定最小上下文、一个主 Skill、Owner handoff、审批、恢复和交付门禁。"

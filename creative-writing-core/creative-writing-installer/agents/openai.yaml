@@ -1,3 +1,4 @@
-display_name: 中文创作技能安装器
-short_description: Promote the minimum Auctra writing skills through profiles and scripts.
-default_prompt: 请使用 中文创作技能安装器 判断缺失 skill 应按需读取还是加入 cli/auctra profile，并给出真实的同步与验证命令。
+interface:
+  display_name: "创作 Skill 启用协调器"
+  short_description: "通过宿主 capability adapter 按需加载或持久化启用创作 Skill"
+  default_prompt: "请使用 $creative-writing-installer 消费既有 SkillActivationPlan，选择最窄 activation scope，先 preview，经当前请求明确授权后再通过宿主 adapter apply，并返回验证和回滚 receipt。"

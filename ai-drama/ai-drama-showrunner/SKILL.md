@@ -11,11 +11,12 @@ description: Use when planning an AI drama season, multi-episode arc, episode fu
 
 ## 工作流
 
-1. 读取 CanonSnapshot、已完成 episode、角色状态和未兑现伏笔。
-2. 定义 season/arc promise、episode question、局部 payoff 和末尾 hook。
-3. 为每集分配人物变化、冲突升级、信息释放、视觉/声音重点和生产风险。
-4. 检查集间因果、悬念债务、角色成长速度和制作资源冲突。
-5. 输出 `ShowrunnerPlan` 与 episode proposals，交给 Dramaturge/Auctra/Scaena owner。
+1. 读取 `DramaFormatContract` 和 `episode-planning` 或 `series-development` DramaContextPack；缺失时先返回上游补齐，不自行猜测剧型。
+2. 读取 CanonSnapshot、已完成 episode、角色状态和未兑现伏笔。
+3. 定义 season/arc promise、episode question、局部 payoff 和末尾 hook。
+4. 为每集分配人物变化、冲突升级、信息释放、视觉/声音重点和生产风险。
+5. 检查集间因果、悬念债务、角色成长速度和制作资源冲突。
+6. 输出 `ShowrunnerPlan` 与 episode proposals，交给 Dramaturge/Auctra/Scaena owner。
 
 ## 质量门槛
 

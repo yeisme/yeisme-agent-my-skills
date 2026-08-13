@@ -39,7 +39,7 @@ description: Use when routing Chinese creative-writing, screenplay, AI drama, se
 5. 剧本/AI 漫剧继续识别 Story、Character、Showrunner、Scene Writer、Director、Visual、Continuity、Critic、Producer 和 Production handoff。
 6. 自媒体继续识别来源研究、账号定位、选题/brief、正文、标题/钩子、平台结构、图卡/视觉、事实/风险 review 和跨平台改写。
 7. Auctra 项目内结构化变更必须走 Auctra 命令，candidate 先进入 review；任意 skill 只提供 proposal/handoff。
-8. 若 skill 未启用，优先按需读取来源；只有会话启动必需、高频或 owner 明确要求时，才交给 `creative-writing-installer` 提升 profile。
+8. 若 skill 未启用，优先按需读取来源；只有会话启动必需、高频或 owner 明确要求时，才生成 `SkillActivationPlan` 并交给 `creative-writing-installer`。外部安装和 profile mutation 都需要当前用户明确授权。
 9. 默认保留用户语言；中文创作输出默认中文，协议字段、skill 名称和命令保持稳定英文。
 
 ## 核心路由

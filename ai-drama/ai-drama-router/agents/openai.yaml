@@ -1,3 +1,4 @@
-display_name: AI 漫剧总路由器
-short_description: Route AI drama and style-reference tasks to the narrowest role, originality gate, skill, and owner.
-default_prompt: 请使用 $ai-drama-router 把这个做剧或导演风格参考任务路由到最小角色和 Skill；如有点名风格，先生成原创 StyleLens，再列出输入、门禁、Owner handoff 和下一步。
+interface:
+  display_name: "AI 做剧矩阵路由器"
+  short_description: "用剧型、类型、阶段与上下文矩阵按需选择最小做剧 Skills"
+  default_prompt: "请使用 $ai-drama-router 判断这个项目的剧型、类型、阶段和上下文包，按需选择最小 Skill，并给出启用状态、Owner 门禁和下一步。"
