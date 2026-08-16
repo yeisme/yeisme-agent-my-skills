@@ -12,7 +12,7 @@ change before editing.
 
 ## Working rules
 
-- Preserve Auctra's CLI/TUI, review, provider-boundary, and evidence contracts.
+- Preserve Auctra's CLI, review, provider-boundary, and evidence contracts.
 - Start with `git status --short` and record pre-existing changes; do not reset,
   clean, publish, or release from the agent session.
 - Prefer low-risk, behavior-preserving fixes. Do not use a global lint disable
