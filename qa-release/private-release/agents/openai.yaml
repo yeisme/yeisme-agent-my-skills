@@ -1,0 +1,5 @@
+---
+display_name: Private Release
+short_description: Ship formal releases from private Yeisme repositories with token-authenticated distribution, visibility-gated provenance, and tag-failure recovery.
+default_prompt: Prepare and execute a formal release for this private repository following the Yeisme private release reference: run the local pre-flight gates, confirm green CI, tag, watch the release workflow, verify assets with checksums and a token-authenticated install, and recover cleanly from any failed tag.
+---
