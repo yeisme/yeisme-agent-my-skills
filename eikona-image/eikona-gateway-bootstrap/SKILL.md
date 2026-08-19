@@ -28,7 +28,7 @@ eikona init --user --agent
 
 2. 选择 Eikona model ref：
    - GPT Image 默认使用 `openai/gpt-5.4-image-2`。
-   - `gpt-5.4-image-2` 和 `gpt-image-2` 是仅限显式入口的兼容短别名；新配置和新证据必须写 slash canonical ref。
+   - bare 短别名 `gpt-5.4-image-2` / `gpt-image-2` 已在 Eikona 0.6.0 从主入口移除；所有配置与证据只写 slash canonical ref（v1 handoff 域保留独立 alias policy）。
    - 对 GPT Image，provider-colon 和重复 provider 前缀形式一律在联网前拒绝；不要为 canonical ref 添加 provider 前缀。
    - 如果 `/v1/models` 返回的完整 ID 是 `openai/gpt-5.4-image-2`，必须把该 slash ID 原样复制到 Eikona。
    - ImageRouter 使用 `imagerouter:<exact-model-id>`。
