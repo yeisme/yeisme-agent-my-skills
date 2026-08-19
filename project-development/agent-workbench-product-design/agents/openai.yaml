@@ -1,0 +1,3 @@
+display_name: Agent Workbench Product Design
+short_description: Enforce the Agent-first single-shell blueprint for Yeisme Workbench shell, Pane, palette, proposal, and Owner composition changes.
+default_prompt: Anchor on docs/product/agent-workbench-blueprint.md, docs/ui/agent-first-workbench.md, and docs/interfaces/agent-pi-workspace.md; keep the Agent conversation as the unclosable anchor, bound hot-pluggable Panes to 1-3 visible, route every mutation through server revalidation and TaskService, and never restore parallel shells or browser-authoritative actions.

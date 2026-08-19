@@ -67,7 +67,8 @@ Do not treat tool priority as a fixed list. First identify the task goal and lik
 2. If the target is a supported social, video, community, RSS, podcast, or logged-in platform, use Agent Reach as the capability selector and health checker, then call the selected upstream tool directly. Read `routing/agent_reach.md`.
 3. For ordinary websites and documentation, use Firecrawl before browser automation:
    - Unknown source: `firecrawl search`.
-   - Known page, including JavaScript-rendered content: `firecrawl scrape`, using `--wait-for` when needed.
+   - Known page: `firecrawl scrape`; always pass an absolute `https://` or `http://` URL and quote URLs that contain query parameters.
+   - JavaScript-rendered page that returns only global navigation, branding, or another thin shell: apply `routing/dynamic_pages.md` before treating the scrape as complete or escalating to a browser.
    - Documentation or multi-page site: `firecrawl map`, `firecrawl crawl`, or `firecrawl download`.
    - Supported clicks, forms, pagination, or logged-in navigation: `firecrawl interact`.
 4. If the task is in a Yeisme/OpenWebUI local deployment context, first read `routing/local_research_infra.md` and reuse the local Firecrawl, SearXNG, and Research Harness constraints.
@@ -202,6 +203,7 @@ Choose the smallest route that satisfies the task:
 - `routing/research_budget.md`: research scale, time/sample budgets, stopping conditions, and escalation rules.
 - `routing/autonomous.md`: browser interaction, login flows, dynamic content, forms, and multi-step web workflows.
 - `routing/source_priority.md`: choose `firecrawl`, `gh`, package managers, `curl`/`jq`, or browser tools by source.
+- `routing/dynamic_pages.md`: recognize a JavaScript-rendered shell, retry with a bounded wait and fresh render, and validate page-specific markers before accepting extraction.
 - `routing/local_research_infra.md`: Yeisme/OpenWebUI local search infrastructure, Firecrawl, SearXNG, Research Harness, and Gateway search policy.
 - `routing/retrieval_optimization.md`: progressive retrieval, compact result contracts, deduplication, cache/freshness, and Firecrawl change gates.
 - `routing/browser_tools.md`: choose `agent-browser`, Playwright, `browser-use`, or static extraction; embedded page data first; browser tool failure fallback chain.
@@ -220,7 +222,7 @@ Continue with search/extraction when:
 
 - The user needs facts, sources, docs, releases, repositories, package versions, or comparison conclusions.
 - `firecrawl search`, `firecrawl scrape`, `gh`, or package manager CLIs return enough information.
-- The page is documentation, a blog, README, release notes, or API docs, including JavaScript-rendered content that `firecrawl scrape --wait-for` can extract.
+- The page is documentation, a blog, README, release notes, or API docs, including JavaScript-rendered content that passes the marker checks in `routing/dynamic_pages.md` after `firecrawl scrape --wait-for`.
 - Firecrawl can complete the required interaction with `firecrawl interact`.
 
 Escalate to browser tools when:
@@ -286,6 +288,12 @@ After Agent Reach reports the active backend, call the upstream tool directly in
 ```bash
 firecrawl scrape "https://github.com/"
 firecrawl scrape "https://docs.firecrawl.dev/"
+```
+
+For a JavaScript-rendered page that initially returns only navigation or branding, follow `routing/dynamic_pages.md`. A representative recovery command is:
+
+```bash
+firecrawl scrape "https://wetoken.ai/model-docs?model=dreamina-seedance-2-5-filter-off" --only-main-content --wait-for 5000 --max-age 0 --timing -o /tmp/wetoken-model-docs.md
 ```
 
 ### Crawl A Documentation Site

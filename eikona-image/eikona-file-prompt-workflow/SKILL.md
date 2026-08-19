@@ -39,13 +39,13 @@ eikona generate \
   --input prompts/product/landing-hero/local-first-cli/prompts/01-clean-editorial.md \
   --size 1536x1024 \
   --dry-run \
-  --json
+  --agent
 
 eikona generate \
   --model openai/gpt-5.4-image-2 \
   --input prompts/product/landing-hero/local-first-cli/prompts/01-clean-editorial.md \
   --size 1536x1024 \
-  --json
+  --agent
 ```
 
 `--input` 与 `--prompt` 互斥。文件路径必须指向一个普通文件，不能指向目录或集合 README。
@@ -56,12 +56,12 @@ eikona generate \
 eikona run \
   -f prompts/product/landing-hero/local-first-cli/runbook.yaml \
   --dry-run \
-  --json
+  --agent
 
 eikona run \
   -f prompts/product/landing-hero/local-first-cli/runbook.yaml \
   --background \
-  --json
+  --agent
 ```
 
 - `defaults.prompt_file`：所有普通 job 共享一个基础 prompt 文件。
@@ -88,10 +88,11 @@ eikona run \
 - 不用模型名、日期或临时人员姓名作为顶层分类；模型和尺寸属于 runbook，日期可写入集合 README。
 - 不把多个候选拼进一个超长 prompt 文件；一个文件只表达一个可比较方向。
 - 不直接编辑 Eikona 生成的 run evidence、snapshot、queue、manifest 或 batch plan。
+- 例行自动化命令使用 `--agent`；非终态 run 用 `eikona watch <run_id> --events` 观察；脚本/CI 用 `--json --compact`（共存期内裸 `--json` 仍是 legacy full）；取证用 `--json --full`。
 
 ## 验证
 
 - prompt 文件不含未替换的 `<...>` 占位符。
 - runbook 中引用的文件存在，且路径相对于 runbook 正确。
-- `eikona run -f <runbook> --dry-run --json` 成功并展开预期 job 数。
-- 真实远程示例和新默认使用 `openai/gpt-5.4-image-2`；短别名只作为兼容输入，legacy `openai:gpt-image-2` 不得写入新 runbook。
+- `eikona run -f <runbook> --dry-run --agent` 成功并展开预期 job 数。
+- 真实远程示例和新默认使用 `openai/gpt-5.4-image-2`；短别名只作为显式兼容输入，provider-colon、重复前缀和 underscore 形式不得写入新 runbook。

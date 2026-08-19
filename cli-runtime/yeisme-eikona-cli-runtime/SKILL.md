@@ -7,7 +7,7 @@ description: Use when the user explicitly asks to use Eikona/eikona, or when cha
 
 Use this skill for `cli/eikona`, the agent-facing visual asset runtime and evidence-backed generation CLI.
 
-If the user explicitly says to use Eikona, `eikona`, or the Eikona CLI for image generation, this route takes precedence over generic built-in image generation tools. Enter `cli/eikona`, follow local `AGENTS.md`, and use Eikona commands such as `eikona generate ... --json` / `--agent`. Only fall back to another image tool if the user explicitly changes the route or Eikona is unavailable and the user approves the fallback.
+If the user explicitly says to use Eikona, `eikona`, or the Eikona CLI for image generation, this route takes precedence over generic built-in image generation tools. Enter `cli/eikona`, follow local `AGENTS.md`, and use Eikona commands such as `eikona generate ... --agent`. Only fall back to another image tool if the user explicitly changes the route or Eikona is unavailable and the user approves the fallback.
 
 ## Boundary
 
@@ -34,7 +34,7 @@ If the user explicitly says to use Eikona, `eikona`, or the Eikona CLI for image
    - For temporary image persistence, Visual Library promotion, project/global scope, download grants, or asset APIs, load `eikona-asset-lifecycle` and read `docs/product/external-asset-capture.md` plus `docs/interfaces/api/openapi.yaml`.
    - For active design tracks around scoring/tags or recipe reuse, read `openspec/changes/eikona-visual-assessment-tags/` and `openspec/changes/eikona-prompt-skill-reuse-recipes/` if they exist, then keep new implementation tasks in the owning Eikona OpenSpec change.
 2. Preserve Eikona product contracts:
-   - `--json` output must remain machine-readable and stable for agents, Cohors, CI, and shell scripts.
+   - `--json` output must remain machine-readable and stable for scripts, Cohors, CI, and shell pipelines: `--json --compact` is the bounded script/CI projection and `--json --full` is the permanent forensic projection. During the coexistence window bare `--json` still means legacy full; do not write new routine examples with bare `--json`.
    - new or changed CLI output must follow `ai-native-cli-output-contract`: human summary by default, strict `--json`, `--agent` for low-token parsing, optional `--events`, and secret-safe stdout/stderr separation.
    - local project docs and OpenSpec artifacts should be Chinese by default; human CLI output, help text, logs, and user-visible errors should be English unless the user explicitly requests another language for that artifact or the content is Chinese-language product content.
    - every successful provider artifact must be written through the run evidence store under `runs/<run_id>/outputs/`.
@@ -49,17 +49,17 @@ If the user explicitly says to use Eikona, `eikona`, or the Eikona CLI for image
   - do not add real-time sync, file watchers, automatic bidirectional merge, or multi-device conflict resolution to Eikona without a separate OpenSpec change.
   - visual assessment and recipe reuse must be evidence-backed and explainable: store scores/tags/corrections/recipe influence as structured evidence, never as hidden reasoning or unbounded prose. Machine-only scores must not silently select winners without append-only human feedback.
 3. For OpenAI-compatible image generation:
-   - the canonical Eikona model ref is `openai/gpt-5.4-image-2`; gateway-native IDs must copy `/v1/models` exactly. The accepted short aliases are `gpt-5.4-image-2` and `gpt-image-2`; persisted `openai:gpt-image-2` is a legacy compatibility spelling only.
-   - reject the ambiguous `openai:gpt-5.4-image-2` before provider submission with a repair message pointing to `openai/gpt-5.4-image-2`.
+   - the canonical Eikona model ref is `openai/gpt-5.4-image-2`; gateway-native IDs must copy `/v1/models` exactly. The accepted short aliases are `gpt-5.4-image-2` and `gpt-image-2`; persisted `openai/gpt-5.4-image-2` is a legacy compatibility spelling only.
+   - reject the ambiguous `openai/gpt-5.4-image-2` before provider submission with a repair message pointing to `openai/gpt-5.4-image-2`.
    - local interactive auth must use an explicitly selected Eikona channel backed by the user-level secret store; never restore implicit `OPENAI_API_KEY` fallback.
-   - `openai:gpt_image_2` is legacy compatibility only.
+   - `gpt-image-2` is legacy compatibility only.
    - before selecting a provider workflow or describing readiness, read `cli/eikona/docs/commands/agent-operability.md`; preserve its evidence vector and conservative effective level in the result.
    - no reference input means `image.generate`; the ordinary OpenAI Images path uses `/images/generations`.
    - `--reference-image` / `--ref` with `--reference-mode auto|edit` must preserve reference order, infer `image.edit`, and prefer multipart `/images/edits`.
    - `--reference-mode generate` means the references are guidance rather than the editable canvas; keep `image.generate`, encode ordered refs as multimodal `input_image` content, and prefer `/responses`.
    - agents must not start an additional transport-switching retry for auth, rate-limit, content-policy, timeout, TLS, or malformed-response failures. Preserve whatever attempts the current runtime records; changing automatic fallback policy requires runtime tests and a separate implementation scope.
    - never silently remove reference inputs. If evidence proves that the configured gateway supports text-to-image but not reference input, preserve the failed run, explain the capability loss, and start a separate text-only run only when the user requested or accepted that semantic fallback.
-   - do not diagnose missing reference support from a generic failure alone. Inspect the redacted failure facts currently exposed by `eikona inspect <run_id> --json` and provider doctor; if endpoint or transport is not explicit, report `unknown/degraded` rather than inventing a distinction.
+   - do not diagnose missing reference support from a generic failure alone. Inspect the redacted failure facts currently exposed by `eikona inspect <run_id> --brief --agent` and provider doctor (`--json --full` only for forensic deep dives); if endpoint or transport is not explicit, report `unknown/degraded` rather than inventing a distinction.
    - do not skip TLS verification for self-signed gateways; use system trust or `SSL_CERT_FILE`.
 4. For CLI behavior changes, add tests close to the behavior:
    - command wiring and JSON contracts in `internal/cli`
@@ -69,18 +69,20 @@ If the user explicitly says to use Eikona, `eikona`, or the Eikona CLI for image
    - project library, sessions, prompt memory, and replacement safety in their matching `internal/*` packages
    - MCP and HTTP playground helpers in `internal/mcp`, `internal/playground`, and related request/projection packages
 5. For agent invocation design, keep the contract simple:
-   - one-off inline generation uses `eikona "<prompt>" --json` or `eikona generate ... --json`; a prompt stored in a text or Markdown file uses `eikona generate --input <prompt-file> --json` instead. `--input` and `--prompt` are mutually exclusive; use `eikona-file-prompt-workflow` for categorized directories, collection README files, templates, and runbook authoring;
-   - a prompt collection uses `eikona run -f <runbook.yaml> --json`: use `defaults.prompt_file` for a shared file, `jobs[].prompt_file` for named candidates, or `matrix.prompt_files` to expand one job per file. Prompt paths are relative to the runbook and `prompt`, `prompt_file`, and `prompt_ref` are mutually exclusive at each source level;
-   - multi-step workflow work uses `eikona workflow validate/plan/draw/run --json` and `workflow run --background`;
-   - status polling uses `eikona wait/status/inspect --json` or low-token `--agent`;
-   - external PNG/JPEG/WebP capture uses `eikona artifacts import <path> --json`; capture always creates run evidence first and never auto-promotes into Visual Library;
-   - artifact handoff uses `eikona assets handoff <artifact_id> --json` before project writes; long-term reuse requires an explicit `eikona library save eikona://artifact/<handle> ... --json` decision;
+   - output mode policy: routine agent automation uses `--agent`; observing a non-terminal run uses `eikona watch <run-id> --events`; scripts/CI that need JSON use `--json --compact`; forensic debugging and compatibility audits use `--json --full`. Never route routine agents into full JSON. `--compact` or `--full` without `--json`, and `--compact --full` together, fail with `INVALID_REQUEST` before side effects. Emitted actions are normalized to the caller's output mode, and `eikona next --agent` is the unified read-only progression entry;
+   - the routine closed loop is: submit with `--agent` → observe with `eikona watch <run-id> --events` → advance with `eikona next --agent` → `eikona inspect --brief --agent` → `eikona review packet --agent` → a human opens the preview/contact sheet → `eikona feedback accept|reject` or `eikona reroll` with `--agent` → `eikona assets handoff/stage/apply --agent`;
+   - one-off inline generation uses `eikona "<prompt>" --agent` or `eikona generate ... --agent`; a prompt stored in a text or Markdown file uses `eikona generate --input <prompt-file> --agent` instead. `--input` and `--prompt` are mutually exclusive; use `eikona-file-prompt-workflow` for categorized directories, collection README files, templates, and runbook authoring;
+   - a prompt collection uses `eikona run -f <runbook.yaml> --agent`: use `defaults.prompt_file` for a shared file, `jobs[].prompt_file` for named candidates, or `matrix.prompt_files` to expand one job per file. Prompt paths are relative to the runbook and `prompt`, `prompt_file`, and `prompt_ref` are mutually exclusive at each source level;
+   - multi-step workflow work uses `eikona workflow validate/plan/draw/run --agent` and `workflow run --background --agent`;
+   - run observation uses `eikona watch <run-id> --events` for non-terminal runs and `eikona next --agent` for read-only progression; lightweight status checks use `eikona status --agent` and routine result inspection uses `eikona inspect --brief --agent`;
+   - external PNG/JPEG/WebP capture uses `eikona artifacts import <path> --agent`; capture always creates run evidence first and never auto-promotes into Visual Library;
+   - artifact handoff uses `eikona assets handoff <artifact_id> --agent` before project writes; long-term reuse requires an explicit `eikona library save eikona://artifact/<handle> ... --agent` decision;
    - project-bound generated assets use `eikona assets handoff` → `eikona assets stage --to <project-relative-path>` → `eikona assets apply --project current --yes`; do not copy user-level runstore paths directly;
    - REST capture requires `Idempotency-Key`, allowed roots for server-side paths, and path-free delivery grants rather than absolute runstore paths;
-   - scenario prompt exploration uses `eikona prompts catalog search ... --json`, `eikona workflow draw ... --json`, and `eikona workflow run ... --background --json`;
+   - scenario prompt exploration uses `eikona prompts catalog search ... --agent`, `eikona workflow draw ... --agent`, and `eikona workflow run ... --background --agent`;
    - creative direction uses the on-demand `eikona-visual-router`, `eikona-subject-asset-director`, `eikona-xhs-*`, and `eikona-ultrawide-storyboard-director` skills for brief and prompt design; file-backed storage uses `eikona-file-prompt-workflow`; this runtime skill remains responsible for CLI contracts, evidence, provider safety, and generated artifact lifecycle;
    - Scaena episode/shot/cover/motion generation must first pass `scaena-subject-asset-readiness`; without a current preflight, Eikona may generate only subject candidates or look-development artifacts marked non-production;
-   - planned visual scoring uses `eikona assess ... --json` after the assessment change lands; until then, use `review`, `feedback`, and objective `quality.check` evidence;
+   - planned visual scoring uses `eikona assess ... --agent` after the assessment change lands; until then, use `review`, `feedback`, and objective `quality.check` evidence;
    - planned recipe reuse uses `eikona recipes ...` and `workflow --recipe` only after the recipe change lands; until then, keep reuse explicit through prompt skills, deck versions, style packs, and feedback evidence;
    - long-lived integrations can use `eikona mcp`, but ordinary CLI output remains the primary contract.
    - storage backup uses `eikona storage backend set s3 ...`, `eikona storage push ...`, and `eikona storage restore ...`; for reusable Git plus S3/rclone/cloud-drive policy, use `local-first-backup-sync-policy` on demand.
@@ -93,7 +95,7 @@ If the user explicitly says to use Eikona, `eikona`, or the Eikona CLI for image
 
 - 分类、命名、README、prompt 文档和 runbook 模板由 `eikona-file-prompt-workflow` 统一定义；runtime 不复制第二套目录规范。
 - 一个 `.md` 或 `.txt` 文件对应一个可审阅的提示词方向；文件内容只包含自然语言创作提示，不包含密钥、provider payload、隐藏指令或 run metadata。
-- 对集合先执行 `eikona run -f <runbook.yaml> --dry-run --json`，确认展开的 jobs、模型、尺寸、来源和成本限制后再执行真实 run。
+- 对集合先执行 `eikona run -f <runbook.yaml> --dry-run --agent`，确认展开的 jobs、模型、尺寸、来源和成本限制后再执行真实 run。
 - CLI 会为单文件和 runbook job 记录 prompt source provenance 与 run-owned snapshot。不得手改 `prompt_sources.json`、snapshot、batch plan、queue 或 run evidence；通过 Eikona CLI 重建或推进它们。
 - Auctra 来源先交给 `eikona-auctra-visual-router`：只能从已接受的 brief/source refs 派生 prompt 文件；Eikona 是 Auctra 生图的默认和优先执行路径。
 

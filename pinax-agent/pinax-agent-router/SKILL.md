@@ -21,7 +21,7 @@ Prefer form-style intake before writing to a vault. Convert loose user input int
 - The request says or implies `note`, `笔记`, `知识笔记`, `学习笔记`, `技术笔记`, `Pinax note`, `Pinax 笔记`, `保存到 Pinax`, `收进 vault`, `写入 vault`, or `capture this in Pinax`.
 - The user asks in Chinese to complete, write, organize, polish, or turn material into a note, such as `帮我完成一篇笔记`, `写一篇笔记`, `整理成一篇笔记`, or `把这些内容做成笔记`, and no explicit non-Pinax publishing channel is named.
 - The task is operational use of `pinax`, not Go code changes under `cli/pinax`.
-- The request mentions any Pinax top-level command: `init`, `vault`, `record`, `project`, `journal`, `inbox`, `draft`, `note`, `import`, `export`, `template`, `view`, `folder`, `search`, `kb`, `memory`, `query`, `dataview`, `database`, `metadata`, `repair`, `organize`, `proof`, `briefing`, `cloud`, `sync`, `plan`, `prompt`, `collection`, `publish`, `plugin`, `backend`, `mcp`, `api`, `token`, `profile`, `config`, `version`, `asset`, `storage`, `index`, or `graph`.
+- The request mentions any Pinax top-level command: `init`, `vault`, `record`, `project`, `journal`, `inbox`, `draft`, `note`, `import`, `export`, `template`, `view`, `folder`, `search`, `memory`, `query`, `dataview`, `database`, `metadata`, `repair`, `organize`, `proof`, `briefing`, `cloud`, `sync`, `plan`, `prompt`, `collection`, `publish`, `plugin`, `backend`, `mcp`, `api`, `token`, `profile`, `config`, `version`, `asset`, `storage`, `index`, or `graph`.
 
 For Pinax code implementation, use `yeisme-pinax-cli-runtime` plus the normal coding skills instead.
 
@@ -30,7 +30,7 @@ For Pinax code implementation, use `yeisme-pinax-cli-runtime` plus the normal co
 | User goal or command family | Skill to load | First commands |
 | --- | --- | --- |
 | Set up/select a vault, write/complete/capture notes, inbox, journal, draft, import/export, ordinary note lifecycle | `pinax-vault-operator` | `pinax vault list --agent`, `pinax note add ... --dir index --stdin --json`, `pinax inbox capture ... --stdin --json` |
-| Search notes, refresh indexes, KB context, links/backlinks/orphans, query/dataview/database/view/folder inspection | `pinax-retrieval-operator` | `pinax index refresh --json`, `pinax search "..." --agent`, `pinax kb context "..." --agent` |
+| Search notes, refresh indexes, links/backlinks/orphans, query/dataview/database/view/folder inspection | `pinax-retrieval-operator` | `pinax index refresh --json`, `pinax search "..." --agent`, `pinax note links "..." --agent` |
 | Capture or recall durable facts, decisions, events, and tasks | `pinax-memory-operator` | `pinax memory context "..." --agent`, `pinax memory recall "..." --agent` |
 | Capsa Sync, repository-encrypted S3/COS bootstrap, sync logs/conflicts, storage backend, S3/rclone fallback, backend object diagnostics | `pinax-sync-storage-operator` | `pinax sync status --agent`, `pinax sync repo doctor --json`, `pinax sync diff --target capsa --json` |
 | Proof loop, doctor/stats, metadata/repair/organize apply, snapshot/restore, record ledger, high-risk maintenance | `pinax-proof-maintenance-operator` | `pinax proof loop run --json`, `pinax vault doctor --json`, `pinax version snapshot --message "before maintenance" --json` |

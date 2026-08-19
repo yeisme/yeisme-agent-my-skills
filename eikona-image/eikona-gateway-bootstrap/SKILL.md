@@ -23,14 +23,14 @@ description: Use when a user provides an image gateway base URL, API key, channe
 
 ```bash
 eikona --version
-eikona init --user --json
+eikona init --user --agent
 ```
 
 2. 选择 Eikona model ref：
    - GPT Image 默认使用 `openai/gpt-5.4-image-2`。
-   - `gpt-5.4-image-2` 和 `gpt-image-2` 是兼容短别名；历史 `openai:gpt-image-2` 仅接受为兼容输入，不作为新默认。
-   - 普通 OpenAI-compatible gateway 使用 `openai:<exact-model-id>`。
-   - 如果 `/v1/models` 返回的完整 ID 本身包含 slash，例如 `openai/gpt-5.4-image-2`，必须把该 slash ID 原样复制到 Eikona；不要改写成 `openai:gpt-5.4-image-2`。
+   - `gpt-5.4-image-2` 和 `gpt-image-2` 是仅限显式入口的兼容短别名；新配置和新证据必须写 slash canonical ref。
+   - 对 GPT Image，provider-colon 和重复 provider 前缀形式一律在联网前拒绝；不要为 canonical ref 添加 provider 前缀。
+   - 如果 `/v1/models` 返回的完整 ID 是 `openai/gpt-5.4-image-2`，必须把该 slash ID 原样复制到 Eikona。
    - ImageRouter 使用 `imagerouter:<exact-model-id>`。
    - OpenRouter 使用 `openrouter:<exact-model-id>`。
    - 前缀表示 Eikona adapter，不表示营销名称；不要把 `Nano Banana Pro` 自动改写成任何猜测 ID。
@@ -44,7 +44,7 @@ printf '%s\n' "$EIKONA_API_KEY" | eikona auth set gateway \
   --base-url https://gateway.example.com/v1 \
   --api-key-stdin \
   --default-model openai/gpt-5.4-image-2 \
-  --json
+  --agent
 unset EIKONA_API_KEY
 ```
 
@@ -59,11 +59,11 @@ printf '%s\n' "$EIKONA_API_KEY" | eikona auth set gateway \
   --base-url http://dev.qxtech.cc:26160/v1 \
   --api-key-stdin \
   --default-model openai/gpt-5.4-image-2 \
-  --json
+  --agent
 unset EIKONA_API_KEY
 ```
 
-`openai:gpt-5.4-image-2` 是已知歧义错误形式，必须在联网前失败并提示改用 `openai/gpt-5.4-image-2`。
+provider-colon、重复 provider 前缀或未知 model ref 是歧义错误形式，必须在联网前失败；canonical slash ref 可直接提交。
 
 4. 读取脱敏状态并注册当前项目：
 
@@ -138,13 +138,13 @@ eikona projects register . --agent
 项目移动后，根据 `projects list` 返回的 project ID 修复根路径：
 
 ```bash
-eikona projects list --json
-eikona projects repair-root <project_id> --root /new/project/path --json
+eikona projects list --agent
+eikona projects repair-root <project_id> --root /new/project/path --agent
 ```
 
 ## 参考图失败诊断
 
-1. 使用 `eikona inspect <run_id> --json` 读取当前 CLI 暴露的脱敏失败摘要，并结合 `eikona providers doctor <provider> --agent`。如果输出没有明确区分 endpoint 或 transport，就保持 `unknown/degraded`；不要只凭“带参考图失败”猜根因。
+1. 使用 `eikona inspect <run_id> --brief --agent` 读取当前 CLI 暴露的脱敏失败摘要（深度取证才用 `--json --full`），并结合 `eikona providers doctor <provider> --agent`。如果输出没有明确区分 endpoint 或 transport，就保持 `unknown/degraded`；不要只凭“带参考图失败”猜根因。
 2. 只有现有证据明确标识 `/images/edits` 为 unsupported 时，才能说明编辑接口不可用。任务意图是“新生成并参考风格”时，可以在获得用户同意后用新的 `--reference-mode generate` run 验证另一语义路径。
 3. 只有现有证据明确标识 multimodal reference input 不受支持时，才记录该 channel 的对应能力缺口。不要继续手工轮换 transport，也不要声称已保留参考图一致性。
 4. 用户接受语义降级后，创建一个新的无 `--ref` run，并把参考图中的可见约束转写为明确产品 brief。失败 run 保留用于审计；认证、限流、内容拒绝、超时、TLS 或 malformed response 不是参考图不支持的证据，不得通过删除参考图掩盖。
@@ -158,7 +158,7 @@ eikona projects repair-root <project_id> --root /new/project/path --json
 
 - 不写 Python、JavaScript、curl、base64 解码或下载脚本代替 Eikona。
 - 不把 key 写入仓库、项目 `.eikona/config.yaml`、命令参数、日志、trace、run evidence 或 skill 输出。
-- 不调用 `auth env`，不从 human output 解析状态；agent 自动化使用 `--json`、`--agent` 或 `--events`。
+- 不调用 `auth env`，不从 human output 解析状态；例行 agent 自动化使用 `--agent`，观察非终态 run 用 `--events`，脚本/CI 用 `--json --compact`（共存期内裸 `--json` 仍是 legacy full），取证用 `--json --full`。
 - 如果当前 Eikona runtime 无法把该 channel、adapter 或 transport 路由到网关，停止生成并交给 `yeisme-eikona-cli-runtime`；不要绕过 Eikona 直接调用网关。
 - 不把纯文生图成功描述成编辑式图生图或参考图条件生成成功；三种能力必须分别验证和报告。
 

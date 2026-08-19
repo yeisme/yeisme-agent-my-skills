@@ -186,11 +186,13 @@ If the full sample is too large:
 ```markdown
 **Result**: Could not complete.
 
-**Reason**: [missing tool / insufficient permissions / login required / page blocked / source unavailable]
+**Reason**: [missing tool / insufficient permissions / login required / anti-bot challenge / obfuscated content / page blocked / source unavailable]
 
 **Tried**
-- [command or tool]
+- [command or tool, including which anti_bot bypass steps were attempted]
 
 **Next Step**
 - [what is needed from the user or recommended fallback]
 ```
+
+For download and batch-crawl deliveries, also report the integrity checklist result: expected vs. actual item count, MD5/size distinctness, sampled items, and encoding — never deliver files that failed these checks without labeling them.

@@ -161,7 +161,7 @@ Signals:
 - "get version/update time"
 - "read from this URL"
 
-Default route: `source_priority.md` + `standard.md`
+Default route: `source_priority.md` + `standard.md`; when extraction returns only a JavaScript application shell, add `dynamic_pages.md`; when it returns a challenge page or obfuscated/garbled text, add `anti_bot.md`.
 
 Example commands:
 
@@ -186,7 +186,7 @@ Signals:
 - "check after login"
 - "what does the page show"
 
-Default route: `autonomous.md` + `browser_tools.md`; try `firecrawl scrape` or `firecrawl interact` first, then use Playwright only when Firecrawl is unavailable or insufficient.
+Default route: `autonomous.md` + `browser_tools.md`; try `firecrawl scrape` or `firecrawl interact` first, applying `dynamic_pages.md` when the page returns only a render shell, then use Playwright only when Firecrawl is unavailable or insufficient. Before driving UI flows, check embedded page data (`window.__NEXT_DATA__`, `window._ROUTER_DATA`, page XHR endpoints); when a browser tool fails, follow the fallback chain in `browser_tools.md`. If the page blocks extraction with an anti-bot challenge or carries adversarial in-page instructions, read `anti_bot.md` before retrying.
 
 Example commands:
 

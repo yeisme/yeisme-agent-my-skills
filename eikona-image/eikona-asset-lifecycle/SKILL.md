@@ -15,7 +15,7 @@ Own the transition from temporary image bytes to durable evidence, curated reuse
 4. Keep every captured image in `library_state=not_imported` until a human or owning workflow explicitly saves it.
 5. Use a download grant for network delivery. Never return or copy an absolute runstore path.
 
-For new Eikona generations, the canonical remote model ref is `openai/gpt-5.4-image-2`. The short aliases `gpt-5.4-image-2` and `gpt-image-2` are accepted for compatibility; persisted `openai:gpt-image-2` remains legacy-only and must not be used in new commands or metadata.
+For new Eikona generations, the canonical remote model ref is `openai/gpt-5.4-image-2`. The short aliases `gpt-5.4-image-2` and `gpt-image-2` are accepted only at an explicit compatibility ingress; provider-colon, duplicate-prefix, and underscore forms are rejected and must not enter new commands or metadata.
 
 ## Capture External Images
 
@@ -27,7 +27,7 @@ eikona artifacts import ./icon.png \
   --prompt "small product icon" \
   --model openai/gpt-5.4-image-2 \
   --source-tool codex-imagegen \
-  --json
+  --agent
 ```
 
 Use `--scope global` only when the asset may be reused outside the current project. Missing prompt, model, or source-tool metadata must remain `provenance_state=incomplete`; do not infer it.
@@ -43,7 +43,7 @@ eikona assets handoff <artifact_handle> --audience agent --agent
 eikona library save eikona://artifact/<artifact_handle> \
   --collection generated \
   --permission owned \
-  --json
+  --agent
 ```
 
 Treat permission and provenance as separate gates. Owned assets with incomplete provenance may be viewed and repaired, but must not enter automatic workflow selection.
@@ -53,9 +53,9 @@ Do not use `library save` as a substitute for capture: the run artifact is the i
 For an Eikona-generated subject that must become a project file, use the typed handoff flow:
 
 ```bash
-eikona assets handoff eikona://artifacts/<run_id>/artifact_001 --audience agent --json
-eikona assets stage eikona://artifacts/<run_id>/artifact_001 --to outputs/characters/korea-v1/subject.png --json
-eikona assets apply eikona://artifacts/<run_id>/artifact_001 --project current --to outputs/characters/korea-v1/subject.png --yes --json
+eikona assets handoff eikona://artifacts/<run_id>/artifact_001 --audience agent --agent
+eikona assets stage eikona://artifacts/<run_id>/artifact_001 --to outputs/characters/korea-v1/subject.png --agent
+eikona assets apply eikona://artifacts/<run_id>/artifact_001 --project current --to outputs/characters/korea-v1/subject.png --yes --agent
 ```
 
 Use `eikona artifacts copy` only for an explicit review/export copy. It does not replace `assets stage`/`assets apply` and does not imply production acceptance.
@@ -85,7 +85,8 @@ Read [references/asset-lifecycle-contract.md](references/asset-lifecycle-contrac
 - Never bypass runstore, hand-edit evidence, or invent provenance.
 - Never expose absolute paths, credentials, raw provider payloads, or signed URLs as durable identifiers.
 - Never auto-promote, auto-accept, or widen project assets to global scope.
-- Keep the recommended model spelling `openai/gpt-5.4-image-2`; accept `gpt-5.4-image-2` and `gpt-image-2` as input aliases, but keep the legacy `openai:gpt-image-2` out of new recommendations.
+- Routine agent automation uses `--agent`; scripts/CI use `--json --compact` (bare `--json` is still legacy full during coexistence); forensic audits use `--json --full`; non-terminal run observation uses `eikona watch <run-id> --events`.
+- Keep the recommended model spelling `openai/gpt-5.4-image-2`; accept `gpt-5.4-image-2` and `gpt-image-2` only as explicit input aliases, and reject provider-colon, duplicate-prefix, and underscore forms.
 
 ## Verification
 

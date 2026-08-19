@@ -47,9 +47,9 @@ Lower authority may narrow optional choices but cannot weaken safety/readiness/r
 ## Workflow compilation
 
 ```bash
-eikona workflow import intent -f visual-intent.yaml --out workflow.yaml --json
-eikona workflow validate -f workflow.yaml --json
-eikona workflow plan -f workflow.yaml --json
+eikona workflow import intent -f visual-intent.yaml --out workflow.yaml --agent
+eikona workflow validate -f workflow.yaml --agent
+eikona workflow plan -f workflow.yaml --agent
 ```
 
 Blocked or stale readiness fails compilation. Model defaults to `openai/gpt-5.4-image-2`; `gpt-5.4-image-2` and `gpt-image-2` are accepted aliases, while provider/credential resolution remains runtime responsibility.

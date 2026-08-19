@@ -58,6 +58,8 @@ Scrape authoritative URLs directly:
 firecrawl scrape "https://docs.firecrawl.dev/"
 ```
 
+Always use an absolute URL. If a JavaScript-rendered page returns only branding or global navigation, apply `dynamic_pages.md` and validate an expected page-specific marker before accepting the result.
+
 Do not hide these steps inside local helper scripts. The agent should preserve a visible research path so the final answer can explain sources, limits, and confidence.
 
 ### 4. Use Structured Sources For Confirmation
@@ -89,6 +91,8 @@ curl -L "https://example.com" | head
 ```
 
 Then use built-in search/browser tools if needed. Do not block the task just because the preferred CLI is missing.
+
+If scraping returns an anti-bot challenge page or garbled/obfuscated text instead of content, do not keep retrying the same request — apply `anti_bot.md` (rendered extraction, real browser, plaintext side doors) and label any partial content you still use.
 
 ## Output Format
 

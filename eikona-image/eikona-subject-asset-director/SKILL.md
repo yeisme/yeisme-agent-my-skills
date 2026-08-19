@@ -45,11 +45,11 @@ description: Use when creating or repairing Eikona character identity sheets, su
 - 一个 `.md`/`.txt` 文件对应一个候选方向；runbook/prompt source/evidence 由 Eikona CLI 创建，不手写结构化 metadata。
 - Prompt 只使用允许公开给 provider 的 source facts；不要包含完整 canon、隐藏剧透、credential、provider payload 或内部推理。
 
-Eikona 默认模型使用完整 canonical ref：`openai/gpt-5.4-image-2`。`gpt-5.4-image-2` 与 `gpt-image-2` 是接受的短别名；历史 `openai:gpt-image-2` 只作为兼容输入。网关其他模型必须复制 `/v1/models` 的完整 ID；`openai:gpt-5.4-image-2` 是禁止的歧义形式。
+Eikona 默认模型使用完整 canonical ref：`openai/gpt-5.4-image-2`。`gpt-5.4-image-2` 与 `gpt-image-2` 是接受的短别名；历史 `openai/gpt-5.4-image-2` 只作为兼容输入。网关其他模型必须复制 `/v1/models` 的完整 ID；`openai/gpt-5.4-image-2` 是禁止的歧义形式。
 
 ### 4. 先 fixture/dry-run，再真实生成
 
-进入 `cli/eikona`，读取本地 `AGENTS.md`，确认实际命令 help。单个 prompt 文件：
+进入 `cli/eikona`，读取本地 `AGENTS.md`，确认实际命令 help。输出模式：例行自动化用 `--agent`；非终态 run 用 `eikona watch <run_id> --events` 观察；脚本/CI 用 `--json --compact`（共存期内裸 `--json` 仍是 legacy full）；取证用 `--json --full`。单个 prompt 文件：
 
 ```bash
 eikona generate \
@@ -58,7 +58,7 @@ eikona generate \
   --size 2k \
   --aspect 2:3 \
   --dry-run \
-  --json
+  --agent
 
 eikona generate \
   --use-channel openai \
@@ -69,15 +69,15 @@ eikona generate \
   --size 2k \
   --aspect 2:3 \
   --quality high \
-  --json
+  --agent
 ```
 
 需要 reference image 时使用 installed version 支持的 `--reference-image` 语法，并保留顺序。候选集合使用已有 runbook：
 
 ```bash
-eikona run -f prompts/scaena/subject-candidate/<subject-ref>/runbook.yaml --dry-run --json
-eikona run -f prompts/scaena/subject-candidate/<subject-ref>/runbook.yaml --background --json
-eikona wait <run_id> --json
+eikona run -f prompts/scaena/subject-candidate/<subject-ref>/runbook.yaml --dry-run --agent
+eikona run -f prompts/scaena/subject-candidate/<subject-ref>/runbook.yaml --background --agent
+eikona watch <run_id> --events
 ```
 
 真实生成默认使用 `openai/gpt-5.4-image-2`。不要为 Scaena 专门创建 provider script 或另一套 scenario command。
@@ -99,7 +99,7 @@ printf '%s\n' "$EIKONA_API_KEY" | eikona auth set openai \
   --base-url http://dev.qxtech.cc:26160/v1 \
   --api-key-stdin \
   --default-model openai/gpt-5.4-image-2 \
-  --json
+  --agent
 unset EIKONA_API_KEY
 ```
 
@@ -109,7 +109,7 @@ unset EIKONA_API_KEY
 ### 5. 生成 review packet，禁止机器自动选定
 
 ```bash
-eikona review packet <run_id> --json
+eikona review packet <run_id> --agent
 eikona assets list <run_id> --agent
 ```
 
@@ -118,8 +118,8 @@ eikona assets list <run_id> --agent
 记录反馈：
 
 ```bash
-eikona feedback accept <run_id> --artifact <artifact_id> --reason identity_anchor --reason view_completeness --json
-eikona feedback reject <run_id> --artifact <artifact_id> --reason identity_drift --json
+eikona feedback accept <run_id> --artifact <artifact_id> --reason identity_anchor --reason view_completeness --agent
+eikona feedback reject <run_id> --artifact <artifact_id> --reason identity_drift --agent
 ```
 
 不要把 Eikona accept 描述成 Scaena frozen 或 shot accepted。
@@ -135,15 +135,15 @@ Handoff 必须带 artifact/run refs、digest、mime/dimensions、permission、li
 项目文件必须通过 typed asset flow 写入。不要直接复制用户级 runstore 的绝对路径，也不要把 `--output-dir` 当成 production acceptance：
 
 ```bash
-eikona assets handoff eikona://artifacts/<run_id>/artifact_001 --audience agent --json
+eikona assets handoff eikona://artifacts/<run_id>/artifact_001 --audience agent --agent
 eikona assets stage eikona://artifacts/<run_id>/artifact_001 \
   --to outputs/characters/korea-v1/<subject-id>.png \
-  --json
+  --agent
 eikona assets apply eikona://artifacts/<run_id>/artifact_001 \
   --project current \
   --to outputs/characters/korea-v1/<subject-id>.png \
   --yes \
-  --json
+  --agent
 ```
 
 `assets apply` 只表示项目文件已写入；主体冻结仍由 Scaena readiness/consistency gate 完成。

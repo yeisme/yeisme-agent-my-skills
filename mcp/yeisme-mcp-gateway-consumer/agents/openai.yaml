@@ -1,0 +1,3 @@
+display_name: Yeisme MCP Gateway Consumer
+short_description: Connect an Agent to a Yeisme MCP Gateway and use advertised tools safely.
+default_prompt: Connect to the provided MCP Gateway endpoint, verify health and advertised tools, configure the requested client, and explain any scope or approval block without changing Gateway policy.

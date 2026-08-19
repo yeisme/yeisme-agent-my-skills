@@ -92,13 +92,13 @@ prompts/
 把：
 
 ```bash
-eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --prompt "<long prompt>" --json
+eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --prompt "<long prompt>" --agent
 ```
 
 迁移为：
 
 ```bash
-eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --input prompts/<owner>/<asset-type>/<collection>/prompts/01-<direction>.md --json
+eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --input prompts/<owner>/<asset-type>/<collection>/prompts/01-<direction>.md --agent
 ```
 
 迁移时不要把 shell 转义符、命令参数、模型名或 `--set` provider options 写进 prompt 文件。

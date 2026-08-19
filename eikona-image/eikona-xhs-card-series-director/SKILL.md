@@ -25,18 +25,20 @@ description: Use when designing Xiaohongshu 3/6/9-page static card series, knowl
 
 ## 命令示例
 
+输出模式：例行自动化用 `--agent`；非终态 run 用 `eikona watch <run_id> --events` 观察；脚本/CI 用 `--json --compact`（共存期内裸 `--json` 仍是 legacy full）；取证用 `--json --full`。
+
 本地验证：
 
 ```bash
-eikona run -f prompts/xhs/card-series/skincare-basics/runbook.yaml --dry-run --json
+eikona run -f prompts/xhs/card-series/skincare-basics/runbook.yaml --dry-run --agent
 ```
 
 真实生成：
 
 ```bash
-eikona run -f prompts/xhs/card-series/skincare-basics/runbook.yaml --background --json
-eikona review packet <run_id> --json
-eikona feedback accept <run_id> --artifact <artifact_id> --reason series_consistency --reason mobile_readability --json
+eikona run -f prompts/xhs/card-series/skincare-basics/runbook.yaml --background --agent
+eikona review packet <run_id> --agent
+eikona feedback accept <run_id> --artifact <artifact_id> --reason series_consistency --reason mobile_readability --agent
 eikona assets handoff <artifact_id> --agent
 ```
 
@@ -45,7 +47,7 @@ eikona assets handoff <artifact_id> --agent
 ```bash
 eikona workflow run -f testdata/workflows/social-card-series.yaml --background --agent
 eikona worker daemon --once --max-active-runs 2 --agent
-eikona review packet <run_id> --json
+eikona review packet <run_id> --agent
 ```
 
 ## 输出

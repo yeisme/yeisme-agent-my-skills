@@ -46,25 +46,27 @@ description: Use when designing ultrawide continuous-space storyboards, action b
 
 以下直接生成示例适用于独立 planning，或已通过 Scaena production preflight 的上下文。Scaena context 无 preflight 时不要运行真实生成命令。
 
+输出模式：例行自动化用 `--agent`；非终态 run 用 `eikona watch <run_id> --events` 观察；脚本/CI 用 `--json --compact`（共存期内裸 `--json` 仍是 legacy full）；取证用 `--json --full`。
+
 本地验证规划看板：
 
 ```bash
-eikona generate --model fixture:image --aspect 3:1 --size 1536x512 --input prompts/story/storyboard/night-market-conflict/prompts/01-planning-board.md --dry-run --json
+eikona generate --model fixture:image --aspect 3:1 --size 1536x512 --input prompts/story/storyboard/night-market-conflict/prompts/01-planning-board.md --dry-run --agent
 ```
 
 真实生成规划看板：
 
 ```bash
-eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --aspect 3:1 --size 1536x512 --input prompts/story/storyboard/night-market-conflict/prompts/01-planning-board.md --json
-eikona review packet <run_id> --json
-eikona feedback accept <run_id> --artifact <artifact_id> --reason spatial_continuity --reason beat_clarity --json
+eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --aspect 3:1 --size 1536x512 --input prompts/story/storyboard/night-market-conflict/prompts/01-planning-board.md --agent
+eikona review packet <run_id> --agent
+eikona feedback accept <run_id> --artifact <artifact_id> --reason spatial_continuity --reason beat_clarity --agent
 eikona assets handoff <artifact_id> --agent
 ```
 
 视频参考图必须生成干净电影镜头：
 
 ```bash
-eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --aspect 16:9 --size 1536x864 --input prompts/story/storyboard/night-market-conflict/prompts/02-clean-video-reference.md --json
+eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --aspect 16:9 --size 1536x864 --input prompts/story/storyboard/night-market-conflict/prompts/02-clean-video-reference.md --agent
 ```
 
 ## 输出

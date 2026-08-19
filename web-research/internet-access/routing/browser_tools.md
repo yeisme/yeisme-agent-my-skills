@@ -6,7 +6,7 @@ Explain when an internet information task should escalate from Firecrawl to a br
 
 ## Principle
 
-A browser is not the default web access tool. Use source-specific CLIs or Firecrawl first, including for JavaScript-rendered pages and Firecrawl-supported interactions. Use a browser only when Firecrawl is unavailable or insufficient, or when real visual state and reusable UI automation are required.
+A browser is not the default web access tool. Use source-specific CLIs or Firecrawl first, including the bounded shell-recovery workflow in `dynamic_pages.md` for JavaScript-rendered pages and Firecrawl-supported interactions. Use a browser only when Firecrawl is unavailable or insufficient, or when real visual state and reusable UI automation are required.
 
 Priority:
 
@@ -41,7 +41,7 @@ Record which fallback worked; later steps in the same session should reuse it di
 
 Use an existing project Playwright command or `npx playwright` when:
 
-- Firecrawl is unavailable or remains incomplete after a reasonable `scrape --wait-for` or `interact` attempt.
+- Firecrawl is unavailable or remains incomplete after the marker checks and bounded `scrape --wait-for` recovery in `dynamic_pages.md`, or after a reasonable `interact` attempt.
 - The workflow depends on browser-only state, unsupported widgets, complex authentication, downloads, popups, or multi-tab behavior.
 - The flow must run repeatedly as a test, QA check, regression, monitor, or maintained automation.
 - Console, network, accessibility, screenshot, or trace evidence is required.
@@ -127,7 +127,7 @@ Do not escalate to a browser when:
 
 Confirm at least one condition:
 
-- Firecrawl was unavailable or a reasonable scrape/interact attempt still misses key content or state.
+- Firecrawl was unavailable or the bounded recovery and page-specific marker checks in `dynamic_pages.md` still miss key content or state.
 - The user cares about the actual visible state of the page, not just extracted content.
 - Unsupported filters, widgets, authentication, downloads, popups, or multi-tab behavior must be operated.
 - Screenshots, browser traces, console output, or network evidence are needed.

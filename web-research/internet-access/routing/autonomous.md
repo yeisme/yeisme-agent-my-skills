@@ -31,7 +31,7 @@ Tool choice:
 - Use existing project Playwright commands or `npx playwright` only when Firecrawl is unavailable or insufficient, or when the workflow should become a maintained test or automation.
 - Use `agent-browser` for one-off visual inspection when screenshots or accessibility state are required and a Playwright artifact is unnecessary.
 - If structured data exists, prefer source-specific CLI/API instead of browser automation; for example, use `gh` only for GitHub.
-- Do not write new wrapper scripts for one-off exploration.
+- Do not write new wrapper scripts for one-off exploration; disposable scripts for batch jobs are fine — see "Long-Running And Batch Jobs" below.
 
 ## Workflow
 

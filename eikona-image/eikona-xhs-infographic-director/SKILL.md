@@ -25,18 +25,20 @@ description: Use when designing Xiaohongshu infographics, process diagrams, comp
 
 ## 命令示例
 
+输出模式：例行自动化用 `--agent`；非终态 run 用 `eikona watch <run_id> --events` 观察；脚本/CI 用 `--json --compact`（共存期内裸 `--json` 仍是 legacy full）；取证用 `--json --full`。
+
 本地验证：
 
 ```bash
-eikona generate --model fixture:image --aspect 3:4 --size 1024x1536 --input prompts/xhs/infographic/skincare-steps/prompts/01-five-step-flow.md --dry-run --json
+eikona generate --model fixture:image --aspect 3:4 --size 1024x1536 --input prompts/xhs/infographic/skincare-steps/prompts/01-five-step-flow.md --dry-run --agent
 ```
 
 真实生成：
 
 ```bash
-eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --aspect 3:4 --size 1024x1536 --input prompts/xhs/infographic/skincare-steps/prompts/01-five-step-flow.md --json
-eikona review packet <run_id> --json
-eikona feedback accept <run_id> --artifact <artifact_id> --reason fact_layout --reason mobile_readability --json
+eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --aspect 3:4 --size 1024x1536 --input prompts/xhs/infographic/skincare-steps/prompts/01-five-step-flow.md --agent
+eikona review packet <run_id> --agent
+eikona feedback accept <run_id> --artifact <artifact_id> --reason fact_layout --reason mobile_readability --agent
 eikona assets handoff <artifact_id> --agent
 ```
 

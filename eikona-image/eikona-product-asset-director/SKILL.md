@@ -49,9 +49,9 @@ eikona auth check gateway --agent
 5. 先检查集合展开。获得 paid/live gate 的明确同意后，才生成真实候选。产品 hero 示例：
 
 ```bash
-eikona run -f prompts/product/landing-hero/local-first-cli/runbook.yaml --dry-run --json
+eikona run -f prompts/product/landing-hero/local-first-cli/runbook.yaml --dry-run --agent
 # Only after explicit approval for the configured provider/model and potential cost:
-eikona run -f prompts/product/landing-hero/local-first-cli/runbook.yaml --background --json
+eikona run -f prompts/product/landing-hero/local-first-cli/runbook.yaml --background --agent
 ```
 
 网关模型不是 GPT Image 时，保留相同 Eikona 流程，只替换准确 model ref 和网关要求的 `--set api=responses|images|chat`；不要猜 Nano Banana model ID，也不要假设纯文生图成功等于参考输入可用。
@@ -59,21 +59,21 @@ eikona run -f prompts/product/landing-hero/local-first-cli/runbook.yaml --backgr
 6. 获取 review packet，按实际使用场景检查主体、品牌、文字伪影、文案安全区、桌面/移动裁切、尺寸和版权风险：
 
 ```bash
-eikona review packet <run_id> --json
+eikona review packet <run_id> --agent
 ```
 
 7. 记录接受和拒绝理由：
 
 ```bash
-eikona feedback accept <run_id> --artifact <artifact_id> --reason composition --reason brand_fit --reason prompt_alignment --json
-eikona feedback reject <run_id> --artifact <artifact_id> --reason brand_fit --reason text_quality --json
+eikona feedback accept <run_id> --artifact <artifact_id> --reason composition --reason brand_fit --reason prompt_alignment --agent
+eikona feedback reject <run_id> --artifact <artifact_id> --reason brand_fit --reason text_quality --agent
 ```
 
 8. 先读取 path-free handoff，再确认项目内目标路径并 apply：
 
 ```bash
 eikona assets handoff <artifact_handle> --audience agent --agent
-eikona assets apply <artifact_handle> --project current --to public/images/hero.png --yes --json
+eikona assets apply <artifact_handle> --project current --to public/images/hero.png --yes --agent
 ```
 
 禁止 agent 自己下载、base64 解码或复制 provider 产物。目标路径必须位于已注册项目内。
@@ -83,7 +83,7 @@ eikona assets apply <artifact_handle> --project current --to public/images/hero.
 9. 只有用户明确接受视觉方向且预计复用时才提升 recipe：
 
 ```bash
-eikona recipes promote <run_id> --artifact <artifact_id> --as product-hero-clean-editorial --json
+eikona recipes promote <run_id> --artifact <artifact_id> --as product-hero-clean-editorial --agent
 ```
 
 跨项目复用前重新检查品牌归属、素材权限和用户许可；优先复用构图、prompt skill 或 recipe，不默认复制源图。
@@ -99,6 +99,7 @@ eikona recipes promote <run_id> --artifact <artifact_id> --as product-hero-clean
 - 不自动覆盖项目文件；`assets apply` 前必须确认目标路径并使用 `--yes`。
 - 不把 exploratory 场景包装为成熟能力；优先完成一个真实资产进入仓库的闭环。
 - 不把 Eikona CLI/runtime bug 塞进场景 skill；运行时问题交给 `yeisme-eikona-cli-runtime`。
+- 例行自动化用 `--agent`；非终态 run 用 `eikona watch <run_id> --events` 观察；脚本/CI 用 `--json --compact`（共存期内裸 `--json` 仍是 legacy full）；取证用 `--json --full`。
 
 ## 验证
 
@@ -112,4 +113,4 @@ eikona recipes promote <run_id> --artifact <artifact_id> --as product-hero-clean
 
 产品 UI canary 默认值：canvas `2k` `16:9`，text_density `low`，unknown_secondary_copy `leave_blank`，forbid_pseudo_cjk `true`，reference_mode `generate`，review_rubric `native_resolution` + `title_legibility` + `no_pseudo_cjk`。
 
-编译：`eikona workflow import intent -f visual-intent.yaml --out workflow.yaml --json`。契约详见 `../eikona-visual-router/references/visual-intent-contract.md`。
+编译：`eikona workflow import intent -f visual-intent.yaml --out workflow.yaml --agent`。契约详见 `../eikona-visual-router/references/visual-intent-contract.md`。

@@ -51,27 +51,27 @@ description: Use when the user explicitly requests Eikona/eikona visual generati
 4. 判断是否已有 accepted source。Auctra 来源必须先通过 Auctra review；外部临时图片先交给 `eikona-asset-lifecycle` 捕获，普通素材必须确认权限和禁用项。
 5. 选择最小 skill；需要文件落盘时同时加载 `eikona-file-prompt-workflow`，但只选择一个创意 director。当已有可复用的视觉方向或资产集合时，优先用 `eikona themes` 和 `eikona library collections` 引用既有 theme/asset refs，而不是重新描述或复制素材：先 `eikona themes list` / `eikona library collections list` 查找匹配 alias，再在 workflow 的 `theme_bindings` / `collection_bindings` 里绑定 canonical URI，让 plan 记录不可变 snapshot。
 6. 要求下游输出：visual brief、推荐命令、review packet、feedback、handoff/apply 下一步，以及 Scaena context 的 freeze/preflight/consistency 下一步。
-7. 本地验证默认用 `fixture:image`；Eikona 真实远程默认用 canonical ref `openai/gpt-5.4-image-2`。短别名 `gpt-5.4-image-2` 与 `gpt-image-2` 可接受；历史 `openai:gpt-image-2` 只为兼容读取。网关其他模型必须复制准确完整 model ID。
+7. 本地验证默认用 `fixture:image`；Eikona 真实远程默认用 canonical ref `openai/gpt-5.4-image-2`。短别名 `gpt-5.4-image-2` 与 `gpt-image-2` 可接受；历史 `openai/gpt-5.4-image-2` 只为兼容读取。网关其他模型必须复制准确完整 model ID。
 8. 尺寸参数必须显式设置：用户未指定尺寸时统一使用 `--size 2k` 或 runbook `size: 2k`；用户明确给出其他 size 时原样设置，不换算、不降级。比例继续用 `--aspect` 单独表达，不能用 1024/1536 示例替代 2K 请求。
 
 新的 Eikona 调用默认绑定用户级 channel，不依赖项目内复制的 credential 或 `.env`：
 
 ```bash
 eikona providers doctor --channel openai --model openai/gpt-5.4-image-2 --probe --agent
-eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --input ./prompt.md --size 2k --aspect 2:3 --json
+eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --input ./prompt.md --size 2k --aspect 2:3 --agent
 ```
 
-`gpt-5.4-image-2` 与 `gpt-image-2` 是兼容短名；新 skills、prompt 文件、runbook 和文档一律写 `openai/gpt-5.4-image-2`。`openai:gpt-image-2` 只允许出现在 legacy migration 或兼容性测试说明中。
+`gpt-5.4-image-2` 与 `gpt-image-2` 是兼容短名；新 skills、prompt 文件、runbook 和文档一律写 `openai/gpt-5.4-image-2`。`openai/gpt-5.4-image-2` 只允许出现在 legacy migration 或兼容性测试说明中。
 
 韩国转绘网关使用 slash ID，并显式选择已保存密钥的 channel：
 
 ```bash
 eikona models readiness openai/gpt-5.4-image-2 --channel openai --agent
 eikona providers doctor openai --channel openai --model openai/gpt-5.4-image-2 --probe --agent
-eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --input ./prompt.md --size 2k --aspect 2:3 --json
+eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --input ./prompt.md --size 2k --aspect 2:3 --agent
 ```
 
-不得把 slash ID 改成 `openai:gpt-5.4-image-2`，不得隐式读取 `OPENAI_API_KEY`。
+不得把 slash ID 改成 `openai/gpt-5.4-image-2`，不得隐式读取 `OPENAI_API_KEY`。
 
 ## 文件提示词与出图集合
 
@@ -82,37 +82,39 @@ eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --input ./pr
 - `prompt`、`prompt_file`、`prompt_ref` 在同一 defaults、matrix entry 或 job 中互斥。先 `--dry-run` 检查扩展结果，再批准真实 provider run。
 - prompt 文件是可编辑的创作输入；runbook、`prompt_sources.json`、队列和 run evidence 是结构化资产，必须通过 Eikona CLI 创建或推进，不能由 agent 直接改写。
 
+输出模式政策：例行自动化一律用 `--agent`；非终态 run 用 `eikona watch <run_id> --events` 观察，`eikona next --agent` 是统一只读推进入口；脚本/CI 需要 JSON 时用 `--json --compact`；取证/兼容性审计用 `--json --full`。共存期内裸 `--json` 仍是 legacy full，不要把例行 agent 推向 full JSON；`--compact`/`--full` 不带 `--json` 或两者同给会在副作用前报 `INVALID_REQUEST`。emitted actions 会按调用方输出模式自动归一化。
+
 ## 命令骨架
 
 普通 Eikona 文件生成：
 
 ```bash
-eikona generate --model fixture:image --aspect 3:1 --size 2k --input prompts/story/storyboard/scene/prompts/01-planning-board.md --dry-run --json
-eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --aspect 3:1 --size 2k --input prompts/story/storyboard/scene/prompts/01-planning-board.md --json
-eikona review packet <run_id> --json
-eikona feedback accept <run_id> --artifact <artifact_id> --reason composition --json
+eikona generate --model fixture:image --aspect 3:1 --size 2k --input prompts/story/storyboard/scene/prompts/01-planning-board.md --dry-run --agent
+eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --aspect 3:1 --size 2k --input prompts/story/storyboard/scene/prompts/01-planning-board.md --agent
+eikona review packet <run_id> --agent
+eikona feedback accept <run_id> --artifact <artifact_id> --reason composition --agent
 eikona assets handoff <artifact_id> --agent
 ```
 
 直接从提示词文件出图：
 
 ```bash
-eikona generate --model fixture:image --input prompts/product/landing-hero/launch/prompts/01-clean-editorial.md --size 2k --dry-run --json
-eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --input prompts/product/landing-hero/launch/prompts/01-clean-editorial.md --size 2k --json
+eikona generate --model fixture:image --input prompts/product/landing-hero/launch/prompts/01-clean-editorial.md --size 2k --dry-run --agent
+eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --input prompts/product/landing-hero/launch/prompts/01-clean-editorial.md --size 2k --agent
 ```
 
 从提示词集合批量出图。runbook 中使用 `defaults.prompt_file`、`jobs[].prompt_file` 或 `matrix.prompt_files` 引用 `prompts/*.md`；先验证计划，再执行：
 
 ```bash
-eikona run -f prompts/product/landing-hero/launch/runbook.yaml --dry-run --json
-eikona run -f prompts/product/landing-hero/launch/runbook.yaml --background --json
-eikona wait <run_id> --json
+eikona run -f prompts/product/landing-hero/launch/runbook.yaml --dry-run --agent
+eikona run -f prompts/product/landing-hero/launch/runbook.yaml --background --agent
+eikona watch <run_id> --events
 ```
 
 网关首次接入：
 
 ```bash
-eikona init --user --json
+eikona init --user --agent
 eikona auth check gateway --agent
 eikona projects register . --agent
 ```
@@ -123,7 +125,7 @@ Auctra 来源必须先走 brief/export/import：
 auctra visual brief <unit-id> --profile short_video_storyboard --json
 auctra review accept <review_item_id> --json
 auctra visual export-brief <brief-id> --for eikona --to .auctra/exports/<brief-id>.json --json
-eikona workflow import auctra -f .auctra/exports/<brief-id>.json --out .eikona/workflows/<brief-id>.workflow.yaml --json
+eikona workflow import auctra -f .auctra/exports/<brief-id>.json --out .eikona/workflows/<brief-id>.workflow.yaml --agent
 ```
 
 ## 边界
@@ -154,7 +156,7 @@ eikona workflow import auctra -f .auctra/exports/<brief-id>.json --out .eikona/w
 编译意图到工作流：
 
 ```bash
-eikona workflow import intent -f visual-intent.yaml --out workflow.yaml --json
-eikona workflow validate -f workflow.yaml --json
-eikona workflow plan -f workflow.yaml --json
+eikona workflow import intent -f visual-intent.yaml --out workflow.yaml --agent
+eikona workflow validate -f workflow.yaml --agent
+eikona workflow plan -f workflow.yaml --agent
 ```

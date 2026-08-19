@@ -25,18 +25,20 @@ description: Use when routing Xiaohongshu static visual asset requests for Eikon
 
 ## 命令示例
 
+输出模式：例行自动化用 `--agent`；非终态 run 用 `eikona watch <run_id> --events` 观察；脚本/CI 用 `--json --compact`（共存期内裸 `--json` 仍是 legacy full）；取证用 `--json --full`。
+
 本地验证：
 
 ```bash
-eikona generate --model fixture:image --aspect 3:4 --size 1024x1536 --input prompts/xhs/cover/skincare-morning/prompts/01-clean-lifestyle.md --dry-run --json
+eikona generate --model fixture:image --aspect 3:4 --size 1024x1536 --input prompts/xhs/cover/skincare-morning/prompts/01-clean-lifestyle.md --dry-run --agent
 ```
 
 真实生成：
 
 ```bash
-eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --aspect 3:4 --size 1024x1536 --input prompts/xhs/cover/skincare-morning/prompts/01-clean-lifestyle.md --json
-eikona review packet <run_id> --json
-eikona feedback accept <run_id> --artifact <artifact_id> --reason composition --json
+eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --aspect 3:4 --size 1024x1536 --input prompts/xhs/cover/skincare-morning/prompts/01-clean-lifestyle.md --agent
+eikona review packet <run_id> --agent
+eikona feedback accept <run_id> --artifact <artifact_id> --reason composition --agent
 eikona assets handoff <artifact_id> --agent
 ```
 
@@ -45,7 +47,7 @@ eikona assets handoff <artifact_id> --agent
 ```bash
 eikona workflow run -f testdata/workflows/xhs-cover.yaml --background --agent
 eikona worker daemon --once --max-active-runs 2 --agent
-eikona review packet <run_id> --json
+eikona review packet <run_id> --agent
 ```
 
 ## 输出

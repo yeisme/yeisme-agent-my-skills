@@ -25,18 +25,20 @@ description: Use when designing Xiaohongshu comic-style static posts, situationa
 
 ## 命令示例
 
+输出模式：例行自动化用 `--agent`；非终态 run 用 `eikona watch <run_id> --events` 观察；脚本/CI 用 `--json --compact`（共存期内裸 `--json` 仍是 legacy full）；取证用 `--json --full`。
+
 本地验证：
 
 ```bash
-eikona run -f prompts/xhs/comic/skincare-mistakes/runbook.yaml --dry-run --json
+eikona run -f prompts/xhs/comic/skincare-mistakes/runbook.yaml --dry-run --agent
 ```
 
 真实生成：
 
 ```bash
-eikona run -f prompts/xhs/comic/skincare-mistakes/runbook.yaml --background --json
-eikona review packet <run_id> --json
-eikona feedback accept <run_id> --artifact <artifact_id> --reason character_consistency --reason story_clarity --json
+eikona run -f prompts/xhs/comic/skincare-mistakes/runbook.yaml --background --agent
+eikona review packet <run_id> --agent
+eikona feedback accept <run_id> --artifact <artifact_id> --reason character_consistency --reason story_clarity --agent
 eikona assets handoff <artifact_id> --agent
 ```
 

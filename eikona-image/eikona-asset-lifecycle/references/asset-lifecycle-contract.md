@@ -13,13 +13,13 @@
 
 | Intent | CLI or REST entry | Required evidence |
 | --- | --- | --- |
-| Capture | `eikona artifacts import <path> --json` | `run_id`, path-free artifact, scope, provenance, `not_imported` |
+| Capture | `eikona artifacts import <path> --agent` | `run_id`, path-free artifact, scope, provenance, `not_imported` |
 | Inspect | `eikona assets handoff <handle> --agent` | Stable handle, digest, MIME, dimensions, permission |
-| Curate | `eikona library save eikona://artifact/<handle> ... --json` | Explicit collection, permission, source artifact |
-| Apply | `eikona assets apply <handle> --project ... --to ... --yes --json` | Registered project, bounded destination, decision receipt |
+| Curate | `eikona library save eikona://artifact/<handle> ... --agent` | Explicit collection, permission, source artifact |
+| Apply | `eikona assets apply <handle> --project ... --to ... --yes --agent` | Registered project, bounded destination, decision receipt |
 | Deliver | `POST /api/v1/artifacts/{handle}/download-grants` | Actor, project scope, expiry, path-free URL |
 
-`--agent` remains key-value and low token. `--json` uses the shared envelope. Human output must explain that capture is not library promotion.
+`--agent` remains key-value and low token. `--json --compact` is the bounded script/CI envelope and `--json --full` the forensic envelope; during coexistence bare `--json` still means legacy full. Human output must explain that capture is not library promotion.
 
 ## REST authorization
 
