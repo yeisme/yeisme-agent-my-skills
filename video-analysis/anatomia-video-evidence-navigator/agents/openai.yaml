@@ -1,0 +1,4 @@
+interface:
+  display_name: "Anatomia Video Evidence Navigator"
+  short_description: "Ask one bounded question on a registered video ref."
+  default_prompt: "Use $anatomia-video-evidence-navigator: anatomia video understand --source <ref> --question <q> --json. Do not upload, start, freeze, or hand off."

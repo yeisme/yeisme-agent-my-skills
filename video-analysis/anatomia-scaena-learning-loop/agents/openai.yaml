@@ -1,4 +1,4 @@
 interface:
   display_name: "Anatomia Scaena Learning Loop"
-  short_description: "Route verified video learning to Auctra narrative or Scaena production owners."
-  default_prompt: "Use $anatomia-scaena-learning-loop to turn reviewed video analyses and production outcomes into scoped Auctra dramatic evidence, Scaena production learning, evaluations, or capability proposals."
+  short_description: "Route reviewed evidence; do not invent learning CLI."
+  default_prompt: "Use $anatomia-scaena-learning-loop: anatomia analysis delivery show <analysis> --json. Learning CLI is planned and unavailable."

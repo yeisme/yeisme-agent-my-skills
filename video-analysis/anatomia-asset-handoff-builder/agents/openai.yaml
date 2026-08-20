@@ -1,4 +1,4 @@
 interface:
   display_name: "Anatomia Asset Handoff Builder"
-  short_description: "Export video assets and build owner-safe handoffs."
-  default_prompt: "Use $anatomia-asset-handoff-builder to export clips, frames, prompts, and a provider-neutral handoff package."
+  short_description: "Prepare a package and target-owner handoff."
+  default_prompt: "Use $anatomia-asset-handoff-builder: anatomia revision package prepare <revision> --json then anatomia package handoff prepare <package> --target scaena --json."
