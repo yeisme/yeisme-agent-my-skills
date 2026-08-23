@@ -10,6 +10,28 @@ SKIP_PARTS = {".git"}
 errors: list[str] = []
 names: dict[str, Path] = {}
 
+adapter = ROOT / "scripts" / "skills.sh"
+engine = ROOT / "agent-workflow" / "yeisme-skill-routing-governance" / "scripts" / "skills.sh"
+if not adapter.is_file():
+    errors.append("scripts/skills.sh: missing public portable manager adapter")
+elif not adapter.stat().st_mode & 0o111:
+    errors.append("scripts/skills.sh: public adapter must be executable")
+if not engine.is_file():
+    errors.append("agent-workflow management engine is missing")
+elif not engine.stat().st_mode & 0o111:
+    errors.append("agent-workflow management engine must be executable")
+
+if adapter.is_file() and engine.is_file():
+    adapter_help = subprocess.run(
+        [str(adapter), "--help"],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if adapter_help.returncode != 0 or "Portable Yeisme Skill manager" not in adapter_help.stdout:
+        errors.append("scripts/skills.sh: public adapter help smoke failed")
+
 
 def is_skipped(path: Path) -> bool:
     return any(part in SKIP_PARTS for part in path.parts)

@@ -16,6 +16,65 @@ python3 scripts/validate_repository.py
 git submodule update --init --recursive
 ```
 
+## 管理任意外部项目
+
+本仓库提供可移植的 `scripts/skills.sh`。它把本 checkout 作为 Skill source，但允许 `--project` 指向任意项目或服务器工作目录。
+
+首次接入：
+
+```bash
+git clone --recurse-submodules https://github.com/yeisme/yeisme-agent-my-skills.git
+cd yeisme-agent-my-skills
+scripts/skills.sh --project /path/to/project init
+```
+
+`init` 会：
+
+- 通过 CLI 生成项目 `.skills/source.local` 与 `.skills/profiles/root.txt`；
+- 激活 `yeisme-skill-routing-governance` 管理 Skill；
+- 生成项目 `.agents/skills` 与 `.claude/skills`；
+- 验证 profile、managed manifest 和双 runtime。
+
+搜索并添加复杂 Skill：
+
+```bash
+scripts/skills.sh --project /path/to/project search "task terms"
+scripts/skills.sh --project /path/to/project resolve <skill-name>
+scripts/skills.sh --project /path/to/project --dry-run profile add <skill-name>
+scripts/skills.sh --project /path/to/project profile add <skill-name>
+scripts/skills.sh --project /path/to/project sync
+scripts/skills.sh --project /path/to/project validate
+```
+
+Agent 应先阅读候选 `SKILL.md`，默认选择一个 primary workflow、至多一个兼容 domain constraint，并把独立 audit 与实现职责分开。搜索结果不是自动安装批准。
+
+服务器上的 source checkout 路径是本地状态。checkout 移动后重新绑定：
+
+```bash
+cd yeisme-agent-my-skills
+scripts/skills.sh --project /path/to/project configure-source
+scripts/skills.sh --project /path/to/project doctor
+```
+
+更新公共 Skills 后重新同步：
+
+```bash
+cd yeisme-agent-my-skills
+git pull --ff-only
+git submodule update --init --recursive
+scripts/skills.sh --project /path/to/project sync
+scripts/skills.sh --project /path/to/project validate
+```
+
+机器读取可使用：
+
+```bash
+scripts/skills.sh --project /path/to/project status --agent
+scripts/skills.sh --project /path/to/project list-source --json
+```
+
+默认输出用于人类；`--agent` 输出稳定 `key=value`；`--json` 输出单个版本化 envelope。不要提交 `.skills/source.local`，它会在 Git 项目中自动加入本地 `.git/info/exclude`。
+
 ## 独立项目
 
 | 路径 | 独立仓库 | 定位 |
@@ -75,6 +134,8 @@ git submodule update --init --recursive
 
 ```bash
 python3 scripts/validate_repository.py
+scripts/skills.sh --help
+python3 agent-workflow/scripts/test_skill_manager.py
 python3 ai-drama/scripts/validate_skills.py
 python3 ai-drama/ai-drama-router/scripts/validate_drama_matrix.py
 python3 auctra-novel/scripts/validate_skills.py
