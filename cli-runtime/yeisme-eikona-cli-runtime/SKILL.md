@@ -9,9 +9,9 @@ Use this skill for `cli/eikona`, the agent-facing visual asset runtime and evide
 
 If the user explicitly says to use Eikona, `eikona`, or the Eikona CLI for image generation, this route takes precedence over generic built-in image generation tools. Enter `cli/eikona`, follow local `AGENTS.md`, and use Eikona commands such as `eikona generate ... --agent`. Only fall back to another image tool if the user explicitly changes the route or Eikona is unavailable and the user approves the fallback.
 
-## v0.6.6 current surfaces
+## v0.6.7 current surfaces
 
-- v0.6.6 aligns CLI help, README, command docs, and this runtime skill with the released contracts: bare `--json` is compact by default, the main CLI rejects removed bare OpenAI image aliases, and version/update/Skills/private-service/MCP/prompt-repository commands are current rather than planned.
+- v0.6.7 keeps the v0.6.6 CLI/help/README/Skills contract alignment and repairs release provenance: the command catalog now carries the exact release version and is covered by `checksums.txt`.
 - Version/update: use `eikona version`, `eikona update --check|status|--dry-run|--yes`, `eikona update policy show|set|reset`, and `eikona commands diff --target <version>|latest`. Direct-managed updates keep the binary and release-pinned Skills bundle on one manifest; REST/MCP expose read-only runtime version/update status and never remote apply authority.
 - Private service and MCP: `eikona service config/access-key/doctor` author the private deployment posture; non-loopback service requires TLS; `GET /api/v1/readiness` reports independent evidence dimensions; `eikona mcp --transport stdio` runs the real protocol lifecycle while `eikona mcp --agent` remains a one-shot compatibility projection.
 - Prompt repository: `eikona prompt-asset repository|catalog` consumes the public promptrepo contract with deny-wins review and structured selectors. Template and rendered bodies never enter routine output, events, or evidence, and install stops at `imported_pending_review`.
