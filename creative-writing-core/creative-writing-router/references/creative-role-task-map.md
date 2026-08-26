@@ -71,6 +71,8 @@
 | 短视频时间线脚本 | `short-video-scriptwriter` | `creative-style-lens-builder` |
 | 播客/直播 | `podcast-scriptwriter` 或 `livestream-scriptwriter` | 来源/事实 reviewer |
 | 公众号与长文 | `wechat-article-writer` | 来源/事实 reviewer |
+| 已有稿件去 AI 味、保真润色、作者声音校准 | `natural-writing-editor` | `creative-style-lens-builder` 或来源/事实 reviewer，最多一个 |
+| 新稿终稿自然度复检 | 原平台 writer 保持 primary | `natural-writing-editor` |
 | 跨平台矩阵 | `creative-writing-orchestrator` | 各平台 worker 顺序 handoff |
 
 ## 风格请求示例
@@ -86,5 +88,6 @@
 
 - Story/outline 未定时，Style/Title worker 不得成为 primary。
 - Fact reviewer、continuity 和 StyleLens 可作为约束，但不得与 primary writer 竞争 canonical ownership。
+- 同一稿件默认只运行一次完整的自然度编辑；`natural-writing-editor` 与第三方 humanizer 不得同时作为全文改写 owner。
 - `creative-writing-orchestrator` 只用于跨阶段/跨格式，不应替代具体 worker。
 - Auctra 负责持久化文本状态；Eikona 负责视觉候选；Scaena 负责生产；skill 不拥有第二套 canonical state。

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Yeisme Prompt Repository Router"
+  short_description: "Route prompt content, contracts, registry, and consumers"
+  default_prompt: "Use $yeisme-prompt-repository-router to select the canonical owner and safe handoff for this prompt-template change."

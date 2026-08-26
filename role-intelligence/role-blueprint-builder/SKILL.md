@@ -129,7 +129,7 @@ Presentation          = 它怎样说话、行动、发声和被看见
 | `1 blueprint` | RoleBlueprint proposal + 静态场景测试 | 无 blocking defect；owner 明确 |
 | `2 session_simulation` | 单会话、无外部动作、无隐式持久记忆 | 退出/纠错/降级/注入测试通过 |
 | `3 stateful_vertical_slice` | 一个规则内核、事件账本、3–8 个角色、可回放闭环 | 状态、成本、安全和真人试玩 gate 通过 |
-| `4 owner_adapters` | Auctra/Pinax/digital-human/Cohors 等单独 adapter | 每个 owner 有独立 OpenSpec、contract tests 和 rollback |
+| `4 owner_adapters` | Auctra/Pinax/digital-human/Ordo 等单独 adapter | 每个 owner 有独立 OpenSpec、contract tests 和 rollback |
 | `5 multi_role_society` | 派系、宫廷、社会模拟或长期世界 | 单角色和切片有重复使用证据，不依赖人工救场 |
 
 没有前一阶段证据，不得跳级。

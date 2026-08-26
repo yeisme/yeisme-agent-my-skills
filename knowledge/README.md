@@ -1,3 +1,3 @@
 # Knowledge Skills
 
-企业多模态知识路由模块。负责权限感知的检索、ContextPack、证据和 Owner 交接，不把搜索结果直接提升为 canonical fact。
+知识与可复用内容资产路由模块。负责权限感知的检索、ContextPack、Prompt Repository owner 交接与证据边界，不把搜索结果、模板候选或预览直接提升为 canonical fact。

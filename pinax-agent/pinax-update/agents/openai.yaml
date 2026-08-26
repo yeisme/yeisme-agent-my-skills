@@ -1,3 +1,4 @@
-display_name: Pinax Update
-short_description: Pull latest Pinax notes, validate the vault, refresh indexes, and resolve safe sync conflicts with a negotiated strategy.
-default_prompt: /pinax-update -- 拉取 yeisme-notes 的最新 Pinax 笔记；默认自动保留本地配置/skill 冲突，遇到正文冲突时停下协商。
+interface:
+  display_name: "Pinax Update"
+  short_description: "Pull, validate, index, and reconcile Pinax safely"
+  default_prompt: "Use $pinax-update to pull the latest Pinax notes, validate the vault, refresh indexes, and stop for unsafe content conflicts."

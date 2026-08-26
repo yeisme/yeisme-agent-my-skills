@@ -243,7 +243,13 @@ scoop install <project>
 <project> --version
 ```
 
-If a project is not public/go-installable, replace `go install <module>@<tag>` with an install path the release docs already support.
+If a project is not public/go-installable, replace `go install <module>@<tag>` with an install path the release docs already support. For Yeisme private product repos, the anonymous public path is the `yeisme/yeisme-dist` installer after the product has a GitHub Release with archives and checksums:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/yeisme/yeisme-dist/main/install.sh | bash -s <project>
+```
+
+Do not advertise private `releases/download` URLs as anonymous installs.
 
 ## Common Mistakes
 

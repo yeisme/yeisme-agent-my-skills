@@ -31,16 +31,18 @@ description: Use when coordinating multi-stage Chinese creative-writing tasks ac
 2. 任务类型不明确或涉及多个候选技能时，先读取 router、任务角色图和匹配的 skill descriptions，再决定 owner skill。
 3. 用户点名创作者、作品、流派或视觉风格时，先调用 `creative-style-lens-builder` 形成原创风格约束；不把 persona identity 直接传给 writer。
 4. 每个阶段交给范围最窄的工作技能。
-5. Auctra 工作优先使用 `auctra material`、`auctra text`、`auctra review` 和 `auctra export`。
-6. 跨格式改写时保留原始意图，例如小说章节转小红书笔记、公众号文章或改编交接包。
-7. 小说改编先产出改编诊断、媒介结构和交接包，再交给 `screenplay-scene-writer`、`short-video-scriptwriter`、`podcast-scriptwriter` 等具体写手。
-8. 返回简洁完成报告，包含输出路径、未解决问题和下一步。
+5. 初稿完成后，仅在确有模板感、声音漂移或终稿清理需求时调用 `natural-writing-editor`；它先建立事实与作者声音保护层，再执行一次与场景匹配的编辑流程，不叠加多个第三方 humanizer 全文重写。
+6. Auctra 工作优先使用 `auctra material`、`auctra text`、`auctra review` 和 `auctra export`。
+7. 跨格式改写时保留原始意图，例如小说章节转小红书笔记、公众号文章或改编交接包。
+8. 小说改编先产出改编诊断、媒介结构和交接包，再交给 `screenplay-scene-writer`、`short-video-scriptwriter`、`podcast-scriptwriter` 等具体写手。
+9. 返回简洁完成报告，包含输出路径、未解决问题和下一步。
 
 ## 质量门槛
 
 - 每份稿件都要有明确读者、承诺、结构、素材依据和修订目标。
 - 中文小说保留人物一致性、冲突、钩子和连续性；改编任务还要保留不可牺牲承诺、删改边界和媒介结构。
 - 平台内容贴合平台机制，不复用泛泛文案。
+- 自然度编辑必须保留事实、责任、限定、术语和可观察的作者声音；AI 检测器分数不作为质量门。
 - 默认产出中文稿件。
 
 ## Auctra 轻集成

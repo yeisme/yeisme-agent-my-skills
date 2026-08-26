@@ -40,7 +40,7 @@ description: Use when a request involves creating, researching, adapting, operat
 | `game_direction` | 先判断 AI 角色游戏是否值得做、为什么必须用 LLM | `llm-game-direction-strategist` |
 | `game_vertical_slice` | 将选定角色玩法做成 2–6 周可玩闭环 | `llm-game-vertical-slice-planner` |
 | `digital_human` | 角色的实时会话、呈现、控制面或 embodiment | `role-blueprint-builder`；运行 owner 为 `agent/digital-human`，当前能力按其 readiness 限制 |
-| `operational_agent_role` | 团队中的研究员、审核员、统筹者、“皇帝/总管”等任务职责 | `agent-platform-prd` 或 owning runtime；权限合同由 Cohors/Codex runtime owner 定义 |
+| `operational_agent_role` | 团队中的研究员、审核员、统筹者、“皇帝/总管”等任务职责 | `agent-platform-prd` 或 owning runtime；权限合同由 Ordo/Codex runtime owner 定义 |
 | `personal_twin` | 用户自己的决策/表达复盘、草稿辅助或数字分身 | `role-blueprint-builder`；有来源记忆交 Pinax，禁止冒充用户对外承诺 |
 | `memory_or_continuity` | 保存角色事实、关系里程碑、用户偏好或跨会话连续性 | `pinax-agent-router` 或 owner memory adapter；默认 proposal-first |
 | `visual_or_voice_embodiment` | 角色形象、表情、姿态、声音或生产资产 | 先有 accepted blueprint/canon，再交 Anatomia/Eikona/Sonora/Scaena 对应 owner |
@@ -54,7 +54,7 @@ description: Use when a request involves creating, researching, adapting, operat
 2. 判断角色类型：`fictional`、`historical`、`living_person`、`self`、`original`、`operational_role`。
 3. 判断是否需要 `RoleBlueprint`。只要涉及交互、状态、记忆、工具、多人共享或跨项目 handoff，就先构建 blueprint。
 4. 选择一个 primary skill。只有当另一能力提供独立的安全、状态、媒介或 owner 约束时，才追加一个 compatible constraint。
-5. 指定 canonical owner。skill 只能产生 proposal；Auctra、游戏 runtime、digital-human、Pinax、Cohors 或生产 owner 才能写自己的结构化状态。
+5. 指定 canonical owner。skill 只能产生 proposal；Auctra、游戏 runtime、digital-human、Pinax、Ordo 或生产 owner 才能写自己的结构化状态。
 6. 运行阻断检查，输出 reason code 和 repair action。
 7. 将场景标记为 `exploratory`、`first-support` 或 `mature`；没有 owner、回放和真实证据时只能是 `exploratory`。
 
@@ -83,7 +83,7 @@ description: Use when a request involves creating, researching, adapting, operat
 - 不选择 Agent、模型、reasoning effort 或子 agent。
 - 不把人名、职位、神祇、皇帝、GM、管理员等叙事身份映射为运行权限。
 - 不把风格仿写、人格蒸馏、情绪表演、长期记忆和工具调用混成一个 prompt。
-- 不手写 Auctra、Pinax、游戏存档、Cohors team state 或 digital-human 私有结构化状态。
+- 不手写 Auctra、Pinax、游戏存档、Ordo team state 或 digital-human 私有结构化状态。
 - 不以多 Agent 投票替代 canonical owner、规则校验或人工 acceptance。
 
 ## 验证

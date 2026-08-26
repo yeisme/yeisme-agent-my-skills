@@ -10,10 +10,10 @@ Run a safe one-command update for the Yeisme Pinax notes vault. This skill is fo
 ## Default Command
 
 ```bash
-bash .agents/skills/pinax-update/scripts/pinax-update.sh --vault /workspaces/yeisme-agent/data/yeisme-notes --strategy auto
+bash .agents/skills/pinax-update/scripts/pinax-update.sh --vault . --strategy auto
 ```
 
-Use the runtime copy under `.agents/skills/` when working inside the vault. If the runtime copy is missing, use the source script under `/workspaces/yeisme-agent/.skills/yeisme/pinax-agent/pinax-update/scripts/`.
+Run the command from the active Pinax vault. Use the generated runtime copy under `.agents/skills/`; if it is missing, return to the Yeisme repository root, run `scripts/skills.sh sync-target data/yeisme-notes`, then retry from the vault. Do not depend on a maintainer-specific absolute workspace path.
 
 ## Strategy Negotiation
 

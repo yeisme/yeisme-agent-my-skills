@@ -140,7 +140,7 @@ When the task is small, these can be concise and inline. When the task is a reus
 
 ## Default Design-System Posture
 
-Use this default SaaS operations console posture for Yeisme engineering tools, Agent consoles, MCP Gateway, Cohors, diagnostics, internal systems, and control surfaces unless a local design system overrides it:
+Use this default SaaS operations console posture for Yeisme engineering tools, Agent consoles, MCP Gateway, Ordo, diagnostics, internal systems, and control surfaces unless a local design system overrides it:
 
 - Product type: modern SaaS operations console, engineering tool, Agent console, internal system, or operations workbench.
 - Style keywords: restrained, clear, trustworthy, high information density without crowding, low saturation, non-marketing.

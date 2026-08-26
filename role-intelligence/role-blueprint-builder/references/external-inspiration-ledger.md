@@ -20,7 +20,7 @@
 
 1. `RoleBlueprint`：来源、行为、状态、权限和评测的 proposal。
 2. `RoleRoute`：场景到 skill/owner/readiness 的路由。
-3. `OwnerAdapter`：Auctra、游戏、Pinax、digital-human、Cohors 等各自实现。
+3. `OwnerAdapter`：Auctra、游戏、Pinax、digital-human、Ordo 等各自实现。
 4. `EvidenceGate`：consent、rights、canon、memory、permission、replay 和 safety 的晋级门禁。
 
 仓库许可只覆盖仓库内容，不自动授权真实人物身份、肖像、私人数据、作品角色、台词、商标、世界设定或可识别表达。

@@ -1,0 +1,4 @@
+interface:
+  display_name: "自然文本编辑器"
+  short_description: "保留事实与作者声音，按语境诊断并降低中文和英文文本的模板感"
+  default_prompt: "请使用 $natural-writing-editor 在不改变事实、立场和作者声音的前提下，按合适幅度修改这份文本。"

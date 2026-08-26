@@ -17,7 +17,7 @@ Treat the target as **one knowledge platform with multiple domain owners**, not 
 - `cli/auctra` owns Story World, characters, scenes, canonical text and revision/review.
 - `agent/anatomia` owns video observations, shots/scenes, keyframes, transcripts and analysis evidence.
 - `agent/scaena` owns project subjects, `SubjectVersion`, `ProductionGraph`, requirements, review and readiness; it consumes context and refs.
-- `cli/cohors`, `agent/ordo` and Workbench consume typed context, tasks, receipts or safe projections; they do not become canonical knowledge owners.
+- `agent/ordo`, `agent/ordo` and Workbench consume typed context, tasks, receipts or safe projections; they do not become canonical knowledge owners.
 
 Read [企业多模态知识与主体平台架构](../../../../docs/architecture/enterprise-multimodal-knowledge-platform.md) and the root change `openspec/changes/inferrum-enterprise-multimodal-knowledge-v1/` before proposing a new cross-project contract.
 
@@ -29,7 +29,7 @@ Route through this skill when the request involves any of the following:
 - adding a Pinax/Eikona/Auctra/Anatomia/Scaena source projection to Inferrum;
 - connecting Scaena SubjectVersion or ProductionGraph readiness to retrieved entities/assets;
 - changing representation profiles, index generations, permission-aware retrieval, citation, freshness or rollback;
-- deciding whether a new knowledge feature belongs in Inferrum, a domain owner, Scaena, Cohors/Ordo or Workbench.
+- deciding whether a new knowledge feature belongs in Inferrum, a domain owner, Scaena, Ordo or Workbench.
 
 Do not use it for a single product's ordinary note, image, screenplay, video-analysis or production behavior unless the work crosses the knowledge-plane contract.
 
@@ -43,7 +43,7 @@ Do not use it for a single product's ordinary note, image, screenplay, video-ana
    - `cli/inferrum`: catalog, representation, entity, retrieval, ContextPack, generation and shared SDK/API;
    - domain project: adapter and canonical-source projection;
    - `agent/scaena`: read-only ContextPack consumption, subject binding and production readiness;
-   - Cohors/Ordo/Workbench: consumer projection, run/receipt or operations UI only.
+   - Ordo/Workbench: consumer projection, run/receipt or operations UI only.
 5. **Make the change additive**. Preserve `inferrum.sidecar.v1`, existing provider/Record/VectorStore contracts and domain CLI entrypoints. Add optional fields/methods or a new high-level contract; use an OpenSpec migration/deprecation/rollback plan for any stable-surface break.
 6. **Define multimodal lineage**. Every representation names modality, profile, model, content digest and index generation. Video uses transcript/shot/keyframe/observation refs; image bytes stay with Eikona.
 7. **Define entity review**. Candidate discovery may be automated; verify, merge, freeze and deprecate require owner or human evidence. Scaena adoption stores a version, scope, permission snapshot and receipt.

@@ -40,7 +40,7 @@ Backend acceptance requires explicit treatment of:
 - edge-case tests
 - performance baseline and profiling evidence when relevant
 
-For Cohors, Agent Team, MCP Gateway, and engineering consoles, the backend should usually be an event-driven task state system, not a thin CRUD app.
+For Ordo, Agent Team, MCP Gateway, and engineering consoles, the backend should usually be an event-driven task state system, not a thin CRUD app.
 > Database migrations and API/RPC contracts evolve incrementally. `DROP COLUMN`/`DROP TABLE`, narrowing a type, adding `NOT NULL` without a default, renaming a populated column, and changing an HTTP method/path or proto field number are generation-breaking changes. Follow `yeisme-evolutionary-change-policy`: gate them behind an OpenSpec change with expand-then-contract migrations, a deprecation window, and a rollback before touching the schema or wire format.
 
 ## Backend Workspace And Debugging Defaults
@@ -91,7 +91,7 @@ Use this shape when no project-specific template exists:
 backend_surface:
   name: Approval Decision API
   type: api + application-service + state-machine
-  owner_subproject: cli/cohors
+  owner_subproject: agent/ordo
 
 entities:
   - name: Approval

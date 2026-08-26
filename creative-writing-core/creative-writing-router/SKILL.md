@@ -29,6 +29,7 @@ description: Use when routing Chinese creative-writing, screenplay, AI drama, se
 - 需要按准备、规划、起草、修订、评审和交付选择任务角色时读取 `references/creative-role-task-map.md`。
 - 用户点名创作者、作品、流派、情绪或视觉风格时，先读取并调用 `creative-style-lens-builder`；不要直接加载 persona imitation skill。
 - 需要公众号、书评、产品评测、教程、周报或旅行攻略结构时读取 `../../content-writing/wechat-article-writer/references/platform-nonfiction-playbook.md`。
+- 已有文本需要去 AI 味、保真润色、作者声音校准或终稿自然度复检时调用 `natural-writing-editor`；新稿仍由对应 writer 负责，编辑器只作为 revise/final-pass owner 或兼容质量约束。
 
 ## 工作流
 
@@ -53,6 +54,7 @@ description: Use when routing Chinese creative-writing, screenplay, AI drama, se
 - 小红书多阶段任务 → `xhs-orchestrator`；单篇、标题、爆款结构、热点、素材拆帖、个人品牌分别交给对应 `xhs-*` worker。
 - Twitter/X 个人品牌、账号矩阵、Newsletter 转化 → `twitter-personal-brand-growth`；不要把字母 X 误判为小红书。
 - 短视频/播客/直播/公众号 → `short-video-scriptwriter`、`podcast-scriptwriter`、`livestream-scriptwriter`、`wechat-article-writer`。
+- 已有中文/英文稿件去 AI 味、润色、声音校准或终稿清理 → `natural-writing-editor`；不要默认叠加多个完整 humanizer 流程。
 - 跨格式或多阶段项目 → `creative-writing-orchestrator`。
 
 ## 严格失败条件

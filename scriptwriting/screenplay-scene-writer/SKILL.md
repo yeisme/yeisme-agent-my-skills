@@ -17,6 +17,8 @@ description: Use when writing, revising, or converting Chinese screenplay, short
 
 - 标准化场景稿：场景标头、动作线、对白、停顿、转场。
 - 人物目标、潜台词、权力变化和制作限制说明。
+- proof slice 场景的 A/B 候选；两版必须改变人物策略、信息释放、空间行动、代价或 exit state，不能只换句式。
+- `DialogueLiveTest` advisory evidence：具体台词/动作位置、问题、观众感受和一次有界修订目标。
 - 小说材料转译说明：哪些心理、背景、文学描写被改成动作、表情、道具、环境声、对白或转场。
 - 可选改写版或排练提示。
 
@@ -31,18 +33,21 @@ description: Use when writing, revising, or converting Chinese screenplay, short
 
 只在任务需要对应细节时读取参考资料，避免把所有模板一次性加载进上下文：
 - `references/screenplay-vs-novel.md`：需要把小说、散文式叙述、心理描写或作者讲述改成可拍剧本时读取。
+- `references/dialogue-live-test.md`：新写对白、用户反馈“没有活人感”、人物声音相似、对白讲道理或提交 proof-slice 候选时必须读取。
 - `../short-video-scriptwriter/references/audio-video-live-script-playbook.md`：需要短视频、剧本、直播或播客时间线与制作限制时读取。
 
 ## 工作流
 
 1. 明确场景目标、地点/时间、人物、冲突、转折点和制作限制。
 2. 如果用户要求“参考热门剧/样本写类似剧本”，先使用 `$auctra-screenplay-pattern-research` 获取已审核的多来源 recipe；不要直接模仿单一样本台词、专名或独特桥段。
-3. 定义每个角色想要什么、隐瞒什么。
+3. 定义每个角色此刻想从对方那里得到什么、为什么不能直说、双方各自知道什么、说破会付出什么代价，以及谈崩后会采取什么行动。
 4. 如果输入是小说或梗概，先标出不能直接拍摄的内容：内心独白、作者解释、抽象感受、细腻文学比喻、背景概述和时间跳跃。
 5. 将不可拍内容转成可拍元素：动作、表情、道具、场面调度、环境声、对白、沉默、字幕、闪回、蒙太奇或可执行转场。
 6. 动作线写可见行为，不写小说式内心说明；环境只写拍得到、听得到、能影响表演或镜头的信息。
-7. 对白要能被演员说出口，有潜台词和权力变化；不能用对白替作者解释一切。
-8. 以清晰结果或可制作转场收束。
+7. proof slice 或明确要求多候选时，先锁定同一个 scene contract，再写 A/B 两版。两版至少在人物策略、信息释放、空间行动、代价或 exit state 中有两项不同；语气词、网络梗、方言或同义改写不算第二候选。
+8. 对白要能被演员说出口，有潜台词和权力变化；不能用对白替作者解释一切。关系三角中的第三方必须改变另外两人的选择成本、信息或责任，不能只站在旁边总结主题。
+9. 候选提交前执行 `Dialogue Live Test`。发现共同知识说明、声线可互换或主题泄漏时，只形成一次有界修订目标；修订后仍不成立就回到 scene contract。
+10. 以可观察的 entry→exit 状态变化或可制作转场收束；没有状态变化的场景不得靠一句金句冒充完成。
 
 ## 质量门槛
 
@@ -52,12 +57,22 @@ description: Use when writing, revising, or converting Chinese screenplay, short
 - 不写摄影机拍不到的内容，例如“想起”“放下”“无法原谅”“初恋般的味道”，除非已转成闪回、照片、对白、动作或声音线索。
 - 时间跨度、回忆和背景信息必须有可制作方案，例如字幕、闪回、蒙太奇、新闻/文件/照片、角色行为或渐进式对白。
 - 对白不解释画面已经能呈现的内容。
+- 对白不替双方复述共同经历，也不直接说出作者主题；观众需要知道的信息优先通过争夺、隐瞒、误解、打断、动作和有代价的选择暴露。
+- 互换两名主要人物的台词后若目标、知识和策略仍成立，视为声音去角色化；修复人物行动逻辑，不只添加口头禅。
+- 每场至少出现一次策略变化、回避、打断、撒谎、沉默或动作替代解释。
 - Recipe 影响的是结构、节奏、角色功能和生产约束；输出不得复现样本专名、长台词或独特情节表达。
 
-## Auctra 轻集成
+## 临时创作与 Auctra 轻集成
 
-- 普通一次性写稿不强制进入 Auctra。
-- 当用户在 Auctra 项目内工作、需要保存素材、审稿或导出时，优先建议 `auctra material`、`auctra text`、`auctra review`、`auctra export` 的真实命令。
+- 普通一次性试写默认留在聊天，不强制进入 Auctra，也不在仓库根目录创建 Markdown。
+- 需要可恢复的 A/B 候选但尚未选中时，优先使用宿主提供的 scratch/review workspace；宿主没有该能力时使用明确、可清理的操作系统临时目录。
+- 用户选择候选只推进到 `selected`/pending review。只有 story owner 的显式 accept action 才能写 canonical；未选、被拒绝、已删除或仅存在于聊天记忆的文本不得作为后续 accepted source。
+- 在 Auctra 中校验候选时显式使用 `auctra screenplay quality-check --body-file <candidate-file> --profile screenplay_p0.v2 ...`，比较时绑定两份 v2 report；semantic evidence 缺失或无报告比较必须保持 `inconclusive`，不能作为 expansion gate 通过依据。
+- 当用户已经在 Auctra 项目内工作并处理 accepted source、正式审稿或导出时，使用 Auctra CLI/application service，不手写其结构化状态。
+
+## 编辑器边界
+
+`natural-writing-editor` 不作为剧本对白的默认修复器。它可以处理普通正文终稿或用户明确要求的自然化编辑；对白“活人感”必须先由角色目标、知识边界、关系权力、策略和可表演行动解决，避免把所有人物润成同一种自然口吻。
 
 ## 边界
 
@@ -71,4 +86,5 @@ description: Use when writing, revising, or converting Chinese screenplay, short
 
 - 交付前确认输出覆盖用户请求中的目标读者、素材依据、格式、限制和下一步。
 - 检查是否存在空泛判断、虚假细节、结构缺口、语气错位和平台/题材不匹配。
+- 对每个候选附上 Dialogue Live Test 的定位证据与修订目标；不得用一个总分自动宣告“有活人感”。
 - 无法确认的信息以待补问题列出，不用编造事实补齐。

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Aigora Operator i18n"
+  short_description: "Keep Aigora zh-CN and en-US UI behavior aligned"
+  default_prompt: "Use $aigora-operator-i18n to add or review bilingual Aigora Operator Console copy without translating protocol facts."

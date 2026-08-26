@@ -9,7 +9,11 @@ description: Use when the user explicitly requests Eikona/eikona visual generati
 
 用户明确说“用 Eikona / eikona 出图 / Eikona 生成”时，本路由优先于通用 `imagegen` 或内置图片工具。先进入 `cli/eikona` 并使用 Eikona CLI；只有 Eikona 不可用且用户确认 fallback 时，才允许改用其他图片工具。
 
+当用户没有付费 OpenAI/gateway key，但本机已登录 Codex 时，隐式 `eikona generate --prompt ... --agent` 会默认走 `codex:imagegen` 预览回退。结果会带 `model_selection`、`capability_class=preview`、`size_class=1k`、`auth_class=codex_session`、`resolution_control=prompt_instruction`。推荐省略 `--size 1k`：Eikona 会把默认 1K 约束注入 `codex exec` 的 stdin 提示词；显式传入受支持尺寸仍兼容，但会返回 `PROMPT_CONTROLLED_RESOLUTION` warning。请求 `2k`/`4k`、参考图或 edit 不会静默降级。生产级 2K/编辑仍走 `openai/gpt-5.4-image-2`。先跑 `eikona providers doctor codex --agent`，不要把 1K 上限说成工具故障。
+
 用户说“提示词文档”“提示词库”“分门别类”“提示词集合”“从文件加载提示词”或“一组 prompt 批量出图”时，加载 `eikona-file-prompt-workflow`。单张读取一个 text/Markdown 文件；多张通过 runbook 的 `prompt_file` / `prompt_files` 引用一组文件。不要把集合拼成长命令行字符串，也不要把提示词正文塞进 run evidence 或 provider 配置。
+
+自然语言到 Eikona 的对接遵循 `cli/eikona/docs/interfaces/cli/headless-prompt-control-contract.md`：router/director 可以把用户请求拆成 image intent 与 provider-neutral typed controls，但不能把 model/channel、operation kind、refs/reference mode、canvas、cost、execution mode、readiness、review 或 handoff 隐藏在最终 prompt 中。单次简单生图直接走 prompt-first/generate CLI；复杂请求输出 `eikona.visual_intent.v1`，再由 Eikona workflow compiler 执行。Provider runtime instruction 始终由 Eikona adapter 构造。
 
 ## 输入
 
@@ -45,18 +49,21 @@ description: Use when the user explicitly requests Eikona/eikona visual generati
 
 ## 工作流
 
-1. 判断是否已有可用 provider。提供网关或缺少凭据时先交给 `eikona-gateway-bootstrap`。
+1. 判断是否已有可用 provider。付费 OpenAI/gateway 不可用且本机 Codex session 可用时，普通文生图走 `codex:imagegen` 预览回退，并明确告诉用户这是 1K preview。提供网关或用户明确要付费 2K/编辑时交给 `eikona-gateway-bootstrap`。
 2. 判断 owner：外部资产生命周期、Scaena production、产品仓库、Auctra 内容链、小红书、影视/故事看板、还是 Eikona CLI/runtime。
 3. Scaena context 先判定 purpose。episode/shot/cover/motion 必须路由 `$scaena-subject-asset-readiness`；只有 candidate/lookdev/correction 或 current passed preflight 才可继续 Eikona。
 4. 判断是否已有 accepted source。Auctra 来源必须先通过 Auctra review；外部临时图片先交给 `eikona-asset-lifecycle` 捕获，普通素材必须确认权限和禁用项。
 5. 选择最小 skill；需要文件落盘时同时加载 `eikona-file-prompt-workflow`，但只选择一个创意 director。当已有可复用的视觉方向或资产集合时，优先用 `eikona themes` 和 `eikona library collections` 引用既有 theme/asset refs，而不是重新描述或复制素材：先 `eikona themes list` / `eikona library collections list` 查找匹配 alias，再在 workflow 的 `theme_bindings` / `collection_bindings` 里绑定 canonical URI，让 plan 记录不可变 snapshot。
 6. 要求下游输出：visual brief、推荐命令、review packet、feedback、handoff/apply 下一步，以及 Scaena context 的 freeze/preflight/consistency 下一步。
 7. 本地验证默认用 `fixture:image`；Eikona 真实远程默认用 canonical ref `openai/gpt-5.4-image-2`。短别名 `gpt-5.4-image-2` 与 `gpt-image-2` 可接受；历史 `openai/gpt-5.4-image-2` 只为兼容读取。网关其他模型必须复制准确完整 model ID。
-8. 尺寸参数必须显式设置：用户未指定尺寸时统一使用 `--size 2k` 或 runbook `size: 2k`；用户明确给出其他 size 时原样设置，不换算、不降级。比例继续用 `--aspect` 单独表达，不能用 1024/1536 示例替代 2K 请求。
+8. 尺寸参数按 provider 控制方式处理：付费 OpenAI/gateway 原生参数路径在用户未指定尺寸时统一使用 `--size 2k` 或 runbook `size: 2k`；用户明确给出其他 size 时原样设置，不换算、不降级。`codex:imagegen` 是 `prompt_instruction` 路径，推荐不写 `--size 1k`，由 runtime 自动向提示词注入 1K 约束；只有确需指定受支持画布时才保留显式 `--size` 并接受 warning。请求 2k/4k 会在提交前失败，这是通道上限。比例继续用 `--aspect` 单独表达，不能用 1024/1536 示例替代 2K 请求。
+9. 不从最终 prompt 文本反向推断 provider 权限或 typed controls。用户说“不要付费”“使用参考图”“编辑背景”“竖版 2K”时，router 必须把这些决定映射到明确的 model/channel、reference mode、canvas 或 execution policy；若无法安全映射，就保留为未决输入而不是让 provider 自行猜测。
 
 新的 Eikona 调用默认绑定用户级 channel，不依赖项目内复制的 credential 或 `.env`：
 
 ```bash
+eikona providers doctor codex --agent
+eikona generate --prompt "preview icon" --agent
 eikona providers doctor --channel openai --model openai/gpt-5.4-image-2 --probe --agent
 eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --input ./prompt.md --size 2k --aspect 2:3 --agent
 ```

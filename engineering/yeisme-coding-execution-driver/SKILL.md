@@ -9,7 +9,7 @@ description: Use when implementing, modifying, debugging, refactoring, or verify
 
 Drive coding sessions end to end. Turn a request, approved plan, PRD, bug report, or failing command into a prioritized recursive checklist, execute the highest-priority unblocked leaf, verify each completed slice, and continue until the task is handled or a real stop condition is reached.
 
-Use this together with narrower skills when they apply, such as `test-driven-development`, `systematic-debugging`, `verification-before-completion`, `yeisme-repo-routing`, `yeisme-cohors-cli-runtime`, `yeisme-mcp-builder`, or `yeisme-mcp-gateway-maintainer`.
+Use this together with narrower skills when they apply, such as `test-driven-development`, `systematic-debugging`, `verification-before-completion`, `yeisme-repo-routing`, `ordo-runtime-canary-evaluation`, `yeisme-mcp-builder`, or `yeisme-mcp-gateway-maintainer`.
 
 ## Trigger Conditions
 

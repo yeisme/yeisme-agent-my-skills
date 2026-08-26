@@ -1,6 +1,6 @@
 ---
 name: yeisme-frontend-quality-workflow
-description: Use when adding, changing, testing, or reviewing frontend tooling and UI quality gates in this repository, including Impeccable-style deterministic detection, default SaaS operations console style conformance, Storybook design-system stories, Tailwind CSS in Storybook, Chromatic or Playwright visual regression, @storybook/addon-designs, Lighthouse, Axe accessibility checks, Front-End Checklist rule/MCP lookups, browser-use driven real browser integration tests, and Cohors-style diagnostics summaries.
+description: Use when adding, changing, testing, or reviewing frontend tooling and UI quality gates in this repository, including Impeccable-style deterministic detection, default SaaS operations console style conformance, Storybook design-system stories, Tailwind CSS in Storybook, Chromatic or Playwright visual regression, @storybook/addon-designs, Lighthouse, Axe accessibility checks, Front-End Checklist rule/MCP lookups, browser-use driven real browser integration tests, and Ordo-style diagnostics summaries.
 ---
 
 # Yeisme Frontend Quality Workflow

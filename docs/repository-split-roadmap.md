@@ -45,11 +45,11 @@ flowchart TD
 
 ## `cli-runtime/` 的清理原则
 
-`cli-runtime/` 不是长期项目边界。它同时包含 Cohors、Connectors、Eikona、Pinax、Quaestor 和 Git worktree 流程，后续应按 Owner 移动：
+`cli-runtime/` 不是长期项目边界。它同时包含 Ordo、Connectors、Eikona、Pinax、Quaestor 和 Git worktree 流程，后续应按 Owner 移动：
 
 - Eikona runtime → `eikona-skills`；
 - Pinax runtime → `pinax-skills`；
-- Cohors、Connectors、Quaestor runtime → 对应产品 Skills 仓库；
+- Ordo、Connectors、Quaestor runtime → 对应产品 Skills 仓库；
 - 通用 Git worktree workflow → `agent-workflow-skills`；
 - 迁移期间保留原 Skill 名称，并在聚合仓库中使用 submodule 指针升级，不建立重复副本。
 
