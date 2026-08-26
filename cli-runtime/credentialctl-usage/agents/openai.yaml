@@ -1,0 +1,7 @@
+interface:
+  display_name: Credentialctl Usage
+  short_description: Safely operate credentialctl v0.2 commands and outputs
+  default_prompt: Use credentialctl without exposing secrets; choose the correct secret plane, safe input source, and versioned output mode.
+
+policy:
+  allow_implicit_invocation: true
