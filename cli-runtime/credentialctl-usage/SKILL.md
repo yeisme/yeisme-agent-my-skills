@@ -13,6 +13,15 @@ Use this skill only for the local single-user `credentialctl` trust boundaries. 
 - Use `project init`, `project secret`, `project unlock`, `project rekey`, and `project exec` for encrypted repository project secrets.
 - Never put endpoint, model, budget, provider profile, OAuth refresh token, production/admin/payment secret, or server credential into the shared registry.
 
+## Cross-project adoption
+
+- Treat `cli/credentialctl/docs/integration.md` as the canonical integration guide.
+- Activate this skill through the root target profile and `scripts/skills.sh sync-target`; never copy a runtime skill directory by hand.
+- The `local-ai` preset currently grants only `eikona/image`, `pinax/embedding`, `aigora/text`, `scaena/video`, and `anatomia/service`.
+- Skill availability does not grant secret access. A new consumer or capability requires an owning credentialctl OpenSpec change and policy tests.
+- Non-Go projects should call the CLI. Go owners may import only `pkg/credentials`, `pkg/localstore`, or `pkg/projectsecrets`; never import or copy `internal/store`.
+- Browser, UI, facade, and shared broker code may consume redacted readiness only and must never resolve secret bytes.
+
 ## Safe input
 
 - Prefer hidden TTY input for people.
@@ -42,6 +51,6 @@ Use this skill only for the local single-user `credentialctl` trust boundaries. 
 
 ## Release boundary
 
-Current `v0.2.0-rc.1` artifacts are internal preview only. Do not tag, push, publish, redistribute, or deploy them while `license_status=unresolved` and `publish_authorized=false`.
+`v0.2.0` is published as a GitHub Release under the owner's explicit authorization recorded on 2026-08-27. The repo is private and has no LICENSE file yet (`license_status=unresolved`): do not redistribute artifacts outside the owning organization until a license is added.
 
 Before claiming a candidate is ready, run the repository Task/OpenSpec/redaction/release checks and require native Windows/macOS evidence. Never copy evidence containing secrets or private absolute paths into chat or documentation.
