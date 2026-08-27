@@ -1,0 +1,3 @@
+display_name: Aigora Skill Router
+short_description: Walk the Aigora skill decision tree to one leaf chain and one docs domain; do not load a flat skill list.
+default_prompt: Route this Aigora task through the aigora-skill-router decision tree. Stop at the first matching leaf, name the docs domain README to open, and list sibling skills that must not be loaded.
