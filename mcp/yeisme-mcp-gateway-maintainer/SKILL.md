@@ -55,8 +55,11 @@ the directory containing `go.mod` and this project's `AGENTS.md` as the root.
    - the quickstart operator token is an operator credential, not a consumer
      sharing token
    - use `mcp-gateway grant create` for a bounded human or agent-worker tool
-     subset, and `mcp-gateway tokens create` for service accounts that need
-     explicit scopes
+     subset, `mcp-gateway tokens create` for service accounts that need
+     explicit scopes, and `mcp-gateway tokens import --key-file/--key-env`
+     when clients already hold an `sk-...`-style key; imported keys store
+     only a digest, list shows `key_hint`, and revoke behaves like signed
+     tokens
    - keep generated credentials in `0600` files, transfer them through an
      approved secret channel, and pair every issue path with revoke/rotation
 5. Keep failure boundaries isolated. A failed backend must not break unrelated backends.
