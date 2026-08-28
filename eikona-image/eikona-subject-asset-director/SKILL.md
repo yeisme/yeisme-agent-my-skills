@@ -12,6 +12,7 @@ description: Use when creating or repairing Eikona character identity sheets, su
 - Purpose：`subject_candidate`、`look_development`、`consistency_assessment` 或 `correction`。
 - Auctra accepted visual brief/source refs，或 Scaena frozen subject/preflight/correction refs。
 - Subject kind/tier、required views/slots、reference images、allowed/forbidden variation、rights、model/size/aspect/candidate count。
+- Anatomia 反向工程 handoff 包（provider-neutral refs）：`eikona assets import-anatomia <package.json>` 导入 `source=anatomia-handoff` lineage（refs-only，schema 1.0.0 + sha256 digest fail closed；幂等），回执 `eikona://references/anatomia/<handoff_ref>` 可作为 reference 输入的 provenance 来源；不读 `.anatomia/**`、不合并 owner state。
 
 缺 accepted source、Scaena readiness 或 correction authority 时，先返回 owner blocker；不要自行补写 canon 或 production state。
 
