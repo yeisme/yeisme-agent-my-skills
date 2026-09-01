@@ -41,7 +41,7 @@ description: Use when structuring, drafting, expanding, or polishing WeChat Offi
 
 - 普通公众号稿可直接输出 Markdown。
 - Auctra 项目中可建议 `auctra text new wechat_article --title "..." --platform wechat_article --json`。
-- 需要审稿和导出时使用 `auctra review`、`auctra export`。
+- 需要审稿和导出时使用 `auctra review`、`auctra text export`。
 
 ## 边界
 

@@ -6,12 +6,13 @@ import sys
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SKIP_PARTS = {".git"}
+SKIP_PARTS = {".git", ".agents", ".claude", ".codex", "node_modules", "temp"}
 errors: list[str] = []
 names: dict[str, Path] = {}
 
 adapter = ROOT / "scripts" / "skills.sh"
 engine = ROOT / "agent-workflow" / "yeisme-skill-routing-governance" / "scripts" / "skills.sh"
+installer = ROOT / "scripts" / "install.sh"
 if not adapter.is_file():
     errors.append("scripts/skills.sh: missing public portable manager adapter")
 elif not adapter.stat().st_mode & 0o111:
@@ -20,6 +21,20 @@ if not engine.is_file():
     errors.append("agent-workflow management engine is missing")
 elif not engine.stat().st_mode & 0o111:
     errors.append("agent-workflow management engine must be executable")
+if not installer.is_file():
+    errors.append("scripts/install.sh: missing network bootstrap installer")
+elif not installer.stat().st_mode & 0o111:
+    errors.append("install.sh: network bootstrap installer must be executable")
+else:
+    installer_syntax = subprocess.run(
+        ["bash", "-n", str(installer)],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if installer_syntax.returncode != 0:
+        errors.append(f"scripts/install.sh: bash syntax failed: {installer_syntax.stderr.strip()}")
 
 if adapter.is_file() and engine.is_file():
     adapter_help = subprocess.run(

@@ -1,0 +1,6 @@
+display_name: "创作 Grill Me"
+short_description: "聚合路由小说、漫剧与其他内容创作的高强度决策访谈"
+default_prompt: "请使用 $creative-grill-me 路由并深度拷问这个创作想法，先澄清关键选择与验证缺口，不要开始写作或生产。"
+policy:
+  allow_implicit_invocation: false
+

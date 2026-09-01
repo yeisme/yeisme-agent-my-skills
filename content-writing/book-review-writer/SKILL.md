@@ -40,7 +40,7 @@ description: Use when writing Chinese book reviews, reading notes, recommendatio
 ## Auctra 轻集成
 
 - 普通一次性写稿不强制进入 Auctra。
-- 当用户在 Auctra 项目内工作、需要保存素材、审稿或导出时，优先建议 `auctra material`、`auctra text`、`auctra review`、`auctra export` 的真实命令。
+- 当用户在 Auctra 项目内工作、需要保存素材、审稿或导出时，优先建议 `auctra material`、`auctra text`、`auctra review`、`auctra text export` 的真实命令。
 
 ## 边界
 

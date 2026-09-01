@@ -1,6 +1,6 @@
 ---
 name: credentialctl-usage
-description: Use when operating credentialctl for user-level shared credentials or repository project secrets, including setup, rotation, status, machine output, completion, metadata, diagnosis, and internal release verification.
+description: Use when operating credentialctl for user-level shared credentials, external credential bridges, or repository project secrets, including setup, linking, import, run, rotation, status, machine output, completion, metadata, diagnosis, and internal release verification.
 ---
 
 # Credentialctl usage
@@ -9,7 +9,8 @@ Use this skill only for the local single-user `credentialctl` trust boundaries. 
 
 ## Choose the secret plane
 
-- Use `setup`, `set`, `rotate`, `status`, `doctor`, `enable`, `disable`, and `remove` for user-level credentials shared by approved local Yeisme consumers.
+- Use `setup`, `set`, `rotate`, `status`, `doctor`, `enable`, `disable`, and `remove` for user-level credentials stored by credentialctl and shared by approved local Yeisme consumers.
+- Use `backend list`, `link`, `unlink`, `import`, `refresh`, and `run` when the value already lives in 1Password, Bitwarden, or pass, or when a non-Go owner needs one allowlisted child process.
 - Use `project init`, `project secret`, `project unlock`, `project rekey`, and `project exec` for encrypted repository project secrets.
 - Never put endpoint, model, budget, provider profile, OAuth refresh token, production/admin/payment secret, or server credential into the shared registry.
 
@@ -33,9 +34,21 @@ Use this skill only for the local single-user `credentialctl` trust boundaries. 
 ## Read-only diagnosis
 
 1. Run `credentialctl status [ref] --json`; this is local-only.
-2. Run `credentialctl doctor [ref] --json`; add `--probe` only when provider network validation is explicitly required.
-3. Follow only the redacted `actions` in the `1.0` envelope.
-4. Treat `partial` as completed diagnosis requiring attention, not as permission to retrieve a secret.
+2. Run `credentialctl backend list --json` to inspect local bridge CLI availability; it performs PATH lookup only.
+3. Run `credentialctl doctor [ref] --json`; add `--probe` only when provider network validation is explicitly required.
+4. For bridged refs, run `credentialctl refresh <ref> --json` only when an explicit external re-read and digest update is intended.
+5. Follow only the redacted `actions` in the `1.0` envelope.
+6. Treat `partial` as completed diagnosis requiring attention, not as permission to retrieve a secret.
+
+## External bridge workflow
+
+- Supported v1 source refs are `op://<vault>/<item>[/<field>]`, `bw://<object-id>[/<field>]`, and `pass://<store-path>`.
+- `link` stores only the non-secret pointer and does not resolve by default. `link --verify` requires interactive confirmation before one resolve.
+- `import` copies one resolved value into the local credentialctl store and records only redacted origin metadata.
+- `run` accepts explicit `--env-map ENV_VAR=<ref>` entries, drops host collisions, does not use a shell, and propagates the child exit code.
+- The child owns its stdout/stderr. Never use a child command that prints the injected environment value or persists it in evidence.
+- Backend login, unlock, session, and master password remain owned by the native `op`, `bw`, or `pass` tool. credentialctl never accepts them.
+- Bridged entries are readonly in credentialctl: rotate in the source backend, then use the next resolve or `refresh` for a new redacted digest.
 
 ## Machine output
 

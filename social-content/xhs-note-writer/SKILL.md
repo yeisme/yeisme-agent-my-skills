@@ -43,7 +43,7 @@ description: Use when creating, revising, or rewriting Xiaohongshu note packages
 
 - 普通小红书草稿可直接输出 Markdown 素材包。
 - Auctra 项目中可建议 `auctra text new xhs_note --title "..." --platform xiaohongshu --json`。
-- 需要 review 或导出时使用 `auctra review` 和 `auctra export`，不手写项目状态。
+- 需要 review 或导出时使用 `auctra review` 和 `auctra text export`，不手写项目状态。
 
 ## 边界
 

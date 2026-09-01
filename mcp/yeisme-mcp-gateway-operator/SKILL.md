@@ -1,150 +1,123 @@
 ---
 name: yeisme-mcp-gateway-operator
-description: Use when operating the deployed Yeisme MCP Gateway through the mcp-gateway CLI, Web UI, TUI, /api endpoints, or /mcp client endpoint, including status checks, tool discovery, diagnostics, reports, client config rendering, and routine service lifecycle checks without changing gateway code or registry definitions.
+description: Use when an owner or delegated Agent needs to inspect or operate a deployed Yeisme MCP Gateway through its CLI, scoped admin API, or five admin MCP tools, including revision-safe changes, approvals, Packs, credentials, and rollback without changing Gateway source code.
 ---
 
 # Yeisme MCP Gateway Operator
 
-Use this skill to operate the already deployed MCP Gateway as a user or runtime operator.
+Operate an existing Gateway through its versioned Action Catalog. The Gateway,
+not the client, derives `local-owner` or `delegated-agent` from the authenticated
+principal. Never ask a caller to declare an admin profile in request input.
 
-## Scope
+## Establish the boundary
 
-- Gateway service: `http://10.10.1.101:18787`
-- MCP endpoint: `http://10.10.1.101:18787/mcp`
-- Web console: `http://10.10.1.101:18787/`
-- Source project: `mcp/gateway`
-- Long-running service: `nerdctl compose` via `mcp/gateway/Taskfile.yml`
+Identify the admin endpoint, credential source, tenant/workspace, active
+revision, intended Action, and whether an approval is required. Keep the static
+admin token as a local-owner break-glass path; ordinary remote Agents use scoped
+credentials. Do not print tokens, resolved secrets, raw Authorization headers,
+or sensitive action payloads.
 
-## Boundaries
-
-- Do not change gateway TypeScript code here; use `yeisme-mcp-gateway-maintainer`.
-- Do not edit `mcp/registry.json`, credentials, groups, permissions, or exposure policy here; use `yeisme-mcp-registry-onboarding`.
-- Do not print secrets, tokens, raw Authorization headers, or env file values.
-- Prefer `mcp-gateway` CLI for human operations and `--json` for machine-readable inspection.
-- Do not use or troubleshoot BigModel/Zai `web-search-prime` for 联网搜索; it is intentionally disabled in Gateway. Use Firecrawl CLI against the configured `/home/yeshugen/workplace/backend-server-firecrawl` backend instead.
-- Use destructive MCP tools only when the user explicitly asks for that action and the target server has been identified.
-
-## Quick Workflow
-
-1. Confirm the CLI is available:
+Preview features must be explicitly enabled at service startup:
 
 ```bash
-which mcp-gateway
-mcp-gateway --help
+mcp-gateway serve --registry ./registry.yaml \
+  --enable-admin-mcp \
+  --enable-gateway-packs \
+  --enable-gateway-peering
 ```
 
-2. Check gateway health:
+Bootstrap-only settings—listen address, TLS identity, data directory, owner
+trust, admin-token source, and secret resolvers—remain local configuration and
+must not be changed through admin Actions.
+
+For CLI administration, configure the endpoint and exactly one credential
+file. Delegated Agents use `MCP_GATEWAY_TOKEN_FILE`; local-owner break-glass
+uses `MCP_GATEWAY_ADMIN_TOKEN_FILE`:
 
 ```bash
-mcp-gateway status
-cd mcp/gateway && task health
+export MCP_GATEWAY_ADMIN_ENDPOINT=https://gateway.example.com
+export MCP_GATEWAY_TOKEN_FILE=/absolute/path/delegated-agent.token
 ```
 
-3. Inspect available groups, backends, and tools:
+## Inspect before mutation
 
 ```bash
-mcp-gateway groups
-mcp-gateway backends
-mcp-gateway tools
-mcp-gateway tools --server gitea-mcp
+mcp-gateway admin inspect gateway --json
+mcp-gateway config revisions --json
+mcp-gateway admin search --kind action --query registry --agent
+mcp-gateway admin inspect action registry.backend.disable --json
 ```
 
-For 联网搜索, bypass Gateway and use Firecrawl CLI:
+Use `gateway_admin_search`, `gateway_admin_inspect`,
+`gateway_admin_operations`, `gateway_admin_plan`, and `gateway_admin_apply`
+when operating through MCP. These tools expose catalog Actions only; they are
+not an arbitrary HTTP method/path proxy.
+
+## Plan, approve, apply
+
+Every mutation is revision-bound and idempotent:
 
 ```bash
-firecrawl view-config
-firecrawl search "query" --api-url http://localhost:32741 --limit 5 -o .firecrawl/search.json --json
+mcp-gateway admin plan registry.backend.disable \
+  --backend gitea \
+  --expected-revision cfgrev_xxx \
+  --json
+
+mcp-gateway admin apply plan_xxx \
+  --plan-digest sha256:xxx \
+  --approval-id appr_xxx \
+  --json
+
+mcp-gateway admin operations --watch op_xxx --events
 ```
 
-4. Diagnose a backend before retrying tool work:
+On a CAS conflict, inspect the new active revision and create a new plan; do not
+auto-merge. An approval is valid only for its plan digest, revision, principal,
+and expiry. Reusing an idempotency key with a different payload is an error.
+
+## Packs and rollback
+
+Packs are declarative, immutable, signed artifacts. They may reference local
+Skill names and versions but never install or carry Skill content.
 
 ```bash
-mcp-gateway diagnose --server gitea-mcp
-mcp-gateway diagnose --server gitea-mcp --refresh-tools
+mcp-gateway pack templates --json
+mcp-gateway pack validate ./packs/team-shared --json
+mcp-gateway pack fetch https://example.com/packs/team-shared/0.1.0/pack.json \
+  --digest sha256:xxx \
+  --json
+mcp-gateway pack plan pack:team-shared@0.1.0 \
+  --expected-revision cfgrev_xxx \
+  --json
+mcp-gateway admin apply plan_xxx --plan-digest sha256:xxx --approval-id appr_xxx --json
 ```
 
-5. Use structured output when an agent needs to parse results:
+Do not follow `latest`, auto-upgrade, accept executable fields, or enable
+unsigned artifacts outside explicit loopback development mode. Publisher trust
+is local-owner bootstrap state.
+
+Rollback creates a new revision; it never rewrites history:
 
 ```bash
-mcp-gateway status --json
-mcp-gateway tools --server gitea-mcp --json
-curl -fsS http://10.10.1.101:18787/api/projection
+mcp-gateway config rollback cfgrev_previous \
+  --expected-revision cfgrev_current \
+  --json
 ```
 
-## Client Configuration
+## Boundaries and handoff
 
-Render client configs instead of hand-writing MCP endpoint blocks:
+- Use `yeisme-mcp-gateway-maintainer` for source changes.
+- Use `yeisme-mcp-registry-onboarding` for base Registry authoring.
+- Use `yeisme-mcp-gateway-provider` for service publication and export grants.
+- Use `yeisme-mcp-gateway-peer-operator` for peer identity, hop, and namespace operations.
+- There is no full management Web UI, TUI, Marketplace, anonymous access,
+  recursive federation, or dynamic Skill installation in V1.
 
-```bash
-mcp-gateway render codex
-mcp-gateway render gemini
-mcp-gateway render opencode
-mcp-gateway render crush
-mcp-gateway commands codex
-```
+Return the active revision, Action/plan/operation ids, approval state, result or
+rollback revision, redacted evidence path, and the exact safe next command.
 
-For direct client wiring, the canonical MCP URL is:
+## References
 
-```text
-http://10.10.1.101:18787/mcp
-```
-
-## Interactive Surfaces
-
-Use the Web console for visual inspection:
-
-```text
-http://10.10.1.101:18787/
-```
-
-Use the TUI for terminal inspection:
-
-```bash
-mcp-gateway tui
-mcp-gateway tui --server gitea-mcp --refresh 5s
-```
-
-## Service Lifecycle
-
-For the long-running gateway service:
-
-```bash
-cd mcp/gateway
-task ps
-task health
-task logs
-task restart
-```
-
-Use `task down` only when the user explicitly asks to stop the service.
-
-## Troubleshooting
-
-- If `mcp-gateway` is missing, run commands from source:
-
-```bash
-cd mcp/gateway
-bun run cli -- status
-```
-
-- If `/api/projection` fails but the container is running, check logs:
-
-```bash
-cd mcp/gateway
-task logs
-```
-
-- If a backend is degraded, diagnose that backend first and avoid broad restarts:
-
-```bash
-mcp-gateway diagnose --server <backend>
-```
-
-## Output
-
-When reporting status, include:
-
-- gateway URL and MCP endpoint
-- health summary: backend count, exposed tool count, auth mode
-- any degraded backend and the next diagnostic command
-- commands actually run and whether they passed
+- `mcp/gateway/docs/remote-admin.md`
+- `mcp/gateway/docs/auth.md`
+- `mcp/gateway/README.md`

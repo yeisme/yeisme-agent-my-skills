@@ -1,0 +1,4 @@
+interface:
+  display_name: "Yeisme MCP Gateway Provider"
+  short_description: "Publish scoped MCP services through Gateway."
+  default_prompt: "Use $yeisme-mcp-gateway-provider to publish an allowlisted MCP service through one Gateway /mcp endpoint."

@@ -1,6 +1,6 @@
 ---
 name: yeisme-mcp-gateway-consumer
-description: Use when an Agent or developer needs to connect to, discover, or use a Yeisme MCP Gateway as a third-party consumer, including client onboarding, tools/list and tools/call, token scopes, approval handling, safe routing, and failure diagnosis without changing Gateway code or registry policy.
+description: Use when an Agent or developer needs to connect to, discover, or use a Yeisme MCP Gateway as a third-party consumer, including direct-provider and one-hop peer namespaces, token scopes, approvals, origin-aware routing, and isolated failure diagnosis without changing Gateway policy.
 ---
 
 # Yeisme MCP Gateway Consumer
@@ -19,6 +19,10 @@ but does not own Gateway deployment or backend policy.
 - Treat `tools/list` as the source of truth for public tool names and schemas.
   Never infer a tool name from an upstream server id or call a hidden backend
   tool.
+- A public capability may originate locally or from one trusted peer. Preserve
+  the advertised namespace and server-provided origin metadata; never invent,
+  strip, or rewrite `origin_gateway_id`, `peer_id`, or `hop`.
+- Consumers and `gateway_peer` principals cannot see Gateway admin tools.
 
 ## Inputs to establish
 
@@ -29,6 +33,8 @@ Before acting, identify:
 3. the authenticated `tenant` and `workspace`, when applicable;
 4. the intended first operation and whether it is read-only;
 5. the operator or approval channel for a blocked write.
+6. whether the advertised capability is local or peer-imported, including the
+   peer namespace shown by discovery.
 
 If the endpoint, credential scope, or intended operation is unknown, ask the
 user or operator. Do not guess a private URL, token, tenant, or approval id.
@@ -138,6 +144,23 @@ explicitly requested it and the current policy/approval flow permits it.
   claims it. Use the Gateway-advertised capabilities and effective policy.
 - An empty resources/templates list does not mean Gateway tools are absent;
   discover tools with `tools/list`.
+- Do not submit `_meta["yeisme.gateway.peer"]` as a consumer. Gateway-to-Gateway
+  metadata and `Via` are generated and validated by the Gateways.
+- An imported `hop=1` capability cannot be exported through another Gateway.
+  Do not route around this limit by connecting to hidden upstream endpoints.
+
+## Peer-origin failure handling
+
+Treat peer failures as namespace-scoped unless local discovery also fails:
+
+- `degraded`: the named peer namespace may use a bounded last-known discovery
+  cache; avoid uncertain writes and preserve the request id.
+- `blocked`: identity or discovery digest changed, a loop was detected, or hop
+  validation failed; stop and ask the peer operator to re-probe and approve.
+- namespace missing: refresh discovery once, then report the peer id/origin and
+  do not substitute a similarly named local tool.
+- local tools healthy while one peer fails: continue only with explicitly
+  selected local capabilities; do not describe the whole Gateway as down.
 
 ## If the user owns the Gateway
 
@@ -189,8 +212,8 @@ authorizes the operator workflow.
 
 Return a compact handoff containing: endpoint class (without secrets), client
 configuration status, discovered public tool names, requested operation,
-Gateway decision, request/operation id, next action, and any redacted evidence
-path.
+Gateway decision, local or peer origin, namespace, request/operation id, next
+action, and any redacted evidence path.
 
 ## References
 
@@ -199,4 +222,3 @@ path.
 - `mcp/gateway/docs/token-management.md`
 - `mcp/gateway/docs/mock-mcp-smoke.md`
 - `mcp/gateway/README.md`
-

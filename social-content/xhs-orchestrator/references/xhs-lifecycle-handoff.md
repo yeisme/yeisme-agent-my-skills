@@ -80,7 +80,7 @@
 - 需要保存素材时，建议先用 `auctra material` 记录 source material。
 - 需要生成正文资产时，建议用 `auctra text` 创建或更新文本项。
 - 需要审稿时，建议用 `auctra review` 产生 review 结果。
-- 需要导出时，建议用 `auctra export` 生成交付物。
+- 需要导出时，建议用 `auctra text export` 生成交付物。
 - 不手写 `.auctra/**`、SQLite rows、review 决策或 run evidence。
 
 ## 质量门禁

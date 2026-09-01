@@ -1,0 +1,4 @@
+interface:
+  display_name: "Yeisme MCP Gateway Peer Operator"
+  short_description: "Operate trusted one-hop Gateway peers safely."
+  default_prompt: "Use $yeisme-mcp-gateway-peer-operator to plan, approve, probe, and diagnose a one-hop Gateway peer."

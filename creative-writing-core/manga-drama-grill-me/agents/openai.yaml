@@ -1,0 +1,6 @@
+display_name: "漫剧 Grill Me"
+short_description: "直达漫剧故事、分镜、视觉、声音与生产决策访谈"
+default_prompt: "请使用 $manga-drama-grill-me 直接拷问这个漫剧想法或当前分镜生产决策，不要先问媒介，也不要开始生成资产。"
+policy:
+  allow_implicit_invocation: false
+

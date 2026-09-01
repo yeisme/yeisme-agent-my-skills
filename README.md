@@ -16,6 +16,28 @@ python3 scripts/validate_repository.py
 git submodule update --init --recursive
 ```
 
+## 云端安装 AI 做剧 Skills
+
+最方便的入口是直接从 AI 做剧仓库安装 `ai-drama-router`：
+
+```bash
+npx --yes skills add https://github.com/yeisme/ai-drama-skills \
+  --skill ai-drama-router \
+  --yes
+```
+
+查看云端全部做剧 Skills：
+
+```bash
+npx --yes skills add https://github.com/yeisme/ai-drama-skills --list
+```
+
+`ai-drama-router` 是短剧、漫剧、电视剧、电影、单元剧、喜剧和音频剧的统一入口。先安装 Router，再由它选择一个 primary 和最多一个必要 constraint，不要一次激活完整矩阵。
+
+包含仓库 URL、安装命令、Router 规则、完整开发工作流开关和验收要求的提示词见 [云端集成 Yeisme AI 做剧 Skills](docs/agent-assisted-installation.md)。
+
+通用编码、Go 后端、Go CLI、Rust/原生高性能、React/Web 前端、全栈 MVP 和快速 demo 的云端组合见 [开发 Skills 组合安装指南](docs/development-skill-combinations.md)。
+
 ## 管理任意外部项目
 
 本仓库提供可移植的 `scripts/skills.sh`。它把本 checkout 作为 Skill source，但允许 `--project` 指向任意项目或服务器工作目录。
@@ -35,6 +57,8 @@ scripts/skills.sh --project /path/to/project init
 - 生成项目 `.agents/skills` 与 `.claude/skills`；
 - 验证 profile、managed manifest 和双 runtime。
 
+`yeisme-builder-profile` 是可选的长期上下文 Profile，不属于安装 AI 做剧 Router 的必要依赖。需要项目路由时再按下文加入 `project-development-router`。
+
 搜索并添加复杂 Skill：
 
 ```bash
@@ -47,6 +71,28 @@ scripts/skills.sh --project /path/to/project validate
 ```
 
 Agent 应先阅读候选 `SKILL.md`，默认选择一个 primary workflow、至多一个兼容 domain constraint，并把独立 audit 与实现职责分开。搜索结果不是自动安装批准。
+
+### 可选的常用开发工作流
+
+默认 `init` 不加载完整项目流程。希望某个项目自动识别新项目、正式 MVP、快速 demo 和跳过工作流时，再显式加入轻量路由器；`grill-me` 可同时加入，但它只允许用户显式调用：
+
+```bash
+scripts/skills.sh --project /path/to/project --dry-run profile add project-development-router
+scripts/skills.sh --project /path/to/project profile add project-development-router
+scripts/skills.sh --project /path/to/project profile add grill-me
+scripts/skills.sh --project /path/to/project sync
+scripts/skills.sh --project /path/to/project validate
+```
+
+不希望项目使用这套流程时移除路由器即可：
+
+```bash
+scripts/skills.sh --project /path/to/project profile remove project-development-router
+scripts/skills.sh --project /path/to/project sync
+scripts/skills.sh --project /path/to/project validate
+```
+
+Ponytail 等第三方多宿主插件仍由其上游安装和更新，不 vendor 到本 source。
 
 服务器上的 source checkout 路径是本地状态。checkout 移动后重新绑定：
 
@@ -134,6 +180,7 @@ scripts/skills.sh --project /path/to/project list-source --json
 
 ```bash
 python3 scripts/validate_repository.py
+python3 scripts/test_network_install.py
 scripts/skills.sh --help
 python3 agent-workflow/scripts/test_skill_manager.py
 python3 ai-drama/scripts/validate_skills.py

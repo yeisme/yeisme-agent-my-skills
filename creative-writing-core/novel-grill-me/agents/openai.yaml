@@ -1,0 +1,6 @@
+display_name: "小说 Grill Me"
+short_description: "直达小说立项、结构、人物、章节与连载决策访谈"
+default_prompt: "请使用 $novel-grill-me 直接拷问这个小说想法或当前章节决策，不要先问我是不是在写小说，也不要开始写正文。"
+policy:
+  allow_implicit_invocation: false
+

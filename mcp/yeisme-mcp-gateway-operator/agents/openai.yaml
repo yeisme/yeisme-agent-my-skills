@@ -1,3 +1,4 @@
-display_name: Yeisme MCP Gateway Operator
-short_description: Operate the deployed MCP Gateway through CLI, Web UI, TUI, API, and MCP endpoint checks.
-default_prompt: Check the deployed MCP Gateway status, inspect available tools, diagnose degraded backends, and report the next operational command without changing code or registry config.
+interface:
+  display_name: "Yeisme MCP Gateway Operator"
+  short_description: "Operate revision-safe Gateway admin actions."
+  default_prompt: "Use $yeisme-mcp-gateway-operator to inspect the active Gateway revision, create a safe admin plan, and report any required approval."
