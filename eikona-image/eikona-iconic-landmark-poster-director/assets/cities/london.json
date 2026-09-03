@@ -1,0 +1,56 @@
+{
+  "schema_version": "iconic-landmark-city/1.0",
+  "id": "london",
+  "series": { "id": "iconic-landmark", "no": 1 },
+  "city": {
+    "name": "LONDON",
+    "country": "UNITED KINGDOM",
+    "est": "1859",
+    "coordinates": ["51.5007° N", "0.1246° W"]
+  },
+  "landmarks": [
+    { "id": "big-ben", "name": "Big Ben / Elizabeth Tower", "role": "hero" },
+    { "id": "palace-of-westminster", "name": "Palace of Westminster", "role": "supporting" },
+    { "id": "river-thames", "name": "River Thames", "role": "foreground" }
+  ],
+  "tags": {
+    "palette": {
+      "family": "morandi-warm",
+      "paper": "warm-ivory",
+      "accents": ["dusty-rose", "pale-peach", "fog-blue", "charcoal-navy", "pale-gold"]
+    },
+    "use": ["cover", "poster", "print"]
+  },
+  "photo": {
+    "viewpoint": "从泰晤士河南岸附近视角眺望英国议会大厦",
+    "hero_placement": "Big Ben / Elizabeth Tower 位于画面视觉中心偏右位置，完整塔身清晰可见，从底部一直延伸至顶部尖塔，不裁切，严格保持伊丽莎白塔真实建筑比例",
+    "hero_features": ["金色钟面", "哥特复兴式尖塔", "精细石材立面", "垂直窗格", "顶部尖顶"],
+    "skyline": "Big Ben 旁边横向展开 Palace of Westminster 英国议会大厦，形成典型伦敦天际线；建筑采用真实暖米黄色石材，局部受到夕阳照射产生柔和金色高光",
+    "river": "前景为宽阔的 River Thames 泰晤士河，占摄影区域约 20–25%；河水呈低饱和蓝灰色，具有自然细密波纹，建筑产生轻微倒影",
+    "scale_reference": "可出现一艘非常小的伦敦游船作为比例参照，但不能抢夺主体",
+    "background": "远处可以轻微出现伦敦现代城市建筑，但必须弱化",
+    "time": "伦敦 Golden Hour 进入 Blue Hour 前的傍晚",
+    "sky_gradient": "淡灰蓝 → 柔和雾紫 → 浅桃粉 → 微暖金色的自然渐变",
+    "clouds": "少量英国特有的层状云和柔软积云，具有轻微阴天感，但不能阴沉",
+    "rim_light": "阳光从侧后方穿过云层，为 Big Ben 边缘产生细腻金色轮廓光",
+    "lens": "50–85mm 建筑摄影，中长焦视觉压缩，建筑垂直线保持笔直，无鱼眼，无夸张广角畸变",
+    "quality": "真实伦敦旅行摄影，premium architectural photography，cinematic golden hour，真实石材纹理，自然 HDR，高动态范围，4K"
+  },
+  "vector": {
+    "hero_identity": ["高耸矩形塔身", "四面大型钟盘", "金色钟盘装饰", "哥特式窗格", "顶部尖塔结构", "细长塔尖"],
+    "hero_simplification": "将复杂哥特建筑结构简化为矩形 + 细长竖线 + 三角形 + 尖拱 + 极细几何线条；钟盘使用一个非常克制的浅金色圆形表现；不使用粗黑描边",
+    "hero_palette": ["浅砂岩色", "暖米色", "灰褐色", "低饱和金色", "深灰蓝"],
+    "supporting": "Big Ben 左侧横向延伸简化后的 Palace of Westminster；将复杂哥特式立面高度几何化，只保留连续尖顶、矩形主体、塔楼、尖拱窗、水平建筑基座；建筑高度必须明显低于 Big Ben",
+    "supporting_palette": ["米灰", "沙色", "浅棕", "灰蓝", "淡金"],
+    "sun": "Big Ben 后方偏左加入一个巨大半透明几何圆形太阳，使用非常柔和的英国雾粉色 / Dusty Rose / Pale Peach；圆形部分被 Big Ben 与议会大厦遮挡；不使用真实太阳纹理",
+    "river": "建筑底部使用一条极细深灰蓝水平线建立基准，下方加入 5–7 条不同长度的极细水平线，使用雾蓝、灰蓝、浅海军蓝，抽象表现泰晤士河水面",
+    "easter_egg": "可以加入一个极小、极简的红色伦敦双层巴士剪影作为隐藏彩蛋，但面积不得超过画面的 1%",
+    "feel": "整体保持建筑设计档案感，不要变成旅游卡通插画"
+  },
+  "typography": {
+    "title": ["LONDON", "BIG BEN"],
+    "subtitle": "LONDON, UNITED KINGDOM",
+    "footer": "PALACE OF WESTMINSTER"
+  },
+  "negative_extra": ["卡通Big Ben", "Q版伦敦", "儿童插画", "霓虹伦敦", "Big Ben比例错误", "钟楼弯曲", "钟面缺失", "错误哥特结构", "重复钟楼", "伦敦眼抢占主体", "廉价旅游明信片风格"]
+}

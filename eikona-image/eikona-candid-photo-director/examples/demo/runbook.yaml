@@ -1,0 +1,25 @@
+schema_version: eikona.batch.v1
+goal: "candid lifestyle photography batch demo"
+defaults:
+  kind: image.generate
+  model: openai/gpt-5.4-image-2
+  size: 1024x1536  # closest portrait size for 9:16; adjust per provider
+matrix:
+  prompt_files:
+    - prompts/01-fe884623.md
+    - prompts/02-d75a22f1.md
+    - prompts/03-acf902d2.md
+    - prompts/04-65ceb86d.md
+    - prompts/05-aa2f7335.md
+    - prompts/06-e88542c2.md
+    - prompts/07-439988ba.md
+    - prompts/08-1d282cef.md
+    - prompts/09-ccbefd3a.md
+    - prompts/10-596a84ee.md
+limits:
+  max_jobs: 10
+  max_parallel: 1
+  allow_unknown_cost: false
+  fail_fast: true
+policy:
+  approval_required: true

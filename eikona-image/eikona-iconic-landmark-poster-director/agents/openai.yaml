@@ -1,0 +1,4 @@
+interface:
+  display_name: "Eikona Iconic Landmark Poster Director"
+  short_description: "Render ICONIC LANDMARK SERIES city posters with series tags"
+  default_prompt: "Use $eikona-iconic-landmark-poster-director to render a city landmark poster prompt from a city spec, with namespaced tags, runbook, and series index for Eikona generation."

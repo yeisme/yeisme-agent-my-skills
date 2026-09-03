@@ -1,0 +1,4 @@
+interface:
+  display_name: "Eikona Candid Photo Director"
+  short_description: "Sample deduplicated candid photography prompt batches with tags"
+  default_prompt: "Use $eikona-candid-photo-director to sample a deterministic batch of candid lifestyle photography prompts and write the prompt files, manifest tags, and runbook for Eikona generation."

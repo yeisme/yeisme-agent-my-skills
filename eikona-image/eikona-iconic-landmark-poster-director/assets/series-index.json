@@ -1,0 +1,18 @@
+{
+  "schema_version": "iconic-landmark-series/1.0",
+  "series": "iconic-landmark",
+  "posters": [
+    {
+      "no": 1,
+      "city": "london",
+      "name": "LONDON",
+      "landmarks": [
+        "big-ben",
+        "palace-of-westminster",
+        "river-thames"
+      ],
+      "spec": "cities/london.json",
+      "combo": "c5cf2e39"
+    }
+  ]
+}

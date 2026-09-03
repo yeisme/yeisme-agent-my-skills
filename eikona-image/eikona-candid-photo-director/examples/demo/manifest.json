@@ -1,0 +1,333 @@
+{
+  "schema_version": "candid-photo-batch/1.0",
+  "batch": "demo",
+  "seed": 42,
+  "n": 10,
+  "aspect": "9:16",
+  "model": "openai/gpt-5.4-image-2",
+  "subject": "kr-ins-default",
+  "locks": [],
+  "excludes": [],
+  "images": [
+    {
+      "file": "prompts/01-fe884623.md",
+      "combo": "fe884623",
+      "tags": {
+        "expression": "刚刚醒来的慵懒感",
+        "wardrobe": "Y2K风",
+        "scene": "旧木舟",
+        "moment": "刚刚坐下",
+        "shot": "肩部特写",
+        "lens": "28mm广角",
+        "camera": "从楼梯上方向下拍",
+        "composition": "荷叶形成天然圆形框景",
+        "foreground": "完全失焦的荷花",
+        "light": "穿过树叶形成的细碎光影",
+        "palette": "深绿+奶白+肤色",
+        "state": "自然颗粒"
+      },
+      "tag_list": [
+        "expression:刚刚醒来的慵懒感",
+        "wardrobe:Y2K风",
+        "scene:旧木舟",
+        "moment:刚刚坐下",
+        "shot:肩部特写",
+        "lens:28mm广角",
+        "camera:从楼梯上方向下拍",
+        "composition:荷叶形成天然圆形框景",
+        "foreground:完全失焦的荷花",
+        "light:穿过树叶形成的细碎光影",
+        "palette:深绿+奶白+肤色",
+        "state:自然颗粒"
+      ]
+    },
+    {
+      "file": "prompts/02-d75a22f1.md",
+      "combo": "d75a22f1",
+      "tags": {
+        "expression": "低头走神",
+        "wardrobe": "白开水高级感",
+        "scene": "南方老宅窗边",
+        "moment": "手扶栏杆",
+        "shot": "胸像近景",
+        "lens": "105mm远距离偷窥感长焦",
+        "camera": "人物完全偏离画面中心",
+        "composition": "对角线构图",
+        "foreground": "白墙边缘",
+        "light": "人物脸部只被一小块阳光照亮",
+        "palette": "青绿+米白+少量粉色花朵",
+        "state": "玻璃反射叠影"
+      },
+      "tag_list": [
+        "expression:低头走神",
+        "wardrobe:白开水高级感",
+        "scene:南方老宅窗边",
+        "moment:手扶栏杆",
+        "shot:胸像近景",
+        "lens:105mm远距离偷窥感长焦",
+        "camera:人物完全偏离画面中心",
+        "composition:对角线构图",
+        "foreground:白墙边缘",
+        "light:人物脸部只被一小块阳光照亮",
+        "palette:青绿+米白+少量粉色花朵",
+        "state:玻璃反射叠影"
+      ]
+    },
+    {
+      "file": "prompts/03-acf902d2.md",
+      "combo": "acf902d2",
+      "tags": {
+        "expression": "冷淡放空",
+        "wardrobe": "甜酷风",
+        "scene": "白色凉亭",
+        "moment": "侧身看向远处",
+        "shot": "肩部特写",
+        "lens": "28mm广角",
+        "camera": "明显高位俯拍",
+        "composition": "不对称构图",
+        "foreground": "栏杆",
+        "light": "午后侧逆光",
+        "palette": "青绿+米白+少量粉色花朵",
+        "state": "局部失焦"
+      },
+      "tag_list": [
+        "expression:冷淡放空",
+        "wardrobe:甜酷风",
+        "scene:白色凉亭",
+        "moment:侧身看向远处",
+        "shot:肩部特写",
+        "lens:28mm广角",
+        "camera:明显高位俯拍",
+        "composition:不对称构图",
+        "foreground:栏杆",
+        "light:午后侧逆光",
+        "palette:青绿+米白+少量粉色花朵",
+        "state:局部失焦"
+      ]
+    },
+    {
+      "file": "prompts/04-65ceb86d.md",
+      "combo": "65ceb86d",
+      "tags": {
+        "expression": "抬眼看远处",
+        "wardrobe": "度假风",
+        "scene": "荷叶下方",
+        "moment": "低头整理裙摆",
+        "shot": "超近景脸部局部",
+        "lens": "50mm自然透视",
+        "camera": "人物腰部以下低机位",
+        "composition": "大面积水面",
+        "foreground": "水面反光",
+        "light": "穿过树叶形成的细碎光影",
+        "palette": "水蓝+白+灰",
+        "state": "轻微运动模糊"
+      },
+      "tag_list": [
+        "expression:抬眼看远处",
+        "wardrobe:度假风",
+        "scene:荷叶下方",
+        "moment:低头整理裙摆",
+        "shot:超近景脸部局部",
+        "lens:50mm自然透视",
+        "camera:人物腰部以下低机位",
+        "composition:大面积水面",
+        "foreground:水面反光",
+        "light:穿过树叶形成的细碎光影",
+        "palette:水蓝+白+灰",
+        "state:轻微运动模糊"
+      ]
+    },
+    {
+      "file": "prompts/05-aa2f7335.md",
+      "combo": "aa2f7335",
+      "tags": {
+        "expression": "闭眼感受风",
+        "wardrobe": "后妈风",
+        "scene": "现代玻璃花房",
+        "moment": "被风吹乱头发后抬手整理",
+        "shot": "膝上中景",
+        "lens": "28mm广角",
+        "camera": "倾斜 Dutch Angle",
+        "composition": "建筑几何切割画面",
+        "foreground": "门框",
+        "light": "局部过曝高光",
+        "palette": "雨后灰蓝+湿润绿色",
+        "state": "自然抓拍"
+      },
+      "tag_list": [
+        "expression:闭眼感受风",
+        "wardrobe:后妈风",
+        "scene:现代玻璃花房",
+        "moment:被风吹乱头发后抬手整理",
+        "shot:膝上中景",
+        "lens:28mm广角",
+        "camera:倾斜 Dutch Angle",
+        "composition:建筑几何切割画面",
+        "foreground:门框",
+        "light:局部过曝高光",
+        "palette:雨后灰蓝+湿润绿色",
+        "state:自然抓拍"
+      ]
+    },
+    {
+      "file": "prompts/06-e88542c2.md",
+      "combo": "e88542c2",
+      "tags": {
+        "expression": "被抓拍时的自然停顿",
+        "wardrobe": "Y2K风",
+        "scene": "湖边石阶",
+        "moment": "正准备起身",
+        "shot": "超近景脸部局部",
+        "lens": "35mm环境人像",
+        "camera": "平视抓拍",
+        "composition": "透视引导线构图",
+        "foreground": "玻璃反射",
+        "light": "背景高亮人物稍暗",
+        "palette": "青绿+米白+少量粉色花朵",
+        "state": "自然颗粒"
+      },
+      "tag_list": [
+        "expression:被抓拍时的自然停顿",
+        "wardrobe:Y2K风",
+        "scene:湖边石阶",
+        "moment:正准备起身",
+        "shot:超近景脸部局部",
+        "lens:35mm环境人像",
+        "camera:平视抓拍",
+        "composition:透视引导线构图",
+        "foreground:玻璃反射",
+        "light:背景高亮人物稍暗",
+        "palette:青绿+米白+少量粉色花朵",
+        "state:自然颗粒"
+      ]
+    },
+    {
+      "file": "prompts/07-439988ba.md",
+      "combo": "439988ba",
+      "tags": {
+        "expression": "短暂失神",
+        "wardrobe": "甜酷风",
+        "scene": "便利店冰柜",
+        "moment": "刚刚坐下",
+        "shot": "半身环境人像",
+        "lens": "35mm环境人像",
+        "camera": "从人物背后拍",
+        "composition": "从植物缝隙窥视",
+        "foreground": "花瓣",
+        "light": "白墙反射光",
+        "palette": "深绿+奶白+肤色",
+        "state": "边缘高光溢出"
+      },
+      "tag_list": [
+        "expression:短暂失神",
+        "wardrobe:甜酷风",
+        "scene:便利店冰柜",
+        "moment:刚刚坐下",
+        "shot:半身环境人像",
+        "lens:35mm环境人像",
+        "camera:从人物背后拍",
+        "composition:从植物缝隙窥视",
+        "foreground:花瓣",
+        "light:白墙反射光",
+        "palette:深绿+奶白+肤色",
+        "state:边缘高光溢出"
+      ]
+    },
+    {
+      "file": "prompts/08-1d282cef.md",
+      "combo": "1d282cef",
+      "tags": {
+        "expression": "轻轻眯眼",
+        "wardrobe": "Old Money风",
+        "scene": "芦苇湖边",
+        "moment": "用巨大荷叶挡太阳",
+        "shot": "肩部特写",
+        "lens": "85mm压缩人像",
+        "camera": "从巨大荷叶下方仰拍",
+        "composition": "前景占画面三分之一",
+        "foreground": "透明塑料帘",
+        "light": "人物处在明暗交界",
+        "palette": "水蓝+白+灰",
+        "state": "摄影师偶然捕捉"
+      },
+      "tag_list": [
+        "expression:轻轻眯眼",
+        "wardrobe:Old Money风",
+        "scene:芦苇湖边",
+        "moment:用巨大荷叶挡太阳",
+        "shot:肩部特写",
+        "lens:85mm压缩人像",
+        "camera:从巨大荷叶下方仰拍",
+        "composition:前景占画面三分之一",
+        "foreground:透明塑料帘",
+        "light:人物处在明暗交界",
+        "palette:水蓝+白+灰",
+        "state:摄影师偶然捕捉"
+      ]
+    },
+    {
+      "file": "prompts/09-ccbefd3a.md",
+      "combo": "ccbefd3a",
+      "tags": {
+        "expression": "轻轻眯眼",
+        "wardrobe": "纯欲风",
+        "scene": "老式火车车厢",
+        "moment": "经过镜头时被偶然捕捉",
+        "shot": "半身环境人像",
+        "lens": "85mm压缩人像",
+        "camera": "隔着植物侧拍",
+        "composition": "极端留白",
+        "foreground": "树叶",
+        "light": "傍晚低角度逆光",
+        "palette": "雨后灰蓝+湿润绿色",
+        "state": "自然抓拍"
+      },
+      "tag_list": [
+        "expression:轻轻眯眼",
+        "wardrobe:纯欲风",
+        "scene:老式火车车厢",
+        "moment:经过镜头时被偶然捕捉",
+        "shot:半身环境人像",
+        "lens:85mm压缩人像",
+        "camera:隔着植物侧拍",
+        "composition:极端留白",
+        "foreground:树叶",
+        "light:傍晚低角度逆光",
+        "palette:雨后灰蓝+湿润绿色",
+        "state:自然抓拍"
+      ]
+    },
+    {
+      "file": "prompts/10-596a84ee.md",
+      "combo": "596a84ee",
+      "tags": {
+        "expression": "若有所思",
+        "wardrobe": "极简冷淡风",
+        "scene": "乡间浅溪",
+        "moment": "风吹起头发",
+        "shot": "肩部特写",
+        "lens": "28mm广角",
+        "camera": "从肩后越肩视角",
+        "composition": "门框式框景",
+        "foreground": "湿润树枝",
+        "light": "水面反射补光",
+        "palette": "蓝天+翠绿+白色",
+        "state": "自然抓拍"
+      },
+      "tag_list": [
+        "expression:若有所思",
+        "wardrobe:极简冷淡风",
+        "scene:乡间浅溪",
+        "moment:风吹起头发",
+        "shot:肩部特写",
+        "lens:28mm广角",
+        "camera:从肩后越肩视角",
+        "composition:门框式框景",
+        "foreground:湿润树枝",
+        "light:水面反射补光",
+        "palette:蓝天+翠绿+白色",
+        "state:自然抓拍"
+      ]
+    }
+  ]
+}
