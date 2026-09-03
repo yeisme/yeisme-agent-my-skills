@@ -26,7 +26,15 @@ eikona --version
 eikona init --user --agent
 ```
 
-2. 选择 Eikona model ref：
+2. 先列出代码已适配的模型，再复制网关准确 ID。不要把空 `models.lock` 或未配置 channel 当成未适配：
+
+```bash
+eikona models list --source adapted --all --agent
+eikona models list --source adapted --provider openai --all
+eikona auth list --agent
+```
+
+3. 选择 Eikona model ref：
    - GPT Image 默认使用 `openai/gpt-5.4-image-2`。
    - bare 短别名 `gpt-5.4-image-2` / `gpt-image-2` 已在 Eikona 0.6.0 从主入口移除；所有配置与证据只写 slash canonical ref（v1 handoff 域保留独立 alias policy）。
    - 对 GPT Image，provider-colon 和重复 provider 前缀形式一律在联网前拒绝；不要为 canonical ref 添加 provider 前缀。
@@ -35,7 +43,7 @@ eikona init --user --agent
    - OpenRouter 使用 `openrouter:<exact-model-id>`。
    - 前缀表示 Eikona adapter，不表示营销名称；不要把 `Nano Banana Pro` 自动改写成任何猜测 ID。
 
-3. 只通过 stdin 保存 key。未显式传入 `--config` 时，Eikona 默认把 channel 和 local secret 写入用户级 `~/.eikona/`；Agent 应启动该命令并把用户提供的 key 写入进程 stdin，不能把 key 放入参数、项目文件或 shell credential script。人工终端可运行：
+4. 只通过 stdin 保存 key。未显式传入 `--config` 时，Eikona 默认把 channel 和 local secret 写入用户级 `~/.eikona/`；Agent 应启动该命令并把用户提供的 key 写入进程 stdin，不能把 key 放入参数、项目文件或 shell credential script。人工终端可运行：
 
 ```bash
 read -rsp 'Gateway API key: ' EIKONA_API_KEY; echo
@@ -65,7 +73,7 @@ unset EIKONA_API_KEY
 
 provider-colon、重复 provider 前缀或未知 model ref 是歧义错误形式，必须在联网前失败；canonical slash ref 可直接提交。
 
-4. 读取脱敏状态并注册当前项目：
+5. 读取脱敏状态并注册当前项目：
 
 ```bash
 eikona auth check gateway --agent
@@ -74,7 +82,7 @@ eikona projects register . --agent
 eikona models readiness openai/gpt-5.4-image-2 --channel gateway --agent
 ```
 
-5. 先把纯文生图作为独立基线。只有用户任务需要参考图、且用户同意潜在费用时，才继续验证参考输入；不要把三种能力混成一次 smoke：
+6. 先把纯文生图作为独立基线。只有用户任务需要参考图、且用户同意潜在费用时，才继续验证参考输入；不要把三种能力混成一次 smoke：
 
 | 能力 | Eikona 请求 | 首选接口 | 结论 |
 | --- | --- | --- |
@@ -94,7 +102,7 @@ eikona generate --use-channel gateway --model openai/gpt-5.4-image-2 --ref ./ref
 eikona generate --use-channel gateway --model openai/gpt-5.4-image-2 --ref style=./reference.png --reference-mode generate --size 2k --aspect 16:9 --prompt "Create a new product page using only the reference's visual language." --agent
 ```
 
-6. 根据网关协议做真实 smoke generation。GPT Image 的 OpenAI Images-compatible 示例：
+7. 根据网关协议做真实 smoke generation。GPT Image 的 OpenAI Images-compatible 示例：
 
 ```bash
 eikona "minimal geometric product image, white background, no text" \
@@ -129,7 +137,7 @@ eikona "minimal geometric product image, white background, no text" \
   --agent
 ```
 
-7. smoke 成功后，把视觉任务交给 `eikona-product-asset-director` 或匹配的垂直场景 director。切换项目时只需在新项目运行：
+8. smoke 成功后，把视觉任务交给 `eikona-product-asset-director` 或匹配的垂直场景 director。切换项目时只需在新项目运行：
 
 ```bash
 eikona projects register . --agent

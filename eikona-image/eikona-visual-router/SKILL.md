@@ -59,6 +59,15 @@ description: Use when the user explicitly requests Eikona/eikona visual generati
 8. 尺寸参数按 provider 控制方式处理：付费 OpenAI/gateway 原生参数路径在用户未指定尺寸时统一使用 `--size 2k` 或 runbook `size: 2k`；用户明确给出其他 size 时原样设置，不换算、不降级。`codex:imagegen` 是 `prompt_instruction` 路径，推荐不写 `--size 1k`，由 runtime 自动向提示词注入 1K 约束；只有确需指定受支持画布时才保留显式 `--size` 并接受 warning。请求 2k/4k 会在提交前失败，这是通道上限。比例继续用 `--aspect` 单独表达，不能用 1024/1536 示例替代 2K 请求。
 9. 不从最终 prompt 文本反向推断 provider 权限或 typed controls。用户说“不要付费”“使用参考图”“编辑背景”“竖版 2K”时，router 必须把这些决定映射到明确的 model/channel、reference mode、canvas 或 execution policy；若无法安全映射，就保留为未决输入而不是让 provider 自行猜测。
 
+选模型前先分清「代码已适配」和「本机已配置」。缺凭据不得说成模型未适配：
+
+```bash
+eikona models list --source adapted --all --agent
+eikona models list --source adapted --provider openai --all
+eikona models default show --agent
+eikona auth list --agent
+```
+
 新的 Eikona 调用默认绑定用户级 channel，不依赖项目内复制的 credential 或 `.env`：
 
 ```bash

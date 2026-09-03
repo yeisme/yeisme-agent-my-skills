@@ -46,7 +46,19 @@ eikona config env --all --json
 
 These commands may expose variable names, sensitivity, set/unset state, source, and precedence, but never values. Ordinary Agents must not call `eikona auth env` because it is an advanced raw secret-export surface.
 
-After configuration, a user may authorize the explicit non-generating probe:
+After configuration, inspect adapted models and local channel defaults before any probe. Missing credentials are configuration status, not lack of adapter support:
+
+```bash
+eikona models list --source adapted --all --agent
+eikona models list --source adapted --provider openai --all
+eikona models default show --agent
+eikona auth list --agent
+eikona providers show openai --agent
+```
+
+Bare `eikona models list` reads `models.lock` (`--source manifest`). An empty manifest is not an empty adapter catalog; next action is `--source adapted`. `auth list` shows channel `default_model` values, not every adapted model.
+
+A user may then authorize the explicit non-generating probe:
 
 ```bash
 eikona doctor --channel openai --model openai/gpt-5.4-image-2 --probe --agent

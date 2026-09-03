@@ -21,7 +21,7 @@ anatomia analyze file --file /absolute/path/demo.mp4 --to ./anatomia-output/demo
 
 | Skill | 一句话 |
 | --- | --- |
-| `anatomia-video-analysis-router` | 登录并分析一个已授权本地视频 |
+| `anatomia-video-analysis-router` | 登录并分析一个已授权本地视频；不列 Provider/模型 catalog |
 | `anatomia-video-evidence-navigator` | 对已登记 ref 问一个有界问题 |
 | `anatomia-storyboard-reviewer` | 校验并冻结分镜 revision |
 | `anatomia-asset-handoff-builder` | 准备 package 并交给下游 owner |

@@ -1,6 +1,6 @@
 # Commands
 
-Released CLI only. Ordinary users hold a service endpoint and a key file; they do not configure provider credentials.
+Released CLI only. Ordinary users hold a service endpoint and a key file; they do not configure provider credentials. Do not run `anatomia models list` or `anatomia provider list` on this path; those commands belong to the owner-only self-hosted operator.
 
 ```
 anatomia login --endpoint https://anatomia.example.com --key-file /absolute/private/anatomia-access.key

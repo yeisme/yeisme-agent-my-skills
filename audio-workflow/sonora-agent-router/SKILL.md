@@ -21,9 +21,12 @@ Use `--json` only when the task needs full nested capabilities, strategy compari
 | --- | --- |
 | Workspace readiness | `sonora doctor --agent` |
 | Initialize a project | `sonora init --project . --agent` |
-| Provider status | `sonora provider list --agent` |
-| Full provider capability matrix | `sonora tts providers list --json` |
-| Voice models for one provider | `sonora tts voices list --provider <provider-id> --agent` |
+| Adapted providers plus local credential status | `sonora provider list --agent` |
+| Full TTS provider capability matrix | `sonora tts providers list --json` |
+| Built-in local TTS models | `sonora tts models list --local --agent` |
+| Voice models for one provider | `sonora tts models list --provider <provider-id> --agent` |
+| Voices for one provider | `sonora tts voices list --provider <provider-id> --agent` |
+| Music provider catalog | `sonora music providers list --json` |
 | Local fixture flow | `sonora bridge scaena plan --graph <production-graph-ref> --agent` |
 | Compile AI-drama shot audio intent | `sonora bridge scaena episode-audio compile-intent --from <handoff.json> --agent` |
 | Import AI-drama shot audio intent | `sonora bridge scaena episode-audio import-intent --from <handoff.json> --idempotency-key <key> --agent` |
@@ -31,6 +34,8 @@ Use `--json` only when the task needs full nested capabilities, strategy compari
 | Compare replacement/final mix routes | `sonora audio strategy compare --plan <language-plan-ref> --agent` |
 | Render or review receipt | `sonora render plan --plan <language-plan-ref> --voice-pack fixture --confirm --agent` |
 | Detailed strategy comparison | `sonora audio strategy compare --plan <language-plan-ref> --json` |
+
+`provider list` 同时给出代码 catalog 与本地 credential 状态，不访问远程 provider。`credential_missing` 不是未适配。`tts models list --local` 只列内建本地模型生命周期，不代表已部署或可渲染。测试 provider 不进入 `provider list`。
 
 ## Remote Safety
 

@@ -33,11 +33,13 @@ description: Use when an agent building a website, application, documentation si
 
 1. 只读检查项目框架、页面、现有视觉 token、资产目录、目标尺寸和 `.gitignore`。确认参考素材权限，不把未知权限素材提交给 provider。
    - 如果已有 Codex/imagegen 或设计师交付的临时图片，先加载 `eikona-asset-lifecycle`，捕获为 run artifact；不要重新生成或直接复制进项目。
-2. 注册项目并读取可用 channel：
+2. 注册项目，先看代码已适配的模型，再读本机 channel 默认值：
 
 ```bash
 eikona projects register . --agent
+eikona models list --source adapted --all --agent
 eikona auth list --agent
+eikona models default show --agent
 eikona auth check gateway --agent
 ```
 
