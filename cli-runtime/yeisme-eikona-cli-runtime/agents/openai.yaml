@@ -1,4 +1,4 @@
 interface:
   display_name: "Yeisme Eikona CLI Runtime"
-  short_description: "维护 Eikona CLI、run evidence、资产 API 与 provider runtime"
-  default_prompt: "Use $yeisme-eikona-cli-runtime to change or review cli/eikona while preserving CLI output, asset lifecycle, OpenAPI, runstore, provider, and verification contracts."
+  short_description: "配置和维护 Eikona CLI、公开安装、Skills 与 provider runtime"
+  default_prompt: "Use $yeisme-eikona-cli-runtime to bootstrap installed Eikona with eikona setup --agent or change cli/eikona while preserving public distribution, secret-safe environment discovery, CLI output, asset lifecycle, OpenAPI, runstore, provider, and verification contracts."

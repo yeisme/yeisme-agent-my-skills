@@ -1,6 +1,6 @@
 ---
 name: yeisme-eikona-cli-runtime
-description: Use when the user explicitly asks to use Eikona/eikona, or when changing, testing, reviewing, documenting, or designing Eikona CLI/runtime behavior under cli/eikona, including generation, external artifact capture, project/global asset scope, Visual Library promotion, download grants, OpenAPI/SDK contracts, prompt files, provider adapters, run evidence, project registry, replacement safety, MCP, and Go release checks.
+description: Use when the user explicitly asks to use Eikona/eikona, needs post-install setup or environment discovery, or when changing, testing, reviewing, documenting, or designing Eikona CLI/runtime behavior under cli/eikona, including public distribution, Agent Skills, generation, external artifact capture, project/global asset scope, Visual Library promotion, download grants, OpenAPI/SDK contracts, prompt files, provider adapters, run evidence, project registry, replacement safety, MCP, and Go release checks.
 ---
 
 # Yeisme Eikona CLI Runtime
@@ -9,8 +9,53 @@ Use this skill for `cli/eikona`, the headless image-generation and image-asset-m
 
 If the user explicitly says to use Eikona, `eikona`, or the Eikona CLI for image generation, this route takes precedence over generic built-in image generation tools. Enter `cli/eikona`, follow local `AGENTS.md`, and use Eikona commands such as `eikona generate ... --agent`. Only fall back to another image tool if the user explicitly changes the route or Eikona is unavailable and the user approves the fallback.
 
+## Installed-binary bootstrap
 
-## v0.6.9 current surfaces
+An installed Eikona binary is self-describing. Do not search for, clone, or require access to the private `yeisme/eikona` repository to determine environment names, configuration files, Skills, or next actions.
+
+Start every fresh Homebrew, Scoop, package, archive, or public Bash installation with:
+
+```bash
+eikona setup --agent
+```
+
+Follow `action.next`. The default setup is a no-write preview. Only after local-write authority is clear may the Agent run:
+
+```bash
+eikona setup --yes --agent
+```
+
+Setup creates only missing user configuration and installs Agent Skills from the public `https://github.com/yeisme/yeisme-dist` release that exactly matches the running released CLI. It must not fall back to latest, replace a package-manager-owned binary, accept credentials, edit shell startup files, change Codex/Claude MCP configuration, probe a provider, or generate an image. `SKILLS_RELEASE_NOT_MIRRORED` is a real public-distribution blocker; config-only recovery is:
+
+```bash
+eikona setup --yes --skip-skills --agent
+```
+
+Persistent local credentials use stdin and the user-owned auth store:
+
+```bash
+eikona auth set openai --protocol openai --api-key-stdin --agent
+```
+
+Environment discovery must remain metadata-only:
+
+```bash
+eikona config env --provider openai --agent
+eikona config env --all --json
+```
+
+These commands may expose variable names, sensitivity, set/unset state, source, and precedence, but never values. Ordinary Agents must not call `eikona auth env` because it is an advanced raw secret-export surface.
+
+After configuration, a user may authorize the explicit non-generating probe:
+
+```bash
+eikona doctor --channel openai --model openai/gpt-5.4-image-2 --probe --agent
+```
+
+Do not run `--smoke` or any generation command during bootstrap without explicit user approval for the provider/model and potential cost.
+
+
+## Current surfaces
 
 - v0.6.9 adds first-class xAI Grok Imagine **image** models on top of v0.6.7 release provenance. Product default paid image model remains `openai/gpt-5.4-image-2`. Grok **video** refs are rejected and owned by Scaena.
 - Grok Imagine image: `--model xai:grok-imagine-image` or `xai:grok-imagine-image-quality` (aliases `grok-imagine-image-pro`, `grok-imagine-image-quality-latest`, `grok-imagine-image-quality-20260403`). Official default `https://api.x.ai/v1` + `XAI_API_KEY`; a user-local channel whose name and protocol are both `xai` auto-binds; a channel named `gateway` stays explicit (`--use-channel`). Doctor/readiness may emit `endpoint_class=official|custom` without printing host or key. Map `--aspect` → `aspect_ratio`, `--size 1k|2k` → `resolution`; JSON edits only, max 3 refs. Official USD rows apply even on a custom host for known Imagine image models.
@@ -41,6 +86,7 @@ If the user explicitly says to use Eikona, `eikona`, or the Eikona CLI for image
 ## Workflow
 
 1. Start inside `cli/eikona` and read `AGENTS.md`, `README.md`, and the nearest package or command doc before editing.
+   - For an installed-binary usage or setup request, run `eikona setup --agent` first. Repository access is not a prerequisite for operating a released CLI.
    - For CLI command documentation, read `docs/commands/README.md` and the matching `docs/commands/<command>.md` first.
    - For other agents calling Eikona, read `docs/commands/agent-integration.md` first and prefer CLI `--json`/`--agent` contracts before adding MCP-only behavior.
   - For storage backup/restore work, read `docs/commands/storage.md`, `docs/runtime/storage/storage-and-projection.md`, and root `docs/workflows/local-first-backup-sync.md` before changing code or docs.
@@ -87,6 +133,7 @@ If the user explicitly says to use Eikona, `eikona`, or the Eikona CLI for image
    - project library, sessions, prompt memory, and replacement safety in their matching `internal/*` packages
    - MCP transport in `internal/mcptransport` (official SDK server over local or stateless remote backing), backing services in `internal/mcp`, and HTTP playground helpers in `internal/playground`
 5. For agent invocation design, keep the contract simple:
+   - installed-binary bootstrap is `eikona setup --agent` → review → `eikona setup --yes --agent` → `eikona auth set ... --api-key-stdin` → an explicitly authorized `doctor --probe`; do not search the private repository or infer state by parsing `~/.eikona`;
    - output mode policy: routine agent automation uses `--agent`; observing a non-terminal run uses `eikona watch <run-id> --events`; scripts/CI that need JSON use `--json --compact`; forensic debugging and compatibility audits use `--json --full`. Never route routine agents into full JSON. `--compact` or `--full` without `--json`, and `--compact --full` together, fail with `INVALID_REQUEST` before side effects. Emitted actions are normalized to the caller's output mode, and `eikona next --agent` is the unified read-only progression entry;
    - the routine closed loop is: submit with `--agent` → observe with `eikona watch <run-id> --events` → advance with `eikona next --agent` → `eikona inspect --brief --agent` → `eikona review packet --agent` → a human opens the preview/contact sheet → `eikona feedback accept|reject` or `eikona reroll` with `--agent` → `eikona assets handoff/stage/apply --agent`;
    - one-off inline generation uses `eikona "<prompt>" --agent` or `eikona generate ... --agent`; a prompt stored in a text or Markdown file uses `eikona generate --input <prompt-file> --agent` instead. `--input` and `--prompt` are mutually exclusive; use `eikona-file-prompt-workflow` for categorized directories, collection README files, templates, and runbook authoring;

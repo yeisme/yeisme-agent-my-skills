@@ -194,3 +194,7 @@ python3 scaena/scripts/validate_skills.py
 ## License
 
 聚合仓库采用 [MIT License](LICENSE)。每个独立子仓库也包含自己的许可证；产品源码仓库的可见性和许可证以对应仓库为准。
+
+## CI/CD
+
+- [模块化、分级 CI/CD](docs/ci-cd.md)：quick、full、integration、release 的触发场景、真实命令和权限边界。

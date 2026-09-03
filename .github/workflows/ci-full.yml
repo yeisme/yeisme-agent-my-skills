@@ -1,0 +1,44 @@
+# Initial project-owned scaffold from Yeisme modular CI rollout.
+name: Full CI
+
+on:
+  pull_request:
+    paths:
+      - '.github/**'
+      - 'go.mod'
+      - 'go.sum'
+      - 'package.json'
+      - 'bun.lock'
+      - 'pnpm-lock.yaml'
+      - 'Taskfile.yml'
+      - '.goreleaser.yaml'
+      - '.golangci.yml'
+      - 'openspec/**'
+      - '**/migrations/**'
+      - '**/schema/**'
+      - '**/contracts/**'
+  push:
+    branches: [main, develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  full:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Run full gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/validate_repository.py
+          python3 scripts/test_network_install.py
