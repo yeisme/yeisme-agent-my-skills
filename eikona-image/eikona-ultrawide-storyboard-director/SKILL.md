@@ -51,7 +51,7 @@ description: Use when designing ultrawide continuous-space storyboards, action b
 本地验证规划看板：
 
 ```bash
-eikona generate --model fixture:image --aspect 3:1 --size 1536x512 --input prompts/story/storyboard/night-market-conflict/prompts/01-planning-board.md --dry-run --agent
+eikona generate --model openai/gpt-5.4-image-2 --aspect 3:1 --size 1536x512 --input prompts/story/storyboard/night-market-conflict/prompts/01-planning-board.md --dry-run --agent
 ```
 
 真实生成规划看板：

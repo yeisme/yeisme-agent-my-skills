@@ -7,7 +7,7 @@ description: Use when an agent building a website, application, documentation si
 
 把产品代码、页面用途和品牌约束转成 Eikona visual brief，完成候选生成、审稿、反馈、复用和安全交付，避免 agent 为每个项目重复编写 provider 脚本。
 
-开始前读取 `cli/eikona/docs/commands/agent-operability.md` 并现场收集适用证据。`configured`、fixture 或历史快照都不能授权真实 provider run；任何非 fixture 的 `generate`、`run --background` 或 workflow execution 都需要用户对指定 provider/model 和潜在费用的明确同意。
+开始前读取 `cli/eikona/docs/commands/agent-operability.md` 并现场收集适用证据。`configured`、repository test evidence 或历史快照都不能授权真实 provider run；任何非-test-harness 的 `generate`、`run --background` 或 workflow execution 都需要用户对指定 provider/model 和潜在费用的明确同意。
 
 ## 输入
 

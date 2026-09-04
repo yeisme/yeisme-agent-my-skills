@@ -41,7 +41,7 @@ Lower authority may narrow optional choices but cannot weaken safety/readiness/r
 
 - `eikona://artifact/<id>`, `eikona://brief/<id>`, `eikona://prompt/<id>`
 - `auctra://brief/<id>`, `scaena://subject/<id>`
-- `fixture:<name>`
+- repository test-harness references (not valid installed-user/agent inputs)
 - `runs/<run_id>/<evidence_path>`
 
 ## Workflow compilation

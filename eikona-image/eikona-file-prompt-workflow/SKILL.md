@@ -28,14 +28,14 @@ description: Use when creating, organizing, reviewing, or executing Eikona image
 3. 将 brief、来源、权限和交付说明写入 `README.md`，不要写进 provider prompt。
 4. 将每个候选方向写入独立的 `prompts/NN-<direction>.md`；正文只放可提交给模型的自然语言提示。
 5. 单个候选使用 `generate --input`；多个候选使用同目录 `runbook.yaml` 的 `matrix.prompt_files` 或 `jobs[].prompt_file`。
-6. 先用 `fixture:image` 或 `--dry-run` 验证路径和展开结果，再批准真实 provider run。
+6. 先用 `--dry-run` 和 canonical model ref 验证路径和展开结果；它不提交 provider 请求。再由用户批准真实 provider run。
 7. 通过 `review packet`、`feedback` 和 `assets handoff` 完成证据链；不要手改 run-owned snapshot 或 `prompt_sources.json`。
 
 ## 单文件生成
 
 ```bash
 eikona generate \
-  --model fixture:image \
+  --model openai/gpt-5.4-image-2 \
   --input prompts/product/landing-hero/local-first-cli/prompts/01-clean-editorial.md \
   --size 1536x1024 \
   --dry-run \

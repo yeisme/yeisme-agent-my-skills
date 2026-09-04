@@ -43,33 +43,20 @@ eikona auth list --agent
    - OpenRouter 使用 `openrouter:<exact-model-id>`。
    - 前缀表示 Eikona adapter，不表示营销名称；不要把 `Nano Banana Pro` 自动改写成任何猜测 ID。
 
-4. 只通过 stdin 保存 key。未显式传入 `--config` 时，Eikona 默认把 channel 和 local secret 写入用户级 `~/.eikona/`；Agent 应启动该命令并把用户提供的 key 写入进程 stdin，不能把 key 放入参数、项目文件或 shell credential script。人工终端可运行：
+4. 只通过受保护 stdin 或已存在的 mode-0600 key file 授权保存 key。未显式传入 `--config` 时，Eikona 默认把 channel 和 local secret 写入用户级 `~/.eikona/`；Agent 不得读取、缓存或转发 key，也不能把它放入参数、项目文件或 shell credential script。用户在受保护的交互 stdin 中输入 key 后可运行：
 
 ```bash
-read -rsp 'Gateway API key: ' EIKONA_API_KEY; echo
-printf '%s\n' "$EIKONA_API_KEY" | eikona auth set gateway \
+eikona auth set gateway \
   --protocol openai \
-  --base-url https://gateway.example.com/v1 \
+  --base-url https://gateway.example.invalid/v1 \
   --api-key-stdin \
   --default-model openai/gpt-5.4-image-2 \
   --agent
-unset EIKONA_API_KEY
 ```
 
 把 `--default-model` 替换为网关公开的准确 Eikona model ref。只有用户明确要求隔离 channel 时才使用 `eikona --config <path> auth set ...`。不要运行 `eikona auth env`，因为它会把 secret 输出到 stdout。
 
-当前开发网关若 `/v1/models` 返回 `openai/gpt-5.4-image-2`，配置示例必须写成：
-
-```bash
-read -rsp 'Gateway API key: ' EIKONA_API_KEY; echo
-printf '%s\n' "$EIKONA_API_KEY" | eikona auth set gateway \
-  --protocol openai \
-  --base-url http://dev.qxtech.cc:26160/v1 \
-  --api-key-stdin \
-  --default-model openai/gpt-5.4-image-2 \
-  --agent
-unset EIKONA_API_KEY
-```
+私有或开发网关必须由用户提供其 HTTPS base URL 和准确 model ID；Skill 不得硬编码内网或明文 endpoint。其授权方式仍为受保护 stdin 或已有 mode-0600 key file，且 agent 不读取 key 内容。
 
 provider-colon、重复 provider 前缀或未知 model ref 是歧义错误形式，必须在联网前失败；canonical slash ref 可直接提交。
 

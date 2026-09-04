@@ -30,7 +30,7 @@ description: Use when designing Xiaohongshu cover images, first-frame visuals, o
 本地验证：
 
 ```bash
-eikona generate --model fixture:image --aspect 3:4 --size 1024x1536 --input prompts/xhs/cover/skincare-morning/prompts/01-clean-lifestyle.md --dry-run --agent
+eikona generate --model openai/gpt-5.4-image-2 --aspect 3:4 --size 1024x1536 --input prompts/xhs/cover/skincare-morning/prompts/01-clean-lifestyle.md --dry-run --agent
 ```
 
 真实生成：

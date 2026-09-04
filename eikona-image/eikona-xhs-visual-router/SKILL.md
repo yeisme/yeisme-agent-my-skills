@@ -20,7 +20,7 @@ description: Use when routing Xiaohongshu static visual asset requests for Eikon
    - 如果用户要的是 3:1 超宽剧情走位、动作调度、短剧预演、战役推演或转视频参考图，停止本路由并交给 `eikona-ultrawide-storyboard-director`。
 2. 将封面交给 `eikona-xhs-cover-director`，图文卡片交给 `eikona-xhs-card-series-director`，信息图交给 `eikona-xhs-infographic-director`，漫画图文交给 `eikona-xhs-comic-director`。
 3. 同时加载 `eikona-file-prompt-workflow`，要求导演输出：视觉 brief、`prompts/xhs/<asset-type>/<collection>/` 分类目录、2-3 个候选文件、runbook、review/feedback/handoff 下一步。
-4. 本地验证优先用 `fixture:image`；真实远程生成默认用 `openai/gpt-5.4-image-2`，短别名仅用于兼容输入。
+4. 本地验证用 `--dry-run` 和 `openai/gpt-5.4-image-2`，不提交 provider 请求；真实远程生成默认也用 `openai/gpt-5.4-image-2`，短别名仅用于兼容输入。
 5. 生成后必须通过 `review packet` 和 `feedback` 记录选择，不让 agent 只凭主观文字宣称“最佳”。
 
 ## 命令示例
@@ -30,7 +30,7 @@ description: Use when routing Xiaohongshu static visual asset requests for Eikon
 本地验证：
 
 ```bash
-eikona generate --model fixture:image --aspect 3:4 --size 1024x1536 --input prompts/xhs/cover/skincare-morning/prompts/01-clean-lifestyle.md --dry-run --agent
+eikona generate --model openai/gpt-5.4-image-2 --aspect 3:4 --size 1024x1536 --input prompts/xhs/cover/skincare-morning/prompts/01-clean-lifestyle.md --dry-run --agent
 ```
 
 真实生成：

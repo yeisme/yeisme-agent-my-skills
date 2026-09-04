@@ -20,7 +20,7 @@ description: Use when creating or repairing Eikona character identity sheets, su
 
 - Candidate plan：subject、view roles、wardrobe/location/prop/style variants、reference roles、candidate count。
 - Review packet：artifact refs、objective checks、missing inputs、comparison order。
-- Eikona commands：dry-run/fixture、真实 run、review、feedback、handoff。
+- Eikona commands：dry-run、真实 run、review、feedback、handoff。
 - Scaena handoff：purpose、source/preflight/correction refs、artifact refs/digests、rights、下一步 human review/freeze/consistency action。
 
 ## 工作流
@@ -46,15 +46,15 @@ description: Use when creating or repairing Eikona character identity sheets, su
 - 一个 `.md`/`.txt` 文件对应一个候选方向；runbook/prompt source/evidence 由 Eikona CLI 创建，不手写结构化 metadata。
 - Prompt 只使用允许公开给 provider 的 source facts；不要包含完整 canon、隐藏剧透、credential、provider payload 或内部推理。
 
-Eikona 默认模型使用完整 canonical ref：`openai/gpt-5.4-image-2`。`gpt-5.4-image-2` 与 `gpt-image-2` 是接受的短别名；历史 `openai/gpt-5.4-image-2` 只作为兼容输入。网关其他模型必须复制 `/v1/models` 的完整 ID；`openai/gpt-5.4-image-2` 是禁止的歧义形式。
+本工作流唯一接受并推荐的默认模型 ref 是 `openai/gpt-5.4-image-2`。必须拒绝 bare `gpt-5.4-image-2`、`gpt-image-2` 以及 provider-colon、重复前缀和下划线变体，并给出该 canonical ref 作为修复提示；不得用“兼容”或“历史”措辞把这些输入引回新命令、prompt 文件、runbook 或 evidence。
 
-### 4. 先 fixture/dry-run，再真实生成
+### 4. 先 dry-run，再真实生成
 
 进入 `cli/eikona`，读取本地 `AGENTS.md`，确认实际命令 help。输出模式：例行自动化用 `--agent`；非终态 run 用 `eikona watch <run_id> --events` 观察；脚本/CI 用 `--json --compact`（共存期内裸 `--json` 仍是 legacy full）；取证用 `--json --full`。单个 prompt 文件：
 
 ```bash
 eikona generate \
-  --model fixture:image \
+  --model openai/gpt-5.4-image-2 \
   --input prompts/scaena/subject-candidate/<subject-ref>/prompts/01-candidate-a.md \
   --size 2k \
   --aspect 2:3 \
@@ -91,17 +91,15 @@ eikona models readiness openai/gpt-5.4-image-2 --channel openai --agent
 eikona providers doctor openai --channel openai --model openai/gpt-5.4-image-2 --probe --agent
 ```
 
-用户级 channel 尚未配置时，必须显式提示用户通过 stdin 保存 key；不要隐式读取 `OPENAI_API_KEY`，也不要推荐 `--from-env OPENAI_API_KEY`：
+用户级 channel 尚未配置时，必须显式提示用户通过受保护 stdin 或已有 mode-0600 key file 保存 key；不要隐式读取 `OPENAI_API_KEY`，也不要推荐 `--from-env OPENAI_API_KEY`。Agent 不得读取、缓存或转发 key：
 
 ```bash
-read -rsp 'OpenAI-compatible API key: ' EIKONA_API_KEY; echo
-printf '%s\n' "$EIKONA_API_KEY" | eikona auth set openai \
+eikona auth set openai \
   --protocol openai \
-  --base-url http://dev.qxtech.cc:26160/v1 \
+  --base-url https://openai-compatible.example.invalid/v1 \
   --api-key-stdin \
   --default-model openai/gpt-5.4-image-2 \
   --agent
-unset EIKONA_API_KEY
 ```
 
 `PROVIDER_UNAVAILABLE`、`PROVIDER_AUTH_MISSING` 或 readiness degraded 时必须保留原始失败 run 和 reference lineage；
