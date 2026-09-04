@@ -54,7 +54,7 @@ description: Use when routing Chinese creative-writing, screenplay, AI drama, se
 - 小红书多阶段任务 → `xhs-orchestrator`；单篇、标题、爆款结构、热点、素材拆帖、个人品牌分别交给对应 `xhs-*` worker。
 - Twitter/X 个人品牌、账号矩阵、Newsletter 转化 → `twitter-personal-brand-growth`；不要把字母 X 误判为小红书。
 - 短视频/播客/直播/公众号 → `short-video-scriptwriter`、`podcast-scriptwriter`、`livestream-scriptwriter`、`wechat-article-writer`。
-- 已有中文/英文稿件去 AI 味、润色、声音校准或终稿清理 → `natural-writing-editor`；不要默认叠加多个完整 humanizer 流程。
+- 已有中文/英文稿件去 AI 味、润色、声音校准或终稿清理 → `natural-writing-editor`；其中英文虚构叙事与工程类专业文体（release notes、postmortem、tickets、PR 回复、技术文章）的深度去 AI 味由其 `sepia` 参考层按需加载，不另派 owner；不要默认叠加多个完整 humanizer 流程。
 - 跨格式或多阶段项目 → `creative-writing-orchestrator`。
 
 ## 严格失败条件

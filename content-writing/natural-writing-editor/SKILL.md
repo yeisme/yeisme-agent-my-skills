@@ -79,6 +79,8 @@ description: Use when diagnosing, rewriting, polishing, translating, or giving a
 - `humanizer-zh` 仅在用户明确要求 Humanizer、24 类模式盘点或独立专项审阅时按需加载；不要再叠加一次全文改写。
 - `de-AI-writing` 保留为第三方对照 canary，不与本 skill 默认并行处理同一稿件。
 - `good-writing` 只用于用户明确要求的作者风格研究；不得复制其范文表达，也不作为通用默认风格。
+- `sepia`（`.skills/imported/text-writing/sepia/`，可经 `scripts/skills.sh resolve sepia` 定位）只在第一方分类未覆盖的层按需加载，单次任务按其路由表最多读 1–3 个 reference 文件：英文虚构叙事，或叙事稿 `structural` scope 架构级诊断 → `narrative-pass` → `discourse-pass` → `style-pass`，诊断配 `rubric`；工程专业文体（release notes、PR/issue 回复、postmortem、tickets、技术文章）→ `professional-pass` 加对应 `domains/<venue>`；模型指纹定位 → `model-fingerprints`，且绝不从文本反推模型，无法确认时报告 unknown；仅在用户显式叠加 voice/style skill 时追加 `voice-skills`。
+- `sepia` 分支不与本 skill 叠加全文改写：同一稿件只有一条主编辑流，`sepia` 只在虚构架构、工程 venue 或模型指纹层作为事实方法源；中文普通散文默认不触发 `sepia`；`sepia` 无法定位时直接降级为本 skill 完整流程。
 - 维护、升级或纳入新的社区方案时读取 [references/community-evidence.md](references/community-evidence.md)，先通过来源、许可证、冲突和回归检查，再决定是否吸收规则。
 
 ## 边界

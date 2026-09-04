@@ -1,6 +1,6 @@
 # 社区方案证据与纳入策略
 
-核验日期：2026-08-19。所有来源按精确提交审阅；本 skill 是第一方原创综合，不复制未授权提示词、范文或大型词表。
+核验日期：2026-08-19；2026-09-04 增补核验 sepia。所有来源按精确提交审阅；本 skill 是第一方原创综合，不复制未授权提示词、范文或大型词表。
 
 ## 已审阅来源
 
@@ -14,8 +14,11 @@
 | [av8d-levelup/voice-guard-zhtw](https://github.com/av8d-levelup/voice-guard-zhtw) | `8f2eceee24d362be268b37ac2f08074382d746eb` | MIT | 作者主动保护层、机械召回与人工判断分层 | AI 指数不作为质量结论，繁中地域规则不设为全局默认 |
 | [ruodou233/de-ai-taste](https://github.com/ruodou233/de-ai-taste) | `2a7c9154e8d48354a7ddf9778bb17ac2c62dd20d` | MIT | 信号需满足门槛、语境豁免、正式建议与观察项分开 | 不复制其大规模信号库，不自动执行更新检查 |
 | [OUBIGFA/De-AI-Prompt-Enhancer-Writer-Booster-SKILL](https://github.com/OUBIGFA/De-AI-Prompt-Enhancer-Writer-Booster-SKILL) | `b050eefa88af3709ec24fc0b353740ccb151f563` | 未声明 | 仅作为用户指定的行为对照和 canary | 不复制提示词、范文、规则文本或脚本 |
+| [Nanako0129/sepia](https://github.com/Nanako0129/sepia) | `0326635aa2cee589e6f525af1ec6089d51944f3c` | MIT | 虚构叙事三遍架构协议+30 特征 rubric（StoryScope 实证）、工程 venue 域规则、分模型指纹，作为按需参考层 | 不安装 4 个 operation wrapper 与 plugin 包装；不复制其文本进第一方；不从文本反推作者模型；不把检测器分数当验收 |
 
 `.skills/imported/text-writing/good-writing/` 同样缺少明确上游许可证且含完整参考范文，只允许用户明确要求时本地按需研究，不进入默认运行时，也不把范文内容转写到第一方 skill。
+
+`.skills/imported/text-writing/sepia/` 通过 `scripts/skills.sh import` 只引入 canonical 单目录（SKILL.md + references + LICENSE），不进 profile、不出现在默认运行时；由本 skill 的「与社区技能的关系」条款按文本类型触发加载，中文普通散文默认不触发。
 
 ## 纳入新社区方案的门槛
 
@@ -32,6 +35,7 @@
 ## 维护决策
 
 - 相同目的的完整 humanizer 默认只保留一个 active primary；
+- `sepia` 保持源层参考定位：升级须换钉新提交并重走本门槛，wrapper 与 plugin 包装始终不引入；
 - 社区词表只用于召回，不成为硬性规则；
 - 高星数和热度只是候选信号，不代表规则正确；
 - 没有许可证的仓库只能做行为层观察，不能复制内容；
