@@ -1,17 +1,18 @@
 {
-  "schema_version": "iconic-landmark-poster/1.0",
+  "schema_version": "iconic-landmark-poster/1.1",
   "city": "london",
   "series": {
     "id": "iconic-landmark",
     "no": 1
   },
-  "combo": "c5cf2e39",
   "aspect": "2:3",
   "model": "openai/gpt-5.4-image-2",
   "images": [
     {
       "file": "prompts/01-london-big-ben.md",
-      "combo": "c5cf2e39",
+      "variant": "base",
+      "label": null,
+      "combo": "1f9813a9",
       "tags": [
         "series:iconic-landmark",
         "series.no:001",
@@ -34,7 +35,68 @@
         "palette.accent:pale-gold",
         "use:cover",
         "use:poster",
-        "use:print"
+        "use:print",
+        "variant:base"
+      ]
+    },
+    {
+      "file": "prompts/02-london-big-ben-cover-title-space.md",
+      "variant": "cover-title-space",
+      "label": "封面刊头留白版：上半天空更干净，为杂志刊头/封面标题预留呼吸空间",
+      "combo": "01b09cd7",
+      "tags": [
+        "series:iconic-landmark",
+        "series.no:001",
+        "geo.city:london",
+        "geo.country:united-kingdom",
+        "layout:photo-vector-split",
+        "aspect:2:3",
+        "palette.family:morandi-warm",
+        "palette.paper:warm-ivory",
+        "component:photography",
+        "component:vector-deconstruction",
+        "component:archival-typography",
+        "landmark:big-ben",
+        "landmark:palace-of-westminster",
+        "landmark:river-thames",
+        "palette.accent:dusty-rose",
+        "palette.accent:pale-peach",
+        "palette.accent:fog-blue",
+        "palette.accent:charcoal-navy",
+        "palette.accent:pale-gold",
+        "use:cover",
+        "variant:cover-title-space"
+      ]
+    },
+    {
+      "file": "prompts/03-london-big-ben-blue-hour.md",
+      "variant": "blue-hour",
+      "label": "蓝调时刻版：进入 Blue Hour，建筑泛光点亮，整体偏深海军蓝调",
+      "combo": "25739952",
+      "tags": [
+        "series:iconic-landmark",
+        "series.no:001",
+        "geo.city:london",
+        "geo.country:united-kingdom",
+        "layout:photo-vector-split",
+        "aspect:2:3",
+        "palette.family:morandi-warm",
+        "palette.paper:warm-ivory",
+        "component:photography",
+        "component:vector-deconstruction",
+        "component:archival-typography",
+        "landmark:big-ben",
+        "landmark:palace-of-westminster",
+        "landmark:river-thames",
+        "palette.accent:midnight-blue",
+        "palette.accent:dusty-rose",
+        "palette.accent:fog-blue",
+        "palette.accent:charcoal-navy",
+        "palette.accent:pale-gold",
+        "use:cover",
+        "use:poster",
+        "use:print",
+        "variant:blue-hour"
       ]
     }
   ]

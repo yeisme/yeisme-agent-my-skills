@@ -52,5 +52,39 @@
     "subtitle": "LONDON, UNITED KINGDOM",
     "footer": "PALACE OF WESTMINSTER"
   },
-  "negative_extra": ["卡通Big Ben", "Q版伦敦", "儿童插画", "霓虹伦敦", "Big Ben比例错误", "钟楼弯曲", "钟面缺失", "错误哥特结构", "重复钟楼", "伦敦眼抢占主体", "廉价旅游明信片风格"]
+  "negative_extra": ["卡通Big Ben", "Q版伦敦", "儿童插画", "霓虹伦敦", "Big Ben比例错误", "钟楼弯曲", "钟面缺失", "错误哥特结构", "重复钟楼", "伦敦眼抢占主体", "廉价旅游明信片风格"],
+  "variants": [
+    {
+      "id": "cover-title-space",
+      "label": "封面刊头留白版：上半天空更干净，为杂志刊头/封面标题预留呼吸空间",
+      "overrides": {
+        "photo": {
+          "hero_placement": "Big Ben / Elizabeth Tower 位于画面视觉中心偏右、略微下移，完整塔身清晰可见，从底部一直延伸至顶部尖塔，不裁切，严格保持伊丽莎白塔真实建筑比例",
+          "clouds": "极少量英国特有的层状云，天空大面积干净平缓，为封面刊头与标题预留充足负空间，不能阴沉",
+          "sky_gradient": "淡灰蓝 → 柔和雾紫 → 浅桃粉 → 微暖金色的平缓自然渐变，过渡更柔和"
+        },
+        "vector": {
+          "sun": "Big Ben 后方偏左加入一个更大、更淡的半透明几何圆形太阳，使用非常柔和的英国雾粉色 / Dusty Rose / Pale Peach；圆形部分被 Big Ben 与议会大厦遮挡；不使用真实太阳纹理"
+        },
+        "tags": { "use": ["cover"] }
+      }
+    },
+    {
+      "id": "blue-hour",
+      "label": "蓝调时刻版：进入 Blue Hour，建筑泛光点亮，整体偏深海军蓝调",
+      "overrides": {
+        "photo": {
+          "time": "伦敦 Blue Hour 蓝调时刻，天色已转深蓝",
+          "sky_gradient": "深灰蓝 → 雾紫 → 暗桃粉 → 地平线一线微暖金色的自然渐变",
+          "clouds": "少量深色层状云，夜空通透不阴沉",
+          "rim_light": "建筑泛光已点亮，Big Ben 钟面发出柔和暖光，塔身边缘保留细腻金色轮廓光",
+          "quality": "真实伦敦旅行摄影，premium architectural photography，blue hour cityscape，真实石材纹理，自然 HDR，高动态范围，4K"
+        },
+        "tags": {
+          "palette": { "accents": ["midnight-blue", "dusty-rose", "fog-blue", "charcoal-navy", "pale-gold"] }
+        },
+        "negative_extra": ["夜空死黑", "灯光过曝成光斑"]
+      }
+    }
+  ]
 }

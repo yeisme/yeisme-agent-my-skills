@@ -7,21 +7,21 @@ description: "Use when an agent operates the Eikona MCP beyond ordinary image ge
 
 The Eikona MCP tool surface is intentionally compact: `eikona.search` (read-only
 card retrieval) and `eikona.execute` (one allowlisted `action` + `args` per
-call). 78 actions live behind `eikona.execute`. This skill routes an intent to
-the right action in the fewest calls. Ordinary image generation and editing
+call). This skill routes an intent to the right action in the fewest calls.
+Ordinary image generation and editing
 stay in `eikona-mcp-image`; everything else starts here.
 
-## First-call verification (mandatory, once per session)
+## Current map and drift
 
-The action map below is navigation, not truth. Before the first
-`eikona.execute` of a session, confirm action names against one official
-discovery surface:
+Use the bundled action map below for ordinary routing. Do not fetch a full
+catalog or generate a card at session start. Refresh the map only after an
+actual installed-version mismatch or a typed action denial that needs
+diagnosis:
 
-1. Local `eikona` CLI present → run this skill's `scripts/card.sh`; it prints
-   the live action list with kind/lane/safety plus a digest and timestamp.
-2. Service endpoint known → `GET <service-origin>/api/v1/mcp/actions`.
-3. Neither available → use the navigation map below and treat the first typed
-   error as the correction; do not enumerate guesses.
+1. Local `eikona` CLI present → run this skill's `scripts/card.sh` on demand.
+2. Service endpoint known → read `GET <service-origin>/api/v1/mcp/actions`
+   only to resolve that demonstrated drift.
+3. Otherwise, stop on the typed denial; do not enumerate guesses.
 
 Never guess or pluralize an action name. `DeniedActionError` is returned
 identically for unknown and non-entitled actions (existence-oracle
@@ -81,10 +81,10 @@ Full per-action kind (readonly/generation/mutation) and safety columns live in
   preview variant exists (`replace.preview`, `workflow.validate`,
   `comparison.preflight`), run it before the applying call.
 
-## Card script
+## On-demand card script
 
 `scripts/card.sh` wraps `eikona mcp capabilities --json --full` (compact mode
-caps the array at a 5-item sample), prints the live action table plus
-`generated_utc`, `actions_count`, and `digest_sha256_16` of the sorted action
-names, and warns when only a sample was available. Re-run when a typed error
-suggests drift (for example after an Eikona upgrade) and compare digests.
+caps the array at a 5-item sample) and prints a live action table only when an
+actual version mismatch or typed denial requires it. It is not a per-session
+preflight. Re-run after an Eikona upgrade only when the bundled map no longer
+matches the installed action set.

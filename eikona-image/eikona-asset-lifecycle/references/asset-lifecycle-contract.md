@@ -17,7 +17,7 @@
 | Inspect | `eikona assets handoff <handle> --agent` | Stable handle, digest, MIME, dimensions, permission |
 | Curate | `eikona library save eikona://artifact/<handle> ... --agent` | Explicit collection, permission, source artifact |
 | Apply | `eikona assets apply <handle> --project ... --to ... --yes --agent` | Registered project, bounded destination, decision receipt |
-| Deliver | `POST /api/v1/artifacts/{handle}/download-grants` | Actor, project scope, expiry, path-free URL |
+| Deliver | `POST /api/v1/artifacts/{handle}/access-grants` then `GET|HEAD /api/v1/artifact-access/{token}` | Actor, project scope, expiry, path-free capability |
 
 `--agent` remains key-value and low token. `--json --compact` is the bounded script/CI envelope and `--json --full` the forensic envelope; during coexistence bare `--json` still means legacy full. Human output must explain that capture is not library promotion.
 

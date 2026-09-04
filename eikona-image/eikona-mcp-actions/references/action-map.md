@@ -1,8 +1,9 @@
 # Eikona MCP action map
 
-Navigation reference for `eikona.execute` actions. Source of truth:
-`eikona mcp capabilities --json` (or `GET /api/v1/mcp/actions`). Regenerate the
-live card with `../scripts/card.sh`; this table is navigation, not truth.
+Bundled navigation reference for current executable `eikona.execute` actions.
+It is verified against current `ActionDescriptors`; use it directly instead of
+catalog discovery at session start. Refresh with `../scripts/card.sh` only
+after an actual installed-version mismatch or typed denial requires diagnosis.
 
 Columns: `kind` = readonly / generation / mutation (server-side dispatch
 classification); `lane` = consumer / operator (remote consumer principals see
@@ -17,15 +18,15 @@ consumer actions only; unknown and non-entitled actions return the identical
 | `edit` | generation | consumer | Submit an edit run with a supplied reference image |
 | `run.batch` | generation | consumer | Submit a batch of runs in one call |
 | `wait` | generation | consumer | Wait on a run until terminal |
-| `status` | generation | consumer | Read back run status |
-| `inspect` | generation | consumer | Inspect run evidence |
+| `status` | readonly | consumer | Read back run status |
+| `inspect` | readonly | consumer | Inspect run evidence |
 | `cancel` | generation | consumer | Cancel an active run |
 | `retry` | generation | consumer | Retry a failed run |
 | `repair` | generation | consumer | Repair a stuck run |
 | `resume` | generation | consumer | Resume an interrupted run |
 | `reroll` | generation | consumer | Request more candidates for a run |
-| `trace.tail` | generation | consumer | Tail run trace events |
-| `report` | generation | consumer | Run report projection |
+| `trace.tail` | readonly | consumer | Tail run trace events |
+| `report` | readonly | consumer | Run report projection |
 
 ## Review & feedback
 

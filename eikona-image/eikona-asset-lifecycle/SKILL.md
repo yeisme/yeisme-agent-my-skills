@@ -68,7 +68,7 @@ Use `eikona artifacts copy` only for an explicit review/export copy. It does not
 - Send `Idempotency-Key` on every REST capture. Exact retries return the original run; changed content returns `IDEMPOTENCY_CONFLICT`.
 - Read path-free instance and project projections from `/api/v1/instance` and `/api/v1/projects`.
 - Restrict project registration and root repair with `--allow-project-root`.
-- Create a short-lived grant at `POST /api/v1/artifacts/{handle}/download-grants`; download through the returned `/api/v1/downloads/{grant}` URL.
+- Create URL-first access at `POST /api/v1/artifacts/{handle}/access-grants`; consume the returned `/api/v1/artifact-access/{token}` capability without persisting it.
 
 Read [references/asset-lifecycle-contract.md](references/asset-lifecycle-contract.md) when implementing or reviewing CLI/API behavior.
 

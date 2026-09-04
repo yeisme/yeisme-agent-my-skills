@@ -11,6 +11,11 @@
         "palace-of-westminster",
         "river-thames"
       ],
+      "variants": [
+        "base",
+        "cover-title-space",
+        "blue-hour"
+      ],
       "spec": "cities/london.json",
       "combo": "c5cf2e39"
     }

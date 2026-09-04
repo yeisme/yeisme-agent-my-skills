@@ -9,9 +9,10 @@ description: Use when creating ICONIC LANDMARK SERIES premium city landmark post
 
 ## 输入
 
-- `city`：城市 spec id（`assets/cities/<id>.json`，现有 `london`）。
+- `city`：城市 spec id（`assets/cities/<id>.json`，现有 `london`，含 base + `cover-title-space` + `blue-hour` 三个变体）。
 - `aspect` / `size`：默认 2:3（`1024x1536`）。
 - 新城市：复制 london.json 改内容，不需要改代码。
+- 封面/构图变体：在 spec 的 `variants` 数组声明，渲染器深度合并后随基础版一起输出；合并规则与约束见 [references/city-spec.md](references/city-spec.md)。
 
 ## 工作流
 

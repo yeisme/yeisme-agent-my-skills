@@ -17,12 +17,13 @@
 | `palette.accent` | `palette.accent:dusty-rose` | 多 | 点缀色，每色一条 |
 | `component` | `component:photography` 等 | 固定 3 | 构成组件：摄影 / 矢量解构 / 档案排版 |
 | `use` | `use:cover` | 多 | 用途：cover / poster / print |
+| `variant` | `variant:base`、`variant:blue-hour` | 1 | 构图/封面变体；基础版恒为 `variant:base` |
 | `combo` | manifest 顶层字段 | 1 | spec 内容 sha1 前 8 位，去重与变更检测 |
 
 ## 治理规则
 
 - **值用 slug**：小写、连字符，如 `palace-of-westminster`、`charcoal-navy`；不直接放中文或空格。
 - **新增命名空间需升级技能**：先更新本文件与渲染器 `compute_tags`，再重渲受影响城市；不要在单个 manifest 里发明临时 tag。
-- **combo 即版本指纹**：spec 任何字节变化都会改变 combo；同一 `series.no` 出现两个 combo 说明 spec 被改过，审阅时以最新渲染为准。
+- **combo 即版本指纹**：基础版 combo 对 spec（不含 variants）哈希，变体 combo 再叠加 variant id；spec 任何字节变化都会改变 combo，审阅时以最新渲染为准。
 - **系列索引**：`assets/series-index.json` 由 `--reindex` 从全部城市 spec 重新生成，用于检查编号冲突与地标覆盖；索引不含 tags 全量（避免双源），查 tags 看各批次 manifest。
-- **筛选示例**：封面候选 = `use:cover`；某地标全部海报 = `landmark:big-ben`；色彩漂移审查 = 同 `series` 下对比 `palette.family` / `palette.accent`。
+- **筛选示例**：封面候选 = `use:cover`（注意封面专用变体可能只保留 `use:cover`）；同城全部候选 = `geo.city:london`；只要基础版 = `variant:base`；某地标全部海报 = `landmark:big-ben`；色彩漂移审查 = 同 `series` 下对比 `palette.family` / `palette.accent`。

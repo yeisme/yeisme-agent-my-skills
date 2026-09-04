@@ -43,12 +43,35 @@ def load_city(city_id):
         return json.load(f)
 
 
-def combo_id(city, aspect):
-    raw = json.dumps(city, ensure_ascii=False, sort_keys=True) + f"|{aspect}"
+def deep_merge(base, overrides):
+    merged = dict(base)
+    for key, value in overrides.items():
+        if isinstance(value, dict) and isinstance(merged.get(key), dict):
+            merged[key] = deep_merge(merged[key], value)
+        elif key == "negative_extra" and isinstance(value, list):
+            merged[key] = list(merged.get(key, [])) + value
+        else:
+            merged[key] = value
+    return merged
+
+
+def expand_variants(city):
+    base = {k: v for k, v in city.items() if k != "variants"}
+    posters = [("base", None, base)]
+    for variant in city.get("variants", []):
+        merged = deep_merge(base, variant.get("overrides", {}))
+        posters.append((variant["id"], variant.get("label"), merged))
+    return posters
+
+
+def combo_id(spec, aspect, variant=None):
+    raw = json.dumps(spec, ensure_ascii=False, sort_keys=True) + f"|{aspect}"
+    if variant:
+        raw += f"|{variant}"
     return hashlib.sha1(raw.encode("utf-8")).hexdigest()[:8]
 
 
-def compute_tags(city, aspect):
+def compute_tags(city, aspect, variant=None):
     palette = city["tags"]["palette"]
     tags = [
         f"series:{city['series']['id']}",
@@ -66,6 +89,7 @@ def compute_tags(city, aspect):
     tags += [f"landmark:{lm['id']}" for lm in city["landmarks"]]
     tags += [f"palette.accent:{a}" for a in palette["accents"]]
     tags += [f"use:{u}" for u in city["tags"]["use"]]
+    tags.append(f"variant:{variant or 'base'}")
     return tags
 
 
@@ -160,28 +184,40 @@ EST.
 
 
 def write_outputs(city, args):
-    combo = combo_id(city, args.aspect)
-    tags = compute_tags(city, args.aspect)
     out = Path(args.out)
     prompts_dir = out / "prompts"
     prompts_dir.mkdir(parents=True, exist_ok=True)
 
-    hero = next(lm for lm in city["landmarks"] if lm["role"] == "hero")
-    filename = f"01-{city['id']}-{hero['id']}.md"
-    (prompts_dir / filename).write_text(
-        render_prompt(city, args.aspect), encoding="utf-8"
-    )
+    posters = expand_variants(city)
+    prompt_files, images = [], []
+    for i, (variant_id, variant_label, spec) in enumerate(posters, start=1):
+        combo = combo_id(spec, args.aspect, variant=variant_id)
+        tags = compute_tags(spec, args.aspect, variant=variant_id)
+        hero = next(lm for lm in spec["landmarks"] if lm["role"] == "hero")
+        suffix = f"-{variant_id}" if variant_id != "base" else ""
+        filename = f"{i:02d}-{city['id']}-{hero['id']}{suffix}.md"
+        (prompts_dir / filename).write_text(
+            render_prompt(spec, args.aspect), encoding="utf-8"
+        )
+        prompt_files.append(f"prompts/{filename}")
+        images.append(
+            {
+                "file": f"prompts/{filename}",
+                "variant": variant_id,
+                "label": variant_label,
+                "combo": combo,
+                "tags": tags,
+            }
+        )
+        print(f"[{combo}] {variant_id}: {' / '.join(t for t in tags if t.startswith(('variant:', 'geo.')))}")
 
     manifest = {
-        "schema_version": "iconic-landmark-poster/1.0",
+        "schema_version": "iconic-landmark-poster/1.1",
         "city": city["id"],
         "series": city["series"],
-        "combo": combo,
         "aspect": args.aspect,
         "model": "openai/gpt-5.4-image-2",
-        "images": [
-            {"file": f"prompts/{filename}", "combo": combo, "tags": tags}
-        ],
+        "images": images,
     }
     (out / "manifest.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
@@ -196,9 +232,11 @@ def write_outputs(city, args):
         f"  size: {args.size}  # {args.aspect} portrait; adjust per provider",
         "matrix:",
         "  prompt_files:",
-        f"    - prompts/{filename}",
+    ]
+    lines += [f"    - {p}" for p in prompt_files]
+    lines += [
         "limits:",
-        "  max_jobs: 1",
+        f"  max_jobs: {len(prompt_files)}",
         "  max_parallel: 1",
         "  allow_unknown_cost: false",
         "  fail_fast: true",
@@ -207,8 +245,7 @@ def write_outputs(city, args):
         "",
     ]
     (out / "runbook.yaml").write_text("\n".join(lines), encoding="utf-8")
-    print(f"[{combo}] {city['city']['name']} -> {out}")
-    print("tags: " + " / ".join(tags))
+    print(f"wrote {len(prompt_files)} prompt(s) + manifest.json + runbook.yaml -> {out}")
 
 
 def reindex():
@@ -216,17 +253,22 @@ def reindex():
     for path in sorted(CITIES_DIR.glob("*.json")):
         with path.open(encoding="utf-8") as f:
             city = json.load(f)
+        base = {k: v for k, v in city.items() if k != "variants"}
         posters.append(
             {
                 "no": city["series"]["no"],
                 "city": city["id"],
                 "name": city["city"]["name"],
                 "landmarks": [lm["id"] for lm in city["landmarks"]],
+                "variants": ["base"] + [v["id"] for v in city.get("variants", [])],
                 "spec": f"cities/{path.name}",
-                "combo": combo_id(city, "2:3"),
+                "combo": combo_id(base, "2:3"),
             }
         )
     posters.sort(key=lambda p: p["no"])
+    numbers = [p["no"] for p in posters]
+    if len(numbers) != len(set(numbers)):
+        raise SystemExit(f"duplicate series.no in city specs: {sorted(numbers)}")
     index = {
         "schema_version": "iconic-landmark-series/1.0",
         "series": "iconic-landmark",
