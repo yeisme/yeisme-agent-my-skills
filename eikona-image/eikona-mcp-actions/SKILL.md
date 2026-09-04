@@ -13,7 +13,7 @@ stay in `eikona-mcp-image`; everything else starts here.
 
 ## Current map and drift
 
-Use the bundled v0.7.6 action map (77 actions) for ordinary routing. Do not
+Use the bundled v0.7.7 action map (77 actions) for ordinary routing. Do not
 fetch a full catalog or generate a card at session start. Refresh the map only
 after an actual installed-version mismatch or a typed action denial that needs
 diagnosis:

@@ -98,7 +98,7 @@ eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --input ./pr
 - `prompt`、`prompt_file`、`prompt_ref` 在同一 defaults、matrix entry 或 job 中互斥。先 `--dry-run` 检查扩展结果，再批准真实 provider run。
 - prompt 文件是可编辑的创作输入；runbook、`prompt_sources.json`、队列和 run evidence 是结构化资产，必须通过 Eikona CLI 创建或推进，不能由 agent 直接改写。
 
-输出模式政策：例行自动化一律用 `--agent`；非终态 run 用 `eikona watch <run_id> --events` 观察，`eikona next --agent` 是统一只读推进入口；脚本/CI 需要 JSON 时用 `--json --compact`；取证/兼容性审计用 `--json --full`。共存期内裸 `--json` 仍是 legacy full，不要把例行 agent 推向 full JSON；`--compact`/`--full` 不带 `--json` 或两者同给会在副作用前报 `INVALID_REQUEST`。emitted actions 会按调用方输出模式自动归一化。
+输出模式政策：例行自动化一律用 `--agent`；非终态 run 用 `eikona watch <run_id> --events` 观察，`eikona next --agent` 是统一只读推进入口；脚本/CI 需要 JSON 时用 `--json --compact`；取证/兼容性审计用 `--json --full`。从 v0.6.0 起裸 `--json` 已是 compact 默认投影（等价 `--json --compact`），不要把例行 agent 推向 full JSON；`--compact`/`--full` 不带 `--json` 或两者同给会在副作用前报 `INVALID_REQUEST`。emitted actions 会按调用方输出模式自动归一化。
 
 ## 命令骨架
 

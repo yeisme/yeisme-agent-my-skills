@@ -1,6 +1,6 @@
-# Eikona MCP v0.7.6 action map
+# Eikona MCP v0.7.7 action map
 
-Bundled navigation reference for the 77 executable v0.7.6 `eikona.execute`
+Bundled navigation reference for the 77 executable v0.7.7 `eikona.execute`
 actions. It is verified against `ActionDescriptors`; use it directly instead
 of catalog discovery at session start. Refresh with `eikona mcp capabilities
 --json --full` or the scoped REST action endpoint only after an actual
