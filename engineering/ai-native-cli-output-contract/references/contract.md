@@ -259,9 +259,11 @@ Events:
 Explain:
 
 ```text
-结论：允许执行
-证据：error_rate=0.2% < 1%
-置信度：0.93
-推荐下一步：
+Conclusion: safe to deploy
+Evidence: error_rate=0.2% < 1%
+Confidence: 0.93
+Recommended next step:
 app deploy apply svc-a
 ```
+
+`--explain` reports default to English `Conclusion` / `Evidence` markers. Validators keep accepting the legacy Chinese markers `结论` / `证据` for CLIs whose explain surface is already a released Chinese-language artifact; new commands use English.

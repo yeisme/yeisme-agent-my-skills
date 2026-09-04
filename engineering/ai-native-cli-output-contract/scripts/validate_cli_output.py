@@ -20,6 +20,24 @@ VERSION_RE = re.compile(r"^[0-9]+\.[0-9]+(\.[0-9]+)?$")
 COMMAND_RE = re.compile(r"^[a-z][a-z0-9]*(\.[a-z][a-z0-9]*)+$")
 STATUSES = {"success", "partial", "failed"}
 MODES = {"summary", "agent", "json", "events", "explain"}
+ENVELOPE_FIELDS = {
+    "spec_version",
+    "mode",
+    "command",
+    "status",
+    "summary",
+    "facts",
+    "actions",
+    "evidence",
+    "confidence",
+    "data",
+    "error",
+}
+ERROR_FIELDS = {"code", "message", "path", "suggestion", "retryable", "details"}
+# English markers are the contract default; Chinese markers stay accepted for
+# CLIs whose explain surface is already a released Chinese-language artifact.
+EXPLAIN_CONCLUSION_MARKERS = ("Conclusion", "结论")
+EXPLAIN_EVIDENCE_MARKERS = ("Evidence", "证据")
 EVENT_TYPES = {
     "start",
     "progress",
@@ -61,6 +79,13 @@ def validate_envelope(obj: Any, expected_mode: str, expected_command: str | None
     if not isinstance(obj, dict):
         fail("JSON envelope must be an object")
 
+    unknown_fields = sorted(set(obj) - ENVELOPE_FIELDS)
+    if unknown_fields:
+        fail(
+            "unknown top-level envelope fields (keep command-specific data under 'data'): "
+            + ", ".join(unknown_fields)
+        )
+
     spec_version = require_str(obj, "spec_version")
     if not VERSION_RE.match(spec_version):
         fail("spec_version must look like 1.0 or 1.0.0")
@@ -97,12 +122,39 @@ def validate_envelope(obj: Any, expected_mode: str, expected_command: str | None
             require_str(item, "name")
             require_str(item, "command")
 
-    if status == "failed":
-        error = obj.get("error")
+    summary = obj.get("summary")
+    if summary is not None and (not isinstance(summary, str) or not summary.strip()):
+        fail("summary must be a non-empty string")
+
+    facts = obj.get("facts")
+    if facts is not None and not isinstance(facts, dict):
+        fail("facts must be an object")
+
+    evidence = obj.get("evidence")
+    if evidence is not None:
+        if not isinstance(evidence, list):
+            fail("evidence must be an array")
+        for index, item in enumerate(evidence):
+            if not isinstance(item, str):
+                fail(f"evidence[{index}] must be a string")
+
+    data = obj.get("data")
+    if data is not None and not isinstance(data, dict):
+        fail("data must be an object")
+
+    error = obj.get("error")
+    if error is not None:
         if not isinstance(error, dict):
-            fail("failed envelopes must include error object")
+            fail("error must be an object")
         require_str(error, "code")
         require_str(error, "message")
+        unknown_error_fields = sorted(set(error) - ERROR_FIELDS)
+        if unknown_error_fields:
+            fail(f"unknown error fields: {', '.join(unknown_error_fields)}")
+
+    if status == "failed":
+        if not isinstance(obj.get("error"), dict):
+            fail("failed envelopes must include error object")
 
 
 def validate_json(text: str, expected_command: str | None) -> None:
@@ -178,8 +230,17 @@ def validate_events(text: str, expected_command: str | None) -> None:
             previous_seq = seq
         events.append(event)
 
-    if events[0].get("type") != "start":
+    start = events[0]
+    if start.get("type") != "start":
         fail("events output must start with type=start")
+    start_version = start.get("spec_version")
+    if not isinstance(start_version, str) or not VERSION_RE.match(start_version):
+        fail("start event must include spec_version like 1.0")
+    start_command = start.get("command")
+    if not isinstance(start_command, str) or not COMMAND_RE.match(start_command):
+        fail("start event must include a normalized command like domain.action")
+    if expected_command and start_command != expected_command:
+        fail(f"start event command must be {expected_command}, got {start_command}")
     if events[-1].get("type") not in {"end", "error"}:
         fail("events output must end with type=end or type=error")
     final_status = events[-1].get("status")
@@ -194,9 +255,10 @@ def validate_human(text: str, mode: str) -> None:
     if stripped.startswith("{") or stripped.startswith("["):
         fail(f"{mode} output must not default to raw JSON")
     if mode == "explain":
-        for marker in ("结论", "证据"):
-            if marker not in stripped:
-                fail(f"explain output must include {marker}")
+        if not any(marker in stripped for marker in EXPLAIN_CONCLUSION_MARKERS):
+            fail("explain output must include Conclusion")
+        if not any(marker in stripped for marker in EXPLAIN_EVIDENCE_MARKERS):
+            fail("explain output must include Evidence")
 
 
 def main() -> int:
