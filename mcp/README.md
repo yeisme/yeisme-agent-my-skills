@@ -11,3 +11,9 @@ Gateway V1 角色 Skill：
 - `yeisme-mcp-gateway-peer-operator`：建立和维护单向、单跳可信 Peer。
 
 Gateway Pack 只保存 Skill name/version 引用，不携带、安装、更新或热替换 Skill 内容。
+
+MCP 操作路由与后端快路径：
+
+- `yeisme-mcp-router`：把 MCP 操作意图（eikona/gitea/gateway 后端）路由到最窄操作 skill，统一首调校验与 digest 纪律。
+- `gitea-mcp-quickstart`：gitea-mcp 紧凑面的两调用快路径（search→exec 复制 exec_example）与 guard/allowlist/错误恢复。
+- per-backend 导航卡（consumer 增补）：`yeisme-mcp-gateway-consumer/references/backends.md`，导航非真源。

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Gitea MCP Quickstart"
+  short_description: "Two-call Gitea operations: search, then exec the copied template."
+  default_prompt: "Use $gitea-mcp-quickstart to turn a Gitea intent into a gitea_mcp_search discovery call plus one gitea_mcp_exec with the copied exec_example, respecting read-only/allowlist/guard policy and recovering from typed shape errors."

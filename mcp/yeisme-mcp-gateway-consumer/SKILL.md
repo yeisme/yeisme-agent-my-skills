@@ -202,6 +202,20 @@ Interpret common failures as follows:
 - `approval_required`: operator evidence is required;
 - `budget_exceeded`: the run or output budget is exhausted.
 
+## Performance and context cost
+
+- Run `tools/list` once per session; it returns compact entries (field names
+  only). Fetch a full input schema per tool on demand via
+  `GET /v1/tools/{name}` instead of escalating discovery.
+- Prefer bounded results: pass `limit`, keep the backend's default
+  `summary`/compact view, and escalate to verbose only when the bounded view
+  cannot answer the question. Responses are budgeted (~12KB per backend).
+- For the current public backends, start from the navigation cards in
+  [references/backends.md](references/backends.md) — navigation only; live
+  `tools/list` stays authoritative.
+- After `backend_failed`/`timeout`, retry only read-only or documented
+  idempotent operations and preserve the request id.
+
 ## Boundaries and output
 
 This skill may configure a local client, run read-only diagnostics, and explain

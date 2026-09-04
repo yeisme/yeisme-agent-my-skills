@@ -1,0 +1,4 @@
+interface:
+  display_name: "Eikona MCP Actions"
+  short_description: "Route Eikona MCP intents to the right eikona.execute action."
+  default_prompt: "Use $eikona-mcp-actions to map a non-generation Eikona MCP intent (review, assets, library, workflow, delivery, comparison, evidence writeback) to the shortest allowed eikona.execute action sequence, verify action names once, and recover from typed errors."

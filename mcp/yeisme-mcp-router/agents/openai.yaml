@@ -1,0 +1,4 @@
+interface:
+  display_name: "Yeisme MCP Router"
+  short_description: "Route MCP intents to the right operating skill and verify names once."
+  default_prompt: "Use $yeisme-mcp-router to pick the narrowest operating skill for a Yeisme MCP surface (eikona, gitea-mcp, gateway backends), apply one first-call verification per session, and avoid guessed tool or action names."
