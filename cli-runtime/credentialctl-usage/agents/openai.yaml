@@ -1,0 +1,8 @@
+interface:
+  display_name: Credentialctl Usage
+  short_description: Operate credentialctl v0.3 inline sync without exposing secrets
+  default_prompt: Use credentialctl to install or manage a central user credential, sync an inline target copy safely, and keep every output redacted.
+
+policy:
+  allow_implicit_invocation: true
+
