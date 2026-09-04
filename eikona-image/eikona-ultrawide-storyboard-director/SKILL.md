@@ -22,7 +22,7 @@ description: Use when designing ultrawide continuous-space storyboards, action b
 
 ## 工作流
 
-1. 先判断是否属于 Scaena production。若是 episode/shot/cover/motion context，必须先调用 `$scaena-subject-asset-readiness`；没有 current passed preflight 时只能输出 planning/lookdev brief，不得输出 production generation command。
+1. 先判断是否属于 Scaena production。若是 episode/shot/cover/motion context，必须提供 production owner 的 current passed preflight evidence；没有该 evidence 时只能输出 planning/lookdev brief，不得输出 production generation command。
 2. 明确用途：剧情规划、动作调度、连续性检查、历史战役推演、视频镜头预演。
 3. 拆成 4-6 个时间点 beats，例如：追逐 -> 拦截 -> 近身冲突 -> 环境破坏 -> 借环境反击 -> 逃离/落点。
 4. 设计一个连续背景空间：入口、移动路径、冲突中心、遮挡物、可互动道具、出口。

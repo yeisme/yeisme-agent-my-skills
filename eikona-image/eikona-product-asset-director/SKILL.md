@@ -27,7 +27,7 @@ description: Use when an agent building a website, application, documentation si
 | UI/游戏小资产 | `ui_asset` | 尺寸、透明度、边缘质量 |
 | 文档概念图 | `docs_illustration` | 解释性、主题一致性 |
 
-小红书交给 `eikona-xhs-visual-router`，Auctra/小说内容交给 `eikona-auctra-visual-router`，连续空间分镜交给 `eikona-ultrawide-storyboard-director`。
+小红书交给 `eikona-xhs-visual-router`；Auctra/小说内容必须先提供已接受的 brief/source refs，再用 `eikona-file-prompt-workflow` 建立可追溯候选；连续空间分镜交给 `eikona-ultrawide-storyboard-director`。
 
 ## 工作流
 

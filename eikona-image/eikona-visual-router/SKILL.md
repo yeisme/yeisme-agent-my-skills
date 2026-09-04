@@ -41,8 +41,8 @@ description: Use when the user explicitly requests Eikona/eikona visual generati
 | 提供 base URL、API key、channel、模型 ID，要求安装/配置/调通 Eikona，或诊断网关是否支持编辑/参考图输入 | `eikona-gateway-bootstrap` | 用户级安全接入；分别验证纯文生图、`/images/edits` 和 `/responses` multimodal；key 只走 stdin，不进入参数或项目文件；Nano Banana 使用网关准确 ID。 |
 | 临时图片持久化、Codex/imagegen 文件回收、project/global scope、长期资产库、下载授权、资产 REST/OpenAPI | `eikona-asset-lifecycle` | 先捕获为 synthetic import run，再显式保存进 Visual Library；不得把临时文件直接当长期资产。 |
 | Web、App、docs、developer tool、landing page、hero、feature、empty state、social card、product mockup | `eikona-product-asset-director` | 从项目上下文形成 visual brief，经 Eikona review/feedback/handoff/apply 交付仓库。 |
-| Auctra accepted content、Story Bible、小说设定、创作者素材导出视觉 brief | `eikona-auctra-visual-router` | Auctra 负责内容上下文、brief、review 和 import-handoff；Eikona 负责 provider workflow、run evidence 和 artifact handoff。 |
-| Scaena 角色定妆、主体参考资产、人物一致性、服装/地点/道具/风格包、剧集/镜头/封面/动态视觉 | `scaena-subject-asset-readiness` → `eikona-subject-asset-director` | 先由 Scaena 判定 candidate-only 或 production-ready；未冻结/无 preflight 时只允许主体候选/lookdev/correction，不得直接生成剧集资产。 |
+| Auctra accepted content、Story Bible、小说设定、创作者素材导出视觉 brief | `eikona-file-prompt-workflow` | 仅从已接受的 Auctra brief/source refs 建立可追溯候选；Eikona 负责 provider workflow、run evidence 和 artifact handoff。 |
+| Scaena 角色定妆、主体参考资产、人物一致性、服装/地点/道具/风格包、剧集/镜头/封面/动态视觉 | `eikona-subject-asset-director` | 必须携带 production owner 提供的 current passed preflight evidence；未冻结/无 preflight 时只允许主体候选/lookdev/correction，不得直接生成剧集资产。 |
 | 小红书封面、3/6/9 图文卡片、信息图、漫画静态图文 | `eikona-xhs-visual-router` | 继续分派到 cover/card/infographic/comic director。 |
 | 非 Scaena 的超宽连续空间故事看板、动作调度图、影视预演、历史战役推演长卷、从看板转视频镜头 | `eikona-ultrawide-storyboard-director` | 用一个连续背景空间表达多个时间点；Scaena production context 必须先通过 subject readiness/preflight。 |
 | 单张通用图片、参考图编辑、provider 适配、run evidence、workflow/prompt deck/recipe/assessment/runtime 行为 | `yeisme-eikona-cli-runtime` | 这是 CLI/runtime owner，不替代文件提示词组织或具体创意导演。 |
@@ -51,7 +51,7 @@ description: Use when the user explicitly requests Eikona/eikona visual generati
 
 1. 判断是否已有可用 provider。付费 OpenAI/gateway 不可用且本机 Codex session 可用时，普通文生图走 `codex:imagegen` 预览回退，并明确告诉用户这是 1K preview。提供网关或用户明确要付费 2K/编辑时交给 `eikona-gateway-bootstrap`。
 2. 判断 owner：外部资产生命周期、Scaena production、产品仓库、Auctra 内容链、小红书、影视/故事看板、还是 Eikona CLI/runtime。
-3. Scaena context 先判定 purpose。episode/shot/cover/motion 必须路由 `$scaena-subject-asset-readiness`；只有 candidate/lookdev/correction 或 current passed preflight 才可继续 Eikona。
+3. Scaena context 先判定 purpose。episode/shot/cover/motion 必须提供 production owner 的 current passed preflight evidence；否则只允许 candidate/lookdev/correction，不得继续 production Eikona generation。
 4. 判断是否已有 accepted source。Auctra 来源必须先通过 Auctra review；外部临时图片先交给 `eikona-asset-lifecycle` 捕获，普通素材必须确认权限和禁用项。
 5. 选择最小 skill；需要文件落盘时同时加载 `eikona-file-prompt-workflow`，但只选择一个创意 director。当已有可复用的视觉方向或资产集合时，优先用 `eikona themes` 和 `eikona library collections` 引用既有 theme/asset refs，而不是重新描述或复制素材：先 `eikona themes list` / `eikona library collections list` 查找匹配 alias，再在 workflow 的 `theme_bindings` / `collection_bindings` 里绑定 canonical URI，让 plan 记录不可变 snapshot。
 6. 要求下游输出：visual brief、推荐命令、review packet、feedback、handoff/apply 下一步，以及 Scaena context 的 freeze/preflight/consistency 下一步。
@@ -150,7 +150,7 @@ eikona workflow import auctra -f .auctra/exports/<brief-id>.json --out .eikona/w
 - 不把 key 放入命令参数、项目文件、日志或结构化输出；配置凭据必须使用默认用户级 `eikona auth set <channel> --api-key-stdin` 流程。
 - 不猜测 Nano Banana、Gemini 或其他网关模型 ID。
 - 不把 Auctra 的 accepted canon、review 决策或 `.auctra/**` 状态手写到文件里。
-- Auctra 上下文的视觉请求优先进入 `eikona-auctra-visual-router`；不能把它降级成通用图片工具或绕过其 brief/review/export/handoff 链路。
+- Auctra 上下文的视觉请求必须保留 accepted brief/source refs，并经 `eikona-file-prompt-workflow` 建立 prompt、review 与 handoff 链路；不能降级成无来源的通用图片工具。
 - Scaena 上下文不能因“先出几张看看”直接路由 storyboard/generic generate；未通过 readiness 时只允许 non-production candidate/lookdev，并明确标注不可绑定 episode/shot。
 - 不把 Eikona accepted candidate、图片相似度或文件数量描述成 Scaena frozen/production accepted。
 - 不把用户级 runstore 的临时输出路径直接写入项目；项目落盘必须走 `assets handoff` → `assets stage` → `assets apply`。

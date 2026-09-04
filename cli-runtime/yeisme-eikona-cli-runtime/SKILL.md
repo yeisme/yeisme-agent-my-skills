@@ -159,7 +159,7 @@ Do not run `--smoke` or any generation command during bootstrap without explicit
    - REST capture requires `Idempotency-Key`, allowed roots for server-side paths, and path-free delivery grants rather than absolute runstore paths;
    - scenario prompt exploration uses `eikona prompts catalog search ... --agent`, `eikona workflow draw ... --agent`, and `eikona workflow run ... --background --agent`;
    - creative direction uses the on-demand `eikona-visual-router`, `eikona-subject-asset-director`, `eikona-xhs-*`, and `eikona-ultrawide-storyboard-director` skills for brief and prompt design; file-backed storage uses `eikona-file-prompt-workflow`; this runtime skill remains responsible for CLI contracts, evidence, provider safety, and generated artifact lifecycle;
-   - Scaena episode/shot/cover/motion generation must first pass `scaena-subject-asset-readiness`; without a current preflight, Eikona may generate only subject candidates or look-development artifacts marked non-production;
+   - Scaena episode/shot/cover/motion generation requires current passed preflight evidence supplied by its production owner; without it, Eikona may generate only subject candidates or look-development artifacts marked non-production;
    - visual scoring in automated tests belongs to the repository test harness; installed users and agents must not invoke a test-only scoring channel. A configured production scorer returns its model ref/version and explicitly indeterminate missing dimensions; an unavailable scorer fails closed with `MODEL_UNCONFIGURED`. Scores and tags remain review evidence, while acceptance still requires append-only human feedback;
    - recipe reuse uses `eikona recipes ... --agent` and supported workflow recipe inputs; preserve recipe influence, prompt/deck/style refs, version and review evidence so later edits cannot reinterpret old runs;
    - long-lived integrations can use `eikona mcp`, but ordinary CLI output remains the primary contract;
@@ -178,7 +178,7 @@ Do not run `--smoke` or any generation command during bootstrap without explicit
 - 一个 `.md` 或 `.txt` 文件对应一个可审阅的提示词方向；文件内容只包含自然语言创作提示，不包含密钥、provider payload、隐藏指令或 run metadata。
 - 对集合先执行 `eikona run -f <runbook.yaml> --dry-run --agent`，确认展开的 jobs、模型、尺寸、来源和成本限制后再执行真实 run。
 - CLI 会为单文件和 runbook job 记录 prompt source provenance 与 run-owned snapshot。不得手改 `prompt_sources.json`、snapshot、batch plan、queue 或 run evidence；通过 Eikona CLI 重建或推进它们。
-- Auctra 来源先交给 `eikona-auctra-visual-router`：只能从已接受的 brief/source refs 派生 prompt 文件；Eikona 是 Auctra 生图的默认和优先执行路径。
+- Auctra 来源必须携带已接受的 brief/source refs；只可从这些 refs 经 `eikona-file-prompt-workflow` 派生 prompt 文件。Eikona 是 Auctra 生图的默认和优先执行路径。
 
 ## Validation
 

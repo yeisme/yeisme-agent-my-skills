@@ -30,7 +30,7 @@ description: Use when creating or repairing Eikona character identity sheets, su
 - `subject_candidate` / `look_development`：要求 Auctra accepted source/brief；不要求 frozen subject，但产物必须 non-production。
 - `consistency_assessment`：要求 source shot asset 与 frozen subject/style/reference refs。
 - `correction`：要求 Scaena correction plan、source asset、finding refs 和 preserve refs。
-- `shot_visual` / `episode_visual` / `cover_visual` / `motion_visual`：若属于 Scaena production，先交给 `$scaena-subject-asset-readiness`；没有 current passed preflight 时停止。
+- `shot_visual` / `episode_visual` / `cover_visual` / `motion_visual`：若属于 Scaena production，必须提供 production owner 的 current passed preflight evidence；没有该 evidence 时停止。
 
 ### 2. 规划候选包而不是直接画剧集镜头
 
