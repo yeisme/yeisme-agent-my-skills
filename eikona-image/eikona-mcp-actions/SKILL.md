@@ -7,21 +7,25 @@ description: "Use when an agent operates the Eikona MCP beyond ordinary image ge
 
 The Eikona MCP tool surface is intentionally compact: `eikona.search` (read-only
 card retrieval) and `eikona.execute` (one allowlisted `action` + `args` per
-call). 78 actions live behind `eikona.execute`. This skill routes an intent to
-the right action in the fewest calls. Ordinary image generation and editing
+call). This skill routes an intent to the right action in the fewest calls.
+Ordinary image generation and editing
 stay in `eikona-mcp-image`; everything else starts here.
 
-## First-call verification (mandatory, once per session)
+## Current map and drift
 
-The action map below is navigation, not truth. Before the first
-`eikona.execute` of a session, confirm action names against one official
-discovery surface:
+Use the bundled v0.7.6 action map (77 actions) for ordinary routing. Do not
+fetch a full catalog or generate a card at session start. Refresh the map only
+after an actual installed-version mismatch or a typed action denial that needs
+diagnosis:
 
-1. Local `eikona` CLI present → run this skill's `scripts/card.sh`; it prints
-   the live action list with kind/lane/safety plus a digest and timestamp.
-2. Service endpoint known → `GET <service-origin>/api/v1/mcp/actions`.
-3. Neither available → use the navigation map below and treat the first typed
-   error as the correction; do not enumerate guesses.
+1. Local released `eikona` CLI present → run `eikona mcp capabilities --json
+   --full` on demand.
+2. Service endpoint known → read `GET <service-origin>/api/v1/mcp/actions`
+   only to resolve that demonstrated drift.
+3. Otherwise, stop on the typed denial; do not enumerate guesses.
+
+Do not depend on a bundled helper script: released Skill bundles intentionally
+contain only the installed Skill content.
 
 Never guess or pluralize an action name. `DeniedActionError` is returned
 identically for unknown and non-entitled actions (existence-oracle
@@ -36,13 +40,13 @@ consumer tokens never see them). Unmarked = consumer lane.
 | --- | --- |
 | Generation loop | `generate`, `edit`, `run.batch`, `wait`, `status`, `inspect`, `cancel`, `retry`, `repair`, `resume`, `reroll`, `trace.tail`, `report` |
 | Review & feedback | `review.packet`, `review.contact_sheet`, `feedback.accept`, `feedback.reject`, `feedback.needs-edit`, `feedback.reference-only`, `analyze` |
-| Assets & delivery of accepted work | `assets.handoff`, `assets.stage`, `assets.apply`, `artifact.access`, `replace.preview`, `replace.apply`, `rollback`, `export` |
+| Assets & delivery of accepted work | `assets.handoff`, `assets.stage`, `assets.apply`, `artifact.access` (op), `replace.preview`, `replace.apply`, `rollback`, `export` |
 | Visual library & style | `library.search`, `library.list`, `library.show`, `library.save`, `library.tag`, `library.update`, `library.import-url`, `library.import-runs`, `style.build-from-image`, `deck.list`, `deck.show`, `recipes.list`, `recipes.show`, `prompts.list` |
 | Workflows | `workflow.plan`, `workflow.validate`, `workflow.run`, `workflow.pack.inspect`, `workflow.submit_scaena_request`, `preview.status` |
 | Delivery pipeline | `delivery.create`, `delivery.status`, `delivery.capture`, `delivery.review`, `delivery.resume`, `delivery.cancel`, `delivery.outcome` |
 | Comparison loop | `comparison.preflight`, `comparison.start`, `comparison.status`, `comparison.inspect`, `comparison.retry_failed` |
 | Model catalog & diagnostics | `models.search`, `models.readiness`, `health` |
-| Operator diagnostics & indexing | `config.inspect` (op), `providers.doctor` (op), `projects.list` (op), `index.status` (op), `index.rebuild` (op), `worker.status` (op), `capsa.status` (op), `sync.status` (op) |
+| Operator diagnostics & indexing | `config.inspect` (op), `providers.doctor` (op), `projects.list` (op), `index.status` (op), `worker.status` (op), `capsa.status` (op), `sync.status` (op) |
 | Evidence writeback & datasets | `lifecycle.inspect` (op), `outcomes.record` (op), `reuse.record` (op), `repairs.record` (op), `dataset.build` (op), `dataset.export` (op), `bindings.confirm` |
 
 Full per-action kind (readonly/generation/mutation) and safety columns live in
@@ -73,18 +77,20 @@ Full per-action kind (readonly/generation/mutation) and safety columns live in
   lost before any `run_id` arrives, report unknown outcome and stop; never
   resubmit or claim the key reconciled the run.
 - Consume the MCP `ResourceLink` immediately. On 404/expiry, call
-  `artifact.access` once with `confirm: true` and the completed run's
-  canonical `artifact_uri`, then retry the download once.
+  `artifact.access` once only when it is advertised for the active credentials
+  and the caller is an authorized operator; send `confirm: true` and the
+  completed run's canonical `artifact_uri`, then retry the new link once. If
+  it is absent or denied, report that an operator grant or a compatible MCP
+  host is required; do not retry or probe actions.
 - Only run `models.search`, `providers.doctor` (op), or resource reads after a
   typed Eikona error says that exact information is needed.
 - Mutations report `safety: mutates_local_state_or_requires_dry_run`; when a
   preview variant exists (`replace.preview`, `workflow.validate`,
   `comparison.preflight`), run it before the applying call.
 
-## Card script
+## On-demand drift check
 
-`scripts/card.sh` wraps `eikona mcp capabilities --json --full` (compact mode
-caps the array at a 5-item sample), prints the live action table plus
-`generated_utc`, `actions_count`, and `digest_sha256_16` of the sorted action
-names, and warns when only a sample was available. Re-run when a typed error
-suggests drift (for example after an Eikona upgrade) and compare digests.
+Run `eikona mcp capabilities --json --full` or read the scoped REST action
+endpoint only after an actual version mismatch or typed denial. Neither is a
+per-session preflight. Re-check after an Eikona upgrade only when the bundled
+map no longer matches the installed action set.

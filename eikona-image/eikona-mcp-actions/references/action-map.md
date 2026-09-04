@@ -1,8 +1,10 @@
-# Eikona MCP action map
+# Eikona MCP v0.7.6 action map
 
-Navigation reference for `eikona.execute` actions. Source of truth:
-`eikona mcp capabilities --json` (or `GET /api/v1/mcp/actions`). Regenerate the
-live card with `../scripts/card.sh`; this table is navigation, not truth.
+Bundled navigation reference for the 77 executable v0.7.6 `eikona.execute`
+actions. It is verified against `ActionDescriptors`; use it directly instead
+of catalog discovery at session start. Refresh with `eikona mcp capabilities
+--json --full` or the scoped REST action endpoint only after an actual
+installed-version mismatch or typed denial requires diagnosis.
 
 Columns: `kind` = readonly / generation / mutation (server-side dispatch
 classification); `lane` = consumer / operator (remote consumer principals see
@@ -17,15 +19,15 @@ consumer actions only; unknown and non-entitled actions return the identical
 | `edit` | generation | consumer | Submit an edit run with a supplied reference image |
 | `run.batch` | generation | consumer | Submit a batch of runs in one call |
 | `wait` | generation | consumer | Wait on a run until terminal |
-| `status` | generation | consumer | Read back run status |
-| `inspect` | generation | consumer | Inspect run evidence |
+| `status` | readonly | consumer | Read back run status |
+| `inspect` | readonly | consumer | Inspect run evidence |
 | `cancel` | generation | consumer | Cancel an active run |
 | `retry` | generation | consumer | Retry a failed run |
 | `repair` | generation | consumer | Repair a stuck run |
 | `resume` | generation | consumer | Resume an interrupted run |
 | `reroll` | generation | consumer | Request more candidates for a run |
-| `trace.tail` | generation | consumer | Tail run trace events |
-| `report` | generation | consumer | Run report projection |
+| `trace.tail` | readonly | consumer | Tail run trace events |
+| `report` | readonly | consumer | Run report projection |
 
 ## Review & feedback
 
@@ -46,7 +48,7 @@ consumer actions only; unknown and non-entitled actions return the identical
 | `assets.handoff` | readonly | consumer | Path-free handoff descriptor for downstream consumers |
 | `assets.stage` | mutation | consumer | Stage an accepted asset to a local path |
 | `assets.apply` | mutation | consumer | Apply an accepted asset into a project (confirmation-gated) |
-| `artifact.access` | mutation | consumer | Reissue an artifact grant for 404/expired ResourceLink (`confirm: true`) |
+| `artifact.access` | mutation | operator | Reissue an artifact grant for 404/expired ResourceLink (`confirm: true`); requires advertised operator entitlement |
 | `replace.preview` | mutation | consumer | Preview a safe asset replacement |
 | `replace.apply` | mutation | consumer | Apply the previewed replacement |
 | `rollback` | mutation | consumer | Roll back an applied replacement |
@@ -120,7 +122,6 @@ consumer actions only; unknown and non-entitled actions return the identical
 | `providers.doctor` | readonly | operator | Provider connectivity diagnostics |
 | `projects.list` | readonly | operator | List projects |
 | `index.status` | readonly | operator | Search index status |
-| `index.rebuild` | mutation | operator | Rebuild the search index |
 | `worker.status` | readonly | operator | Worker status readback |
 | `capsa.status` | readonly | operator | Capsa sync status readback |
 | `sync.status` | readonly | operator | Sync status readback |

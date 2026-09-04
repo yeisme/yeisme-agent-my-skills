@@ -1,0 +1,4 @@
+interface:
+  display_name: "Eikona MCP 生图直达"
+  short_description: "通过 Eikona MCP 直达生成、交付与下载恢复"
+  default_prompt: "Use $eikona-mcp-image to generate an image through the configured Eikona MCP and retrieve the delivered artifact."
