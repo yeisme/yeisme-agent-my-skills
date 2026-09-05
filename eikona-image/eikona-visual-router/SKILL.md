@@ -45,6 +45,9 @@ description: Use when the user explicitly requests Eikona/eikona visual generati
 | Scaena 角色定妆、主体参考资产、人物一致性、服装/地点/道具/风格包、剧集/镜头/封面/动态视觉 | `eikona-subject-asset-director` | 必须携带 production owner 提供的 current passed preflight evidence；未冻结/无 preflight 时只允许主体候选/lookdev/correction，不得直接生成剧集资产。 |
 | 小红书封面、3/6/9 图文卡片、信息图、漫画静态图文 | `eikona-xhs-visual-router` | 继续分派到 cover/card/infographic/comic director。 |
 | 非 Scaena 的超宽连续空间故事看板、动作调度图、影视预演、历史战役推演长卷、从看板转视频镜头 | `eikona-ultrawide-storyboard-director` | 用一个连续背景空间表达多个时间点；Scaena production context 必须先通过 subject readiness/preflight。 |
+| 夏日抓拍写真批量候选、多维随机组合、批内去重、seed 复现 | `eikona-candid-photo-director` | 随机矩阵采样；正文模板在模板仓库 `solutions/image/candid-portrait-matrix`，技能只做采样与绑定。 |
+| 城市地标系列海报/封面（ICONIC LANDMARK SERIES）、城市 spec、系列编号与变体 | `eikona-iconic-landmark-poster-director` | 固定视觉系统 + 城市参数化；正文模板在模板仓库 `solutions/image/iconic-landmark-poster`。 |
+| 单镜头精调抓拍、量化机位/占幅/色板/光源、shot spec | `eikona-precision-candid-director` | 全量化单镜头；正文模板在模板仓库 `solutions/image/precision-candid-shot`，规范投递语言为英文。 |
 | 单张通用图片、参考图编辑、provider 适配、run evidence、workflow/prompt deck/recipe/assessment/runtime 行为 | `yeisme-eikona-cli-runtime` | 这是 CLI/runtime owner，不替代文件提示词组织或具体创意导演。 |
 
 ## 工作流
@@ -155,6 +158,7 @@ eikona workflow import auctra -f .auctra/exports/<brief-id>.json --out .eikona/w
 - 不把 Eikona accepted candidate、图片相似度或文件数量描述成 Scaena frozen/production accepted。
 - 不把用户级 runstore 的临时输出路径直接写入项目；项目落盘必须走 `assets handoff` → `assets stage` → `assets apply`。
 - 不把原始提示词、供应商载荷、私密素材、隐藏系统提示或完整思维链写入结构化资产。
+- 提示词正文模板的 canonical owner 是模板仓库 promptrepo 解决方案包（`data/yeisme-prompt-templates/solutions/**`）；director 技能只持有数据 spec、编译器、采样/去重/变体合并与 tags，不在技能内复制模板正文；模板改动必须走模板仓库并用 template-registry `contract refresh` 更新 digest。语言约定：编译与投递只用 `prompts/main.en.md`，`docs/template-zh-CN.md` 为人工审阅译文、不进入编译；Scaena 项目模板遵循同一约定。
 - 不新增 Eikona 默认图像模型；真实远程示例只使用 `openai/gpt-5.4-image-2`，bare aliases 和歧义变体必须拒绝。
 
 ## 验证

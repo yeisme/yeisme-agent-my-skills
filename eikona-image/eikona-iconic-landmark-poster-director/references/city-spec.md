@@ -19,6 +19,15 @@
 | `typography.title` | string[] | 两行大写主标题，如 `["LONDON", "BIG BEN"]` |
 | `typography.subtitle` / `typography.footer` | string | 副标题与底部脚注 |
 | `negative_extra` | string[] | 城市专属负面词，追加到固定基线之后 |
+| `variants` | object[] | 可选。封面/构图变体：`id`（slug，进 tags 与文件名）、`label`（审阅用中文说明）、`overrides`（按顶层字段深度合并到基础 spec） |
+
+## 变体（variants）
+
+- 变体与基础版共享视觉系统和系列编号，只通过 `overrides` 改差异字段；不要复制整份 spec。
+- 合并规则：dict 递归合并；数组与标量整体替换；唯一例外是 `negative_extra` 数组按追加合并（变体只写新增负面词）。
+- 每个变体独立 combo 哈希与 `variant:<id>` tag；基础版 tag 为 `variant:base`。
+- 变体必须遵守视觉系统（分割比例、排版槽位、风格栈不变）；`overrides` 不该触碰 `series`、`id`。典型用途：封面刊头留白、时段/色调版本、彩蛋开关。
+- 渲染输出文件名：`01-<city>-<hero>.md`（base），`NN-<city>-<hero>-<variant-id>.md`（变体按声明顺序编号）。
 
 ## 写作要点
 

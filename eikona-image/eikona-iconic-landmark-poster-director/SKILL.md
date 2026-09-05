@@ -9,9 +9,11 @@ description: Use when creating ICONIC LANDMARK SERIES premium city landmark post
 
 ## 输入
 
-- `city`：城市 spec id（`assets/cities/<id>.json`，现有 `london`）。
+- `city`：城市 spec id（`assets/cities/<id>.json`，现有 `london`，含 base + `cover-title-space` + `blue-hour` 三个变体）。
 - `aspect` / `size`：默认 2:3（`1024x1536`）。
+- `locale` / `template`：模板语言与路径覆盖；默认从模板仓库加载 `main.zh-CN.md`。
 - 新城市：复制 london.json 改内容，不需要改代码。
+- 封面/构图变体：在 spec 的 `variants` 数组声明，渲染器深度合并后随基础版一起输出；合并规则与约束见 [references/city-spec.md](references/city-spec.md)。
 
 ## 工作流
 
@@ -35,7 +37,7 @@ description: Use when creating ICONIC LANDMARK SERIES premium city landmark post
 - 上半：真实旅行摄影、中长焦压缩、golden hour 质感、前景水体、弱化远景。
 - 下半：象牙白艺术纸、大面积负空间、几何解构保留核心识别元素、极细线条、无粗黑描边、档案感而非卡通。
 - 排版：建筑事务所档案 / 博物馆图录式；固定槽位（左上系列名、左下城市大字、右上 EST、右下坐标、底部小字）。
-- 风格栈与负面词基线固定在渲染器内；城市 spec 只可追加城市专属负面词（`negative_extra`）。
+- 风格栈与负面词基线固定在模板正文内（canonical：模板仓库 `data/yeisme-prompt-templates/solutions/image/iconic-landmark-poster`，promptrepo 包，contract 声明 33 个输入）；渲染器只加载模板并绑定城市 spec，不内嵌模板。城市 spec 只可追加城市专属负面词（`negative_extra`）。
 
 详见 [references/visual-system.md](references/visual-system.md)；城市 spec 字段见 [references/city-spec.md](references/city-spec.md)。
 

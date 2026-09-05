@@ -1,0 +1,26 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "shot": "night-flash-lean-in",
+  "combo": "9ea58da9",
+  "aspect": "9:16",
+  "model": "openai/gpt-5.4-image-2",
+  "images": [
+    {
+      "file": "prompts/01-night-flash-lean-in.md",
+      "combo": "9ea58da9",
+      "tags": [
+        "style:precision-candid",
+        "shot:night-flash-lean-in",
+        "aspect:9:16",
+        "subject:east-asian-woman",
+        "lens:20mm-wide-angle",
+        "light.temperature:direct-flash",
+        "use:reference",
+        "mood:intimate",
+        "mood:spontaneous",
+        "mood:late-night"
+      ],
+      "palette": []
+    }
+  ]
+}

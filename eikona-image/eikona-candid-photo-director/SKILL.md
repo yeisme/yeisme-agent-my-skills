@@ -12,8 +12,8 @@ description: Use when generating batches of candid lifestyle photography portrai
 - `batch`：集合名（必填），即 prompt library 的 collection 层。
 - `n`：批次数量，默认 10。
 - `seed`：任意整数，默认 42；同 seed + 同参数必出同批次，用于复现与重审。
-- `lock dim=value`：锁定维度（可重复），如 `scene=盛夏荷塘`。
-- `exclude dim=value`：禁用取值（可重复），如 `palette=深蓝夜色+冷白灯光`。
+- `lock dim=value`：锁定维度（可重复），如 `scene=midsummer lotus pond`。
+- `exclude dim=value`：禁用取值（可重复），如 `palette=deep blue night + cool white lamplight`。
 - `subject` / `subject-text`：主体参数化，见下文。
 - `aspect` / `size`：默认 9:16（`1024x1536`，按 provider 能力调整）。
 
@@ -53,7 +53,7 @@ description: Use when generating batches of candid lifestyle photography portrai
 
 ## 提示词结构
 
-每张候选 = 固定主体段 + 12 维采样段 + 全局约束段，模板见 [references/prompt-template.md](references/prompt-template.md)。硬规则写进每张提示词：前景必须自然侵入画面形成明显遮挡；主色块 ≤ 3—4 个；以及全部负向约束（无影楼感、无棚拍、无直视镜头、无居中人像、无过度磨皮等）。
+提示词正文模板的 canonical 归属是模板仓库 `data/yeisme-prompt-templates/solutions/image/candid-portrait-matrix`（promptrepo 解决方案包，contract 声明 14 个输入：subject、aspect + 12 维）。编译与投递只使用 `main.en.md`（en 给 agent/模型）；`main.zh-CN.md` 是人工审阅译文，不进入编译。本技能的采样器加载该模板并把采样结果绑定为变量，不内嵌模板正文。硬规则由模板保证：前景必须自然侵入画面形成明显遮挡；主色块 ≤ 3—4 个；以及全部负向约束（无影楼感、无棚拍、无直视镜头、无居中人像、无过度磨皮等）。绑定约定见 [references/prompt-template.md](references/prompt-template.md)。
 
 ## 不要做
 

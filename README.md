@@ -2,6 +2,8 @@
 
 Yeisme 开源 Skills 聚合仓库。它提供跨项目 Skill 的发现入口，并通过 Git submodule 挂载具备独立产品边界、发布节奏和维护责任的 Skills 仓库。
 
+创作共创的在研规格见 [creative-grilling-owner-session-v1](openspec/changes/creative-grilling-owner-session-v1/proposal.md)：复用小说与做剧专用 Frontier，连接可恢复的 owner 会话。当前仅完成规格与任务设计，新增 binding 尚未实现。
+
 ## 获取
 
 ```bash

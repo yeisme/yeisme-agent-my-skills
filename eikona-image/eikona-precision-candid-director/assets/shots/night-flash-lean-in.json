@@ -1,0 +1,41 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "id": "night-flash-lean-in",
+  "label": "深夜公寓直闪俯身贴镜：20mm 广角畸变，日韩深夜快照美学",
+  "aspect": "9:16",
+  "orientation": "Vertical",
+  "subject": {
+    "id": "east-asian-woman",
+    "pronoun": "She",
+    "description": "an adult East Asian woman indoors at night, long messy dark hair with wispy bangs, soft pink makeup, slightly flushed cheeks, glossy natural lips",
+    "pose": "bending forward toward the camera, upper body leaning close to the lens, shoulders slightly drawn inward, both knees slightly bent, hands naturally resting near her thighs",
+    "expression": "large moist eyes looking directly into the camera",
+    "wardrobe": "a light gray white lace camisole with thin straps and white mid calf socks"
+  },
+  "camera": {
+    "position": "slightly above eye level and extremely close to her face",
+    "lens": "20mm wide angle",
+    "perspective": "strong perspective distortion",
+    "framing": "her face large in the upper center of the frame while her body recedes downward"
+  },
+  "light": {
+    "key": "Direct on camera flash, bright pale skin highlights, hard compact shadows",
+    "temperature": "direct-flash"
+  },
+  "background": "dim ordinary apartment background, dark wooden floor, slightly underexposed surroundings",
+  "atmosphere": "giving a spontaneous intimate snapshot feeling",
+  "quality": [
+    "Real smartphone flash photography",
+    "Japanese Korean late night snapshot aesthetic",
+    "natural skin texture",
+    "slight grain",
+    "subtle motion softness",
+    "imperfect framing"
+  ],
+  "negative": ["studio lighting", "beauty filter"],
+  "tags": {
+    "use": ["reference"],
+    "mood": ["intimate", "spontaneous", "late-night"]
+  },
+  "tail": ["photorealistic"]
+}

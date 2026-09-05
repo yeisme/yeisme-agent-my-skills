@@ -1,0 +1,52 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "id": "night-bedroom-lookback",
+  "label": "夜晚卧室回眸：暖灯 + 城市冷光双光源，床面低机位",
+  "aspect": "9:16",
+  "orientation": "Vertical",
+  "subject": {
+    "id": "east-asian-woman",
+    "pronoun": "She",
+    "description": "an adult East Asian woman with long slightly messy black hair",
+    "pose": "lying on her stomach across a rumpled bed at night, turning her head back toward the camera",
+    "expression": "soft moist eyes and slightly parted lips",
+    "wardrobe": "a white floral lace camisole and light gray lounge shorts"
+  },
+  "camera": {
+    "height": "about 55 cm from the mattress",
+    "lens": "35mm",
+    "framing": "subject occupies about 68% of the frame, cropped from upper thighs upward"
+  },
+  "foreground": {
+    "elements": "A blurred notebook and laptop",
+    "coverage": "about 15% of the lower foreground"
+  },
+  "light": {
+    "key": "Warm bedside lamp from frame left at about 45 degrees",
+    "fill": "cool city window light from frame right",
+    "temperature": "mixed-warm-cool"
+  },
+  "palette": [
+    { "color": "warm cream", "pct": 40 },
+    { "color": "dark brown-black", "pct": 25 },
+    { "color": "cool blue-gray", "pct": 20 },
+    { "color": "skin tone", "pct": 15 }
+  ],
+  "fingerprints": [
+    "city lights outside the large window",
+    "photo collage on the wall",
+    "plush toy near the pillow"
+  ],
+  "atmosphere": "intimate lived-in bedroom atmosphere",
+  "quality": [
+    "Natural skin texture",
+    "shallow depth of field",
+    "subtle film grain",
+    "realistic candid photography"
+  ],
+  "negative": ["collage", "split screen"],
+  "tags": {
+    "use": ["reference", "cover"],
+    "mood": ["intimate", "lived-in"]
+  }
+}

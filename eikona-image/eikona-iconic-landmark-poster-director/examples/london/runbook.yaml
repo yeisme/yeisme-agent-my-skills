@@ -7,8 +7,10 @@ defaults:
 matrix:
   prompt_files:
     - prompts/01-london-big-ben.md
+    - prompts/02-london-big-ben-cover-title-space.md
+    - prompts/03-london-big-ben-blue-hour.md
 limits:
-  max_jobs: 1
+  max_jobs: 3
   max_parallel: 1
   allow_unknown_cost: false
   fail_fast: true

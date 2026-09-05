@@ -1,6 +1,6 @@
 # ICONIC LANDMARK SERIES 视觉系统
 
-固定系统，所有城市共享。唯一实现来源是 `scripts/render_poster.py` 的模板；本文档供审阅。改系统必须改渲染器并同步本文档，且会影响所有城市的 combo 哈希（视为新版本）。
+固定系统，所有城市共享。模板正文的 canonical 归属是模板仓库 `data/yeisme-prompt-templates/solutions/image/iconic-landmark-poster`（promptrepo 解决方案包，contract 声明 33 个输入）。编译与投递只使用 `main.en.md`（en 给 agent/模型）；`main.zh-CN.md` 是人工审阅译文，不进入编译。`scripts/render_poster.py` 只负责加载模板、绑定城市 spec、变体合并与 tags，不内嵌模板正文。本文档供审阅。改视觉系统必须改模板仓库的 `main.en.md`（并用 template-registry `contract refresh` 更新 digest）并同步本文档。
 
 ## 版式
 
@@ -42,7 +42,7 @@
 
 风格栈（固定）：Swiss International Style + British modernism + Bauhaus + Mid-century travel poster + architectural editorial illustration + museum exhibition graphic design + Japanese minimalism + Scandinavian graphic design。
 
-负面词基线（固定）：赛博朋克、未来城市、3D渲染、黏土风、油画、水彩、粗黑描边、过度饱和、强HDR、建筑透视错误、密集游客、大量汽车、杂乱背景、文字乱码。城市 spec 通过 `negative_extra` 追加城市专属项（如「伦敦眼抢占主体」）。
+负面词基线（固定，英文）：cyberpunk、futuristic city、3D render、clay style、oil painting、watercolor、thick black outlines、oversaturation、heavy HDR、architectural perspective errors、dense tourists、heavy traffic、cluttered background、garbled text。城市 spec 通过 `negative_extra` 追加城市专属项（如 `London Eye stealing the subject`）。
 
 ## 系列一致性检查
 

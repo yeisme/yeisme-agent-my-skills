@@ -6,16 +6,16 @@ defaults:
   size: 1024x1536  # closest portrait size for 9:16; adjust per provider
 matrix:
   prompt_files:
-    - prompts/01-fe884623.md
-    - prompts/02-d75a22f1.md
-    - prompts/03-acf902d2.md
-    - prompts/04-65ceb86d.md
-    - prompts/05-aa2f7335.md
-    - prompts/06-e88542c2.md
-    - prompts/07-439988ba.md
-    - prompts/08-1d282cef.md
-    - prompts/09-ccbefd3a.md
-    - prompts/10-596a84ee.md
+    - prompts/01-92cf7a58.md
+    - prompts/02-58017126.md
+    - prompts/03-1cb35491.md
+    - prompts/04-3b363803.md
+    - prompts/05-21a9ea38.md
+    - prompts/06-a36337a5.md
+    - prompts/07-b04ff4e4.md
+    - prompts/08-136a9b3d.md
+    - prompts/09-f081b138.md
+    - prompts/10-15f97435.md
 limits:
   max_jobs: 10
   max_parallel: 1

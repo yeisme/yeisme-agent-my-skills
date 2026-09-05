@@ -1,0 +1,4 @@
+interface:
+  display_name: "Eikona Precision Candid Director"
+  short_description: "Render precision-parameterized candid shot prompts with tags"
+  default_prompt: "Use $eikona-precision-candid-director to render a fully-specified candid shot prompt from a shot spec, with quantified camera, palette and lighting parameters, namespaced tags, and a runbook for Eikona generation."

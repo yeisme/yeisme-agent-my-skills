@@ -1,0 +1,47 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "shot": "night-bedroom-lookback",
+  "combo": "3ccd45c5",
+  "aspect": "9:16",
+  "model": "openai/gpt-5.4-image-2",
+  "images": [
+    {
+      "file": "prompts/01-night-bedroom-lookback.md",
+      "combo": "3ccd45c5",
+      "tags": [
+        "style:precision-candid",
+        "shot:night-bedroom-lookback",
+        "aspect:9:16",
+        "subject:east-asian-woman",
+        "lens:35mm",
+        "light.temperature:mixed-warm-cool",
+        "palette.primary:warm-cream",
+        "fingerprint:city-lights-outside-the-large-window",
+        "fingerprint:photo-collage-on-the-wall",
+        "fingerprint:plush-toy-near-the-pillow",
+        "use:reference",
+        "use:cover",
+        "mood:intimate",
+        "mood:lived-in"
+      ],
+      "palette": [
+        {
+          "color": "warm cream",
+          "pct": 40
+        },
+        {
+          "color": "dark brown-black",
+          "pct": 25
+        },
+        {
+          "color": "cool blue-gray",
+          "pct": 20
+        },
+        {
+          "color": "skin tone",
+          "pct": 15
+        }
+      ]
+    }
+  ]
+}

@@ -16,6 +16,7 @@ import argparse
 import hashlib
 import json
 import random
+import re
 import sys
 from pathlib import Path
 
@@ -114,36 +115,41 @@ def sample_batch(matrix, n, seed, locks, excludes):
     return batch
 
 
-PROMPT_TEMPLATE = """# 候选 {index:02d} — {combo}
-
-## 目标
-
-真实生活摄影抓拍写真，{aspect} 竖幅，现代东方夏日写真，极强摄影质感。
-
-## 主体
-
-{subject}。{wardrobe}穿搭。
-
-## 画面
-
-{scene}。{moment}，{expression}。
-{shot}，{lens}，{camera}，{composition}。
-前景：{foreground}。前景必须自然侵入画面，形成明显遮挡，不要所有元素都完整展示。
-光线：{light}。色彩：{palette}。画面最多保留 3—4 个主要色块，避免五颜六色。
-摄影状态：{state}。
-
-## 禁用
-
-不要影楼感，不要商业棚拍，不要标准网红摆拍，不要人物直视镜头，不要常规居中人像，不要复杂道具，不要繁杂背景，不要过度磨皮，不要塑料皮肤。
-"""
+SOLUTION_ID = "candid-portrait-matrix"
 
 
-def render_prompt(pick, index, subject, aspect):
-    combo = combo_id(pick)
-    body = PROMPT_TEMPLATE.format(
-        index=index, combo=combo, aspect=aspect, subject=subject, **pick
+def find_repository():
+    for base in [Path.cwd(), *Path.cwd().parents]:
+        if (base / "data" / "yeisme-prompt-templates" / "repository.json").exists():
+            return base / "data" / "yeisme-prompt-templates"
+    raise SystemExit(
+        "template repository not found; run from the yeisme-agent workspace or pass --template"
     )
-    return combo, body
+
+
+def load_template(locale, override=None):
+    path = Path(override) if override else (
+        find_repository() / "solutions" / "image" / SOLUTION_ID / "prompts" / f"main.{locale}.md"
+    )
+    if not path.exists():
+        raise SystemExit(f"template not found: {path}")
+    return path.read_text(encoding="utf-8")
+
+
+def render_prompt(pick, subject, aspect, locale, template_override=None):
+    template = load_template(locale, template_override)
+    bindings = {"subject": subject, "aspect": aspect, **pick}
+
+    def substitute(match):
+        name = match.group(1)
+        if name not in bindings:
+            raise SystemExit(f"template variable not bound by sampler: {name}")
+        return bindings[name]
+
+    rendered = re.sub(r"\{\{\s*([a-z_0-9]+)\s*\}\}", substitute, template)
+    if "{{" in rendered:
+        raise SystemExit("unresolved template variable remains after binding")
+    return combo_id(pick), rendered
 
 
 def write_outputs(matrix, batch, args, subject_desc):
@@ -153,7 +159,7 @@ def write_outputs(matrix, batch, args, subject_desc):
 
     prompt_files, images = [], []
     for i, pick in enumerate(batch, start=1):
-        combo, body = render_prompt(pick, i, subject_desc, args.aspect)
+        combo, body = render_prompt(pick, subject_desc, args.aspect, args.locale, args.template)
         filename = f"{i:02d}-{combo}.md"
         (prompts_dir / filename).write_text(body, encoding="utf-8")
         prompt_files.append(f"prompts/{filename}")
@@ -231,6 +237,8 @@ def main():
     parser.add_argument("--n", type=int, default=defaults["n"])
     parser.add_argument("--aspect", default=defaults["aspect"])
     parser.add_argument("--size", default=defaults["size"])
+    parser.add_argument("--locale", default="en", help="template locale: en (default, compile/delivery); zh-CN is a human-review translation only")
+    parser.add_argument("--template", help="override template path; default from the yeisme-prompt-templates repository")
     parser.add_argument("--subject", default=defaults["subject"], help="subject id from matrix.json")
     parser.add_argument("--subject-text", help="inline subject description override")
     parser.add_argument("--lock", action="append", help="pin a dimension, e.g. scene=盛夏荷塘 (repeatable)")
