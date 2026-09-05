@@ -1,0 +1,4 @@
+interface:
+  display_name: "Template Registry Agent Operator"
+  short_description: "Compile confirmed inputs into portable prompt packages"
+  default_prompt: "Use $template-registry-agent-operator to select a template, import sources, confirm decisions, compile, and export a verified prompt package."
