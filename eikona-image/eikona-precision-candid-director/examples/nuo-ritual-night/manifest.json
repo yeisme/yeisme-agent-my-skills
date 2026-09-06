@@ -1,0 +1,29 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "shot": "nuo-ritual-night",
+  "combo": "488e8e7e",
+  "aspect": "9:16",
+  "model": "openai/gpt-5.4-image-2",
+  "images": [
+    {
+      "file": "prompts/01-nuo-ritual-night.md",
+      "combo": "488e8e7e",
+      "tags": [
+        "style:precision-candid",
+        "shot:nuo-ritual-night",
+        "aspect:9:16",
+        "subject:east-asian-woman",
+        "lens:50mm",
+        "light.temperature:torch-flash-warm",
+        "use:reference",
+        "mood:eerie",
+        "mood:folk-horror",
+        "mood:sensual",
+        "theme:ethnic-minority",
+        "theme:mountains",
+        "theme:night"
+      ],
+      "palette": []
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "shot": "sweet-professional-headshot",
+  "combo": "8cac08e9",
+  "aspect": "9:16",
+  "model": "openai/gpt-5.4-image-2",
+  "images": [
+    {
+      "file": "prompts/01-sweet-professional-headshot.md",
+      "combo": "8cac08e9",
+      "tags": [
+        "style:precision-candid",
+        "shot:sweet-professional-headshot",
+        "aspect:9:16",
+        "subject:east-asian-woman",
+        "lens:85mm-portrait",
+        "light.temperature:soft-diffused",
+        "use:reference",
+        "use:cover",
+        "mood:sweet",
+        "mood:elegant",
+        "mood:professional",
+        "theme:headshot",
+        "theme:workplace"
+      ],
+      "palette": []
+    }
+  ]
+}

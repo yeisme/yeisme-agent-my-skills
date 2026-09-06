@@ -19,6 +19,8 @@ Use `--json` only when the task needs full nested capabilities, strategy compari
 
 | Intent | Command |
 | --- | --- |
+| Discover installed commands | `sonora commands suggest "<intent>" --agent` |
+| Discover product Skills | `sonora skills list --agent` / `sonora skills suggest "<intent>" --agent` |
 | Workspace readiness | `sonora doctor --agent` |
 | Initialize a project | `sonora init --project . --agent` |
 | Adapted providers plus local credential status | `sonora provider list --agent` |

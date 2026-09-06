@@ -1,0 +1,16 @@
+schema_version: eikona.batch.v1
+goal: "precision candid shot sweet-professional-headshot"
+defaults:
+  kind: image.generate
+  model: openai/gpt-5.4-image-2
+  size: 1024x1536  # 9:16 portrait; adjust per provider
+matrix:
+  prompt_files:
+    - prompts/01-sweet-professional-headshot.md
+limits:
+  max_jobs: 1
+  max_parallel: 1
+  allow_unknown_cost: false
+  fail_fast: true
+policy:
+  approval_required: true

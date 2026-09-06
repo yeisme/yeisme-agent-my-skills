@@ -24,7 +24,7 @@ against the MCP surface directly.
 | Build or change a self-built MCP server under this repository | `yeisme-mcp-builder` | Author-side minimal-tool-face and token-budget rules |
 | Add/update a backend in `mcp/registry.json` | `yeisme-mcp-registry-onboarding` | Registry onboarding governance |
 | Configure Codex against the Gateway | `codex-agent-runtime` | Gateway-rendered client config, tool-name mapping |
-| scaena mcp operations | *(pending)* | Operating skill lands with the scaena owner wave; until then use `scaena mcp` docs in `agent/scaena` and the same verification discipline |
+| scaena mcp operations | `scaena mcp capabilities --json` then `tools/list` | Current diagnostic entry is `scaena mcp doctor` / `scaena mcp capabilities`; confirm live names before execute. Dedicated operating skill remains later; do not invent tool names |
 
 Gateway source maintenance (`yeisme-mcp-gateway-maintainer`), peering
 (`yeisme-mcp-gateway-peer-operator`), and publishing
@@ -38,6 +38,10 @@ replaces them.
    against the live surface before the first execute:
    - eikona: `eikona-mcp-actions` `scripts/card.sh` (`eikona mcp capabilities
      --json --full`) or `GET /api/v1/mcp/actions`;
+   - scaena: `scaena mcp capabilities --json` then one `tools/list`;
+   - sonora: `sonora mcp capabilities --json` or `sonora.search` with
+     `types:["command"]`;
+   - anatomia: `anatomia mcp doctor --json` then `anatomia mcp capabilities --json`;
    - gateway backends: one `tools/list` (compact; full schema per tool via
      `GET /v1/tools/{name}` only when needed);
    - gitea-mcp: the catalog `search` itself is discovery — never skip it.

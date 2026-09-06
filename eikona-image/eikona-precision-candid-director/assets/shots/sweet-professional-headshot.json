@@ -1,0 +1,63 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "id": "sweet-professional-headshot",
+  "label": "甜美职场女性大头照：面部细节模板，超近景贴脸特写",
+  "aspect": "9:16",
+  "orientation": "Vertical",
+  "genre": "ultra-close-up facial portrait photograph",
+  "subject": {
+    "id": "east-asian-woman",
+    "pronoun": "She",
+    "description": "a sweet young adult East Asian professional woman with a clear, gentle, luminous presence — polished workplace elegance with youthful sweetness",
+    "pose": "facing the camera directly with her head straight, in an extreme close-up where her face nearly fills the frame",
+    "expression": "her clear round almond eyes looking directly into the lens — steady, focused, gentle and sincere, with a quiet thoughtful stillness, never vacant, never provocative",
+    "wardrobe": "a simple, refined soft ivory blouse with a clean professional collar, minimalist workplace elegance in a fresh quiet palette"
+  },
+  "sections": [
+    {
+      "heading": "Face shape",
+      "body": "a full, smooth, narrow oval face with softly rounded contours — medium length, moderately narrow width, extremely smooth contour lines with no bony angles and high soft-tissue coverage; a broad rounded forehead with a natural hairline; full smooth temples with no hollows; no outward cheekbone flare; gently full, naturally even apple cheeks; a soft mid-face transition; a full steady nasal base; a clean nasolabial area with no grooves; a soft, clear, firm jawline with an extremely softened rounded angle and a small rounded chin — light, delicate bone structure, youthful and refined, highly photogenic."
+    },
+    {
+      "heading": "Features",
+      "body": "small, delicate, well-proportioned features; natural deep gray-brown soft brows with a low gentle arc, fine real hair texture at the brow head, a barely-there peak, and softly tapered tails; clear round almond eyes, symmetric in frontal view, moderately long with a rounded vertical opening, softly rounded inner corners with a gentle epicanthus, smoothly slightly lifted outer corners, a graceful narrow fan-shaped double eyelid, a softly curving lower lid, full rounded aegyo-sal that stays clear and never puffy, large dark-brown irises with a bright translucent quality; individually defined natural lashes, light clustered curls above, fine and clear below; a delicate small straight nose with a subtly upturned tip, the bridge narrow and clean, the tip small and refined, nostrils fully hidden; small petal-shaped lips with a defined cupid's bow, a slightly thin gently lifted upper lip with a subtle lip bead, a full rounded lower lip, corners naturally straight with a faint lift — no pouting, no forced wide smile."
+    },
+    {
+      "heading": "Skin and makeup",
+      "body": "fair, luminous, naturally warm skin with an eggshell-fine texture — a high-finish sheer cream complexion keeping faint healthy pores and real skin texture, with a soft natural-focus feel, never heavy or cakey, never oily or wet-looking; restrained delicate highlights on the mid-face, nose bridge, nose tip, and aegyo-sal; extremely light contouring only beside the nose and along the jawline, dimension coming from natural bone transitions and soft shading; a breathable polished no-makeup look suited to the workplace — low-saturation nude-apricot and soft earthy pink-brown eye tones, a very fine inner eyeliner, the outer line kept thin and natural without exaggerated extension, a soft matte beige-pink brightening on the aegyo-sal, an extremely soft peach-pink blush blended under the eyes for a natural flush, and low-saturation peach-oolong lips in a semi-matte finish with a slightly deeper center and a softly blurred edge."
+    },
+    {
+      "heading": "Hair and earrings",
+      "body": "deep black-tea naturally wavy long hair, soft, voluminous and healthy with a rounded crown; the front sides are braided into delicate small side braids swept back and secured above and behind the ears, revealing the clear open forehead and the entire face, with soft fuzzy baby hairs along the hairline and temples naturally framing the face; the remaining hair falls smoothly along the shoulders without covering any feature; a pair of tiny cinnabar-red round bead stud earrings — a restrained, luminous accent that never steals the face and never disturbs the clean sweet mood."
+    }
+  ],
+  "camera": {
+    "position": "at extremely close range, nearly touching the face",
+    "lens": "85mm portrait",
+    "framing": "the face filling almost the entire frame, head straight and centered, both eyes at the visual center, an intensely face-dominant composition with an intimate breathing presence"
+  },
+  "light": {
+    "key": "Soft, pure indoor diffused light from slightly above the front, spreading evenly across the forehead, nose bridge, and eyes, with clear gentle catchlights in the eyes and almost no hard shadow edges on the face",
+    "temperature": "soft-diffused"
+  },
+  "background": "heavily blurred and darkened into a soft low-saturation neutral tone, letting the fair skin, rosy lips, and the red earrings stand out",
+  "palette_text": "warm ivory skin, soft peach, apricot beige, tea brown, muted neutral gray",
+  "atmosphere": "a clean, gentle, quietly intelligent sweetness with polished workplace poise",
+  "quality": [
+    "high-end beauty portrait photography",
+    "real human skin texture",
+    "individual eyelashes",
+    "individual hair strands",
+    "soft natural-focus rendering",
+    "high dynamic range",
+    "4K",
+    "ultra detailed"
+  ],
+  "negative": ["school-uniform or campus-student look", "cold distant expression", "mature dominant styling", "heavy dramatic makeup", "influencer-style exaggeration", "plastic over-smoothed skin", "oily high-shine skin", "pouting", "forced wide smile", "harsh shadow cuts across the face", "vacant lifeless eyes", "watermarks", "logos", "text errors"],
+  "tail": ["photorealistic"],
+  "tags": {
+    "use": ["reference", "cover"],
+    "mood": ["sweet", "elegant", "professional"],
+    "theme": ["headshot", "workplace"]
+  }
+}

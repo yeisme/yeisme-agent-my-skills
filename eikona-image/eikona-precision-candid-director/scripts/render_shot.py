@@ -56,6 +56,7 @@ def compute_tags(spec, aspect):
     tags += [f"fingerprint:{slug(f)}" for f in spec.get("fingerprints", [])]
     tags += [f"use:{u}" for u in spec["tags"]["use"]]
     tags += [f"mood:{m}" for m in spec["tags"]["mood"]]
+    tags += [f"theme:{t}" for t in spec["tags"].get("theme", [])]
     return tags
 
 
@@ -87,14 +88,28 @@ def build_bindings(spec, aspect):
     else:
         position = f"Camera height {c['height']}"
     f = spec.get("foreground")
+    sections = spec.get("sections", [])
+    if spec.get("palette"):
+        palette_sentence = (
+            " Main colors: "
+            + ", ".join(f"{p['pct']}% {p['color']}" for p in spec["palette"]) + "."
+        )
+    elif spec.get("palette_text"):
+        palette_sentence = f" Main colors: {spec['palette_text']}."
+    else:
+        palette_sentence = ""
     return {
         "orientation": spec["orientation"],
         "aspect": aspect,
+        "genre": spec.get("genre", "candid lifestyle photo"),
         "subject_description": s["description"],
         "pose": s["pose"],
         "expression": s["expression"],
         "pronoun": s["pronoun"],
         "wardrobe": s["wardrobe"],
+        "sections_block": "".join(
+            f"\n{sec['heading']}: {sec['body']}" for sec in sections
+        ),
         "camera_position_clause": position,
         "lens": c["lens"],
         "perspective_clause": f", {c['perspective']}" if c.get("perspective") else "",
@@ -102,11 +117,7 @@ def build_bindings(spec, aspect):
         "foreground_sentence": f" {f['elements']} cover {f['coverage']}." if f else "",
         "light_key": l["key"],
         "light_fill_clause": f", {l['fill']}" if l.get("fill") else "",
-        "palette_sentence": (
-            " Main colors: "
-            + ", ".join(f"{p['pct']}% {p['color']}" for p in spec["palette"]) + "."
-            if spec.get("palette") else ""
-        ),
+        "palette_sentence": palette_sentence,
         "background_sentence": (
             " " + spec["background"][0].upper() + spec["background"][1:] + "."
             if spec.get("background") else ""

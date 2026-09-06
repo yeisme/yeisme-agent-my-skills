@@ -1,0 +1,54 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "id": "french-vintage-editorial",
+  "label": "法式复古名媛棚拍大片：黑金配色、灰色极简背景、杂志排版",
+  "aspect": "9:16",
+  "orientation": "Vertical",
+  "genre": "high-fashion magazine editorial photograph",
+  "subject": {
+    "id": "east-asian-woman",
+    "pronoun": "She",
+    "description": "a sweet, slightly mixed-heritage young adult East Asian woman with an elegant, light-mature air",
+    "pose": "posed gracefully against a minimalist gray studio backdrop",
+    "expression": "a calm, confident, elegant expression with lively eyes",
+    "wardrobe": "a black fitted high-neck short-sleeve top, a beige-apricot champagne-gold lace-embroidered short skirt, black semi-sheer tights, and black patent pointed-toe stiletto heels — French vintage socialite style in a black-and-gold palette with a premium banquet feel"
+  },
+  "sections": [
+    {
+      "heading": "Hair and accessories",
+      "body": "a low coiled updo, a black vintage veiled mini cocktail hat with a black rose ornament, and silver drop earrings."
+    },
+    {
+      "heading": "Typography",
+      "body": "elegant English typography laid out as part of the magazine composition; no logos, no watermarks."
+    }
+  ],
+  "camera": {
+    "position": "at eye level, classic studio fashion framing",
+    "lens": "85mm portrait",
+    "framing": "full-body editorial composition with the complete outfit visible, magazine-cover layout with strong visual impact"
+  },
+  "light": {
+    "key": "Soft, even studio lighting of high-end fashion editorial quality, gentle modeling on the face and fabric textures",
+    "temperature": "studio-soft"
+  },
+  "background": "a minimalist gray studio backdrop, clean and premium",
+  "palette_text": "black, champagne gold, apricot beige, silver, soft gray",
+  "atmosphere": "a premium banquet mood with strong visual impact",
+  "quality": [
+    "fashion magazine editorial photography",
+    "high-end studio portrait",
+    "real human skin texture",
+    "real lace embroidery texture",
+    "subtle film grain",
+    "high dynamic range",
+    "4K",
+    "ultra detailed"
+  ],
+  "negative": ["eerie expression", "stiff limbs", "deformed hands", "extra hands or limbs", "unbalanced proportions", "low quality or blur", "overexposure", "cheap look", "cluttered background", "cartoonish look", "exaggerated makeup", "watermarks", "logos", "text errors", "dull lifeless eyes"],
+  "tail": ["photorealistic"],
+  "tags": {
+    "use": ["cover", "poster"],
+    "mood": ["elegant", "vintage", "editorial"]
+  }
+}

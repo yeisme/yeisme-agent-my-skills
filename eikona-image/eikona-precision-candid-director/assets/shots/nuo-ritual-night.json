@@ -1,0 +1,45 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "id": "nuo-ritual-night",
+  "label": "傩戏仪式夜景民间恐怖：火炬 + 直闪、风化傩面具、暗红陈金调色",
+  "aspect": "9:16",
+  "orientation": "Vertical",
+  "genre": "vintage digital camera snapshot",
+  "subject": {
+    "id": "east-asian-woman",
+    "pronoun": "She",
+    "description": "an adult East Asian woman with long messy black hair and wispy bangs",
+    "pose": "at a nighttime Chinese Nuo opera ritual festival, positioned close beside a weathered black-red-gold Nuo mask hung with red ribbons",
+    "expression": "her direct piercing gaze and softly parted lips",
+    "wardrobe": "a deep red sleeveless embroidered ceremonial dress"
+  },
+  "camera": {
+    "position": "for a close over-the-shoulder portrait beside the mask",
+    "lens": "50mm",
+    "framing": "a tight close-up from behind the shoulder line, the weathered Nuo mask immediately beside her, the torch-lit ritual crowd blurred far behind"
+  },
+  "light": {
+    "key": "Torchlight glowing behind her with a subtle direct on-camera flash on the face",
+    "fill": "warm orange rim light separating her from the deep shadows",
+    "temperature": "torch-flash-warm"
+  },
+  "background": "drifting smoke, blurred ritual crowds, deep impenetrable shadows",
+  "palette_text": "dark red, aged gold, warm orange, deep shadow black",
+  "atmosphere": "an eerie, sensual folk-horror mood",
+  "quality": [
+    "vintage digital camera snapshot aesthetic",
+    "real human skin texture",
+    "shallow depth of field",
+    "subtle grain",
+    "high dynamic range",
+    "4K",
+    "ultra detailed"
+  ],
+  "negative": ["cartoonish look", "plastic over-smoothed skin", "stiff pose", "overexposure", "cluttered composition", "watermarks", "logos", "text errors"],
+  "tail": ["photorealistic"],
+  "tags": {
+    "use": ["reference"],
+    "mood": ["eerie", "folk-horror", "sensual"],
+    "theme": ["ethnic-minority", "mountains", "night"]
+  }
+}

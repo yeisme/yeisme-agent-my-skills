@@ -1,0 +1,65 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "id": "foxy-cold-allure-headshot",
+  "label": "清冷妩媚钓系大头照：狐狸眼、莓果唇、低照度灰粉调",
+  "aspect": "9:16",
+  "orientation": "Vertical",
+  "genre": "ultra-close-up facial portrait photograph",
+  "subject": {
+    "id": "east-asian-woman",
+    "pronoun": "She",
+    "description": "a young adult East Asian woman with long black hair, a few soft loose strands resting naturally across her forehead and the sides of her face,",
+    "pose": "facing the camera directly with a cool, sultry, languid, restrained allure — the quiet confidence of someone who knows she is beautiful, beautiful but never showy — her face from forehead to chin filling the entire frame, cheeks almost touching the frame edges",
+    "expression": "her half-lidded eyes gazing lazily straight into the lens with slightly lifted outer corners and a subtle fox-eye allure — never an exaggerated seductive smile, never a sweet-girl look",
+    "wardrobe": "an understated dark-toned top that stays out of the frame's focus"
+  },
+  "sections": [
+    {
+      "heading": "Features",
+      "body": "a smooth, refined narrow oval face with a small delicate chin, a slim straight nose with a refined tip, and compact well-centered features that keep a soft, delicate East Asian femininity."
+    },
+    {
+      "heading": "Eye makeup",
+      "body": "low-saturation powdery gray, grayish violet-pink-brown eyeshadow with a faint lotus-pink wash under the eyes and fine natural aegyo-sal; a thin precise eyeliner extending naturally from the lash roots, visibly elongated and upturned at the outer corners to sculpt a long fox-eye contour; long, clearly separated lashes with a focused, lucid gaze."
+    },
+    {
+      "heading": "Lip makeup",
+      "body": "deep rose, berry-rose, cool-toned berry lips — full and refined with a defined cupid's bow, a soft satin sheen, the corners lifted almost imperceptibly; no teeth, no big laugh, the expression restrained yet sultry."
+    },
+    {
+      "heading": "Skin",
+      "body": "a cool-toned soft-focus base, translucent and fine, keeping slight real skin texture."
+    }
+  ],
+  "camera": {
+    "position": "at extremely close range, the features pressed strongly toward the lens",
+    "lens": "85mm portrait",
+    "perspective": "shallow depth of field, soft focus",
+    "framing": "the face as the absolute visual center, a frontal straight-on view, the frame nearly filled by the face alone"
+  },
+  "light": {
+    "key": "Soft low-intensity studio light, frontal and slightly to the side, with delicate shadows and a soft-focus cinematic feel on the face",
+    "temperature": "cool-muted"
+  },
+  "background": "deeply blurred with all detail suppressed, so only the face, the eyes, the lip color, and a few black loose strands stand out",
+  "palette_text": "cold gray, powdery gray-pink, lotus pink, berry red",
+  "atmosphere": "a moody, low-key, cold-sultry luxury beauty-editorial mood",
+  "quality": [
+    "cinematic beauty shot",
+    "luxury editorial beauty photography",
+    "real human skin texture",
+    "individual eyelashes",
+    "soft focus",
+    "moody lighting",
+    "high dynamic range",
+    "4K",
+    "high detail"
+  ],
+  "negative": ["big laugh", "toothy smile", "sweet-girl expression", "childlike youthful look", "exaggerated influencer makeup", "heavy smoky eye", "thick eyeliner", "overdone false lashes", "exaggerated Western high nose", "over-slimmed face", "pointed chin", "over-smoothing", "plastic skin", "oily face", "harsh highlights", "hard light", "overexposure", "shadow cuts across the face", "crossed eyes", "vacant stare", "crooked features", "deformed face", "distorted proportions", "loose hair covering the eyes", "cluttered background", "strongly saturated colors"],
+  "tail": ["photorealistic"],
+  "tags": {
+    "use": ["reference", "cover"],
+    "mood": ["cold-allure", "sultry", "languid"],
+    "theme": ["headshot", "beauty-editorial"]
+  }
+}

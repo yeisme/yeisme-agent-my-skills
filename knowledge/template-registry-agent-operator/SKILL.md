@@ -16,6 +16,16 @@ template-registry doctor --json
 template-registry prompt commands --json
 ```
 
+添加远程模板仓库时直接使用 Git clone address。HTTPS、SSH、SCP-style SSH 和
+`github.com/owner/repository` 简写均可；旧的 `github://` 与 `git+...` 继续兼容：
+
+```bash
+template-registry prompt repository add --id official --source https://github.com/yeisme/prompt-templates --revision main --trust official --json
+template-registry prompt repository sync --id official --json
+```
+
+不要传 GitHub `/tree/...` 页面、ZIP 下载链接或带 token/query 的 URL。私有仓库使用宿主已配置的 Git SSH/credential 能力，不把凭据写入 source、命令输出或 Skill。
+
 使用已连接的 `template_registry_*` MCP tools，或真实 CLI。两者共享项目会话；不因缺少 MCP 而重装工具。工具缺失时说明安装缺口，不把计划中的命令当成可用命令。
 
 ## 交互闭环
@@ -51,4 +61,5 @@ template-registry prompt commands --json
 - [导入与分析](references/source-import.md)：文档、网页、图片、扫描件及能力缺口。
 - [编译与确认](references/compile.md)：字段来源、修订、预设和多步骤绑定。
 - [语言约定](references/locale-policy.md)：英文编译正文、中文审阅译文和旧引用处理。
+- [仓库来源](references/repositories.md)：原生 Git URL、兼容地址、同步与安全边界。
 - [导出与接续](references/export.md)：可搬运包、引用包、私有资源与验证。

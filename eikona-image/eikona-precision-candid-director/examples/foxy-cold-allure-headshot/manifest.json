@@ -1,0 +1,29 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "shot": "foxy-cold-allure-headshot",
+  "combo": "61e289a6",
+  "aspect": "9:16",
+  "model": "openai/gpt-5.4-image-2",
+  "images": [
+    {
+      "file": "prompts/01-foxy-cold-allure-headshot.md",
+      "combo": "61e289a6",
+      "tags": [
+        "style:precision-candid",
+        "shot:foxy-cold-allure-headshot",
+        "aspect:9:16",
+        "subject:east-asian-woman",
+        "lens:85mm-portrait",
+        "light.temperature:cool-muted",
+        "use:reference",
+        "use:cover",
+        "mood:cold-allure",
+        "mood:sultry",
+        "mood:languid",
+        "theme:headshot",
+        "theme:beauty-editorial"
+      ],
+      "palette": []
+    }
+  ]
+}
