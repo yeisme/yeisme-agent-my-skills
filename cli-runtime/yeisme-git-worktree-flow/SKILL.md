@@ -98,6 +98,24 @@ lsof -i :<backend-port>
 
 Use the project's real task or start command after this check. Do not kill an unrelated process or reuse a data directory merely to make a local check pass.
 
+## Hygiene: Temporary Branches And Worktrees
+
+Temporary lanes are disposable by design and must not outlive their wave:
+
+- Name them recognizably: `wt/<topic>`, `tmp/<topic>`, snapshot or `*-wip-*` branches. Delete them at lane closeout.
+- `/tmp` and the root `temp/` directory are ephemeral scratch space. Branch refs are the durable layer: commit in-progress work to a branch before leaving a worktree behind. Removing a worktree only destroys unique work when its HEAD is detached and the tree is dirty.
+- Every commit in this workspace runs the shared advisory hook `.githooks/post-commit` (installed everywhere by `scripts/install-git-hooks.sh`): it prunes dead worktree registrations and prints a one-line nudge when merged branches or dead worktrees exist. It never deletes anything; disable per command with `YEISME_GIT_HOOKS=0`.
+- Deep sweep: `scripts/worktree-doctor.sh` reports extra/dead/detached-dirty worktrees, merged branches, redundant local mirrors, and unmerged branches across the root repository and all submodules. `--prune` performs only safe cleanup (`git worktree prune` plus `git branch -d`, which git refuses for anything unmerged); `--strict` turns warnings into a non-zero exit for gates.
+
+### Staleness Classification Before Removal
+
+1. Is the worktree's base commit an ancestor of the integration branch HEAD? Then the wave landed on top and the worktree's dirty drafts are residue. Confirm by diffing key files against the current checkout.
+2. Are the dirty files identical to current HEAD content (typical: cross-repo skills sync residue in `.agents/skills` / `.claude/skills`)? The edits already landed; discard them with the worktree.
+3. Is the branch ahead of the correct default branch (resolve `origin/HEAD`; several subprojects default to `develop`, not `main`)?
+   - `ahead=0` — merged: remove the worktree, then `git branch -d`.
+   - `ahead>0` — unmerged real work: keep the branch (it survives worktree removal), keep its worktree if it holds uncommitted state, and hand the merge-or-discard decision to the owning lane.
+   - Detached HEAD plus dirty files is the only state where removal destroys unique work — commit it to a branch first.
+
 ## Git Flow Workflow
 
 For a normal feature:
@@ -221,6 +239,8 @@ Before finalizing:
 - Container lifecycle uses `nerdctl compose` and `compose.yml` where applicable.
 - Runtime data, secrets, generated files, and local caches are not staged.
 - Validation commands ran and results are reported.
+- Temporary branches (`wt/*`, `tmp/*`, snapshots, `*-wip-*`) were removed at closeout, and `scripts/worktree-doctor.sh` reports no merged branches or dead worktrees for the touched repositories.
+- No abandoned worktree holds the only copy of unmerged commits (detached HEAD with a dirty tree); anything worth keeping was committed to a branch first.
 
 ## When Not To Use
 
