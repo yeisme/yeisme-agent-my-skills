@@ -1,6 +1,6 @@
 # Eikona MCP v0.7.7 action map
 
-Bundled navigation reference for the 77 executable v0.7.7 `eikona.execute`
+Bundled navigation reference for the 82 executable v0.7.7 `eikona.execute`
 actions. It is verified against `ActionDescriptors`; use it directly instead
 of catalog discovery at session start. Refresh with `eikona mcp capabilities
 --json --full` or the scoped REST action endpoint only after an actual
@@ -48,6 +48,11 @@ consumer actions only; unknown and non-entitled actions return the identical
 | `assets.handoff` | readonly | consumer | Path-free handoff descriptor for downstream consumers |
 | `assets.stage` | mutation | consumer | Stage an accepted asset to a local path |
 | `assets.apply` | mutation | consumer | Apply an accepted asset into a project (confirmation-gated) |
+| `assets.qualification.create` | mutation | operator | Record one unconfirmed asset-reuse qualification (confirm: true) |
+| `assets.qualification.show` | readonly | operator | Read the qualification projection with acceptance and usability |
+| `assets.qualification.validate` | readonly | operator | Re-derive qualification coverage from durable state |
+| `assets.qualification.accept` | mutation | operator | Record the one human acceptance decision for a qualification |
+| `assets.qualification.supersede` | mutation | operator | Mark one qualification superseded by naming its successor |
 | `artifact.access` | mutation | operator | Reissue an artifact grant for 404/expired ResourceLink (`confirm: true`); requires advertised operator entitlement |
 | `replace.preview` | mutation | consumer | Preview a safe asset replacement |
 | `replace.apply` | mutation | consumer | Apply the previewed replacement |
