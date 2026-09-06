@@ -173,6 +173,30 @@ curl -L "https://api.github.com/repos/openai/openai-python" | jq '{name, pushed_
 
 Output: fields, sources, missing items.
 
+### `download`
+
+Goal: obtain the media file itself — video, audio, or subtitles — from a URL, as a local file.
+
+Signals:
+
+- "download this video"
+- "save the video"
+- "X / Twitter video download"
+- "get the audio as mp3"
+- "download subtitles"
+
+Default route: `media_download.md`; when the media sits on a platform with Agent Reach friction (Bilibili), combine with `agent_reach.md` to choose the backend.
+
+Example commands:
+
+```bash
+yt-dlp -f "bv*+ba/b" --merge-output-format mp4 -o "%(uploader)s/%(id)s.%(ext)s" \
+  "https://x.com/<user>/status/<id>"
+yt-dlp --cookies-from-browser chrome "URL"
+```
+
+Output: local file path, tool, resolution/duration evidence (`ffprobe`), and blockers such as missing cookies or extractor failures.
+
 ### `interact`
 
 Goal: open a web page and perform a one-off operation, inspect real page state, or produce evidence.
@@ -227,7 +251,7 @@ Output: execution strategy, whether a project script is needed, risks, and verif
 If a task has multiple intents, process them in this order:
 
 ```text
-local-research-infra -> lookup/extract -> verify -> research -> deep-research -> interact -> automate
+local-research-infra -> lookup/extract -> verify -> research -> deep-research -> download -> interact -> automate
 ```
 
 Example: if the user asks to verify whether a library is still active and open the official site to see if docs are current, first verify activity with `gh`/registry/search, then escalate to browser only if static information is insufficient.

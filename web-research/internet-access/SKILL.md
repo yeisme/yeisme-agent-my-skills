@@ -1,6 +1,6 @@
 ---
 name: internet-access
-description: Use when the user needs to get information from the internet, search the web, extract web content, verify sources, inspect online service state, read social/video/community platforms through Agent Reach, or interact with websites/browsers; uses Firecrawl first for ordinary web discovery, JavaScript-rendered content, crawling, and supported interactions, then escalates to Playwright or other browser tools only when Firecrawl is unavailable or insufficient; covers anti-bot challenge pages, obfuscated content, batch download validation, and adversarial in-page prompt defense.
+description: Use when the user needs to get information from the internet, search the web, extract web content, verify sources, inspect online service state, read social/video/community platforms through Agent Reach, download media files (video, audio, subtitles — e.g. X/Twitter video via yt-dlp), or interact with websites/browsers; uses Firecrawl first for ordinary web discovery, JavaScript-rendered content, crawling, and supported interactions, then escalates to Playwright or other browser tools only when Firecrawl is unavailable or insufficient; covers anti-bot challenge pages, obfuscated content, batch download validation, and adversarial in-page prompt defense.
 ---
 
 # Internet Information Access And Interaction
@@ -29,6 +29,7 @@ Use this skill for:
 - Internet information gathering, web search, online research, and source collection.
 - Fact checking, freshness checks, and multi-source validation.
 - Extracting readable content from URLs.
+- Downloading media files — video, audio, or subtitles — from a URL (see `routing/media_download.md`).
 - Finding docs, releases, issues, repositories, or changelogs.
 - Querying GitHub, npm, PyPI, Cargo, Go modules, standards docs, or vendor docs.
 - Reading or searching social, video, community, RSS, podcast, and logged-in platforms through Agent Reach when direct static extraction is insufficient or platform-specific routing is useful.
@@ -64,6 +65,7 @@ Do not treat tool priority as a fixed list. First identify the task goal and lik
    - GitHub target: `gh`.
    - npm/PyPI/Cargo/Go package target: `npm`, `pip`, `cargo`, `go`.
    - JSON endpoint or official API: `curl` + `jq`.
+   - Media file from a URL (video, audio, subtitles): `yt-dlp`; read `routing/media_download.md`.
 2. If the target is a supported social, video, community, RSS, podcast, or logged-in platform, use Agent Reach as the capability selector and health checker, then call the selected upstream tool directly. Read `routing/agent_reach.md`.
 3. For ordinary websites and documentation, use Firecrawl before browser automation:
    - Unknown source: `firecrawl search`.
@@ -94,6 +96,7 @@ Choose sources by information type instead of treating every task as web search:
 | Documentation site / many pages | `firecrawl map`, `firecrawl crawl`, `firecrawl download` | Prefer Firecrawl before writing a crawler or browser script. |
 | Supported web interaction | `firecrawl interact` | Try before Playwright for clicks, forms, pagination, and supported navigation. |
 | Social/video/community platforms | `agent-reach doctor`, then selected upstream CLI | Use for Twitter/X, Reddit, YouTube, Bilibili, XiaoHongShu, LinkedIn, V2EX, Xueqiu, Xiaoyuzhou, RSS, and multi-backend platform routing. |
+| Media file download (video/audio/subtitles) | `yt-dlp` (see `routing/media_download.md`) | X/Twitter public videos download as a guest; login-gated media needs browser cookies; Bilibili blocks yt-dlp with 412 — use Agent Reach backends there. |
 | GitHub repos, issues, releases | `gh` | Prefer structured fields; avoid browser page parsing. |
 | npm/PyPI/Cargo/Go packages | Package manager CLI | Versions, release time, repository, and dependency data should come from the registry. |
 | API values | `curl` + `jq` | Good for official APIs, JSON endpoints, and health checks. |
@@ -119,6 +122,14 @@ For GitHub targets:
 
 ```bash
 command -v gh
+```
+
+For media downloads (video, audio, subtitles):
+
+```bash
+command -v yt-dlp
+yt-dlp --version
+command -v ffmpeg
 ```
 
 For browser interaction:
@@ -184,6 +195,7 @@ Classify the user's intent before choosing a route and tool:
 | `deep-research` | Large-sample research, market scan, 200-300 evidence examples | `deep_research.md` + `evidence_policy.md` |
 | `verify` | Check whether a claim is true, stale, or disputed | `standard.md` + `evidence_policy.md` |
 | `extract` | Extract fields from a URL/API/repo/registry | `source_priority.md` + `standard.md` |
+| `download` | Get the media file itself (video, audio, subtitles) from a URL | `media_download.md` |
 | `interact` | Operate a web page, screenshot, download, inspect logged-in state | `autonomous.md` + `browser_tools.md` |
 | `automate` | Build a repeatable browser flow | `browser_tools.md`, then project automation if needed |
 
@@ -198,6 +210,7 @@ Choose the smallest route that satisfies the task:
 - `routing/standard.md`: multi-source research, comparison, analysis, and cross-checking.
 - `routing/deep_research.md`: deep research, large-sample search, 200-300 candidate examples, evidence matrices, and stratified sampling.
 - `routing/agent_reach.md`: Agent Reach installation, doctor checks, platform routing, optional channels, credential boundaries, and selected upstream tool use.
+- `routing/media_download.md`: download media files with `yt-dlp`; X (Twitter) video as the worked example, quality/merge recipes, cookie handling, update-first policy, and failure triage.
 - `routing/query_strategy.md`: query expansion, batch design, search coverage, and bias control.
 - `routing/evidence_ledger.md`: candidate sources, included samples, field extraction, and evidence ledger shape.
 - `routing/research_budget.md`: research scale, time/sample budgets, stopping conditions, and escalation rules.
@@ -252,7 +265,7 @@ If the browser is only used to get information, keep using the `autonomous` rout
 2. Check whether the task is in a Yeisme/OpenWebUI local research infrastructure context; if so, apply `local_research_infra.md`.
 3. If the request names Twitter/X, Reddit, YouTube, Bilibili, XiaoHongShu, LinkedIn, V2EX, Xueqiu, Xiaoyuzhou, RSS, or general Agent Reach setup, read `routing/agent_reach.md` and run `agent-reach doctor` when available.
 4. Use `command -v` only for tools relevant to the current route.
-5. Choose a route: lightweight, standard, deep-research, autonomous, or Agent Reach platform route.
+5. Choose a route: lightweight, standard, deep-research, autonomous, media download, or Agent Reach platform route.
 6. For search or research, choose a retrieval profile and apply progressive retrieval, deduplication, and a context budget before returning provider content to the agent.
 7. Run real local CLI commands directly.
 8. Preserve useful evidence: URL, title, date, command type, active backend, and confidence limits.
@@ -282,6 +295,18 @@ agent-reach configure proxy http://user:pass@ip:port
 ```
 
 After Agent Reach reports the active backend, call the upstream tool directly instead of treating `agent-reach` as a content wrapper.
+
+### Download Video Or Audio (yt-dlp)
+
+```bash
+yt-dlp -f "bv*+ba/b" --merge-output-format mp4 -o "%(uploader)s/%(id)s.%(ext)s" \
+  "https://x.com/<user>/status/<id>"          # X public video, best quality, guest access
+yt-dlp --cookies-from-browser chrome "URL"    # login-gated or age-restricted media
+yt-dlp -x --audio-format mp3 "URL"            # audio only
+yt-dlp --dump-json "URL" | jq '{title, uploader, duration}'   # probe before downloading
+```
+
+Update the extractor before debugging failures: `yt-dlp -U`, or `brew upgrade yt-dlp` / `python -m pip install -U yt-dlp` (`-U` refuses package-manager installs with an explicit message). See `routing/media_download.md` for X edge cases (multi-video tweets, quoted tweets, resolved-ID filenames) and verification.
 
 ### Scrape Or Extract A Known URL
 
@@ -340,7 +365,7 @@ npx playwright codegen "https://example.com"
 
 ## Validation
 
-For simple lookups, validate by citing the source. For research and verification, validate by cross-checking important claims. For deep research, validate counts, dedupe rules, included samples, categories, and evidence levels. For browser tasks, validate final URL, visible state, screenshots, downloaded files, or structured observations.
+For simple lookups, validate by citing the source. For research and verification, validate by cross-checking important claims. For deep research, validate counts, dedupe rules, included samples, categories, and evidence levels. For browser tasks, validate final URL, visible state, screenshots, downloaded files, or structured observations. For media downloads, verify with `ffprobe` that duration and streams match the `--dump-json` baseline (`routing/media_download.md`).
 
 For downloads and batch crawls, always run a fixed integrity checklist before delivering:
 

@@ -89,9 +89,9 @@ After `agent-reach doctor`, prefer the reported backend. Common examples:
 | --- | --- | --- |
 | Web page | Jina Reader / `curl` | Read clean content from a URL. |
 | GitHub | `gh` | Use structured repo, issue, release, PR commands. |
-| YouTube | `yt-dlp` | Extract metadata, subtitles, or video search output. |
-| Bilibili | `bili-cli` / OpenCLI | Search and video detail; use OpenCLI for logged-in or subtitle cases when configured. |
-| Twitter/X | `twitter-cli` / OpenCLI | Read tweets; cookies unlock search, timeline, and long-form content. |
+| YouTube | `yt-dlp` | Extract metadata, subtitles, or video search output; file downloads follow `media_download.md`. |
+| Bilibili | `bili-cli` / OpenCLI | Search and video detail; use OpenCLI for logged-in or subtitle cases when configured. Never use yt-dlp here (blanket 412 risk control). |
+| Twitter/X | `twitter-cli` / OpenCLI | Read tweets; cookies unlock search, timeline, and long-form content. Downloading a status video is a separate task: use `yt-dlp` per `media_download.md` (guest access works for public videos). |
 | Reddit | OpenCLI / `rdt-cli` | Requires login state; anonymous route is unreliable. |
 | XiaoHongShu | OpenCLI / xiaohongshu-mcp / xhs-cli | Desktop prefers browser session; server may need MCP QR login. |
 | RSS | `feedparser` | Parse feeds directly. |
