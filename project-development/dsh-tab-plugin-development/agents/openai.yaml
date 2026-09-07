@@ -1,0 +1,4 @@
+interface:
+  display_name: "DSH Tab Plugin Development"
+  short_description: "Build DSH web tab/pane plugins from verified reference patterns"
+  default_prompt: "Use $dsh-tab-plugin-development to design or review a DSH web tab, pane, or overlay plugin in agent/harness-plugins."
