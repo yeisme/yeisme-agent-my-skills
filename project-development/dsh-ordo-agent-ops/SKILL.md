@@ -33,6 +33,14 @@ Use this skill for the DSH host plugin, Web client module, profile bundle, `/ord
 
 ## Required evidence
 
+### Local DSH workbench previews
+
+For a Yeisme DSH preview, enter `agent/harness-plugins` and use `pnpm dsh:workbench -- --check`, then `pnpm dsh:workbench -- --no-open --port 40869`. Use `pnpm dsh:dev` for plugin HMR. Both entrypoints must use the same staged CLI, renderer, sidebar and conversation bundle. A matching release version alone is insufficient: the global installed CLI can lack the independent-pane patches. Do not replace a failed compatibility check with a global `dsh web` launch.
+
+The owning `docs/runtime/dsh-workbench.md` defines preparation, optional global installation and recoverable cleanup. Keep profile/session/credential data and unrelated dirty files. A runtime cleanup request authorizes only the named local installation and verified old preview processes, not blanket cache or home removal. Preserve the original port when possible and redact login URLs from evidence.
+
+Verify sidebar drag into a split, per-pane session and draft isolation, and absence of the built-in global Target footer. Pane context comes from its title and scoped composer; a reference destination chooser opens only when a reference action requests it. Export only owned staging deltas into `upstream-prs`, then commit those packets and local docs when the user requests Git archival.
+
 For a code change, run the narrow DSH package tests and repository documentation gates selected by the diff from `agent/harness-plugins`:
 
 ```bash
