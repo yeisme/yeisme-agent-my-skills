@@ -1,0 +1,4 @@
+interface:
+  display_name: "Template Registry Template Author"
+  short_description: "Author English Agent templates with Chinese review docs"
+  default_prompt: "Use $template-registry-template-author to create or revise a promptrepo solution with an English compiled template, Chinese human review translation, CLI-authored contract metadata, and catalog validation."
