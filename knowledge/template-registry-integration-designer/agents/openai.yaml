@@ -1,0 +1,4 @@
+interface:
+  display_name: "Template Registry Integration Designer"
+  short_description: "Design integrated templates, Skills, tags, and workflow handoffs"
+  default_prompt: "Use $template-registry-integration-designer to design and implement a reusable template or Skill integration with confirmed inputs, tags, capabilities, persistence, compilation, installation, and upstream/downstream handoffs."

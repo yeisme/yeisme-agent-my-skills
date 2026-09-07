@@ -7,6 +7,8 @@ name: template-registry-agent-operator
 
 帮助用户把需求与资料编译成可使用、可搬运的提示词。业务状态由 Template Registry 维护；本 Skill 负责交互与正确调用，不自己实现模板替换或维护会话文件。
 
+如果用户要新建、合并或改造模板/Skill/多步骤工作流，而不是运行已有模板，且已安装 `template-registry-integration-designer`，先切换到该 Skill 完成 owner、tags、capabilities、recipe、持久化和下游交接设计。未安装时说明公共 Skills manager 安装入口，不把它假装成当前可用能力。
+
 ## 开始
 
 先检查本机入口与输入 schema：
@@ -16,12 +18,22 @@ template-registry doctor --json
 template-registry prompt commands --json
 ```
 
+添加远程模板仓库时直接使用 Git clone address。HTTPS、SSH、SCP-style SSH 和
+`github.com/owner/repository` 简写均可；旧的 `github://` 与 `git+...` 继续兼容：
+
+```bash
+template-registry prompt repository add --id official --source https://github.com/yeisme/prompt-templates --revision main --trust official --json
+template-registry prompt repository sync --id official --json
+```
+
+不要传 GitHub `/tree/...` 页面、ZIP 下载链接或带 token/query 的 URL。私有仓库使用宿主已配置的 Git SSH/credential 能力，不把凭据写入 source、命令输出或 Skill。
+
 使用已连接的 `template_registry_*` MCP tools，或真实 CLI。两者共享项目会话；不因缺少 MCP 而重装工具。工具缺失时说明安装缺口，不把计划中的命令当成可用命令。
 
 ## 交互闭环
 
 1. 明确用户要得到的产物，搜索并 inspect 模板，按实际字段合同选择；可搜索不等于可编译。
-2. 创建会话并锁定模板。用户已经提供的信息只需映射到字段，不重复询问。
+2. 创建会话并锁定 `locale=en` 模板。用户已经提供的信息只需映射到字段，不重复询问；中文资料可以绑定到英文 contract。
 3. 通过 source import 统一导入资料。图片和扫描件处于 needs_analysis 时，读取工具返回的私有资源；宿主能够分析则回填观察，不能分析则说明可配置的后端或缺失组件。
 4. 依赖顺序推进：目标/模板 → 受众、风格、结构 → 字段与素材。只问当前可回答且会改变结果的问题，尽量集中确认。
 5. 区分用户明确声明、来源事实和创作建议。事实必须带来源；图片观察不能证明产品材料、认证或功能。来源互相冲突时请用户确定，不悄悄选一个。
@@ -29,6 +41,8 @@ template-registry prompt commands --json
 7. 获取最新 revision 后编译；编译不调用模型。根据结果导出单条提示词或多步骤包，再运行 bundle verify。
 
 `needs_input` 补字段；`needs_analysis` 处理资料；`needs_confirmation` 收集用户决定；`blocked` 按错误码解决具体问题。每次修改使用最新 expected_revision。收到 REVISION_CONFLICT 后重新读取和合并用户意图，不盲目重放旧补丁。
+
+`zh-CN` 模板或引用只用于旧版本人工审阅。收到 `TEMPLATE_LOCALE_REVIEW_ONLY` 时，改用同版本的 `locale=en`；收到 `TEMPLATE_ENGLISH_REQUIRED` 时，选择带英文模板与 contract 的版本，不能把中文译文复制进会话绕过门禁。
 
 ## 接续与导出
 
@@ -48,4 +62,6 @@ template-registry prompt commands --json
 
 - [导入与分析](references/source-import.md)：文档、网页、图片、扫描件及能力缺口。
 - [编译与确认](references/compile.md)：字段来源、修订、预设和多步骤绑定。
+- [语言约定](references/locale-policy.md)：英文编译正文、中文审阅译文和旧引用处理。
+- [仓库来源](references/repositories.md)：原生 Git URL、兼容地址、同步与安全边界。
 - [导出与接续](references/export.md)：可搬运包、引用包、私有资源与验证。

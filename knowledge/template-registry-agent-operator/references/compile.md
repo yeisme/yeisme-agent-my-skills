@@ -1,5 +1,7 @@
 # 编译与确认
 
+所有新会话的模板 locale 固定为 `en`。请求未写 locale 时，Registry 自动归一化为 `en`；显式 `zh-CN` 会返回 `TEMPLATE_LOCALE_REVIEW_ONLY`。中文资料、中文产品事实和中文目标输出仍可作为字段值输入，不能据此切换模板骨架语言。
+
 创建会话前 inspect 精确模板，避免从模板正文猜测输入。普通字段默认使用 step.field；recipe 的 field 绑定可指定共享字段名。
 
 session update 的 Fields 是候选值集合，包含 value、kind 和可选 source：
@@ -9,6 +11,8 @@ session update 的 Fields 是候选值集合，包含 value、kind 和可选 sou
 - proposal：Agent 提出的创作建议。
 
 客户端提交的 confirmed 不能跳过确认；工具会把变更值设为待确认。用户同意后，session confirm 提交具体 fields/sources 和 decision_ref；不要把“继续”扩大为用户尚未看过的关键事实确认。
+
+recipe preset 只提供可复用候选值，不构成用户确认。选择 preset 后，这些字段继续返回 `INPUT_CONFIRMATION_REQUIRED`；用户确认时工具才把 preset 值物化为会话字段。Agent 不得因为 preset 来自官方仓库就替用户确认创作模式、数据口径、输出语言或下游 owner。
 
 compile 读取固定模板与资料，严格替换声明变量。它不会补写事实、检索网页、调用视觉模型，也不会运行前序生成步骤。
 
