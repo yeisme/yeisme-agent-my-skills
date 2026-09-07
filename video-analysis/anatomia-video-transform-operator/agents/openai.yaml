@@ -1,0 +1,4 @@
+interface:
+  display_name: "Anatomia Video Transform Operator"
+  short_description: "Run one local grayscale, shot, or placeholder transform."
+  default_prompt: "Use $anatomia-video-transform-operator: anatomia video grayscale derive|shots detect|placeholders extract on one authorized local video."
