@@ -1,0 +1,49 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "id": "jade-pool-celestial-maiden",
+  "label": "瑶池仙女：薄荷粉蓝汉服、白莲涟漪、柳枝前景",
+  "aspect": "2:3",
+  "orientation": "Vertical",
+  "genre": "Chinese mythological cinema still",
+  "subject": {
+    "id": "celestial-maiden",
+    "pronoun": "She",
+    "description": "a serene adult Chinese celestial maiden",
+    "pose": "seated beside the turquoise waters of the heavenly Jade Pool, her fingertips gently touching a floating white lotus",
+    "expression": "a tranquil, otherworldly serenity",
+    "wardrobe": "pale mint and blush silk hanfu with delicate lotus embroidery, and jade hair ornaments"
+  },
+  "camera": {
+    "position": "at an intimate close distance beside the water",
+    "lens": "85mm portrait",
+    "perspective": "shallow depth of field",
+    "framing": "an intimate cinematic composition, concentric ripples reflecting her face, silver fish visible beneath the clear water"
+  },
+  "foreground": {
+    "elements": "Willow branches",
+    "coverage": "the foreground frame edges, naturally intruding"
+  },
+  "light": {
+    "key": "Soft diffused morning light",
+    "temperature": "morning-diffused"
+  },
+  "background": "distant jade pavilions softened by mist",
+  "palette_text": "turquoise, pale mint, blush pink, jade white",
+  "atmosphere": "a tranquil Chinese mythology mood",
+  "quality": [
+    "realistic skin texture",
+    "translucent silk texture",
+    "soft diffused light",
+    "atmospheric mist",
+    "high dynamic range",
+    "4K",
+    "highly detailed"
+  ],
+  "negative": ["text", "watermarks", "logos", "cartoonish look", "plastic over-smoothed skin", "cluttered composition", "overexposure", "text errors"],
+  "tail": ["photorealistic"],
+  "tags": {
+    "use": ["reference", "cover"],
+    "mood": ["tranquil", "serene", "ethereal"],
+    "theme": ["xianxia", "chinese-fantasy"]
+  }
+}

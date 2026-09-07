@@ -1,0 +1,29 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "shot": "celestial-goddess-palace",
+  "combo": "2e8cd907",
+  "aspect": "9:16",
+  "model": "openai/gpt-5.4-image-2",
+  "images": [
+    {
+      "file": "prompts/01-celestial-goddess-palace.md",
+      "combo": "2e8cd907",
+      "tags": [
+        "style:precision-candid",
+        "shot:celestial-goddess-palace",
+        "aspect:9:16",
+        "subject:celestial-goddess",
+        "lens:35mm-environmental-portrait",
+        "light.temperature:golden-dawn",
+        "use:reference",
+        "use:cover",
+        "mood:ethereal",
+        "mood:celestial",
+        "mood:serene",
+        "theme:xianxia",
+        "theme:chinese-fantasy"
+      ],
+      "palette": []
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+# Precision-Parameterized Candid Shot
+
+This template produces a single precision-parameterized candid shot prompt. Unlike the random-matrix package, nothing is sampled here: every variable is bound exactly from a shot spec (JSON), and quantified parameters (cm, percentages, degrees) go straight into the body. The consumer binds all variables before rendering; the rendered result is the final prompt body without further rewriting.
+
+## Slot convention
+
+Optional clause variables (`perspective_clause`, `sections_block`, `foreground_sentence`, `light_fill_clause`, `palette_sentence`, `background_sentence`, `fingerprints_sentence`, `tail_clause`) carry their own punctuation and leading spaces/newlines; bind them to an empty string when unused and the whole clause disappears. `genre` defaults to "candid lifestyle photo"; use a different genre phrase (e.g. editorial portrait) for non-candid shots.
+
+Vertical 2:3 cinematic portrait photograph, a young adult East Asian woman with long black hair styled loosely in a romantic historical Chinese hairstyle, slightly messy and natural, wispy bangs and loose strands framing her cheeks, a single small deep-red plum blossom tucked into the hair on the upper right side of her head, as she stands outdoors in a snowy traditional Chinese setting at blue hour, shown from about mid-thigh upward, positioned slightly left of center, her body turned gently three-quarters to the side while her face turns back toward the camera with her quiet, delicate, slightly melancholic expression, relaxed lips, and soft direct eye contact.
+She wears an elegant pale ivory and warm pearl-white winter hanfu of soft silk with subtle pastel pink floral embroidery — long, wide, layered sleeves with muted blush-pink and pale sage-green flower details — and over it a very soft, thick cream-white fur shoulder wrap with an oversized fur collar, fluffy and irregular rather than modern or tailored, the fur catching the warm light softly.
+Plum branch: beside her, a thin natural plum branch extends diagonally upward from the lower-left corner, with sparse tiny red blossoms and buds — never large or decorative, incidental and natural.
+Hands: one hand is partially hidden inside the fur and sleeve near her waist.
+Snow: light snow is falling, sparse and realistic, a few tiny snowflakes resting on her dark hair and fur — never dramatic.
+Camera positioned at an intimate distance outdoors, 85mm portrait lens, shallow depth of field, the subject in soft focus with facial features still readable, a mid-thigh-upward composition, the subject slightly left of center.
+Soft winter dusk light with cool ambient blue from the snowy environment, subtle warm orange side light gently illuminating her face and fur, her skin pale and natural with soft rosy cheeks and nose, no strong makeup, no glossy beauty retouching. Main colors: cool blue, blue-gray, muted cyan, ivory, pearl white, blush pink, a deep red accent. A softly blurred traditional Chinese courtyard or waterside walkway, dark wooden architecture and railings barely visible through shallow depth of field, several distant windows or lanterns glowing as small warm amber bokeh lights, the background predominantly cool blue, blue-gray, and muted cyan, in strong but gentle contrast with the warm skin tones and ivory clothing.
+intimate cinematic portrait photography, dreamy analog-film aesthetic, slight diffusion filter, gentle halation around highlights, fine film grain, muted contrast, lifted blacks, soft pastel color grading, subtle atmospheric haze, slightly imperfect vintage photographic texture, a fleeting candid moment from a poetic Chinese historical winter drama, restrained and emotionally quiet rather than epic fantasy, the environment believable and understated, no fantasy palace in the sky, no celestial clouds, no magical glowing effects, no crowns, no elaborate gold hair ornaments, no excessive jewelry, no bright red hanfu, no pure white wedding dress, no modern coat, no western fur coat, no heavy makeup, no sharp digital HDR, no oversaturated colors, no anime style, no illustration, no porcelain-doll face, no exaggerated snowfall, no large flower bouquet, no symmetrical studio composition, no text, no watermarks, no logos, photorealistic.
+
+## Self-check
+
+- Quantified parameters (cm, %, degrees) survive verbatim and are not rewritten as vague adjectives.
+- Palette percentages sum to 100 in descending order (when `palette_sentence` is used).
+- Foreground occlusion carries a percentage (when `foreground_sentence` is used).
+- Negatives are complete; no studio-lighting vocabulary leaks in.

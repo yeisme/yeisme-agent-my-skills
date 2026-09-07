@@ -12,7 +12,7 @@
 | `genre` | string | 可选。体裁短语，默认 `candid lifestyle photo`；非抓拍镜头用对应体裁，如 `ultra-realistic high-definition close-up portrait photograph` |
 | `subject.id` / `pronoun` | string | 主体 slug 与英文代词（She/He/They） |
 | `subject.description` | string | 主体外观一句话，须写明 adult |
-| `subject.pose` / `expression` | string | 姿势与表情；pose 用分词形式（bending/lying/turning/standing…）直接接在 description 后，避免动词冲突 |
+| `subject.pose` / `expression` | string | 姿势与表情；description 以主体名词收尾时 pose 用分词形式（bending/lying/turning…）；description 以其他名词/形容词收尾时 pose 改用 `as she …` 从句，避免分词悬空 |
 | `subject.wardrobe` | string | 服装完整描述 |
 | `sections` | object[] | 可选。`{heading, body}` 分区段落（如 Eye makeup / Hair / Hands / Nails），渲染为服装句后的独立段落 |
 | `camera.position` | string | 量化机位描述，如 `slightly above eye level and extremely close to her face`；与 `height` 二选一 |

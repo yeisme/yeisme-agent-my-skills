@@ -6,4 +6,5 @@ Prompt Template 相关入口：
 
 - `yeisme-prompt-repository-router`：判断正文、公共合同、Registry 和领域消费者的 canonical owner。
 - `template-registry-agent-operator`：从自然语言需求和资料开始，完成确认、英文模板编译、导出与接续。
+- `template-registry-integration-designer`：集成模板、Skill、多模态操作和 recipe，规划 tags、capabilities、持久化、安装及上下游交接。
 - `template-registry-template-author`：新建或修订英文 Agent 模板、中文人工审阅译文和 CLI-authored contract/catalog metadata。

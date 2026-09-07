@@ -7,6 +7,8 @@ name: template-registry-agent-operator
 
 帮助用户把需求与资料编译成可使用、可搬运的提示词。业务状态由 Template Registry 维护；本 Skill 负责交互与正确调用，不自己实现模板替换或维护会话文件。
 
+如果用户要新建、合并或改造模板/Skill/多步骤工作流，而不是运行已有模板，且已安装 `template-registry-integration-designer`，先切换到该 Skill 完成 owner、tags、capabilities、recipe、持久化和下游交接设计。未安装时说明公共 Skills manager 安装入口，不把它假装成当前可用能力。
+
 ## 开始
 
 先检查本机入口与输入 schema：

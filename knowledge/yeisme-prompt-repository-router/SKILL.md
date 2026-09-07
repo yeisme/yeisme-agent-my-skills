@@ -27,6 +27,7 @@ Route prompt-template work to the narrowest canonical owner. This skill does not
 6. Route actual execution and acceptance to the consuming domain owner; shared repository layers never infer provider permissions, cost approval, or production acceptance.
 7. For the approved Registry consumption workflow, use `template-registry-agent-operator` when installed. Compilation remains provider-free; only explicit source analysis may call a configured analysis backend. Private session content uses explicit resources/exports, never ordinary output or evidence.
 8. For new solution authoring, use `template-registry-template-author` when installed. It creates the English template and Chinese review document, then generates all structured metadata through Template Registry CLI.
+9. For requests to integrate templates with Skills, multimodal operations, reusable recipes, persistence, installation, or upstream/downstream owners, use `template-registry-integration-designer` when installed before entering the author or operator workflow.
 
 ## Required Handoff
 

@@ -1,0 +1,29 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "shot": "jade-pool-celestial-maiden",
+  "combo": "65bfc7b2",
+  "aspect": "2:3",
+  "model": "openai/gpt-5.4-image-2",
+  "images": [
+    {
+      "file": "prompts/01-jade-pool-celestial-maiden.md",
+      "combo": "65bfc7b2",
+      "tags": [
+        "style:precision-candid",
+        "shot:jade-pool-celestial-maiden",
+        "aspect:2:3",
+        "subject:celestial-maiden",
+        "lens:85mm-portrait",
+        "light.temperature:morning-diffused",
+        "use:reference",
+        "use:cover",
+        "mood:tranquil",
+        "mood:serene",
+        "mood:ethereal",
+        "theme:xianxia",
+        "theme:chinese-fantasy"
+      ],
+      "palette": []
+    }
+  ]
+}

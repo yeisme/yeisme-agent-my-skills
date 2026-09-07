@@ -12,6 +12,8 @@ session update 的 Fields 是候选值集合，包含 value、kind 和可选 sou
 
 客户端提交的 confirmed 不能跳过确认；工具会把变更值设为待确认。用户同意后，session confirm 提交具体 fields/sources 和 decision_ref；不要把“继续”扩大为用户尚未看过的关键事实确认。
 
+recipe preset 只提供可复用候选值，不构成用户确认。选择 preset 后，这些字段继续返回 `INPUT_CONFIRMATION_REQUIRED`；用户确认时工具才把 preset 值物化为会话字段。Agent 不得因为 preset 来自官方仓库就替用户确认创作模式、数据口径、输出语言或下游 owner。
+
 compile 读取固定模板与资料，严格替换声明变量。它不会补写事实、检索网页、调用视觉模型，也不会运行前序生成步骤。
 
 多步骤 recipe 通过 field、source、step_output 绑定输入。前序结果不存在时导出明确的 deferred template；导入实际结果并确认后再编译。新资料或输入使旧编译过期时应生成新版本，不默认使用 allow_stale。

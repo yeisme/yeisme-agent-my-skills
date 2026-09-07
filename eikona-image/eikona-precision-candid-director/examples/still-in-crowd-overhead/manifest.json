@@ -1,0 +1,29 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "shot": "still-in-crowd-overhead",
+  "combo": "29deaf76",
+  "aspect": "3:4",
+  "model": "openai/gpt-5.4-image-2",
+  "images": [
+    {
+      "file": "prompts/01-still-in-crowd-overhead.md",
+      "combo": "29deaf76",
+      "tags": [
+        "style:precision-candid",
+        "shot:still-in-crowd-overhead",
+        "aspect:3:4",
+        "subject:east-asian-woman",
+        "lens:50-70mm",
+        "light.temperature:overcast-daylight",
+        "use:reference",
+        "use:cover",
+        "mood:lonely",
+        "mood:still",
+        "mood:isolated",
+        "theme:street",
+        "theme:urban"
+      ],
+      "palette": []
+    }
+  ]
+}

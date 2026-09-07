@@ -1,0 +1,57 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "id": "nuo-mask-cinematic-closeup",
+  "label": "傩面电影感横版特写：黑红金鬼面具贴脸、明暗对照法",
+  "aspect": "16:9",
+  "orientation": "Horizontal",
+  "genre": "cinematic close-up photograph",
+  "subject": {
+    "id": "east-asian-woman",
+    "pronoun": "She",
+    "description": "an adult East Asian woman with long black hair falling in messy strands, a few damp loose strands clinging to the sides of her face,",
+    "pose": "as she holds an old black-red-gold Nuo ghost mask against the side of her face with her left hand, the mask covering about half of the frame, her right half-face emerging beside it, fingers lightly touching the mask's lower edge",
+    "expression": "her cold, quiet, stunning look — one visible eye gazing directly into the lens",
+    "wardrobe": "a black-and-gold embroidered Chinese ceremonial robe"
+  },
+  "sections": [
+    {
+      "heading": "Mask",
+      "body": "the Nuo ghost mask is old and weathered, with ferocious fangs, round bulging eyes, mottled lacquer, and an aged metal texture; long red tassels hang naturally from it."
+    },
+    {
+      "heading": "Makeup",
+      "body": "red-brown eye makeup and slightly dewy, glossy lip makeup, the expression cold, stunning, and quiet."
+    }
+  ],
+  "camera": {
+    "position": "at extremely close range",
+    "lens": "85mm portrait",
+    "perspective": "shallow depth of field",
+    "framing": "the face and the mask filling the entire frame"
+  },
+  "light": {
+    "key": "Low-key warm light from the front-side illuminates the face and the mask's edges, with dramatic chiaroscuro and cinematic shadow layering",
+    "temperature": "warm-low-key"
+  },
+  "background": "almost entirely black, with only a few warm golden blurred lights",
+  "palette_text": "black, dark red, aged gold",
+  "atmosphere": "an eerie-beautiful, mysterious, Eastern dark-ritual mood",
+  "quality": [
+    "dramatic chiaroscuro",
+    "cinematic close-up",
+    "real human skin texture",
+    "fine visible pores",
+    "a slight damp sweat sheen",
+    "cinematic shadow gradation",
+    "light film grain",
+    "high contrast",
+    "highly detailed"
+  ],
+  "negative": ["cartoonish look", "plastic over-smoothed skin", "bright daylight look", "cluttered background", "overexposure", "clean new-looking mask", "watermarks", "logos", "text errors"],
+  "tail": ["photorealistic"],
+  "tags": {
+    "use": ["reference"],
+    "mood": ["eerie", "mysterious", "ceremonial"],
+    "theme": ["ethnic-minority", "ritual", "night"]
+  }
+}

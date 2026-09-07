@@ -1,0 +1,63 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "id": "winter-plum-blue-hour",
+  "label": "蓝调雪景汉服人像：毛领冬装、梅花枝、克制情绪",
+  "aspect": "2:3",
+  "orientation": "Vertical",
+  "genre": "cinematic portrait photograph",
+  "subject": {
+    "id": "east-asian-woman",
+    "pronoun": "She",
+    "description": "a young adult East Asian woman with long black hair styled loosely in a romantic historical Chinese hairstyle, slightly messy and natural, wispy bangs and loose strands framing her cheeks, a single small deep-red plum blossom tucked into the hair on the upper right side of her head,",
+    "pose": "as she stands outdoors in a snowy traditional Chinese setting at blue hour, shown from about mid-thigh upward, positioned slightly left of center, her body turned gently three-quarters to the side while her face turns back toward the camera",
+    "expression": "her quiet, delicate, slightly melancholic expression, relaxed lips, and soft direct eye contact",
+    "wardrobe": "an elegant pale ivory and warm pearl-white winter hanfu of soft silk with subtle pastel pink floral embroidery — long, wide, layered sleeves with muted blush-pink and pale sage-green flower details — and over it a very soft, thick cream-white fur shoulder wrap with an oversized fur collar, fluffy and irregular rather than modern or tailored, the fur catching the warm light softly"
+  },
+  "sections": [
+    {
+      "heading": "Plum branch",
+      "body": "beside her, a thin natural plum branch extends diagonally upward from the lower-left corner, with sparse tiny red blossoms and buds — never large or decorative, incidental and natural."
+    },
+    {
+      "heading": "Hands",
+      "body": "one hand is partially hidden inside the fur and sleeve near her waist."
+    },
+    {
+      "heading": "Snow",
+      "body": "light snow is falling, sparse and realistic, a few tiny snowflakes resting on her dark hair and fur — never dramatic."
+    }
+  ],
+  "camera": {
+    "position": "at an intimate distance outdoors",
+    "lens": "85mm portrait",
+    "perspective": "shallow depth of field, the subject in soft focus with facial features still readable",
+    "framing": "a mid-thigh-upward composition, the subject slightly left of center"
+  },
+  "light": {
+    "key": "Soft winter dusk light with cool ambient blue from the snowy environment",
+    "fill": "subtle warm orange side light gently illuminating her face and fur, her skin pale and natural with soft rosy cheeks and nose, no strong makeup, no glossy beauty retouching",
+    "temperature": "blue-hour-mixed"
+  },
+  "background": "a softly blurred traditional Chinese courtyard or waterside walkway, dark wooden architecture and railings barely visible through shallow depth of field, several distant windows or lanterns glowing as small warm amber bokeh lights, the background predominantly cool blue, blue-gray, and muted cyan, in strong but gentle contrast with the warm skin tones and ivory clothing",
+  "palette_text": "cool blue, blue-gray, muted cyan, ivory, pearl white, blush pink, a deep red accent",
+  "atmosphere": "a fleeting candid moment from a poetic Chinese historical winter drama, restrained and emotionally quiet rather than epic fantasy, the environment believable and understated",
+  "quality": [
+    "intimate cinematic portrait photography",
+    "dreamy analog-film aesthetic",
+    "slight diffusion filter",
+    "gentle halation around highlights",
+    "fine film grain",
+    "muted contrast",
+    "lifted blacks",
+    "soft pastel color grading",
+    "subtle atmospheric haze",
+    "slightly imperfect vintage photographic texture"
+  ],
+  "negative": ["fantasy palace in the sky", "celestial clouds", "magical glowing effects", "crowns", "elaborate gold hair ornaments", "excessive jewelry", "bright red hanfu", "pure white wedding dress", "modern coat", "western fur coat", "heavy makeup", "sharp digital HDR", "oversaturated colors", "anime style", "illustration", "porcelain-doll face", "exaggerated snowfall", "large flower bouquet", "symmetrical studio composition", "text", "watermarks", "logos"],
+  "tail": ["photorealistic"],
+  "tags": {
+    "use": ["reference", "cover"],
+    "mood": ["melancholic", "quiet", "poetic"],
+    "theme": ["historical-drama", "winter"]
+  }
+}

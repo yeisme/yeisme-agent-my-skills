@@ -1,0 +1,65 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "id": "still-in-crowd-overhead",
+  "label": "高位俯拍慢门街头：人群中静止的她、牛皮纸花束、慢门动感模糊",
+  "aspect": "3:4",
+  "orientation": "Vertical",
+  "genre": "cinematic street photograph",
+  "subject": {
+    "id": "east-asian-woman",
+    "pronoun": "She",
+    "description": "a young adult East Asian woman with long dark brown-black hair, loosely parted, soft strands around her face, natural and slightly tousled,",
+    "pose": "as she stands completely still in the middle of a crowded pedestrian walkway, tilting her face upward to look directly toward the camera",
+    "expression": "her quiet, vulnerable, restrained expression — relaxed eyebrows, softly opened eyes looking upward, closed lips, no smile, no drama",
+    "wardrobe": "an understated all-black urban outfit: a loose black long blazer-style coat over a fitted black dress or dark inner top, black tights, and simple black knee-high leather boots — elegant but ordinary, not luxury editorial fashion"
+  },
+  "sections": [
+    {
+      "heading": "Composition",
+      "body": "she is the only stationary person, placed near the center of the frame, slightly below center, her entire body from head to boots visible; a strong overhead perspective without wide-angle distortion."
+    },
+    {
+      "heading": "Bouquet",
+      "body": "she holds a medium-sized bouquet close to the front of her torso with both arms, wrapped in wrinkled natural brown kraft paper, containing deep crimson-red and dark burgundy flowers with a small amount of muted greenery — the strongest color accent in the entire image; a plain medium-brown paper shopping bag hangs naturally from her right hand beside her thigh, with no visible brand, logo, lettering, or printed graphics anywhere."
+    },
+    {
+      "heading": "Crowd",
+      "body": "numerous commuters move rapidly in different directions around her, their bodies heavily motion-blurred while she remains relatively still, forming a loose circular flow that emphasizes her emotional isolation; some cross behind her, some pass close to the foreground, and several figures are cut off by the left, right, top, and bottom edges; they wear mostly black, charcoal gray, dark brown, and muted beige winter coats, faces never recognizable, heads, arms, coats, and legs stretching with directional motion blur that feels like a real slow-shutter photograph, not artificial radial blur; she must remain clearly visible through gaps in the moving crowd."
+    },
+    {
+      "heading": "Pavement",
+      "body": "an ordinary urban walkway of large worn gray stone tiles with a narrow strip of tactile paving running vertically through the background near her; subtle stains, scratches, seams, and everyday wear, never excessively detailed."
+    }
+  ],
+  "camera": {
+    "position": "several meters above her, looking steeply downward at approximately a 55-65 degree angle",
+    "lens": "50-70mm",
+    "perspective": "compressed perspective, no wide-angle distortion",
+    "framing": "the woman near the center of the frame, slightly below center, full body from head to boots"
+  },
+  "foreground": {
+    "elements": "Several large blurred pedestrians",
+    "coverage": "partially obscuring the left, right, top, and bottom edges of the frame"
+  },
+  "light": {
+    "key": "Overcast natural daylight, soft diffuse illumination with no hard shadows",
+    "temperature": "overcast-daylight"
+  },
+  "background": "the ordinary urban walkway in muted gray, charcoal, desaturated olive-gray, and faint green-gray tones",
+  "palette_text": "muted gray, charcoal, olive-gray, pale natural skin, deep crimson accent",
+  "atmosphere": "loneliness and stillness inside a busy city — everyone else rushing somewhere while she remains motionless and silently looks upward",
+  "quality": [
+    "realistic candid street photography",
+    "an elevated surveillance-like viewpoint combined with emotional cinematic portraiture",
+    "slow shutter speed simulation: the stationary woman slightly soft but with recognizable facial features, the moving pedestrians in much stronger directional motion blur",
+    "a subdued analog-film aesthetic: low contrast, slightly lifted blacks, muted saturation, fine but visible film grain, subtle scanning noise, mild softness, faint atmospheric haze, gentle highlight diffusion, slight vignette",
+    "an imperfect low-resolution film-scan character, like an old 35mm photograph scanned from film"
+  ],
+  "negative": ["readable text", "logos", "brand names", "watermarks", "typography", "signs", "decorative lettering", "hidden words", "repeated letters", "fashion labels", "neon lights", "cyberpunk elements", "umbrellas", "cars", "dramatic architecture", "studio lighting", "glamour makeup", "beauty retouching", "glossy skin", "HDR", "extreme sharpness", "oversaturated colors", "frozen surrounding pedestrians", "individually sharp crowd faces", "exaggerated posing", "fisheye distortion", "extreme wide angle", "radial zoom blur", "artificial spotlight", "cheerful mood"],
+  "tail": ["photorealistic"],
+  "tags": {
+    "use": ["reference", "cover"],
+    "mood": ["lonely", "still", "isolated"],
+    "theme": ["street", "urban"]
+  }
+}

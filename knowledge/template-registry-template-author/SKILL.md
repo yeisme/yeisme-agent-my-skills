@@ -7,6 +7,8 @@ description: Use when creating, translating, revising, validating, or versioning
 
 创建和维护可由 Agent 稳定编译的 promptrepo solution。正文 owner 是模板内容仓；所有结构化 metadata 由 Template Registry CLI 生成，本 Skill 不手写 `repository.json`、`solution.json`、contract 或 `catalog.json`。
 
+当任务还包含 Skill、多个步骤、图片/视频/文档/剪辑执行或上下游 owner 集成时，先使用 `template-registry-integration-designer` 固定集成边界，再由本 Skill 维护模板正文和合同。
+
 ## 开始
 
 先确认 owner、版本状态和现有消费引用：
@@ -50,6 +52,14 @@ template-registry contract validate --repository . --package <package> --id <sol
 ```
 
 6. 建立公开、虚构、非敏感的 valid/invalid fixtures；运行 catalog build/validate 和消费者 canary。
+
+已有 solution 的 discovery metadata 和 role 准入能力使用独立命令更新：
+
+```bash
+template-registry solution tag set --repository . --package <package> --id <solution> --tag job:<job> --tag artifact:<artifact> --tag modality:<modality> --json
+template-registry solution capability set --repository . --package <package> --id <solution> --capability <capability> --json
+template-registry document capability set --repository . --package <package> --id <solution> --role <role> --locale en --capability <required-capability> --json
+```
 
 ## 修改与翻译
 

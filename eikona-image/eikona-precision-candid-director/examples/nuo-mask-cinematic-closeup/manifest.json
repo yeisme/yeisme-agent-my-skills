@@ -1,0 +1,29 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "shot": "nuo-mask-cinematic-closeup",
+  "combo": "6f3d2cb4",
+  "aspect": "16:9",
+  "model": "openai/gpt-5.4-image-2",
+  "images": [
+    {
+      "file": "prompts/01-nuo-mask-cinematic-closeup.md",
+      "combo": "6f3d2cb4",
+      "tags": [
+        "style:precision-candid",
+        "shot:nuo-mask-cinematic-closeup",
+        "aspect:16:9",
+        "subject:east-asian-woman",
+        "lens:85mm-portrait",
+        "light.temperature:warm-low-key",
+        "use:reference",
+        "mood:eerie",
+        "mood:mysterious",
+        "mood:ceremonial",
+        "theme:ethnic-minority",
+        "theme:ritual",
+        "theme:night"
+      ],
+      "palette": []
+    }
+  ]
+}

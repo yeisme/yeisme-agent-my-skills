@@ -52,6 +52,8 @@ credentialctl doctor openai/personal-default --json
 - `setup` is create-if-absent. Use `rotate` for an existing ref.
 - Add `--probe` to `doctor` only when a provider network request is explicitly intended.
 
+Local single-user default is an inline key in the owner user config (`api_key`, file mode 0600). credentialctl is the shared store and rotation plane; `export` copies into that same slot. Do not tell the user to keep both `api_key` and `api_key_env`. Process environment is CI/temporary override only when the slot is empty. Cross-project contract: `openspec/changes/local-credential-single-slot-v1/`.
+
 ## Inline target workflow
 
 Target URIs have the fixed shape `yeisme-target://<tool>/<kind>/<slot...>`. Supported v1 owners are Eikona, Scaena, Sonora, and Inferrum.
@@ -65,7 +67,7 @@ credentialctl sync openai/personal-default --json
 credentialctl binding list --json
 ```
 
-- `export` writes the central value into the target owner's user config and removes the legacy ref after a successful atomic write.
+- `export` writes the central value into the target owner's single user-level `api_key` slot (0600 inline copy) and removes the legacy ref after a successful atomic write. Do not also write `api_key_env`.
 - `import` asks the target owner to read its user-level inline or explicit named source and call `localstore.Manager.Import`; the value never crosses stdout, a temporary file, or a socket.
 - `export` and `import` create a binding unless `--no-bind` is supplied.
 - Target drift returns a conflict. Use `--force-target --yes` only after reviewing the target copy.

@@ -1,0 +1,29 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "shot": "winter-plum-blue-hour",
+  "combo": "0c8c27c8",
+  "aspect": "2:3",
+  "model": "openai/gpt-5.4-image-2",
+  "images": [
+    {
+      "file": "prompts/01-winter-plum-blue-hour.md",
+      "combo": "0c8c27c8",
+      "tags": [
+        "style:precision-candid",
+        "shot:winter-plum-blue-hour",
+        "aspect:2:3",
+        "subject:east-asian-woman",
+        "lens:85mm-portrait",
+        "light.temperature:blue-hour-mixed",
+        "use:reference",
+        "use:cover",
+        "mood:melancholic",
+        "mood:quiet",
+        "mood:poetic",
+        "theme:historical-drama",
+        "theme:winter"
+      ],
+      "palette": []
+    }
+  ]
+}

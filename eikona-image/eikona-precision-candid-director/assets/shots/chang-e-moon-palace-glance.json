@@ -1,0 +1,65 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "id": "chang-e-moon-palace-glance",
+  "label": "广寒宫嫦娥月下回眸：月洞门框景、巨大满月、冷暖对照",
+  "aspect": "2:3",
+  "orientation": "Vertical",
+  "genre": "Chinese classical fantasy cinema still",
+  "subject": {
+    "id": "chang-e",
+    "pronoun": "She",
+    "description": "a young adult Chinese classical goddess, Chang'e, with very long straight black hair falling naturally past her waist, a delicate silver crescent-moon hair ornament clearly visible but restrained in size,",
+    "pose": "as she stands slightly below center in the moon-gate opening, her body turned three-quarters toward frame right, her head turned back toward the camera in a quiet, restrained backward glance",
+    "expression": "her cool, lonely, thoughtful expression — no smile, no excessive sadness",
+    "wardrobe": "layered moon-white, silver-gray, and faint celadon immortal robes between hanfu and fantasy costume — wide flowing sleeves, translucent gauze layers, subtle low-key silver floral, frost, and botanical embroidery, a light, soft, faintly pearlescent texture, with no ornate gold"
+  },
+  "sections": [
+    {
+      "heading": "Composition",
+      "body": "a huge, dark, ancient, ornate circular wooden gate frame surrounds the frame edges as a natural circular vignette; an extremely large, hazy, softly bright full moon sits at the upper center, partially veiled by night mist and clouds; the figure stands in the lower-center of the gate opening; her crescent-moon hair ornament echoes the full moon in the sky as a small-and-large moon correspondence; the folding fan opens toward her right; the warm palace lantern sits at frame right; osmanthus and plants occupy the left and right foreground."
+    },
+    {
+      "heading": "Fan",
+      "body": "she holds an opened Chinese folding fan near her right side — gray-silver, light brown-gray, or pale celadon-gray, with clearly visible ribs, the posture natural and elegant."
+    },
+    {
+      "heading": "Background",
+      "body": "the dreamlike Moon Palace at night: distant ancient Chinese palaces, pavilions, eaves, and layered terraces, all veiled in thick blue-green night mist as vague silhouettes; low clouds and mist float over the ground and the distance, creating immortal-realm spatial layering; a single small warm red-orange palace lantern at frame right midground is the only obvious warm light source in the cold frame."
+    },
+    {
+      "heading": "Foreground",
+      "body": "dense clusters of small osmanthus branches, flowering twigs, and hazy plants grow at the lower left and right of the moon gate and in the foreground — gray-green, gray-pink, and pale brown, densely flowered but soft-focus, never garish; branches naturally intrude into the frame edges to strengthen the foreground-background layering."
+    }
+  ],
+  "camera": {
+    "position": "inside the palace, shooting outward through the gate",
+    "lens": "85mm portrait",
+    "perspective": "a medium-long distance with gentle subject-background separation, the background never fully blurred away; slight soft focus",
+    "framing": "a full-body composition inside the circular gate frame"
+  },
+  "light": {
+    "key": "Soft cyan-blue moonlight dominates, the full moon forming a huge diffused backlight with atmospheric perspective",
+    "fill": "a very soft side-front fill on her face, her skin naturally cool-fair, with the faintest warm orange reflection from the lantern at frame right; no strong rim light, no high contrast",
+    "temperature": "moonlit-cool"
+  },
+  "background": "the mist-veiled Moon Palace nightscape as described, never reduced to a pure white or empty backdrop",
+  "palette_text": "muted hazy celadon, gray-blue, moon white, touches of gray pink",
+  "atmosphere": "a faded Oriental film-dream mood — poetic, quiet, restrained, ethereal, with damp night mist",
+  "quality": [
+    "visible but refined atmospheric haze",
+    "soft glow and slight bloom",
+    "light film grain",
+    "slightly lowered contrast with gently lifted blacks",
+    "the feel of an old cinema lens shooting a dream",
+    "85mm portrait lens feel",
+    "poetic composition",
+    "highly detailed"
+  ],
+  "negative": ["text", "titles", "watermarks", "logos", "pigs", "rabbits", "modern objects", "modern hairstyles", "Western faces", "crowns", "exaggerated headdresses", "golden ornate costumes", "revealing clothing", "weapons", "stiff frontal standing pose", "anime style", "2D illustration look", "3D game render", "modern commercial CG look", "sharp game concept art", "over-sharpening", "HDR look", "high-saturation neon colors", "pure white background", "a crescent moon in the sky"],
+  "tail": ["photorealistic"],
+  "tags": {
+    "use": ["reference", "cover"],
+    "mood": ["ethereal", "lonely", "restrained"],
+    "theme": ["xianxia", "chinese-fantasy"]
+  }
+}

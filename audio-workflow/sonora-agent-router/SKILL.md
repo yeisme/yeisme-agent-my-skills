@@ -39,6 +39,21 @@ Use `--json` only when the task needs full nested capabilities, strategy compari
 
 `provider list` 同时给出代码 catalog 与本地 credential 状态，不访问远程 provider。`credential_missing` 不是未适配。`tts models list --local` 只列内建本地模型生命周期，不代表已部署或可渲染。测试 provider 不进入 `provider list`。
 
+## Credentials
+
+本地默认把 key 写进用户级配置的单一槽，不要再配 `api_key_env`：
+
+```yaml
+# ~/.sonora/config.yaml  (0600)
+providers:
+  suno-kie:
+    enabled: true
+    base_url: https://api.kie.ai
+    api_key: <inline-key>
+```
+
+`api_key` 按内容识别：内联密钥、环境变量名，或 `yeisme-credential://...`。槽为空才读进程环境 `SONORA_<PROVIDER>_API_KEY`。跨工具复用或轮换再用 `credentialctl export --to yeisme-target://sonora/provider/<id>`，写入的仍是同一 `api_key` 槽。Agent 不得把真实 key 写进项目配置、docs、evidence 或 stdout。
+
 ## Remote Safety
 
 1. Inspect `sonora provider doctor --provider <provider-id> --agent` before a remote action.

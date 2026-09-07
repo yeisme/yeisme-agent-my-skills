@@ -1,0 +1,54 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "id": "crimson-shrine-trance",
+  "label": "暗黑祭祠烛光恍惚：后仰伸颈、红烛环绕、傩面前景",
+  "aspect": "9:16",
+  "orientation": "Vertical",
+  "genre": "photorealistic cinematic portrait",
+  "subject": {
+    "id": "east-asian-woman",
+    "pronoun": "She",
+    "description": "an adult East Asian woman with long messy black hair, wet loose strands framing her face, soft smoky eye makeup, flushed skin, and glossy lips,",
+    "pose": "as she leans slightly forward while tilting her head far back, chin raised, neck elongated, eyes looking upward, lips softly parted",
+    "expression": "a dreamy trance-like softness",
+    "wardrobe": "a deep red and black embroidered camisole dress with ornate traditional patterns and thin straps, delicate red metallic hair ornaments trailing behind her hair"
+  },
+  "sections": [
+    {
+      "heading": "Setting",
+      "body": "she is surrounded by burning red candles, dark carved wood, hanging crimson fabric, antique ritual objects, and traditional masks."
+    }
+  ],
+  "camera": {
+    "position": "at close range, a tight vertical composition",
+    "lens": "50mm",
+    "perspective": "shallow depth of field, dramatic chiaroscuro",
+    "framing": "her face and upper body dominating the frame"
+  },
+  "foreground": {
+    "elements": "A blurred painted ritual mask and a large glowing candle",
+    "coverage": "the lower-left and lower-right foreground"
+  },
+  "light": {
+    "key": "Warm candlelight illuminates her face and shoulders from the side",
+    "fill": "a strong orange rim light outlines her hair, with deep black shadows behind and red and gold reflections throughout the scene",
+    "temperature": "candlelight-warm"
+  },
+  "background": "the dark ancient ritual shrine interior sinking into deep black shadows",
+  "palette_text": "deep red, crimson, black, warm gold",
+  "atmosphere": "a sensual, mysterious Chinese ritual fantasy mood",
+  "quality": [
+    "realistic skin texture",
+    "individual hair strands",
+    "subtle film grain",
+    "dramatic chiaroscuro",
+    "highly detailed"
+  ],
+  "negative": ["cartoonish look", "plastic over-smoothed skin", "harsh daylight", "overexposure", "cluttered composition", "watermarks", "logos", "text errors"],
+  "tail": ["photorealistic"],
+  "tags": {
+    "use": ["reference"],
+    "mood": ["sensual", "mysterious", "trance"],
+    "theme": ["ritual", "night"]
+  }
+}

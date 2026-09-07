@@ -1,0 +1,44 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "id": "celestial-goddess-palace",
+  "label": "修仙中式幻想：凌霄殿玉女、云海金顶、低机位全身像",
+  "aspect": "9:16",
+  "orientation": "Vertical",
+  "genre": "Chinese mythological cinema still",
+  "subject": {
+    "id": "celestial-goddess",
+    "pronoun": "She",
+    "description": "an elegant adult Chinese celestial goddess",
+    "pose": "standing atop the white jade steps of Lingxiao Palace",
+    "expression": "her serene, transcendent calm",
+    "wardrobe": "a flowing ivory hanfu embroidered with delicate gold cloud patterns, translucent silk ribbons drifting in the high-altitude breeze, and elaborate golden hairpins with dangling pearls"
+  },
+  "camera": {
+    "position": "from a low angle",
+    "lens": "35mm environmental portrait",
+    "framing": "a full-body composition with monumental palace gates rising above an endless sea of clouds behind her"
+  },
+  "light": {
+    "key": "The first sunlight illuminating her profile, with atmospheric depth through the cloud sea",
+    "temperature": "golden-dawn"
+  },
+  "background": "monumental palace gates rising above an endless sea of clouds",
+  "palette_text": "warm ivory, pale gold, cloud white",
+  "atmosphere": "a transcendent celestial xianxia mood",
+  "quality": [
+    "Chinese mythological cinema",
+    "realistic skin texture",
+    "intricate textile details",
+    "atmospheric depth",
+    "high dynamic range",
+    "4K",
+    "highly detailed"
+  ],
+  "negative": ["cartoonish look", "plastic over-smoothed skin", "modern objects", "cluttered composition", "overexposure", "watermarks", "logos", "text errors"],
+  "tail": ["photorealistic"],
+  "tags": {
+    "use": ["reference", "cover"],
+    "mood": ["ethereal", "celestial", "serene"],
+    "theme": ["xianxia", "chinese-fantasy"]
+  }
+}

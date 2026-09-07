@@ -1,0 +1,28 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "shot": "crimson-shrine-trance",
+  "combo": "fe1e12ac",
+  "aspect": "9:16",
+  "model": "openai/gpt-5.4-image-2",
+  "images": [
+    {
+      "file": "prompts/01-crimson-shrine-trance.md",
+      "combo": "fe1e12ac",
+      "tags": [
+        "style:precision-candid",
+        "shot:crimson-shrine-trance",
+        "aspect:9:16",
+        "subject:east-asian-woman",
+        "lens:50mm",
+        "light.temperature:candlelight-warm",
+        "use:reference",
+        "mood:sensual",
+        "mood:mysterious",
+        "mood:trance",
+        "theme:ritual",
+        "theme:night"
+      ],
+      "palette": []
+    }
+  ]
+}
