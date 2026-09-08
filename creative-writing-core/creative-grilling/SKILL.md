@@ -13,6 +13,11 @@ description: Use when an explicitly requested creative interview needs the share
 - 需要选择 `quick|standard|deep` 时读取 [references/depth-routing.md](references/depth-routing.md)。
 - 生成 route、brief 或 owner handoff 时读取 [references/contracts.md](references/contracts.md)。
 - 需要检查覆盖场景时读取 [references/route-matrix.md](references/route-matrix.md)。
+- 进入、恢复或重开 owner-session 会话时按 [references/frontier-protocol.md](references/frontier-protocol.md) 的恢复小节执行；binding 合同见 [references/contracts.md](references/contracts.md)。
+- 阶段确认并授权试写时读取 [references/writer-handoff.md](references/writer-handoff.md)，串行交接最窄 writer 并在候选返回后恢复访谈。
+- 宿主问答控件适配、typed action 发现或 legacy owner 降级时读取 [references/host-adaptation.md](references/host-adaptation.md)。
+- 其他 AI 做剧（非漫剧）分支读取 [references/ai-drama-decision-map.md](references/ai-drama-decision-map.md)。
+- 审阅交互质量时读取 [references/canaries.md](references/canaries.md) 的合成 transcript canary。
 
 ## 共享工作流
 
@@ -28,6 +33,8 @@ description: Use when an explicitly requested creative interview needs the share
 7. 用户连续机械接受建议时，只复核最高影响、最难逆转的一项；不人为制造低价值争论。
 8. frontier 为空后输出聊天内 `creative.decision-brief.v0.1`。用户确认共同理解前，不调用 owner mutation、writer、生成 provider 或生产操作。
 9. 用户确认后只输出 `creative.owner-handoff.v0.1`，由后续 owner Skill 决定真实命令和确认门。
+10. 用户明确授权试写时，按 [references/writer-handoff.md](references/writer-handoff.md) 串行交接最窄 writer；候选返回进入待审，只重开受影响节点，访谈不代写正文。
+11. 存在 `creative.owner-session-binding.v0.1` 时按恢复/刷新/重开规则执行；binding 缺席时行为与旧版完全一致。
 
 ## 问题格式
 

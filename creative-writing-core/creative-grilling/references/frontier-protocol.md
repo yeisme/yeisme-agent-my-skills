@@ -56,6 +56,30 @@ Agent 负责读取现有项目状态、canon、owner 合同、平台规范、工
 - 不把同义改写的两个选项伪装成真实选择。
 - 不为追求问题数量展开与目标 artifact 无关的分支。
 
+## 恢复、刷新与重开（owner-session 可选）
+
+本节只在存在 `creative.owner-session-binding.v0.1` 时生效；projectless 会话不引入任何持久状态文件，恢复能力完全来自 owner 的版本化 projection。
+
+### 恢复
+
+1. 将 binding 的 `session_revision`/`session_digest` 与 owner 当前版本比对；不一致时先刷新（`needs_refresh`），刷新后重算 frontier，再继续提问。
+2. 恢复时展示三件事：已决定摘要（含理由与取舍）、未决项、被重开节点及原因；仍有效的决定不要求重答。
+3. 问题引用使用稳定 ref（如 `novel.character.core_motivation`），不使用“上一轮 Q3”这类会随版本漂移的序号。
+
+### 示例
+
+- 稳定 ref：恢复时表述为“`novel.commitment.format=连载` 已定，理由是周更留存测试”，而不是“你上次第 2 题选了 B”。binding 刷新后轮次序号变化，ref 不变。
+- 同轮依赖：`structure.act3_payoff` 依赖 `character.core_motivation`，而后者被 owner 标记 `reopened` 时，本轮只问动机，不同时问结局；两问同时出现即违规。
+- 旧 source：决定引用 `source_refs=[auctra://proj/nan-1/story@rev12]`；恢复时 owner 已到 rev15 且相关场景被 reopen，该决定回到 `reopened`，需在新 source 上重问，不沿用旧结论。
+- 角色身份：恢复摘要始终区分“你的决定（用户，decision 来源）”与“我的建议（Agent，proposal/hypothesis）”；Agent 建议不得被写成既成事实。
+- 未知转试写：恢复后用户对“两种结局哪种更抓人”回答“不知道”，转 `needs_prototype` 并给出有界 proof handoff（如两个 800 字结尾候选），不替用户选择。
+
+### 重开与在途交接
+
+- owner 将上游决定标记 `reopened` 时，只重开依赖它的下游分支；未受影响的选择保留并展示。
+- 存在进行中的 writer handoff 时，上游重开先暂停该交接，待重问收敛后用新 digest 重新生成 handoff；不拿旧 digest 提交。
+- 每次重开说明影响范围（哪些决定保留、哪些作废、为什么），不要求用户复述历史。
+
 ## 收束与确认
 
 frontier 为空不等于自动完成。先总结已决定、暂定、未决和验证项，再询问用户是否确认共同理解。用户确认后只完成访谈 handoff；除非用户随后另行要求，不自动进入计划或实施。

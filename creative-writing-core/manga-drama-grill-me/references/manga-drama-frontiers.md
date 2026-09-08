@@ -39,3 +39,15 @@
 - rights、continuity、cost、audio、similarity 和 delivery gate。
 - 从 proof slice 扩展到 bounded batch 所需证据。
 
+
+## 阶段进入与 proof 转换
+
+- 每个 phase 只问该 phase 的最窄问题集：上游 phase 未定时，不预问下游（如 format 未定不问单集钩子密度）。
+- 每 phase 至少保留一个有代价的选择（如单集闭环比例高则累积弱、比例低则新观众门槛高），且允许“维持现状”作为可反驳建议的对照。
+- “是否抓人、画面是否可读、声音是否有压迫感”属于 hypothesis：转为 A/B 短试写、6–12 格 proof storyboard、镜头或声音样片；返回证据后只重开受影响节点。
+- 媒介差异（短剧/电视/电影/单元/喜剧/音频）见 `creative-grilling/references/ai-drama-decision-map.md`；漫剧访谈不重复其路由问题。
+
+## 中途进入与恢复
+
+- 中途进入读取 owner 当前版本 accepted 的 format/canon/分镜决定，只访谈 `unsettled`/`reopened` 节点；仍有效决定不重问。
+- 上游（format、人物核心、rights）改动时按 `creative-grilling/references/frontier-protocol.md` 重开受影响分支，并暂停在途 Scaena/Auctra 交接。

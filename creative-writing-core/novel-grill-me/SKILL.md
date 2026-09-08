@@ -14,6 +14,8 @@ description: Use when the user explicitly wants a direct dependency-aware interv
 3. 否则设置 `project_mode=projectless`，保持 chat-only。
 4. 按共享 depth 规则选择 `quick|standard|deep`。长篇、连载、改编、跨卷或 canonical 变更默认 `deep`。
 5. 生成 `creative.grill-route.v0.1`，然后按当前小说 phase 运行 frontier。
+6. 按 [references/novel-frontiers.md](references/novel-frontiers.md) 的阶段进入条件加载最窄阶段问法（想法、人物、结构、章节、场景、成稿、修订）；上游未定时不预问下游。
+7. 用户提供 `creative.owner-session-binding.v0.1` 时按 `frontier-protocol.md` 的恢复/刷新/重开规则执行；中途进入或接手已有项目时先读取 owner 当前版本的 accepted 决定，只访谈未决与被重开节点。
 
 ## 小说范围
 
@@ -23,7 +25,7 @@ description: Use when the user explicitly wants a direct dependency-aware interv
 - 章节、场景、视角、叙述距离、声音和对白。
 - 修订、连续性、留存、反馈归因和改编边界。
 
-问题只覆盖当前 artifact。篇幅和读者承诺未定时，不追问精细章纲；canon 和 source revision 未核实时，不询问用户当前实现事实。
+问题只覆盖当前 artifact。篇幅和读者承诺未定时，不追问精细章纲；canon 和 source revision 未核实时，不询问用户当前实现事实。“不知道、哪个更好看”转有界 proof（试写/proof slice/读者小样），不替用户决定；阶段理解确认后才可按 `creative-grilling/references/writer-handoff.md` 串行交接最窄 writer，候选返回后恢复访谈。
 
 ## 收束
 

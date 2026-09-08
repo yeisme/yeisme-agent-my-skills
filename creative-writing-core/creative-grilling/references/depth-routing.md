@@ -19,3 +19,9 @@
 
 用户说“收束、先到这里、接受当前不确定性”时立即停止扩展 frontier，并把剩余节点写入 brief。
 
+
+## 恢复与重开时的 depth
+
+- 恢复 owner-session 会话沿用 binding `workflow_version` 记录的 depth；用户显式覆盖优先。
+- 上游重开只对受影响分支重新计 depth：原 `deep` 会话中的局部重开不强制整链重跑，按重开分支的风险单独选择 `quick|standard|deep`。
+- 刷新（`needs_refresh`）不重置 depth，也不清空仍有效的决定；只有改变媒介、受众、篇幅、商业模式、原创性或生产边界的回答，才触发更大范围重开。
