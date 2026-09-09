@@ -66,10 +66,30 @@
     "4K",
     "ultra detailed"
   ],
-  "negative": ["plastic over-smoothed skin", "wig-cap look", "religious ceremony scene", "large overexposed areas", "modern objects", "visible furniture"],
-  "tail": ["photorealistic"],
+  "negative": [
+    "plastic over-smoothed skin",
+    "wig-cap look",
+    "religious ceremony scene",
+    "large overexposed areas",
+    "modern objects",
+    "visible furniture"
+  ],
+  "tail": [
+    "photorealistic"
+  ],
   "tags": {
-    "use": ["reference", "cover"],
-    "mood": ["gothic", "dark-romantic", "mysterious"]
+    "use": [
+      "reference",
+      "cover"
+    ],
+    "mood": [
+      "gothic",
+      "dark-romantic",
+      "mysterious"
+    ],
+    "theme": [
+      "gothic",
+      "editorial"
+    ]
   }
 }

@@ -20,13 +20,26 @@ explicit supported Eikona model selection, including Grok or Midjourney. When
 the user does not specify a model, default to `openai/gpt-5.4-image-2`. Do not
 select test-only model identifiers.
 
+For remote Eikona LAN MCP (`http://<rfc1918-ip>:<port>/mcp`), `edit`
+`reference_image` must be a server-reachable `eikona://artifact/<handle>` or
+run artifact URI. Do not pass the Codex/Mac host path (`/var/folders/...`,
+`/Users/...`, Windows drive letters, clipboard temp files). Those files are
+not on the Eikona server. Probe connectivity with `generate` and no
+reference; then `edit` the returned artifact. Same-host CLI `--input` is
+unchanged.
+
 Keep the idempotency key as submission evidence. After a response returns a
 `run_id`, use `eikona.execute` with `action: "wait"` (or `status`/`inspect`
-when the typed response directs it) against that same run until terminal. If
-the submit transport outcome is lost before any `run_id` is received, report an
+when the typed response directs it) against that same run. Remote `wait` is a
+bounded snapshot, not a block-until-image call. If the run is `queued`, poll
+the same id. If it is `failed`, stop; do not resubmit that idempotency key
+and do not treat queued-without-artifacts as a dead MCP. If the submit
+transport outcome is lost before any `run_id` is received, report an
 unknown outcome and stop: do not resubmit or claim that the idempotency key
 reconciled the run. Only inspect readiness, a model, or a resource after a
 typed Eikona error says that exact information is needed.
+`AUTH_ACTION_DENIED` on `providers.doctor` from a generation-loop key is
+purpose isolation, not proof the server is down.
 
 ## Artifact delivery and download recovery
 

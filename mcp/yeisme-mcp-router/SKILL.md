@@ -24,6 +24,7 @@ against the MCP surface directly.
 | Build or change a self-built MCP server under this repository | `yeisme-mcp-builder` | Author-side minimal-tool-face and token-budget rules |
 | Add/update a backend in `mcp/registry.json` | `yeisme-mcp-registry-onboarding` | Registry onboarding governance |
 | Configure Codex against the Gateway | `codex-agent-runtime` | Gateway-rendered client config, tool-name mapping |
+| Configure Codex against a direct Eikona LAN `/mcp` URL | `eikona-mcp-image` then `codex-agent-runtime` | Owner HTTP MCP, not Gateway; remote edit forbids client local paths |
 | scaena mcp operations | `scaena mcp capabilities --json` then `tools/list` | Current diagnostic entry is `scaena mcp doctor` / `scaena mcp capabilities`; confirm live names before execute. Dedicated operating skill remains later; do not invent tool names |
 
 Gateway source maintenance (`yeisme-mcp-gateway-maintainer`), peering

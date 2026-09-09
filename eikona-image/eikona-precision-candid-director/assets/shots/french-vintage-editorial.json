@@ -45,10 +45,39 @@
     "4K",
     "ultra detailed"
   ],
-  "negative": ["eerie expression", "stiff limbs", "deformed hands", "extra hands or limbs", "unbalanced proportions", "low quality or blur", "overexposure", "cheap look", "cluttered background", "cartoonish look", "exaggerated makeup", "watermarks", "logos", "text errors", "dull lifeless eyes"],
-  "tail": ["photorealistic"],
+  "negative": [
+    "eerie expression",
+    "stiff limbs",
+    "deformed hands",
+    "extra hands or limbs",
+    "unbalanced proportions",
+    "low quality or blur",
+    "overexposure",
+    "cheap look",
+    "cluttered background",
+    "cartoonish look",
+    "exaggerated makeup",
+    "watermarks",
+    "logos",
+    "text errors",
+    "dull lifeless eyes"
+  ],
+  "tail": [
+    "photorealistic"
+  ],
   "tags": {
-    "use": ["cover", "poster"],
-    "mood": ["elegant", "vintage", "editorial"]
+    "use": [
+      "cover",
+      "poster"
+    ],
+    "mood": [
+      "elegant",
+      "vintage",
+      "editorial"
+    ],
+    "theme": [
+      "editorial",
+      "studio-portrait"
+    ]
   }
 }

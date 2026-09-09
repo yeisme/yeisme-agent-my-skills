@@ -32,10 +32,25 @@
     "subtle motion softness",
     "imperfect framing"
   ],
-  "negative": ["studio lighting", "beauty filter"],
+  "negative": [
+    "studio lighting",
+    "beauty filter"
+  ],
   "tags": {
-    "use": ["reference"],
-    "mood": ["intimate", "spontaneous", "late-night"]
+    "use": [
+      "reference"
+    ],
+    "mood": [
+      "intimate",
+      "spontaneous",
+      "late-night"
+    ],
+    "theme": [
+      "night",
+      "intimate"
+    ]
   },
-  "tail": ["photorealistic"]
+  "tail": [
+    "photorealistic"
+  ]
 }

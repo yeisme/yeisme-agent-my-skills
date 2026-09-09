@@ -60,7 +60,8 @@ description: Use when the user explicitly requests Eikona/eikona visual generati
 6. 要求下游输出：visual brief、推荐命令、review packet、feedback、handoff/apply 下一步，以及 Scaena context 的 freeze/preflight/consistency 下一步。
 7. 本地离线验证使用 `--dry-run` 和唯一 canonical ref `openai/gpt-5.4-image-2`，不提交 provider 请求；repository test harness 不属于 installed-user/agent workflow。真实远程默认也使用该 ref。必须拒绝 bare `gpt-5.4-image-2`、`gpt-image-2` 以及 provider-colon、重复前缀和下划线变体，并将 `openai/gpt-5.4-image-2` 作为唯一修复提示。
 8. 尺寸参数按 provider 控制方式处理：付费 OpenAI/gateway 原生参数路径在用户未指定尺寸时统一使用 `--size 2k` 或 runbook `size: 2k`；用户明确给出其他 size 时原样设置，不换算、不降级。`codex:imagegen` 是 `prompt_instruction` 路径，推荐不写 `--size 1k`，由 runtime 自动向提示词注入 1K 约束；只有确需指定受支持画布时才保留显式 `--size` 并接受 warning。请求 2k/4k 会在提交前失败，这是通道上限。比例继续用 `--aspect` 单独表达，不能用 1024/1536 示例替代 2K 请求。
-9. 不从最终 prompt 文本反向推断 provider 权限或 typed controls。用户说“不要付费”“使用参考图”“编辑背景”“竖版 2K”时，router 必须把这些决定映射到明确的 model/channel、reference mode、canvas 或 execution policy；若无法安全映射，就保留为未决输入而不是让 provider 自行猜测。
+9. 用户点名 Grok 或 Midjourney 时先确认通道能力再发命令：Midjourney（如 huanwang 通道）没有原生分辨率控制，`--size 1k|2k|4k` 会在提交前失败、`--aspect` 当前被适配器丢弃——画幅改用 `--set aspect_ratio=W:H` 或 `--size WxH`，原生 2K 需求直接说明 MJ 给不了并建议 openai 通道；Grok Imagine 编辑对写实人物的换装/泳装类请求容易被 provider 内容审核拒绝（`CONTENT_REJECTED`），被拒后如实报告审核归因，不要静默改写提示词反复重试。详见 `yeisme-eikona-cli-runtime` 的 provider flag 支持矩阵。
+10. 不从最终 prompt 文本反向推断 provider 权限或 typed controls。用户说“不要付费”“使用参考图”“编辑背景”“竖版 2K”时，router 必须把这些决定映射到明确的 model/channel、reference mode、canvas 或 execution policy；若无法安全映射，就保留为未决输入而不是让 provider 自行猜测。
 
 选模型前先分清「代码已适配」和「本机已配置」。缺凭据不得说成模型未适配：
 

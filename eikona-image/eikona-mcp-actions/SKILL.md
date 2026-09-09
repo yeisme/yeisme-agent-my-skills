@@ -76,6 +76,11 @@ Full per-action kind (readonly/generation/mutation) and safety columns live in
 - Keep the idempotency key as submission evidence. If the transport outcome is
   lost before any `run_id` arrives, report unknown outcome and stop; never
   resubmit or claim the key reconciled the run.
+- Remote LAN `edit` must not send the MCP host local path as `reference_image`.
+  Use `eikona://artifact/<handle>` on the Eikona server. `wait` is a bounded
+  status snapshot; a worker-failed run must be treated as `failed`, not as an
+  infinite queue. `AUTH_ACTION_DENIED` on operator diagnostics from a
+  generation-loop key is expected.
 - Consume the MCP `ResourceLink` immediately. On 404/expiry, call
   `artifact.access` once only when it is advertised for the active credentials
   and the caller is an authorized operator; send `confirm: true` and the

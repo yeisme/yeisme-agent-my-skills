@@ -19,6 +19,14 @@ For new Eikona generations, the canonical remote model ref is `openai/gpt-5.4-im
 
 ## Capture External Images
 
+For a remote Eikona MCP session, never pass a Mac/Linux local path as a reference. Start an upload session, PUT the bytes to its presigned URL, complete it, then use the returned canonical URI:
+
+```bash
+eikona asset upload ./reference.png --json
+```
+
+The resulting `eikona://asset/<id>` is valid for `image.edit`; legacy `eikona://artifact/<id>` remains readable. Treat `asset.upload.begin`/`asset.upload.complete` as the provider-neutral contract that Sonora and Scaena will consume.
+
 Preserve prompt, model, and source tool whenever available:
 
 ```bash

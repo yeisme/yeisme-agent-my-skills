@@ -27,10 +27,22 @@
     "temperature": "mixed-warm-cool"
   },
   "palette": [
-    { "color": "warm cream", "pct": 40 },
-    { "color": "dark brown-black", "pct": 25 },
-    { "color": "cool blue-gray", "pct": 20 },
-    { "color": "skin tone", "pct": 15 }
+    {
+      "color": "warm cream",
+      "pct": 40
+    },
+    {
+      "color": "dark brown-black",
+      "pct": 25
+    },
+    {
+      "color": "cool blue-gray",
+      "pct": 20
+    },
+    {
+      "color": "skin tone",
+      "pct": 15
+    }
   ],
   "fingerprints": [
     "city lights outside the large window",
@@ -44,9 +56,22 @@
     "subtle film grain",
     "realistic candid photography"
   ],
-  "negative": ["collage", "split screen"],
+  "negative": [
+    "collage",
+    "split screen"
+  ],
   "tags": {
-    "use": ["reference", "cover"],
-    "mood": ["intimate", "lived-in"]
+    "use": [
+      "reference",
+      "cover"
+    ],
+    "mood": [
+      "intimate",
+      "lived-in"
+    ],
+    "theme": [
+      "night",
+      "intimate"
+    ]
   }
 }

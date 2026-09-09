@@ -11,7 +11,9 @@ description: Use when creating, translating, revising, validating, or versioning
 
 ## 开始
 
-先确认 owner、版本状态和现有消费引用：
+新增内容先确认层级（实例 / Provider 兼容 / 加变量 / 新 solution）：图像侧决策树见模板仓 `docs/adding-image-prompts.md`，视频侧见 `docs/adding-video-prompts.md`；只有确认需要新 solution 时才进入本 Skill 的新建流程。
+
+再确认 owner、版本状态和现有消费引用：
 
 ```bash
 template-registry catalog validate --repository . --json

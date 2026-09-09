@@ -9,9 +9,9 @@ description: Use when creating precision-parameterized candid lifestyle photos t
 
 ## 输入
 
-- `shot`：镜头 spec id（`assets/shots/<id>.json`，现有 `night-bedroom-lookback`、`night-flash-lean-in`；`--list-shots` 查看）。
+- `shot`：镜头 spec id（`assets/shots/<id>.json`；`--list-shots` 查看，全部镜头导航见 [references/shot-library.md](references/shot-library.md)）。
 - `aspect` / `size`：默认取 spec 内值（9:16，`1024x1536`）。
-- 新镜头：复制现有 spec 改内容，不需要改代码。
+- 新镜头：复制现有 spec 改内容，不需要改代码；完整流程（含语法规则与出图门禁）见模板仓库 `data/yeisme-prompt-templates/docs/adding-image-prompts.md` 食谱 A。
 
 ## 工作流
 

@@ -46,6 +46,7 @@ description: Use when generating batches of candid lifestyle photography portrai
 
 ## 采样规则
 
+- 新增/修改矩阵取值（含兼容规则）走模板仓库 `data/yeisme-prompt-templates/docs/adding-image-prompts.md` 食谱 D：先改 `matrix.json`，同步文档与 contract 枚举，再 dry-run 验证。
 - 12 个采样维度：`expression / wardrobe / scene / moment / shot / lens / camera / composition / foreground / light / palette / state`，取值池见 [references/matrix.md](references/matrix.md)。
 - **兼容约束**：机位、构图、前景、瞬间、光线与场景类别有硬约束（荷叶机位只配荷塘类场景、车厢机位只配车内场景等），采样器自动校验，违规组合直接重采。规则表见 [references/compatibility.md](references/compatibility.md)。
 - **批内去重**：组合哈希（combo，sha1 前 8 位）全局唯一；`scene / camera / composition / foreground` 四维在批内强制不重复——这四维最决定画面观感。

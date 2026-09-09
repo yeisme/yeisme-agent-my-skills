@@ -31,7 +31,7 @@ description: Use when creating, organizing, reviewing, or executing Eikona image
 6. 先用 `--dry-run` 和 canonical model ref 验证路径和展开结果；它不提交 provider 请求。再由用户批准真实 provider run。
 7. 通过 `review packet`、`feedback` 和 `assets handoff` 完成证据链；不要手改 run-owned snapshot 或 `prompt_sources.json`。
 
-模板归属约束：若某类提示词的正文模板已进入模板仓库（`data/yeisme-prompt-templates/solutions/**` 的 promptrepo 解决方案包，如 `image/candid-portrait-matrix`、`image/iconic-landmark-poster`、`image/precision-candid-shot`），模板以仓库为 canonical；本地 prompt 文件是对应 director 技能编译器绑定数据 spec 后的产物，不回填、不在技能或集合目录复制模板正文。模板改动走模板仓库并用 template-registry `contract refresh` 更新 digest。语言约定：编译与投递只使用 `prompts/main.en.md`（en 给 agent/模型）；`docs/template-zh-CN.md` 是人工审阅译文，不进入编译。
+模板归属约束：若某类提示词的正文模板已进入模板仓库（`data/yeisme-prompt-templates/solutions/**` 的 promptrepo 解决方案包，如 `image/candid-portrait-matrix`、`image/iconic-landmark-poster`、`image/precision-candid-shot`、`image/xianxia-hazy-fantasy`），模板以仓库为 canonical；本地 prompt 文件是对应 director 技能编译器绑定数据 spec 后的产物，不回填、不在技能或集合目录复制模板正文。模板改动走模板仓库并用 template-registry `contract refresh` 更新 digest。语言约定：编译与投递只使用 `prompts/main.en.md`（en 给 agent/模型）；`docs/template-zh-CN.md` 是人工审阅译文，不进入编译。新增图像提示词内容的决策树与食谱见模板仓库 `docs/adding-image-prompts.md`。
 
 ## 单文件生成
 
