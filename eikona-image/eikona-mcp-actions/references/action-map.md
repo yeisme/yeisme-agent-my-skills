@@ -1,7 +1,9 @@
-# Eikona MCP v0.7.7 action map
+# Eikona MCP development action map
 
-Bundled navigation reference for the 82 executable v0.7.7 `eikona.execute`
-actions. It is verified against `ActionDescriptors`; use it directly instead
+Navigation reference for 89 executable development `eikona.execute`
+actions. This includes unreleased precision-edit and upload lifecycle actions;
+an installed older release must not be assumed to expose them. It is verified
+against `ActionDescriptors`; use it directly instead
 of catalog discovery at session start. Refresh with `eikona mcp capabilities
 --json --full` or the scoped REST action endpoint only after an actual
 installed-version mismatch or typed denial requires diagnosis.
@@ -17,6 +19,13 @@ consumer actions only; unknown and non-entitled actions return the identical
 | --- | --- | --- | --- |
 | `generate` | generation | consumer | Submit a new image run (stable idempotency key) |
 | `edit` | generation | consumer | Submit an edit run with a supplied reference image |
+| `edit.prepare` | generation | consumer | Prepare an immutable region or mask edit; unparsed annotations return needs_analysis |
+| `edit.plan.show` | readonly | consumer | Read an authorized edit plan summary and preview |
+| `asset.upload.begin` | mutation | consumer | Create an authorized upload session for an input image |
+| `asset.upload.complete` | mutation | consumer | Validate uploaded image bytes and return a durable asset URI |
+| `asset.upload.status` | readonly | consumer | Inspect an existing upload session |
+| `asset.upload.abort` | mutation | consumer | Abort an authorized upload session |
+| `asset.upload.cleanup` | mutation | consumer | Clean up upload sessions through the upload lifecycle service |
 | `run.batch` | generation | consumer | Submit a batch of runs in one call |
 | `wait` | generation | consumer | Wait on a run until terminal |
 | `status` | readonly | consumer | Read back run status |

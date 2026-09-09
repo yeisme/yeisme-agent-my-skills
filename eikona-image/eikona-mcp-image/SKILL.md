@@ -10,6 +10,16 @@ mentions Eikona or `eikona-lan`. Do not switch to a generic image-generation
 skill unless the user explicitly asks for that fallback or Eikona returns a
 typed blocker that requires it.
 
+## Precision editing when advertised
+
+Check installed capabilities before using `edit.prepare`, `edit.plan.show`, or `precision_edit`; development examples do not prove installed support. Provide a clean original first, plus exactly one annotation copy, mask, or typed regions. Keep annotation and mask out of ordinary reference images. If the agent already understands the marks, submit regions directly and skip model analysis.
+
+Preserve the user or agent's explicit model/channel choice. GPT Image 2.5 Sunburst and Flare are optional choices, not forced defaults. Use strict PNG protection for new precision controls unless natural mode is explicitly requested. Clear requests submit one edit for all regions; ambiguous arrows, missing instructions or overlaps require preview and correction, not one generation per region or automatic visual retries.
+
+Use `edit.prepare` with `analyze=true` only when analysis is intended and cost policy permits it; `dry_run=true` makes no model call. Reuse `edit_plan_ref` and inspect `analysis_run_id` after interruption. Correct regions through a child plan. The image run's cost is not the total analysis-plus-image cost. If capability is unavailable, report the installed limitation rather than inventing an action or installing updates automatically.
+
+When advertised by the installed action contract, `inspect` accepts `refresh_cost: true` to recompute local workflow costs. Preserve unknown totals even when an orchestration component is priced. To recover a completed edit, pass its original `run_id` and `edit_plan_ref` to `edit`; verify the returned run and artifact references. Recovery errors require inspection, not automatic resubmission or claim-file removal. Project selection determines the output owner; source images require separate current authorization, including after a plan was prepared.
+
 ## Ordinary generation and editing
 
 Call `eikona.execute` directly. Do not begin an ordinary request with
@@ -20,7 +30,8 @@ explicit supported Eikona model selection, including Grok or Midjourney. When
 the user does not specify a model, default to `openai/gpt-5.4-image-2`. Do not
 select test-only model identifiers.
 
-For remote Eikona LAN MCP (`http://<rfc1918-ip>:<port>/mcp`), `edit`
+For remote Eikona LAN MCP (`https://<host>:<port>/mcp`; non-loopback
+endpoints require HTTPS), `edit`
 `reference_image` must be a server-reachable `eikona://artifact/<handle>` or
 run artifact URI. Do not pass the Codex/Mac host path (`/var/folders/...`,
 `/Users/...`, Windows drive letters, clipboard temp files). Those files are

@@ -56,6 +56,16 @@ providers:
 
 ## Remote Safety
 
+### Local media upload
+
+For client audio/video files, first discover `sonora upload inspect` and `sonora upload put` through `sonora commands describe`. Use `sonora upload inspect --file <client-file> --mime <media-mime> --agent` to compute size and SHA-256 without exposing the file path in the result. Do not send a client absolute path or base64 file bytes as MCP arguments. Images belong to Eikona/Scaena; use their canonical reference instead of creating a Sonora image store. Sonora's local upload flow needs no S3; do not invent an S3 switch for it or change another owner's existing storage mode.
+
+Read MCP resource `sonora://docs/local-media-upload` before operating the upload session. Use `media.upload.begin` with a stable idempotency key and file metadata, stream bytes using `sonora upload put --endpoint <issuing-owner-origin> --session <session-id> --file <client-file> --grant-stdin --agent`, then call `media.upload.complete`. Pass the transient grant through stdin, never command arguments, logs, notes, persistent scripts or evidence. The server must explicitly bind upload actor/project; client-supplied identity does not authorize a session. Do not follow a transfer redirect or attach a service/MCP bearer to the grant-only PUT.
+
+On interruption, inspect the same session before retrying. Capacity errors allow a later retry on that session; an expired session requires a new key. `media.upload.abort` and `media.upload.cleanup` affect unfinished inputs, not completed assets. Do not manually delete private storage to repair an upload. Configuration and local executable discovery use `sonora config upload set` and `sonora config upload doctor`; doctor does not prove deployment reachability.
+
+Completion returns a `sonora://media-input/` reference, not permission to transcribe, clone a voice or publish. `media.upload.prepare_audio` requires a current approved transcription snapshot for `sonora://audio-asset/upload-<session_id>` and returns a managed audio asset. Submit that asset through the existing CLI/HTTP transcription workflow with its valid permission snapshot; do not invent a transcription MCP action. Keep review and paid-provider authorization separate. If these commands/actions are absent in the installed build, report the version gap and hand off to the Sonora owner; do not silently fall back to a provider call or another storage service.
+
 1. Inspect `sonora provider doctor --provider <provider-id> --agent` before a remote action.
 2. Estimate cost with `sonora tts estimate --plan <language-plan-ref> --provider <provider-id> --voice-model <voice-model-ref> --max-cost-usd <limit> --agent`.
 3. Require explicit user authorization before a command with `--confirm-external-call`.

@@ -34,7 +34,11 @@ description: Use when creating or repairing Eikona character identity sheets, su
 
 ### 2. 规划候选包而不是直接画剧集镜头
 
-读取 [subject-pack.md](references/subject-pack.md)。Primary character 通常需要 front、three-quarter、profile、full-body、neutral/core expressions 和 default wardrobe；secondary 使用轻量包。Location、prop、wardrobe 和 style 使用各自 anchor slots。
+先消费做剧 Router 已判断的目标：快速看效果、单集交付、跨集复用或模块化资产库。上下文已有选择时直接沿用；只有缺失信息会改变资产范围时问一个最小问题，不重新进行整套访谈。
+
+读取 [subject-pack.md](references/subject-pack.md)，按本轮用途选包。快速 demo 优先每人一张三分之四角度全身定妆照，再做多人开场构图，统一站位、道具、光线和行动通路。普通背景、完整服装允许；不先补六视图、表情库、拆层或透明通道。需要人工核对时可做同服装正/侧/背三视图，视频输入优先用单视图，避免被理解成三个人。只有交付可复用资产包或模块化素材时才按需求补全视图、接口与真实 alpha。
+
+定妆、多人组合和场景重构默认明确表达为参考图生成（`--reference-mode generate`），不因有图片就选严格编辑。它要求通道真实接收图片，不能退成文本描述参考图。蒙版或区域保持要求走严格编辑。切换时保留参考图顺序、用途和失败 lineage；用户已允许重绘时不重复询问。HTTP 500 不等于“不支持”，认证/限流/超时或提交结果未知时不得自动换接口重试。删除参考图、更换模型或放弃明确保持要求须有相应授权。
 
 每个候选方向只改变一组可审阅变量。不要同时改变脸型、发型、年龄、服装、画风和光线，导致无法知道用户接受了什么。
 

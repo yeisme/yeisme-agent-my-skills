@@ -1,0 +1,55 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "shot": "train-window-lookback",
+  "combo": "200f78e2",
+  "aspect": "3:4",
+  "model": "openai/gpt-5.4-image-2",
+  "images": [
+    {
+      "file": "prompts/01-train-window-lookback.md",
+      "combo": "200f78e2",
+      "tags": [
+        "style:precision-candid",
+        "shot:train-window-lookback",
+        "aspect:3:4",
+        "subject:east-asian-woman",
+        "lens:50mm-prime",
+        "light.temperature:warm-backlight",
+        "palette.primary:ivory-white",
+        "fingerprint:faint-reflections-and-hazy-glare-on-the-window-glass",
+        "fingerprint:a-fold-down-tray-table-on-the-seat-back-ahead",
+        "fingerprint:an-overhead-luggage-rack-dissolving-into-the-blur",
+        "use:portrait",
+        "use:reference",
+        "mood:serene",
+        "mood:distant",
+        "mood:dreamy",
+        "theme:travel",
+        "theme:train",
+        "theme:golden-hour"
+      ],
+      "palette": [
+        {
+          "color": "ivory white",
+          "pct": 30
+        },
+        {
+          "color": "warm golden amber",
+          "pct": 25
+        },
+        {
+          "color": "dusty seat blue",
+          "pct": 20
+        },
+        {
+          "color": "dark brown-black",
+          "pct": 15
+        },
+        {
+          "color": "skin tone",
+          "pct": 10
+        }
+      ]
+    }
+  ]
+}

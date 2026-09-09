@@ -1,0 +1,107 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "id": "night-desk-digicam-cat",
+  "label": "夜晚卧室书桌抓拍：2000s 数码卡片机质感 + 椅背白猫，低饱和暖灰调",
+  "aspect": "3:4",
+  "orientation": "Vertical",
+  "subject": {
+    "id": "black-haired-woman",
+    "pronoun": "She",
+    "description": "a young adult woman with extremely long natural black hair, messy wispy bangs and slightly tousled strands",
+    "pose": "as she sits beside a small cluttered desk in a cozy bedroom at night, looking softly toward the camera, one hand resting near her lips",
+    "expression": "a quiet, dreamy, detached expression",
+    "wardrobe": "an oversized cream vintage knitted sweater draped loosely off one shoulder, its extra long sleeves covering part of her hands, with a subtle dark knitted pattern"
+  },
+  "camera": {
+    "position": "at close distance at her eye level",
+    "lens": "35mm equivalent",
+    "perspective": "slight wide angle",
+    "framing": "subject sits on the right side of the frame occupying about 55% of the width, cropped at the waist"
+  },
+  "foreground": {
+    "elements": "An open silver laptop",
+    "coverage": "about 20% of the lower-left foreground"
+  },
+  "light": {
+    "key": "Dim warm ambient room lighting, slightly underexposed overall with soft shadows",
+    "temperature": "dim-warm"
+  },
+  "palette": [
+    {
+      "color": "warm gray beige",
+      "pct": 30
+    },
+    {
+      "color": "cream",
+      "pct": 25
+    },
+    {
+      "color": "muted brown",
+      "pct": 20
+    },
+    {
+      "color": "dark charcoal",
+      "pct": 15
+    },
+    {
+      "color": "silver gray",
+      "pct": 10
+    }
+  ],
+  "background": "warm gray beige bedroom walls with small photos and everyday objects, and a white cat lying on the back of the chair behind her, looking at the camera",
+  "fingerprints": [
+    "a white cat lying on the chair back staring into the camera",
+    "small photos and everyday clutter on the wall and desk",
+    "the faint glow of the open laptop screen"
+  ],
+  "atmosphere": "an intimate lived-in atmosphere, cozy Japanese lifestyle photography, candid and unposed",
+  "quality": [
+    "old compact digital camera snapshot with early 2000s digicam aesthetic",
+    "high ISO grain and subtle film grain",
+    "slight softness and imperfect focus",
+    "slightly underexposed with soft shadows",
+    "muted low saturation and low contrast with slightly faded colors",
+    "natural skin texture"
+  ],
+  "negative": [
+    "studio lighting",
+    "professional fashion shoot",
+    "overly perfect skin",
+    "plastic skin",
+    "heavy makeup",
+    "HDR",
+    "oversaturated colors",
+    "strong orange lighting",
+    "dramatic cinematic lighting",
+    "luxury bedroom",
+    "perfectly clean room",
+    "sharp commercial photography",
+    "exaggerated bokeh",
+    "anime",
+    "illustration",
+    "doll face",
+    "distorted hands",
+    "extra fingers",
+    "deformed cat",
+    "overexposed skin"
+  ],
+  "tail": [
+    "photorealistic"
+  ],
+  "tags": {
+    "use": [
+      "portrait",
+      "reference"
+    ],
+    "mood": [
+      "cozy",
+      "dreamy",
+      "detached"
+    ],
+    "theme": [
+      "night",
+      "bedroom",
+      "digicam"
+    ]
+  }
+}

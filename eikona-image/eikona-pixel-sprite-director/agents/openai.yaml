@@ -1,0 +1,4 @@
+interface:
+  display_name: "Eikona Pixel Sprite Director"
+  short_description: "Generate 4x4 pixel battle sprites and convert them to looping GIFs by code"
+  default_prompt: "Use $eikona-pixel-sprite-director to generate a 4x4 transparent pixel battle sprite sheet through Eikona and convert it to a looping transparent GIF with the sprite_to_gif.py code pipeline."

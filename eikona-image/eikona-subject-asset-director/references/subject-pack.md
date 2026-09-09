@@ -2,6 +2,10 @@
 
 ## Candidate pack
 
+下表用于已经选择“可复用主体包”的任务，不是所有做剧请求的起步清单。快速 demo 的最小包是每人一张同服装全身单视图、一个多人开场构图及当前动作所需道具。透明输出、六视图、表情和拆层仅在本轮交付需要时成为硬要求；模板有这些槽位不代表全部必做。
+
+人工定妆三视图可呈现同一人物的正/侧/背面；它是审阅用途。进入图像或视频生成前优先选清晰单视图，按实际身份人数绑定。多人开场图须验证人数、身份对应、接触关系、道具持有者、门桌拓扑和行动通路。短动作测试通过后再扩展完整时长，仍遵守Scaena当前准入要求。
+
 | Kind | Minimum candidate roles |
 | --- | --- |
 | Primary character | front、three-quarter、profile、full-body、neutral、core expressions、default wardrobe |

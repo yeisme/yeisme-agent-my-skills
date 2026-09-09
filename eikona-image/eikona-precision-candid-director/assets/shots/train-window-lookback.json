@@ -1,0 +1,117 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "id": "train-window-lookback",
+  "label": "列车窗边回眸：午后暖色逆光 + 蓝色座椅车厢，50mm 柔焦胶片感",
+  "aspect": "3:4",
+  "orientation": "Vertical",
+  "subject": {
+    "id": "east-asian-woman",
+    "pronoun": "She",
+    "description": "an adult East Asian woman with a slender, soft oval face, a small chin, natural dark eyes, slender eyebrows, a small nose, subtly glossy lips, and very natural makeup over real fine skin texture",
+    "pose": "as she sits sideways by the window of a moving train, her shoulders and upper body angled two-thirds away from the camera toward frame right, her head turned gently back toward the lens in a natural over-the-shoulder glance, her legs extending toward frame right",
+    "expression": "a quiet, restrained, slightly aloof expression",
+    "wardrobe": "an ivory-champagne satin thin-strap camisole with delicate but restrained lace trim at the neckline, and a loose white semi-sheer satin robe slipped down from both shoulders — the shoulder nearer the camera left bare, the sleeves loosely bunched around her arms — the satin showing a soft pearlescent sheen, not plastic or metallic"
+  },
+  "sections": [
+    {
+      "heading": "Hair",
+      "body": "long, dense dark brown-black hair falls naturally over her chest and waist, a heavy sweep of strands covering one side of her face, side-swept bangs partially veiling one eye, slightly tousled with real airborne flyaways."
+    }
+  ],
+  "camera": {
+    "position": "at her seated eye level from the aisle side, facing her two-thirds side profile",
+    "lens": "50mm prime",
+    "framing": "subject occupies about 55% of the frame in the left foreground, cropped at mid-thigh with only part of her thighs visible"
+  },
+  "light": {
+    "key": "Warm late-afternoon sunlight slanting through the train window from her back-left at about 135 degrees, strong but soft backlight forming a golden rim through her hair, with slight overexposure glow and halation near the window",
+    "fill": "soft ambient bounce keeping her face gently lit and readable",
+    "temperature": "warm-backlight"
+  },
+  "palette": [
+    {
+      "color": "ivory white",
+      "pct": 30
+    },
+    {
+      "color": "warm golden amber",
+      "pct": 25
+    },
+    {
+      "color": "dusty seat blue",
+      "pct": 20
+    },
+    {
+      "color": "dark brown-black",
+      "pct": 15
+    },
+    {
+      "color": "skin tone",
+      "pct": 10
+    }
+  ],
+  "background": "a softly blurred train carriage with clearly recognizable blue fabric seats, a few passengers behind her toward frame right — a woman in light clothing and a man in a dark jacket — present only as silhouettes with unreadable faces",
+  "fingerprints": [
+    "faint reflections and hazy glare on the window glass",
+    "a fold-down tray table on the seat back ahead",
+    "an overhead luggage rack dissolving into the blur"
+  ],
+  "atmosphere": "a quiet mid-journey moment that feels accidentally captured rather than posed, Japanese film portrait mood",
+  "quality": [
+    "natural skin texture with visible fine detail",
+    "shallow depth of field focused on her eyes and face",
+    "soft-focus lens with a subtle diffusion filter and reduced digital sharpness",
+    "creamy highlight bloom and dreamy halation",
+    "subtle film grain",
+    "warm white balance and soft low contrast",
+    "cinematic candid photography"
+  ],
+  "negative": [
+    "front-facing passport-style composition",
+    "centered subject",
+    "studio lighting",
+    "studio backdrop",
+    "overly sexualized pose",
+    "exaggerated body proportions",
+    "deep cleavage",
+    "heavy makeup",
+    "influencer face",
+    "plastic skin",
+    "over-smoothed skin",
+    "over-sharpening",
+    "HDR",
+    "harsh contrast",
+    "cold color tone",
+    "flat white dead light",
+    "neatly pressed hair fully revealing both eyes",
+    "short hair",
+    "the robe worn neatly in place",
+    "an empty background carriage",
+    "sharply focused background passengers",
+    "anime look",
+    "CG look",
+    "3D render look",
+    "deformed hands",
+    "limb deformities"
+  ],
+  "tail": [
+    "photorealistic",
+    "real photo"
+  ],
+  "tags": {
+    "use": [
+      "portrait",
+      "reference"
+    ],
+    "mood": [
+      "serene",
+      "distant",
+      "dreamy"
+    ],
+    "theme": [
+      "travel",
+      "train",
+      "golden-hour"
+    ]
+  }
+}

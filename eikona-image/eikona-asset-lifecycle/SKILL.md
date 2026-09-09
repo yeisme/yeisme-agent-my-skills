@@ -7,6 +7,10 @@ description: Use when capturing temporary or externally generated PNG/JPEG/WebP 
 
 Own the transition from temporary image bytes to durable evidence, curated reuse, and safe delivery. Keep generation evidence and long-term library membership separate.
 
+## Precision edit asset lineage
+
+Keep the clean original, annotation copy and mask as distinct roles. Remote inputs use uploaded asset or run artifact URIs; never pass the client's local path to a remote service. A prepared edit plan is immutable: corrections create a child and preserve input digests and analysis run references. Strict output is a separate PNG composite; preserve the provider intermediate and final association without overwriting the original, automatically accepting the result, or promoting it to the library. Previews and results use the existing resource handles and delivery path. Do not expose private interpretation assets as public image resources.
+
 ## Decision Tree
 
 1. If the image was generated through Eikona, start from its existing run artifact. Do not import it again.
@@ -15,7 +19,9 @@ Own the transition from temporary image bytes to durable evidence, curated reuse
 4. Keep every captured image in `library_state=not_imported` until a human or owning workflow explicitly saves it.
 5. Use a download grant for network delivery. Never return or copy an absolute runstore path.
 
-For new Eikona generations, the canonical remote model ref is `openai/gpt-5.4-image-2`. The short aliases `gpt-5.4-image-2` and `gpt-image-2` are accepted only at an explicit compatibility ingress; provider-colon, duplicate-prefix, and underscore forms are rejected and must not enter new commands or metadata.
+For new Eikona generations without an explicit model selection, the default canonical remote model ref is `openai/gpt-5.4-image-2`. The short aliases `gpt-5.4-image-2` and `gpt-image-2` are accepted only at an explicit compatibility ingress; provider-colon, duplicate-prefix, and underscore forms are rejected and must not enter new commands or metadata.
+
+Preserve an explicitly selected supported model and channel, including GPT Image 2.5 variants. Model provenance records the actual source model; never relabel an imported or edited image with the default model. Precision edits preserve the original canvas and keep masks and annotation copies out of ordinary references.
 
 ## Capture External Images
 

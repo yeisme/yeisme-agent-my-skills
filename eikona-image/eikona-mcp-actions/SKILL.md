@@ -13,7 +13,9 @@ stay in `eikona-mcp-image`; everything else starts here.
 
 ## Current map and drift
 
-Use the bundled v0.7.7 action map (77 actions) for ordinary routing. Do not
+Use the bundled action map for its matching release. The development map also
+contains unreleased actions; inspect advertised capabilities when that version
+is not installed. Do not
 fetch a full catalog or generate a card at session start. Refresh the map only
 after an actual installed-version mismatch or a typed action denial that needs
 diagnosis:
@@ -39,6 +41,7 @@ consumer tokens never see them). Unmarked = consumer lane.
 | Intent domain | Actions |
 | --- | --- |
 | Generation loop | `generate`, `edit`, `run.batch`, `wait`, `status`, `inspect`, `cancel`, `retry`, `repair`, `resume`, `reroll`, `trace.tail`, `report` |
+| Precision editing (when advertised) | `edit.prepare`, `edit.plan.show`, then `edit` with `edit_plan_ref` |
 | Review & feedback | `review.packet`, `review.contact_sheet`, `feedback.accept`, `feedback.reject`, `feedback.needs-edit`, `feedback.reference-only`, `analyze` |
 | Assets & delivery of accepted work | `assets.handoff`, `assets.stage`, `assets.apply`, `artifact.access` (op), `replace.preview`, `replace.apply`, `rollback`, `export` |
 | Visual library & style | `library.search`, `library.list`, `library.show`, `library.save`, `library.tag`, `library.update`, `library.import-url`, `library.import-runs`, `style.build-from-image`, `deck.list`, `deck.show`, `recipes.list`, `recipes.show`, `prompts.list` |

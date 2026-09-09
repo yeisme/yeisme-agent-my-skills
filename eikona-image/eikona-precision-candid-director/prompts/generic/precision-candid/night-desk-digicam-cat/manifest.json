@@ -1,0 +1,55 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "shot": "night-desk-digicam-cat",
+  "combo": "3a2fe572",
+  "aspect": "3:4",
+  "model": "openai/gpt-5.4-image-2",
+  "images": [
+    {
+      "file": "prompts/01-night-desk-digicam-cat.md",
+      "combo": "3a2fe572",
+      "tags": [
+        "style:precision-candid",
+        "shot:night-desk-digicam-cat",
+        "aspect:3:4",
+        "subject:black-haired-woman",
+        "lens:35mm-equivalent",
+        "light.temperature:dim-warm",
+        "palette.primary:warm-gray-beige",
+        "fingerprint:a-white-cat-lying-on-the-chair-back-staring-into-the-camera",
+        "fingerprint:small-photos-and-everyday-clutter-on-the-wall-and-desk",
+        "fingerprint:the-faint-glow-of-the-open-laptop-screen",
+        "use:portrait",
+        "use:reference",
+        "mood:cozy",
+        "mood:dreamy",
+        "mood:detached",
+        "theme:night",
+        "theme:bedroom",
+        "theme:digicam"
+      ],
+      "palette": [
+        {
+          "color": "warm gray beige",
+          "pct": 30
+        },
+        {
+          "color": "cream",
+          "pct": 25
+        },
+        {
+          "color": "muted brown",
+          "pct": 20
+        },
+        {
+          "color": "dark charcoal",
+          "pct": 15
+        },
+        {
+          "color": "silver gray",
+          "pct": 10
+        }
+      ]
+    }
+  ]
+}
