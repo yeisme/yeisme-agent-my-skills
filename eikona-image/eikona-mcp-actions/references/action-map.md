@@ -1,6 +1,6 @@
 # Eikona MCP development action map
 
-Navigation reference for 89 executable development `eikona.execute`
+Navigation reference for 95 executable development `eikona.execute`
 actions. This includes unreleased precision-edit and upload lifecycle actions;
 an installed older release must not be assumed to expose them. It is verified
 against `ActionDescriptors`; use it directly instead
@@ -151,3 +151,14 @@ consumer actions only; unknown and non-entitled actions return the identical
 | `dataset.build` | mutation | operator | Assemble a dataset |
 | `dataset.export` | mutation | operator | Export a dataset |
 | `bindings.confirm` | mutation | consumer | Confirm a binding proposal |
+
+## Additional registered development actions
+
+| Action | Kind | Lane | Purpose |
+| --- | --- | --- | --- |
+| `input.abort` | mutation | consumer | Input request control without a product CLI. Discover exact fields with input.capabilities. HTTP bytes require the transient grant link; the page link supports manual file selection. Upload does not authorize generation. |
+| `input.capabilities` | readonly | consumer | Input request control without a product CLI. Discover exact fields with input.capabilities. HTTP bytes require the transient grant link; the page link supports manual file selection. Upload does not authorize generation. |
+| `input.prepare` | mutation | consumer | Input request control without a product CLI. Discover exact fields with input.capabilities. HTTP bytes require the transient grant link; the page link supports manual file selection. Upload does not authorize generation. |
+| `input.renew` | mutation | consumer | Input request control without a product CLI. Discover exact fields with input.capabilities. HTTP bytes require the transient grant link; the page link supports manual file selection. Upload does not authorize generation. |
+| `input.status` | readonly | consumer | Input request control without a product CLI. Discover exact fields with input.capabilities. HTTP bytes require the transient grant link; the page link supports manual file selection. Upload does not authorize generation. |
+| `pricing.quote` | readonly | consumer | Execute allowlisted Eikona action pricing.quote. |

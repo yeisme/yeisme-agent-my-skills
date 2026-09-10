@@ -1,0 +1,55 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "shot": "cafe-morning-coffee",
+  "combo": "bcd41c08",
+  "aspect": "9:16",
+  "model": "openai/gpt-5.4-image-2",
+  "images": [
+    {
+      "file": "prompts/01-cafe-morning-coffee.md",
+      "combo": "bcd41c08",
+      "tags": [
+        "style:precision-candid",
+        "shot:cafe-morning-coffee",
+        "aspect:9:16",
+        "subject:east-asian-woman",
+        "lens:50mm",
+        "light.temperature:warm-golden-morning",
+        "palette.primary:warm-golden-cream",
+        "fingerprint:a-nearly-finished-cup-of-coffee-in-her-hand",
+        "fingerprint:a-small-white-plate-with-metal-cutlery-on-the-wooden-table",
+        "fingerprint:blurred-city-street-life-outside-the-window",
+        "use:portrait",
+        "use:reference",
+        "mood:serene",
+        "mood:dreamy",
+        "mood:unhurried",
+        "theme:cafe",
+        "theme:morning",
+        "theme:golden-hour"
+      ],
+      "palette": [
+        {
+          "color": "warm golden cream",
+          "pct": 30
+        },
+        {
+          "color": "white",
+          "pct": 20
+        },
+        {
+          "color": "wood brown",
+          "pct": 20
+        },
+        {
+          "color": "dark brown-black",
+          "pct": 15
+        },
+        {
+          "color": "warm skin tone",
+          "pct": 15
+        }
+      ]
+    }
+  ]
+}

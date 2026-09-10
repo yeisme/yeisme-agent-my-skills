@@ -25,7 +25,8 @@ against the MCP surface directly.
 | Add/update a backend in `mcp/registry.json` | `yeisme-mcp-registry-onboarding` | Registry onboarding governance |
 | Configure Codex against the Gateway | `codex-agent-runtime` | Gateway-rendered client config, tool-name mapping |
 | Configure Codex against a direct Eikona LAN `/mcp` URL | `eikona-mcp-image` then `codex-agent-runtime` | Owner HTTP MCP, not Gateway; remote edit forbids client local paths |
-| scaena mcp operations | `scaena mcp capabilities --json` then `tools/list` | Current diagnostic entry is `scaena mcp doctor` / `scaena mcp capabilities`; confirm live names before execute. Dedicated operating skill remains later; do not invent tool names |
+| Scaena official MiniMax H3 / Wan3 video generation, upload or task recovery | `scaena-production-operator`; `tools/list`, `scaena.search`, `scaena://video-tasks/guide` | Use `createVideoProviderTask` with explicit official binding; no Aigora base URL or shot preflight. Include unavailable results for schema/recovery only. |
+| Other Scaena MCP operations | `tools/list` and readable capability resources; optional installed CLI discovery | Confirm exact live actions and scopes before execute; do not invent tool names. |
 
 Gateway source maintenance (`yeisme-mcp-gateway-maintainer`), peering
 (`yeisme-mcp-gateway-peer-operator`), and publishing
@@ -39,7 +40,8 @@ replaces them.
    against the live surface before the first execute:
    - eikona: `eikona-mcp-actions` `scripts/card.sh` (`eikona mcp capabilities
      --json --full`) or `GET /api/v1/mcp/actions`;
-   - scaena: `scaena mcp capabilities --json` then one `tools/list`;
+   - scaena: one `tools/list`, then `scaena.search` and readable owner resources;
+     `scaena mcp capabilities --json` is optional when the CLI is installed;
    - sonora: `sonora mcp capabilities --json` or `sonora.search` with
      `types:["command"]`;
    - anatomia: `anatomia mcp doctor --json` then `anatomia mcp capabilities --json`;
@@ -56,3 +58,13 @@ replaces them.
 5. **One discovery, then commit.** Batch exploration (`search` once with good
    terms, `limit` bounded) beats iterated probing; every skill's shortest
    sequence is written to finish common jobs in 2-3 calls.
+
+## File input without a product CLI
+
+When the task needs a client file, first inspect the connected owner's `://input/capabilities` resource and `tools/list` schemas. Use its advertised typed tools or execute action mapping; never require local CLI help to discover an already connected MCP contract. CLI discovery remains optional when that product CLI is installed. Unconfigured, readonly or older deployments do not gain planned actions.
+
+If the host can read the selected file and send HTTP, prepare the original input request with its stable idempotency key, consume the transient grant link in memory and stream bytes to the issuing owner. For an unknown file, omit metadata and enter awaiting_file. A pure MCP host gives the user the one-time page link, then polls the same input request. One request binds one file; use multiple requests for multiple references.
+
+Keep grants/page URLs out of normal receipts, logs, notes and persisted tool bodies. Never use redacted placeholders or guess URLs. If Gateway reports INPUT_LINK_RELAY_UNAVAILABLE, recover the original request through a host preserving transient resource links. On interruption, query the original ID (or reuse the identical prepare key to retrieve its ID) before renew/cancel/retry. This input-only recovery rule does not authorize resubmitting a generation request.
+
+Return only the stable owner input reference to the original task. Upload completion does not approve generation, analysis, canonical acceptance, overwrite or payment. Eikona, Scaena, Sonora, Anatomia, Auctra, Pinax and Radar have separate owner gates; Ordo input upload is deferred by the user. Deployment and installed capabilities must be checked independently of source-level availability.

@@ -162,3 +162,9 @@ eikona projects repair-root <project_id> --root /new/project/path --agent
 - `auth check` 只显示 configured/resolved 状态，不显示 secret。
 - smoke run 返回 `run_id`、结构化状态和下一步命令。
 - 第二个项目无需重新输入 key，只需注册项目并复用 channel。
+
+## OpenRouter Image API（显式选择）
+
+当前 Eikona 支持通过 `--set api=images` 使用 OpenRouter `/api/v1/images`；保留 `openrouter:<exact-model-id>`，不改全局默认。参考条件生成使用 `--ref <local-image> --reference-mode generate`，有序图片通过 `input_references` 发送；CLI artifact handle 先用 `artifacts copy` 导出为本地文件。不要把该能力当作 mask／strict edit，未核验的蒙版编辑仍应阻断。
+
+先确认安装版本支持新路径与费用回执。授权评测按每个 job 一张、串行读回 `cost_actual_usd` 执行；缺失实际费用或提交结果未知就停止，不自动重放。`--max-cost-usd` 是估算门，不是账户硬上限，`--allow-unknown-cost` 不提供额外预算保证。实际授权金额仍是总上限，不能当成必须花完的目标。

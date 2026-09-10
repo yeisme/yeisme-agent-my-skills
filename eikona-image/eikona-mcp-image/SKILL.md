@@ -33,11 +33,11 @@ select test-only model identifiers.
 For remote Eikona LAN MCP (`https://<host>:<port>/mcp`; non-loopback
 endpoints require HTTPS), `edit`
 `reference_image` must be a server-reachable `eikona://artifact/<handle>` or
-run artifact URI. Do not pass the Codex/Mac host path (`/var/folders/...`,
+run artifact URI, or a verified `eikona://asset/<id>` input reference. Do not pass the Codex/Mac host path (`/var/folders/...`,
 `/Users/...`, Windows drive letters, clipboard temp files). Those files are
-not on the Eikona server. Probe connectivity with `generate` and no
-reference; then `edit` the returned artifact. Same-host CLI `--input` is
-unchanged.
+not on the Eikona server. For a client file, first read `eikona://input/capabilities` and use the advertised input action schemas. Do not generate an image as an upload/connectivity probe. Same-host CLI `--input` is unchanged.
+
+When input intake is enabled for the current `media-input-v1` identity, create `input.prepare` with `args.purpose: "reference"`, the authorized scope and a stable input idempotency key. Omit file when metadata is unknown. A file-capable host consumes the transient grant link and streams HTTP without the product CLI; a pure MCP host offers the one-time page and polls `input.status`. Only the completed asset reference enters `edit`. Missing links require original-request recovery and explicit renewal through a compatible client, never a replacement generation. Keep links out of saved evidence. If the capability is absent, report the actual installed upload limitation and do not invent an action.
 
 Keep the idempotency key as submission evidence. After a response returns a
 `run_id`, use `eikona.execute` with `action: "wait"` (or `status`/`inspect`
@@ -53,6 +53,14 @@ typed Eikona error says that exact information is needed.
 purpose isolation, not proof the server is down.
 
 ## Artifact delivery and download recovery
+
+### Canvas and bounded generation recovery
+
+When the installed generation schema exposes `composition_requirements`, pass explicit full-body/margin/visibility requirements independently from `size` and `aspect`. A native 4k label is not automatically 4096 pixels. Inspect the complete original: cropped hems, occluded feet and preview-only crops are different observations. Use advertised `composition_observations` with current original refs and measured bounds; legacy pass strings do not satisfy new composition evidence.
+
+When `recovery_policy` and a recovery projection are advertised, use its owner-computed disposition and bounded next action instead of the legacy stop-on-failed rule above. A proven no-generation failure may switch within an approved candidate set without repeated approval. An unknown submit must not be resent; a generated image must be downloaded/reviewed, even if its composition fails. Keep hard dimensions/ratio semantics and all references/masks when changing channels. Do not infer equivalent 2k/4k canvases across models.
+
+The additive local implementation exposes recovery inspection through `inspect` with the returned `egr_...` reference in `run_id`; use this only when installed discovery documents it. It does not require the CLI. If background takeover or automatic provider lookup is unavailable, report that concrete limitation and use bounded foreground/snapshot behavior rather than claiming a worker is still running. Unknown costs remain unknown; an existing bounded user authorization to continue covers the same workload without another confirmation.
 
 On success, consume the native `ResourceLink` attached to the MCP result
 immediately. It is the original artifact delivery path; an optional preview is

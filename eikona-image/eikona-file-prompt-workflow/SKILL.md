@@ -31,6 +31,14 @@ description: Use when creating, organizing, reviewing, or executing Eikona image
 6. 先用 `--dry-run` 和 canonical model ref 验证路径和展开结果；它不提交 provider 请求。再由用户批准真实 provider run。
 7. 通过 `review packet`、`feedback` 和 `assets handoff` 完成证据链；不要手改 run-owned snapshot 或 `prompt_sources.json`。
 
+## 尺寸与完整人物构图
+
+- 尺寸、比例与主体完整性分开表达。1k/2k/4k 是具体通道的档位，不能在模板中写成通用像素保证；只提高分辨率不会自动把裙摆或脚放回画面。
+- 安装版本支持 `--full-body` 时，使用 typed 构图块与原模板共同渲染并冻结摘要，不反复在文件里追加互相冲突的远景、特写、全身指令。`--require-review feet` 表示脚部必须可见；完整裙摆不自动意味着露脚。
+- 优先检查完整原图、底部留白、脚部遮挡与披帛边界；缩略图必须与原图对照。新构图观察包含源图引用和理由，边距通过需要原图上的主体边界。未知保持待审，不以口头 pass 掩盖裁切。
+- 比较模板效果时固定通道、档位、比例，先做基线与明确构图块的分组对照，再跑 1k/2k/4k 比例矩阵；保留失败样本。用户已授权有限真实测试及未知费用时，在其范围内继续，不反复索要相同确认。
+- 恢复能力须以安装版本为准。确认未生成后才按授权候选切换；状态未知时查原任务并有界返回，不无限轮询、不直接再生图。切换不得丢弃参考图、mask、比例或完整衣摆要求。
+
 模板归属约束：若某类提示词的正文模板已进入模板仓库（`data/yeisme-prompt-templates/solutions/**` 的 promptrepo 解决方案包，如 `image/candid-portrait-matrix`、`image/iconic-landmark-poster`、`image/precision-candid-shot`、`image/xianxia-hazy-fantasy`），模板以仓库为 canonical；本地 prompt 文件是对应 director 技能编译器绑定数据 spec 后的产物，不回填、不在技能或集合目录复制模板正文。模板改动走模板仓库并用 template-registry `contract refresh` 更新 digest。语言约定：编译与投递只使用 `prompts/main.en.md`（en 给 agent/模型）；`docs/template-zh-CN.md` 是人工审阅译文，不进入编译。新增图像提示词内容的决策树与食谱见模板仓库 `docs/adding-image-prompts.md`。
 
 ## 单文件生成

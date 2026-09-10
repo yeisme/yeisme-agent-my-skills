@@ -1,0 +1,113 @@
+{
+  "schema_version": "precision-candid-shot/1.0",
+  "id": "cafe-morning-coffee",
+  "label": "清晨咖啡馆窗边：低角度暖金晨光 + 白陶瓷杯遮下颌，Soran 三层自然水印",
+  "aspect": "9:16",
+  "orientation": "Vertical",
+  "subject": {
+    "id": "east-asian-woman",
+    "pronoun": "She",
+    "description": "an adult East Asian woman with messy natural long black hair, loose strands and wispy flyaways around her forehead and cheeks, their edges catching fine golden-brown rim light",
+    "pose": "as she sits at a wooden café table, leaning slightly forward, one hand raising a plain white ceramic coffee cup near her mouth so the cup naturally covers part of her mouth and chin, her other hand resting relaxed close to her body, her gaze drifting sideways and downward away from the camera",
+    "expression": "a quiet, languid, slightly daydreaming expression, as if sitting alone in a café in the early morning",
+    "wardrobe": "an oversized white shirt draped loosely off one shoulder, revealing her collarbone and a white thin-strap camisole underneath, the fabric soft with natural wrinkles, not neatly arranged"
+  },
+  "sections": [
+    {
+      "heading": "Watermarking",
+      "body": "a three-layer natural 'Soran' watermark system: first, 'Soran' woven naturally into a tiny fabric label inside the shirt collar or engraved on a tiny pendant; second, 'Soran' hidden within the flow of her hair strands, the wood grain of the table, the reflections on the coffee cup and the folds of the fabric; third, 'Soran' micro-embedded into fiber textures, crossing hair strands, porcelain glaze details and film grain. No external watermark, no sticker-style logo, no floating letters, no captions."
+    }
+  ],
+  "camera": {
+    "position": "at very close distance across the wooden table, at her eye level",
+    "lens": "50mm",
+    "framing": "subject occupies about 70% of the frame, ultra-close half-body framing cropped at mid-chest"
+  },
+  "foreground": {
+    "elements": "A blurred drinking glass in the lower-left corner and a small white plate with metal cutlery in the lower-right corner",
+    "coverage": "about 15% of the lower foreground"
+  },
+  "light": {
+    "key": "Low-angle warm golden morning sunlight slanting through the café window, raking across her forehead, eyes, nose bridge, cheeks, shoulder and collarbone, loose strands casting tiny shadows on her face",
+    "temperature": "warm-golden-morning"
+  },
+  "palette": [
+    {
+      "color": "warm golden cream",
+      "pct": 30
+    },
+    {
+      "color": "white",
+      "pct": 20
+    },
+    {
+      "color": "wood brown",
+      "pct": 20
+    },
+    {
+      "color": "dark brown-black",
+      "pct": 15
+    },
+    {
+      "color": "warm skin tone",
+      "pct": 15
+    }
+  ],
+  "background": "a street-side café with a blurred city street, buildings and vehicles outside the window, softened by shallow depth of field but still recognizable as a café context",
+  "fingerprints": [
+    "a nearly finished cup of coffee in her hand",
+    "a small white plate with metal cutlery on the wooden table",
+    "blurred city street life outside the window"
+  ],
+  "atmosphere": "a restrained, unhurried early-morning mood, like an unposed slice of life before the day is decided",
+  "quality": [
+    "real photography texture with natural pores and slight facial asymmetry",
+    "fine flyaway hair strands and real fabric wrinkles",
+    "slight exposure unevenness and natural optical transitions",
+    "subtle film grain and natural grain texture"
+  ],
+  "negative": [
+    "over-smoothed skin",
+    "plastic skin",
+    "perfectly symmetrical face",
+    "over-sharpening",
+    "HDR",
+    "commercial studio lighting",
+    "studio shoot feel",
+    "deliberately posed look",
+    "heavy makeup",
+    "over-beautified face",
+    "AI fake face",
+    "stiff fingers",
+    "incorrect hand structure",
+    "floating cup",
+    "completely dead-blurred background",
+    "oversaturated orange-yellow filter",
+    "overly neat clothing",
+    "overly smooth hair",
+    "looking directly at the camera",
+    "external watermark",
+    "sticker logo",
+    "captions",
+    "explanatory text"
+  ],
+  "tail": [
+    "photorealistic"
+  ],
+  "tags": {
+    "use": [
+      "portrait",
+      "reference"
+    ],
+    "mood": [
+      "serene",
+      "dreamy",
+      "unhurried"
+    ],
+    "theme": [
+      "cafe",
+      "morning",
+      "golden-hour"
+    ]
+  }
+}

@@ -7,6 +7,10 @@ description: Use when an agent needs to operate Pinax for local-first notes, inc
 
 Route Pinax user-agent work to the smallest suitable Pinax operator skill. Root sessions normally keep only this router active; load the specific Pinax operator only after classifying the task. For knowledge-note requests, do not satisfy the user by only printing a complete note in chat; route to Pinax capture unless the request is clearly a non-Pinax publishing draft.
 
+## Research Brief Exception
+
+When a user asks to use old notes for a decision or research brief, load `pinax-retrieval-operator` and its Decision Research Brief branch first. This takes precedence over default note capture and index refresh: draft in conversation, disclose source limits, then save only after explicit acceptance and authorization under the agreed workflow. A usefulness rating alone is not save permission.
+
 ## Intake Index Rule
 
 Agent-authored Pinax notes are captured through the vault's unified intake index first. For newly generated, imported, or saved notes whose final taxonomy has not already been approved, the destination must be `notes/index/` via commands such as `pinax note add "Title" --dir index --stdin --json`. Do not use bare `pinax note add` for agent-generated notes, because it can create root-level notes. Do not place notes directly into topic folders such as `notes/tools/**`, `notes/research/**`, or `notes/media/**` unless the user explicitly named that target path or an approved organize plan selected it.
