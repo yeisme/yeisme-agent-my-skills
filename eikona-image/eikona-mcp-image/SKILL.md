@@ -20,6 +20,14 @@ Use `edit.prepare` with `analyze=true` only when analysis is intended and cost p
 
 When advertised by the installed action contract, `inspect` accepts `refresh_cost: true` to recompute local workflow costs. Preserve unknown totals even when an orchestration component is priced. To recover a completed edit, pass its original `run_id` and `edit_plan_ref` to `edit`; verify the returned run and artifact references. Recovery errors require inspection, not automatic resubmission or claim-file removal. Project selection determines the output owner; source images require separate current authorization, including after a plan was prepared.
 
+## Coglet Sunburst / Flare acceptance boundary
+
+When the user selects `openai/gpt-image-2.5-sunburst` or `openai/gpt-image-2.5-flare` on the configured `coglet-image25` channel, explicitly pass `use_channels: ["coglet-image25"]`, `execution_mode: "foreground"`, `provider_options: {"api":"images"}`, `quality: "medium"`, `count: 1`, and matching exact `size`/`aspect`. These are the 2026-09-11 verified settings, not universal model defaults. Keep `openai/gpt-5.4-image-2` as the default for unspecified models.
+
+Read the installed `eikona://docs/image25-mcp` when size selection or recovery guidance is needed. The verified matrix is 1024x1024, 1536x1024, 1024x1536, 2048x2048, 2048x1152, 1152x2048, 3840x2160, 2160x3840 for each model. Do not infer 4096x4096, edit, batch or background support from these foreground results. The channel name must exist in the target installation; it is configuration, not a hardcoded model alias.
+
+`canvas capability changed` blocks the current execution before Provider submit but does not establish the entire run's submission history. Inspect the original run and provider attempts. Do not remove canvas snapshots, endlessly poll a failed run, or automatically repeat a possibly accepted generation in foreground. Only after confirmed no-submit and within the user's authorization may a new request use the verified foreground settings. Owner configuration and worker adapter consistency need separate repair/acceptance; foreground success alone does not fix background. A foreground timeout still requires original-run recovery.
+
 ## Ordinary generation and editing
 
 Call `eikona.execute` directly. Do not begin an ordinary request with
@@ -125,3 +133,7 @@ eikona setup --yes --agent
 This installs the exact Skill bundle paired with the installed Eikona release.
 Do not clone a repository, fetch arbitrary Skill code, or silently install
 anything before that approval.
+
+## Private owner complete display
+
+On the user's private Eikona service, owner-configured `EIKONA_MCP_FULL_OUTPUT=true` returns complete authorized operator tool/resource projections without transport content-pattern replacement. Display the actual supplied data and visual attachments; do not replace them with `[GOVERNED]` summaries. Existing owner authorization and actual artifact availability still define what can be read. This response preference does not require persisting full responses or media bodies in audit logs.

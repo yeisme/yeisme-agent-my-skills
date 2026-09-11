@@ -54,6 +54,59 @@ credentialctl doctor openai/personal-default --json
 
 Local single-user default is an inline key in the owner user config (`api_key`, file mode 0600). credentialctl is the shared store and rotation plane; `export` copies into that same slot. Do not tell the user to keep both `api_key` and `api_key_env`. Process environment is CI/temporary override only when the slot is empty. Cross-project contract: `openspec/changes/local-credential-single-slot-v1/`.
 
+## Discover without reading (purpose metadata)
+
+Every credential can carry secret-free metadata — `note` (what the key is for), `tags`, `kind` (`api-key|mcp-server|remote-service|registry-token|other`), and `env_name`. Agents select credentials from this knowledge axis and never need the value:
+
+```bash
+credentialctl describe openai/personal-default \
+  --note "company OpenAI relay key for chat and embedding" \
+  --tag ai,prod --kind api-key --env-name OPENAI_API_KEY --json
+credentialctl search "openai" --agent        # matches provider/account/note/tags/env_name
+credentialctl search "" --kind mcp-server --json
+credentialctl describe openai/personal-default --json   # view without mutating
+```
+
+- There is deliberately no `get`/`print` command; if you find yourself wanting the value, you want `export`/`sync` or a consumer resolver instead.
+- Secrets are rejected in metadata (`METADATA_INVALID`); describe the purpose, never paste the key.
+- `set`/`rotate` keep existing metadata; `--clear-note` removes a note.
+- `search` results include `matched_on` plus the metadata, redacted in every output mode.
+
+## Collect scattered keys (discover / import-config)
+
+Keys already living in config files (`~/.env`, `~/.netrc`, `~/.aws/credentials`, gh `hosts.yml`, `.npmrc`, docker `config.json`, `.mcp.json` / `~/.claude.json` / `~/.cursor/mcp.json`) are collected centrally instead of being read raw:
+
+```bash
+credentialctl discover --json                       # scan well-known locations (read-only, redacted)
+credentialctl discover --path ~/.env --format dotenv --json
+credentialctl import-config ~/.env --format dotenv --key OPENAI_API_KEY --json
+credentialctl import-config ~/.env --format dotenv --key OPENAI_API_KEY --dry-run --json
+```
+
+- Never `cat` a config file to find a key — run `discover` first; output carries only proposed refs, digests and provenance notes.
+- `import-config` copies the value file→store in-process; it never prints, never writes temp files, and never modifies the source.
+- Imports attach provenance automatically (tags `imported,<format>`, note citing path+key) — annotate further with `describe`.
+- Re-import of the same value is `unchanged`; a different value needs `--replace-central --expected-revision <rev> --yes`.
+- Sources must be regular non-world-writable files ≤1 MiB (`SOURCE_UNREADABLE`); malformed content fails closed (`SOURCE_FORMAT_INVALID`).
+
+## Use without seeing (exec / render / sink)
+
+Configure tools with a key WITHOUT ever reading its value. The value flows store→process or store→file in-process only:
+
+```bash
+credentialctl exec --env OPENAI_API_KEY=openai/main -- ./tool --flag   # env injection, shell-free
+credentialctl exec openai/main -- ./tool --flag                       # uses the stored env_name
+printf 'OPENAI_API_KEY={{credential:openai/main}}\n' \
+  | credentialctl render --output ~/tools/.env --json                 # pipe template → 0600 sink
+credentialctl render --output ~/tools/.env --dry-run --json
+credentialctl sink list --json && credentialctl sink verify --json
+```
+
+- `exec`: argv after a literal `--`, no shell; same-named host env vars are dropped so the injection is authoritative; machine output modes are rejected (child owns stdout); the child's exit code propagates. Loader/shell-startup env names (`LD_PRELOAD`, `BASH_ENV`, …) are refused.
+- `render`: single-pass `{{credential:<provider>/<account>}}` substitution; writes ONLY the mandatory `--output` path (0600, atomic); stdout is never a sink. Template caps: ≤256 KiB, ≤64 placeholders, ≤16 refs; malformed placeholders fail closed (`TEMPLATE_INVALID`).
+- Sink safety rules refuse (with `SINK_REFUSED`): group/world-writable parents, `/tmp`-style areas, symlink path components, git worktrees (escape: `--allow-repo-sink --yes`, recorded) and execution-adjacent files (`~/.ssh`, shell startup, git config, terminal/editor rc). Every render is recorded in `sinks.json`; `sink verify` reports drift informationally; `sink remove` never deletes the file.
+- Never `cat` the rendered sink back into the conversation — `sink verify` reports digests instead.
+
 ## Inline target workflow
 
 Target URIs have the fixed shape `yeisme-target://<tool>/<kind>/<slot...>`. Supported v1 owners are Eikona, Scaena, Sonora, and Inferrum.

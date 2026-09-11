@@ -102,3 +102,13 @@ Run `eikona mcp capabilities --json --full` or read the scoped REST action
 endpoint only after an actual version mismatch or typed denial. Neither is a
 per-session preflight. Re-check after an Eikona upgrade only when the bundled
 map no longer matches the installed action set.
+
+## Single-file multitransport intake
+
+For a client file, discover `eikona://input/capabilities` and the installed execute schemas. Use `input.prepare` with purpose `reference` and one stable idempotency key. Prefer executable `object_storage` through the transient HTTP `POST /input-requests/{id}/transfer` plan, then `http_put`; a user may select/preview a file on the one-time page. Only when explicitly advertised, a client program may encode a file up to the owner's inline limit (default 4 MiB) for `input.upload_base64` with file name, MIME, size, SHA-256 and `data_base64`. The dedicated MCP envelope permits 6 MiB; ordinary/legacy actions retain their original limits. Never ask the model to produce or echo base64.
+
+Call `input.complete` after transfer; repeated completion returns the original receipt. Query `input.status` before retry/switch, wait for active writers, and reuse the request. A failed auth, MIME, digest, permission or capacity check cannot be bypassed by switching transport. Keep temporary plans/grants/signatures and file bytes out of logs and notes. An object-store PUT receives only its required signed headers, never the MCP bearer or owner grant. Upload readiness does not approve generation, transcription, rights or canonical acceptance. Owner configuration is documented in the product's `docs/mcp-input-intake.md`; missing object storage does not disable separately configured HTTP/base64.
+
+## GPT Image 2.5 channel-specific guidance
+
+For Sunburst/Flare generation or `canvas capability changed` on `coglet-image25`, use `eikona-mcp-image` and the installed `eikona://docs/image25-mcp` resource (discover with doc query `image25-mcp`). The 2026-09-11 acceptance covers foreground Images API only. Preserve the user's explicit model/channel and inspect original run/attempt evidence before any repeat; do not treat the ordinary background default as qualified by that result.

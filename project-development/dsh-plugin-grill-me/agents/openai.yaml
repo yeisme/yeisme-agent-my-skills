@@ -1,0 +1,5 @@
+display_name: "DSH Plugin Grill Me"
+short_description: "Dependency-aware interview for DSH plugin designs before implementation."
+default_prompt: "Use $dsh-plugin-grill-me to stress-test this DSH plugin design in dependency-aware rounds before any OpenSpec change or scaffolding; keep repo facts with the agent and do not implement until I confirm the decision brief."
+policy:
+  allow_implicit_invocation: false
