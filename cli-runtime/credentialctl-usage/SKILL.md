@@ -70,6 +70,7 @@ credentialctl describe openai/personal-default --json   # view without mutating
 - There is deliberately no `get`/`print` command; if you find yourself wanting the value, you want `export`/`sync` or a consumer resolver instead.
 - Secrets are rejected in metadata (`METADATA_INVALID`); describe the purpose, never paste the key.
 - `set`/`rotate` keep existing metadata; `--clear-note` removes a note.
+- Lifecycle: every value mutation stamps `rotated_at`; set an expiry with `describe <ref> --expires <RFC3339>` (`--clear-expires` removes it) and `doctor` warns `expired`/`expiring` (within 30 days) locally.
 - `search` results include `matched_on` plus the metadata, redacted in every output mode.
 
 ## Collect scattered keys (discover / import-config)
@@ -106,6 +107,41 @@ credentialctl sink list --json && credentialctl sink verify --json
 - `render`: single-pass `{{credential:<provider>/<account>}}` substitution; writes ONLY the mandatory `--output` path (0600, atomic); stdout is never a sink. Template caps: ≤256 KiB, ≤64 placeholders, ≤16 refs; malformed placeholders fail closed (`TEMPLATE_INVALID`).
 - Sink safety rules refuse (with `SINK_REFUSED`): group/world-writable parents, `/tmp`-style areas, symlink path components, git worktrees (escape: `--allow-repo-sink --yes`, recorded) and execution-adjacent files (`~/.ssh`, shell startup, git config, terminal/editor rc). Every render is recorded in `sinks.json`; `sink verify` reports drift informationally; `sink remove` never deletes the file.
 - Never `cat` the rendered sink back into the conversation — `sink verify` reports digests instead.
+
+## Sync MCP server keys (mcp targets)
+
+MCP client configs get keys through the same target machinery, with a builtin JSON writer (no owner CLI needed):
+
+```bash
+credentialctl export openai/main --to yeisme-target://mcp/claude-user/context7 \
+  --env CONTEXT7_API_KEY --json
+credentialctl export gateway/main --to yeisme-target://mcp/claude-project/fetch \
+  --env FETCH_API_KEY --allow-repo-sink --yes --json   # repo-local .mcp.json needs the escape hatch
+credentialctl import yeisme-target://mcp/cursor-user/brave-search --as mcp/brave --json
+credentialctl sync mcp/brave --dry-run --json
+```
+
+- Clients: `claude-project` (`./.mcp.json`), `claude-user` (`~/.claude.json`), `cursor-user` (`~/.cursor/mcp.json`); slots: `env.<NAME>` (via `--env` or the stored `env_name`) or `headers.Authorization` (`--authorization`).
+- The writer preserves unknown JSON fields, snapshots the previous file, writes 0600 atomically; interpreter-hijack env names (`NODE_OPTIONS`, `PYTHONPATH`, …) are refused.
+- `claude-project` targets inside a git worktree need `--allow-repo-sink --yes` per invocation (repo-local secret is opt-in and recorded).
+- `import` reads the existing slot in-process (discovery fallback when exactly one secret-looking slot exists) and records `env_name` on created entries.
+- credentialctl itself never runs as an MCP server (recorded non-goal).
+
+## Opt-in encrypted store (encrypted-file)
+
+The default store stays plaintext 0600. Users who want at-rest encryption migrate explicitly:
+
+```bash
+credentialctl storage migrate openai/main --from file --to encrypted-file --yes --json \
+  --unlock-file ~/.config/credentialctl.passphrase        # or --unlock-env / TTY prompt
+credentialctl storage rollback openai/main --to file --yes --json
+```
+
+- After migration `<base>/envelope.json` exists (Argon2id fixed profile + wrapped DEK; per-ref AEAD bound to ref+revision+envelope digest).
+- Unlock precedence: `--unlock-file` > `CREDENTIALCTL_UNLOCK_FILE` > `--unlock-env` > `--unlock keychain` (macOS/Windows Credential Manager item `credentialctl-store`) > TTY prompt (humans only). Machine flows without a source fail closed `UNLOCK_REQUIRED` (exit 4); wrong passphrase or missing keychain item is `UNLOCK_FAILED` (exit 4).
+- One unlock/derivation per process; keys wiped at exit. `status`/`doctor` on a locked store still render (unavailable + unlock action); data-touching commands fail closed.
+- On macOS the system Keychain is also a real explicit backend: `storage migrate <ref> --from file --to keychain --yes` (file stays the default authority; other platforms fail closed).
+- Inline sync, exec, render and backup all work unchanged over an encrypted store (decrypt in-process).
 
 ## Inline target workflow
 
