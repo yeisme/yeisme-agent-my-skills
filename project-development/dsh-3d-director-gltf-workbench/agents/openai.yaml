@@ -1,0 +1,4 @@
+interface:
+  display_name: DSH 3D Director glTF/GLB Workbench
+  short_description: Shot anchored 3D scene orchestration and glTF/GLB contracts
+  default_prompt: Use $dsh-3d-director-gltf-workbench for this DSH 3D Director task.
