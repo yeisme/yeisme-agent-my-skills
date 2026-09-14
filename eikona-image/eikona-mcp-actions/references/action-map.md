@@ -1,6 +1,6 @@
 # Eikona MCP development action map
 
-Navigation reference for 95 executable development `eikona.execute`
+Navigation reference for 98 executable development `eikona.execute`
 actions. This includes unreleased precision-edit and upload lifecycle actions;
 an installed older release must not be assumed to expose them. It is verified
 against `ActionDescriptors`; use it directly instead
@@ -162,3 +162,11 @@ consumer actions only; unknown and non-entitled actions return the identical
 | `input.renew` | mutation | consumer | Input request control without a product CLI. Discover exact fields with input.capabilities. HTTP bytes require the transient grant link; the page link supports manual file selection. Upload does not authorize generation. |
 | `input.status` | readonly | consumer | Input request control without a product CLI. Discover exact fields with input.capabilities. HTTP bytes require the transient grant link; the page link supports manual file selection. Upload does not authorize generation. |
 | `pricing.quote` | readonly | consumer | Execute allowlisted Eikona action pricing.quote. |
+
+## Additional registered development actions
+
+| Action | Kind | Lane | Purpose |
+| --- | --- | --- | --- |
+| `input.complete` | mutation | consumer | Input request control without a product CLI. Discover exact fields with input.capabilities. Use the configured object-storage/HTTP route or bounded input.upload_base64; the page link supports manual file selection. Upload does not authorize generation. |
+| `input.upload_base64` | mutation | consumer | Input request control without a product CLI. Discover exact fields with input.capabilities. Use the configured object-storage/HTTP route or bounded input.upload_base64; the page link supports manual file selection. Upload does not authorize generation. |
+| `prompts.catalog.list` | readonly | consumer | Execute allowlisted Eikona action prompts.catalog.list. |
