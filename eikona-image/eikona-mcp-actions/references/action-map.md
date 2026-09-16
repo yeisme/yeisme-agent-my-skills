@@ -1,6 +1,6 @@
 # Eikona MCP development action map
 
-Navigation reference for 98 executable development `eikona.execute`
+Navigation reference for 110 executable development `eikona.execute`
 actions. This includes unreleased precision-edit and upload lifecycle actions;
 an installed older release must not be assumed to expose them. It is verified
 against `ActionDescriptors`; use it directly instead
@@ -170,3 +170,20 @@ consumer actions only; unknown and non-entitled actions return the identical
 | `input.complete` | mutation | consumer | Input request control without a product CLI. Discover exact fields with input.capabilities. Use the configured object-storage/HTTP route or bounded input.upload_base64; the page link supports manual file selection. Upload does not authorize generation. |
 | `input.upload_base64` | mutation | consumer | Input request control without a product CLI. Discover exact fields with input.capabilities. Use the configured object-storage/HTTP route or bounded input.upload_base64; the page link supports manual file selection. Upload does not authorize generation. |
 | `prompts.catalog.list` | readonly | consumer | Execute allowlisted Eikona action prompts.catalog.list. |
+
+## Additional registered development actions
+
+| Action | Kind | Lane | Purpose |
+| --- | --- | --- | --- |
+| `assets.saveback.cancel` | mutation | consumer | Owner-scoped measured effort or explicit selected-image saveback. Does not generate, approve images or count saveback as adoption. Discover exact fields; query original records before retrying. |
+| `assets.saveback.resume` | mutation | consumer | Owner-scoped measured effort or explicit selected-image saveback. Does not generate, approve images or count saveback as adoption. Discover exact fields; query original records before retrying. |
+| `assets.saveback.select` | mutation | consumer | Owner-scoped measured effort or explicit selected-image saveback. Does not generate, approve images or count saveback as adoption. Discover exact fields; query original records before retrying. |
+| `assets.saveback.status` | readonly | consumer | Owner-scoped measured effort or explicit selected-image saveback. Does not generate, approve images or count saveback as adoption. Discover exact fields; query original records before retrying. |
+| `feedback.effort` | mutation | consumer | Owner-scoped measured effort or explicit selected-image saveback. Does not generate, approve images or count saveback as adoption. Discover exact fields; query original records before retrying. |
+| `input.drivebridge.cancel` | mutation | consumer | Import a pinned DriveBridge image through the original input service. Owner-configured connections bind actor and project; no generation or automatic review. Query the original import before retrying. |
+| `input.drivebridge.import` | mutation | consumer | Import a pinned DriveBridge image through the original input service. Owner-configured connections bind actor and project; no generation or automatic review. Query the original import before retrying. |
+| `input.drivebridge.resume` | mutation | consumer | Import a pinned DriveBridge image through the original input service. Owner-configured connections bind actor and project; no generation or automatic review. Query the original import before retrying. |
+| `input.drivebridge.status` | readonly | consumer | Import a pinned DriveBridge image through the original input service. Owner-configured connections bind actor and project; no generation or automatic review. Query the original import before retrying. |
+| `prompt.preview` | readonly | consumer | Execute allowlisted Eikona action prompt.preview. |
+| `prompt.tune` | readonly | consumer | Execute allowlisted Eikona action prompt.tune. |
+| `report.effort` | readonly | consumer | Owner-scoped measured effort or explicit selected-image saveback. Does not generate, approve images or count saveback as adoption. Discover exact fields; query original records before retrying. |

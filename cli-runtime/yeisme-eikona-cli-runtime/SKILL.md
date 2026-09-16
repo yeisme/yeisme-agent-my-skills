@@ -279,3 +279,11 @@ Contract reference: `../eikona-visual-router/references/visual-intent-contract.m
 - Per-image pricing requires exact operation/quality/resolution and confirmed generated count. Do not equate a native tier with a pixel size, count downloaded files as generated images, or bill image output both by tokens and by image.
 - No official price mapping is assumed for `openai/gpt-5.4-image-2`; keep the configured model and resolve a missing price through explicit owner configuration. Never restore a hard-coded gateway discount or borrow another model's official price.
 - Without a CLI, discover `pricing.quote` through registered MCP schemas and `eikona://docs/pricing`. Do not send credentials, prompts, or client-supplied price snapshots to the quote action.
+
+### DriveBridge remote CLI interaction
+
+- Development assets saveback select/status/resume/cancel, feedback effort and report effort support optional --endpoint/--key-file/--scope. Reuse the existing typed SDK and upload transport; incomplete explicit remote options must fail instead of silently writing local state.
+- Preserve local owner-host defaults when remote options are absent. Source connection configuration stays on the owner host; operator/service-api purpose is distinct from input-only permission.
+- All structured modes use structuredOutputEnabled and the shared renderer. blocked/partial transfer results retain original IDs and advisory recovery; do not report them as completed deliveries.
+- For client-without-CLI interaction, use advertised MCP schemas and eikona://docs/drivebridge. Computer-local files need a local reader/relay or existing input page, never remote filesystem path interpretation.
+- Keep the independently frozen recovery release separate from later DriveBridge interaction changes. Local verification does not publish or deploy a service.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "DriveBridge Operator"
+  short_description: "Discover file transfers and recover DriveBridge handoffs"
+  default_prompt: "Use $drivebridge-operator to choose the configured file-transfer path and recover the original operation."
