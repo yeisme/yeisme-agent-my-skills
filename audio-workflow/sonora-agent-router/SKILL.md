@@ -54,6 +54,7 @@ providers:
   suno-kie:
     enabled: true
     base_url: https://api.kie.ai
+    upload_base_url: https://kieai.redpandaai.co
     api_key: <inline-key>
 ```
 
@@ -84,7 +85,9 @@ Completion returns a `sonora://media-input/` reference, not permission to transc
 
 模型选择：`music providers list --json` 的 `supported_models` 带 `duration_support`（effective/ineffective/unverified/unsupported）。时长敏感的 BGM 用 `V6`（实测 30s→30.0s 精确）；`V6_MINI` 忽略 duration（实测 30s→~185s）只用于不在意时长的场景；`V6_WILD` 见最新 notes；`V4`–`V5_5` 已停用不可选。非 instrumental 或 <10s/>360s 的 brief 时长提示不生效。
 
-MCP 客户端：先读内置资源 `sonora://docs/music`（provider 身份、模型矩阵、门控、错误码与恢复、terms），动作面 `music.*`（17 个生命周期动作）与 `music.cue.*`（12 个编排动作，零外呼）；`music.generate` 对所有 provider 统一强制幂等键、正预算、`approval_ref`、`confirm_external_call=true`。artifact host 首次被 `artifact_host_forbidden` 拦截时按错误中的宿主补 `providers.suno-kie.artifact_hosts` 再 reconcile，不要重复提交。
+Cover：`music brief create` 用 `--mode cover` 且恰好一个受管 `--source-asset`（owned snapshot、非商用、无歌词、源 ≤8 分钟）；plan `--capability cover`。kie 会上传参考音频到 `upload_base_url` 再走 `upload-and-cover-audio`。不要假设时长等于源曲（V6 live 20s 源 → ~235s）。extend/mashup 仍不可用。
+
+MCP 客户端：先读内置资源 `sonora://docs/music`（provider 身份、模型矩阵、门控、错误码与恢复、terms、cover 参考输入），动作面 `music.*`（17 个生命周期动作）与 `music.cue.*`（12 个编排动作，零外呼）；`music.generate` 对所有 provider 统一强制幂等键、正预算、`approval_ref`、`confirm_external_call=true`。artifact host 首次被 `artifact_host_forbidden` 拦截时按错误中的宿主补 `providers.suno-kie.artifact_hosts` 再 reconcile，不要重复提交。
 
 ## AI Drama ShotAudioIntent Handoff
 
