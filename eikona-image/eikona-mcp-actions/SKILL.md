@@ -13,7 +13,9 @@ stay in `eikona-mcp-image`; everything else starts here.
 
 ## Current map and drift
 
-Use the bundled v0.7.6 action map (77 actions) for ordinary routing. Do not
+Use the bundled action map for its matching release. The development map also
+contains unreleased actions; inspect advertised capabilities when that version
+is not installed. Do not
 fetch a full catalog or generate a card at session start. Refresh the map only
 after an actual installed-version mismatch or a typed action denial that needs
 diagnosis:
@@ -39,6 +41,7 @@ consumer tokens never see them). Unmarked = consumer lane.
 | Intent domain | Actions |
 | --- | --- |
 | Generation loop | `generate`, `edit`, `run.batch`, `wait`, `status`, `inspect`, `cancel`, `retry`, `repair`, `resume`, `reroll`, `trace.tail`, `report` |
+| Precision editing (when advertised) | `edit.prepare`, `edit.plan.show`, then `edit` with `edit_plan_ref` |
 | Review & feedback | `review.packet`, `review.contact_sheet`, `feedback.accept`, `feedback.reject`, `feedback.needs-edit`, `feedback.reference-only`, `analyze` |
 | Assets & delivery of accepted work | `assets.handoff`, `assets.stage`, `assets.apply`, `artifact.access` (op), `replace.preview`, `replace.apply`, `rollback`, `export` |
 | Visual library & style | `library.search`, `library.list`, `library.show`, `library.save`, `library.tag`, `library.update`, `library.import-url`, `library.import-runs`, `style.build-from-image`, `deck.list`, `deck.show`, `recipes.list`, `recipes.show`, `prompts.list` |
@@ -76,6 +79,11 @@ Full per-action kind (readonly/generation/mutation) and safety columns live in
 - Keep the idempotency key as submission evidence. If the transport outcome is
   lost before any `run_id` arrives, report unknown outcome and stop; never
   resubmit or claim the key reconciled the run.
+- Remote LAN `edit` must not send the MCP host local path as `reference_image`.
+  Use `eikona://artifact/<handle>` on the Eikona server. `wait` is a bounded
+  status snapshot; a worker-failed run must be treated as `failed`, not as an
+  infinite queue. `AUTH_ACTION_DENIED` on operator diagnostics from a
+  generation-loop key is expected.
 - Consume the MCP `ResourceLink` immediately. On 404/expiry, call
   `artifact.access` once only when it is advertised for the active credentials
   and the caller is an authorized operator; send `confirm: true` and the
@@ -94,3 +102,17 @@ Run `eikona mcp capabilities --json --full` or read the scoped REST action
 endpoint only after an actual version mismatch or typed denial. Neither is a
 per-session preflight. Re-check after an Eikona upgrade only when the bundled
 map no longer matches the installed action set.
+
+## Single-file multitransport intake
+
+For a client file, discover `eikona://input/capabilities` and the installed execute schemas. Use `input.prepare` with purpose `reference` and one stable idempotency key. Prefer executable `object_storage` through the transient HTTP `POST /input-requests/{id}/transfer` plan, then `http_put`; a user may select/preview a file on the one-time page. Only when explicitly advertised, a client program may encode a file up to the owner's inline limit (default 4 MiB) for `input.upload_base64` with file name, MIME, size, SHA-256 and `data_base64`. The dedicated MCP envelope permits 6 MiB; ordinary/legacy actions retain their original limits. Never ask the model to produce or echo base64.
+
+Call `input.complete` after transfer; repeated completion returns the original receipt. Query `input.status` before retry/switch, wait for active writers, and reuse the request. A failed auth, MIME, digest, permission or capacity check cannot be bypassed by switching transport. Keep temporary plans/grants/signatures and file bytes out of logs and notes. An object-store PUT receives only its required signed headers, never the MCP bearer or owner grant. Upload readiness does not approve generation, transcription, rights or canonical acceptance. Owner configuration is documented in the product's `docs/mcp-input-intake.md`; missing object storage does not disable separately configured HTTP/base64.
+
+## GPT Image 2.5 channel-specific guidance
+
+For Sunburst/Flare generation or `canvas capability changed` on `coglet-image25`, use `eikona-mcp-image` and the installed `eikona://docs/image25-mcp` resource (discover with doc query `image25-mcp`). The 2026-09-11 acceptance covers foreground Images API only. Preserve the user's explicit model/channel and inspect original run/attempt evidence before any repeat; do not treat the ordinary background default as qualified by that result.
+
+## Midjourney prompt assistance
+
+Discover `prompt.preview` and `prompt.tune` through installed action schemas. CLI `prompt tune` reads the selected run and requires `--job` for multiple jobs. Suggestions do not submit provider requests or change original evidence.

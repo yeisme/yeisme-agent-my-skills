@@ -1,7 +1,9 @@
-# Eikona MCP v0.7.6 action map
+# Eikona MCP development action map
 
-Bundled navigation reference for the 77 executable v0.7.6 `eikona.execute`
-actions. It is verified against `ActionDescriptors`; use it directly instead
+Navigation reference for 100 executable development `eikona.execute`
+actions. This includes unreleased precision-edit and upload lifecycle actions;
+an installed older release must not be assumed to expose them. It is verified
+against `ActionDescriptors`; use it directly instead
 of catalog discovery at session start. Refresh with `eikona mcp capabilities
 --json --full` or the scoped REST action endpoint only after an actual
 installed-version mismatch or typed denial requires diagnosis.
@@ -17,6 +19,13 @@ consumer actions only; unknown and non-entitled actions return the identical
 | --- | --- | --- | --- |
 | `generate` | generation | consumer | Submit a new image run (stable idempotency key) |
 | `edit` | generation | consumer | Submit an edit run with a supplied reference image |
+| `edit.prepare` | generation | consumer | Prepare an immutable region or mask edit; unparsed annotations return needs_analysis |
+| `edit.plan.show` | readonly | consumer | Read an authorized edit plan summary and preview |
+| `asset.upload.begin` | mutation | consumer | Create an authorized upload session for an input image |
+| `asset.upload.complete` | mutation | consumer | Validate uploaded image bytes and return a durable asset URI |
+| `asset.upload.status` | readonly | consumer | Inspect an existing upload session |
+| `asset.upload.abort` | mutation | consumer | Abort an authorized upload session |
+| `asset.upload.cleanup` | mutation | consumer | Clean up upload sessions through the upload lifecycle service |
 | `run.batch` | generation | consumer | Submit a batch of runs in one call |
 | `wait` | generation | consumer | Wait on a run until terminal |
 | `status` | readonly | consumer | Read back run status |
@@ -48,6 +57,11 @@ consumer actions only; unknown and non-entitled actions return the identical
 | `assets.handoff` | readonly | consumer | Path-free handoff descriptor for downstream consumers |
 | `assets.stage` | mutation | consumer | Stage an accepted asset to a local path |
 | `assets.apply` | mutation | consumer | Apply an accepted asset into a project (confirmation-gated) |
+| `assets.qualification.create` | mutation | operator | Record one unconfirmed asset-reuse qualification (confirm: true) |
+| `assets.qualification.show` | readonly | operator | Read the qualification projection with acceptance and usability |
+| `assets.qualification.validate` | readonly | operator | Re-derive qualification coverage from durable state |
+| `assets.qualification.accept` | mutation | operator | Record the one human acceptance decision for a qualification |
+| `assets.qualification.supersede` | mutation | operator | Mark one qualification superseded by naming its successor |
 | `artifact.access` | mutation | operator | Reissue an artifact grant for 404/expired ResourceLink (`confirm: true`); requires advertised operator entitlement |
 | `replace.preview` | mutation | consumer | Preview a safe asset replacement |
 | `replace.apply` | mutation | consumer | Apply the previewed replacement |
@@ -137,3 +151,24 @@ consumer actions only; unknown and non-entitled actions return the identical
 | `dataset.build` | mutation | operator | Assemble a dataset |
 | `dataset.export` | mutation | operator | Export a dataset |
 | `bindings.confirm` | mutation | consumer | Confirm a binding proposal |
+
+## Additional registered development actions
+
+| Action | Kind | Lane | Purpose |
+| --- | --- | --- | --- |
+| `input.abort` | mutation | consumer | Input request control without a product CLI. Discover exact fields with input.capabilities. HTTP bytes require the transient grant link; the page link supports manual file selection. Upload does not authorize generation. |
+| `input.capabilities` | readonly | consumer | Input request control without a product CLI. Discover exact fields with input.capabilities. HTTP bytes require the transient grant link; the page link supports manual file selection. Upload does not authorize generation. |
+| `input.prepare` | mutation | consumer | Input request control without a product CLI. Discover exact fields with input.capabilities. HTTP bytes require the transient grant link; the page link supports manual file selection. Upload does not authorize generation. |
+| `input.renew` | mutation | consumer | Input request control without a product CLI. Discover exact fields with input.capabilities. HTTP bytes require the transient grant link; the page link supports manual file selection. Upload does not authorize generation. |
+| `input.status` | readonly | consumer | Input request control without a product CLI. Discover exact fields with input.capabilities. HTTP bytes require the transient grant link; the page link supports manual file selection. Upload does not authorize generation. |
+| `pricing.quote` | readonly | consumer | Execute allowlisted Eikona action pricing.quote. |
+
+## Additional registered development actions
+
+| Action | Kind | Lane | Purpose |
+| --- | --- | --- | --- |
+| `input.complete` | mutation | consumer | Input request control without a product CLI. Discover exact fields with input.capabilities. Use the configured object-storage/HTTP route or bounded input.upload_base64; the page link supports manual file selection. Upload does not authorize generation. |
+| `input.upload_base64` | mutation | consumer | Input request control without a product CLI. Discover exact fields with input.capabilities. Use the configured object-storage/HTTP route or bounded input.upload_base64; the page link supports manual file selection. Upload does not authorize generation. |
+| `prompt.preview` | readonly | consumer | Execute allowlisted Eikona action prompt.preview. |
+| `prompt.tune` | readonly | consumer | Execute allowlisted Eikona action prompt.tune. |
+| `prompts.catalog.list` | readonly | consumer | Execute allowlisted Eikona action prompts.catalog.list. |
