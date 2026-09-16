@@ -29,6 +29,11 @@ Use `--json` only when the task needs full nested capabilities, strategy compari
 | Voice models for one provider | `sonora tts models list --provider <provider-id> --agent` |
 | Voices for one provider | `sonora tts voices list --provider <provider-id> --agent` |
 | Music provider catalog | `sonora music providers list --json` |
+| Music fixture lifecycle | `sonora music brief create --purpose <purpose> --instrumental --agent` → `sonora music plan create --brief <ref> --provider fixture --agent` → `sonora music generate --plan <ref> --idempotency-key <key> --agent` |
+| Music job status/list/reconcile | `sonora music job status <job-id> --agent` / `sonora music job list --agent` / `sonora music job reconcile <job-id> --agent` |
+| Music approval lane (paid providers) | `sonora music approval issue --plan <ref> --project-id <p> --authorization-epoch <e> --idempotency-key <k> --max-cost-usd <cap> --agent` |
+| Music review and handoff | `sonora music review accept <job-id> --agent` → `sonora music handoff get <job-id> --agent` |
+| Music cue orchestration | `sonora music cue --help`（plan/candidates/placement/preview-mix/handoff） |
 | Local fixture flow | `sonora bridge scaena plan --graph <production-graph-ref> --agent` |
 | Compile AI-drama shot audio intent | `sonora bridge scaena episode-audio compile-intent --from <handoff.json> --agent` |
 | Import AI-drama shot audio intent | `sonora bridge scaena episode-audio import-intent --from <handoff.json> --idempotency-key <key> --agent` |
@@ -72,6 +77,14 @@ Completion returns a `sonora://media-input/` reference, not permission to transc
 2. Estimate cost with `sonora tts estimate --plan <language-plan-ref> --provider <provider-id> --voice-model <voice-model-ref> --max-cost-usd <limit> --agent`.
 3. Require explicit user authorization before a command with `--confirm-external-call`.
 4. Voice creation or real-person reference audio also requires `--permission licensed` and redacted permission evidence.
+
+## Music Generation（BGM / cue）
+
+真实付费生成只走 `suno-kie`（kie.ai 聚合渠道，非官方 Suno API；配置见 Credentials 节）或受限 preview 的 `elevenlabs`；`suno-web-bridge` 是用户自部署实验桥，`suno` 官方占位保持 disabled，绝不互相 fallback。标准链：`music brief create`（`--duration-ms` 目标时长、`--instrumental`、`--output-format mp3`）→ `music plan create`（显式 `--provider`/`--model`，未知模型 fail-closed）→ `music approval issue`（绑定 plan/预算/身份/幂等，≤900s 单次消费）→ `music generate`（复用同一 `--idempotency-key`、`--project-id`、`--authorization-epoch`，加 `--confirm-external-call`；`unknown_preview` 渠道再加 `--confirm-unknown-price`）→ `music job reconcile` → `music review accept` → `music handoff get`。
+
+模型选择：`music providers list --json` 的 `supported_models` 带 `duration_support`（effective/ineffective/unverified/unsupported）。时长敏感的 BGM 用 `V6`（实测 30s→30.0s 精确）；`V6_MINI` 忽略 duration（实测 30s→~185s）只用于不在意时长的场景；`V6_WILD` 见最新 notes；`V4`–`V5_5` 已停用不可选。非 instrumental 或 <10s/>360s 的 brief 时长提示不生效。
+
+MCP 客户端：先读内置资源 `sonora://docs/music`（provider 身份、模型矩阵、门控、错误码与恢复、terms），动作面 `music.*`（17 个生命周期动作）与 `music.cue.*`（12 个编排动作，零外呼）；`music.generate` 对所有 provider 统一强制幂等键、正预算、`approval_ref`、`confirm_external_call=true`。artifact host 首次被 `artifact_host_forbidden` 拦截时按错误中的宿主补 `providers.suno-kie.artifact_hosts` 再 reconcile，不要重复提交。
 
 ## AI Drama ShotAudioIntent Handoff
 
