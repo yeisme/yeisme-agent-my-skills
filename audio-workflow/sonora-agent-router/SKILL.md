@@ -31,6 +31,7 @@ Use `--json` only when the task needs full nested capabilities, strategy compari
 | Music provider catalog | `sonora music providers list --json` |
 | Music fixture lifecycle | `sonora music brief create --purpose <purpose> --instrumental --agent` → `sonora music plan create --brief <ref> --provider fixture --agent` → `sonora music generate --plan <ref> --idempotency-key <key> --agent` |
 | Music cover (suno-kie) | `sonora music brief create --mode cover --source-asset <audio-asset-ref> --output-format mp3 --json` → `sonora music plan create --capability cover --provider suno-kie --rights-snapshot <ref> --json` → approval → `sonora music generate ... --confirm-external-call --confirm-unknown-price --json` |
+| Music cover HTTP/SDK | `CreateMusicBrief`/`POST /api/v1/music/briefs` (`mode=cover`, `source_asset_refs`) → `CreateMusicPlan` (`provider_capability=cover`, `rights_snapshot_refs`) → `IssueMusicApproval` → `CreateMusicJob` (`confirm_live`, `confirm_unknown_price`) |
 | Music job status/list/reconcile | `sonora music job status <job-id> --agent` / `sonora music job list --agent` / `sonora music job reconcile <job-id> --agent` |
 | Music approval lane (paid providers) | `sonora music approval issue --plan <ref> --project-id <p> --authorization-epoch <e> --idempotency-key <k> --max-cost-usd <cap> --agent` |
 | Music review and handoff | `sonora music review accept <job-id> --agent` → `sonora music handoff get <job-id> --agent` |
