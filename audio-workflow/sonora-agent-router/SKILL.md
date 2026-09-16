@@ -30,6 +30,7 @@ Use `--json` only when the task needs full nested capabilities, strategy compari
 | Voices for one provider | `sonora tts voices list --provider <provider-id> --agent` |
 | Music provider catalog | `sonora music providers list --json` |
 | Music fixture lifecycle | `sonora music brief create --purpose <purpose> --instrumental --agent` → `sonora music plan create --brief <ref> --provider fixture --agent` → `sonora music generate --plan <ref> --idempotency-key <key> --agent` |
+| Music cover (suno-kie) | `sonora music brief create --mode cover --source-asset <audio-asset-ref> --output-format mp3 --json` → `sonora music plan create --capability cover --provider suno-kie --rights-snapshot <ref> --json` → approval → `sonora music generate ... --confirm-external-call --confirm-unknown-price --json` |
 | Music job status/list/reconcile | `sonora music job status <job-id> --agent` / `sonora music job list --agent` / `sonora music job reconcile <job-id> --agent` |
 | Music approval lane (paid providers) | `sonora music approval issue --plan <ref> --project-id <p> --authorization-epoch <e> --idempotency-key <k> --max-cost-usd <cap> --agent` |
 | Music review and handoff | `sonora music review accept <job-id> --agent` → `sonora music handoff get <job-id> --agent` |
@@ -85,7 +86,7 @@ Completion returns a `sonora://media-input/` reference, not permission to transc
 
 模型选择：`music providers list --json` 的 `supported_models` 带 `duration_support`（effective/ineffective/unverified/unsupported）。时长敏感的 BGM 用 `V6`（实测 30s→30.0s 精确）；`V6_MINI` 忽略 duration（实测 30s→~185s）只用于不在意时长的场景；`V6_WILD` 见最新 notes；`V4`–`V5_5` 已停用不可选。非 instrumental 或 <10s/>360s 的 brief 时长提示不生效。
 
-Cover：`music brief create` 用 `--mode cover` 且恰好一个受管 `--source-asset`（owned snapshot、非商用、无歌词、源 ≤8 分钟）；plan `--capability cover`。kie 会上传参考音频到 `upload_base_url` 再走 `upload-and-cover-audio`。不要假设时长等于源曲（V6 live 20s 源 → ~235s）。extend/mashup 仍不可用。
+Cover：`music brief create` 用 `--mode cover` 且恰好一个受管 `--source-asset`（owned snapshot、非商用、无歌词、源 ≤8 分钟）；plan `--capability cover` 并带 `--rights-snapshot`。没有 `sonora music rights` 命令。kie 在 `music generate` 时才把文件上传到 `upload_base_url` 再走 `upload-and-cover-audio`（真实 live 已包含这次上传）。不要假设时长等于源曲（V6 live 20s 源 → ~235s）。extend/mashup 仍不可用。
 
 MCP 客户端：先读内置资源 `sonora://docs/music`（provider 身份、模型矩阵、门控、错误码与恢复、terms、cover 参考输入），动作面 `music.*`（17 个生命周期动作）与 `music.cue.*`（12 个编排动作，零外呼）；`music.generate` 对所有 provider 统一强制幂等键、正预算、`approval_ref`、`confirm_external_call=true`。artifact host 首次被 `artifact_host_forbidden` 拦截时按错误中的宿主补 `providers.suno-kie.artifact_hosts` 再 reconcile，不要重复提交。
 
