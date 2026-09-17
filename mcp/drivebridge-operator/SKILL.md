@@ -71,3 +71,12 @@ connection_id is Eikona configuration, target_id is local relay configuration, b
 Use the returned recovery instruction with the same identity/project and original operation. Restore a binding or permission through its owner; do not change actors to evade a denial. Fix review failures through Eikona review, not automatic candidate mode. Stop cancelled/expired work and inspect retained evidence before explicitly creating a new intent.
 
 A partial saveback must retain completed file receipts and resume missing work. Complete requires the provenance manifest too. Transfer recovery never authorizes generation, paid retries, permission expansion or deletion. Saving a file is not consumer adoption.
+
+## Intranet CAS and mounts (design-stage)
+
+Server blob reuse and local WebDAV/FUSE mounts are specified, not shipped. Until capabilities advertise `cas_reuse=available` (not merely the key existing) or `mount.adapter=webdav` with a live `mount_status`, keep using ordinary upload/download and original operations.
+
+- File identity stays `drivebridge://<instance>/file/<id>/version/<vid>` (remote) or `drivebridge://file/<hash>` (local). A SHA-256 blob is not a capability token and is not a public URI. Do not call `GET /api/v1/blobs/{sha256}` as a substitute for `stat`.
+- A matching digest does not authorize a read. If create_upload/download reports `blob_reused` or zero transferred bytes, still `stat` the returned version before consuming. `blob_unavailable` means re-upload the original file with a new idempotency key; never treat an empty body as a hit.
+- Do not start mounts through MCP. There is no Server `POST /api/v1/mounts`. `drivebridge mount webdav` is a user-terminal command; default binaries return `unsupported` for `mount fuse`. Unlink in a mount is trash, not purge.
+- Do not treat a local `.drivebridge-cas` path as a stable reference or send it to a remote tool.

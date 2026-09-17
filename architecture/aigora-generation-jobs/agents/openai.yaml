@@ -1,0 +1,3 @@
+display_name: Aigora Generation Jobs
+short_description: Recover capability-specific async jobs with the same Idempotency-Key and authorized artifact refs
+default_prompt: Use $aigora-generation-jobs for Aigora async generation, same-key retry, unknown_accept reconcile, and authorized artifact refs. Freeze scope with $aigora-agent-core first. Treat CLI jobs as local bookkeeping, not provider streams.

@@ -42,6 +42,18 @@ Report the selected owner, artifact, input refs, expected digest/revision, provi
 
 ## Validation
 
+For Auctra template consumption, prefer the explicit dry-run and binding health
+checks before any review-gated mutation:
+
+```bash
+auctra prompt-context catalog bind '<template-address>' --target <unit-id> --input-ref name=target.title --dry-run --json
+auctra prompt-context catalog binding check --id '<binding-id>' --json
+```
+
+Never infer that `preview`, `bind`, or `check` executes a provider. `bind`
+without `--dry-run` creates only a refs-only draft; acceptance and text
+generation remain separate owner-gated steps.
+
 Run only the commands for the affected owner:
 
 ```bash

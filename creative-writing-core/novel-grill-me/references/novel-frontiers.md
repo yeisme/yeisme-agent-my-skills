@@ -81,5 +81,5 @@
 
 - 读取 owner 当前版本（binding 或项目 projection）的 accepted canon 与决定；只访谈 `unsettled`/`reopened` 节点，不重问仍有效决定。
 - 区分“作者已决定”与“Agent 上次建议”；建议需重新确认才可升级为决定。
-- 上游（承诺/人物核心）改动时，按 `frontier-protocol.md` 重开受影响分支并暂停在途 writer 交接。
+- 上游（承诺/人物核心）改动时，按 `creative-grilling/references/frontier-protocol.md` 重开受影响分支并暂停在途 writer 交接。
 - 无 owner projection 的散稿：先做一次现状盘点访谈（缺陷归类 + accepted 边界），再进入修订分支。

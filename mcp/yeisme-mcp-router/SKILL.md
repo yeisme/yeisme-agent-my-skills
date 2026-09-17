@@ -27,6 +27,8 @@ against the MCP surface directly.
 | Configure Codex against a direct Eikona LAN `/mcp` URL | `eikona-mcp-image` then `codex-agent-runtime` | Owner HTTP MCP, not Gateway; remote edit forbids client local paths |
 | Scaena official MiniMax H3 / Wan3 video generation, upload or task recovery | `scaena-production-operator`; `tools/list`, `scaena.search`, `scaena://video-tasks/guide` | Use `createVideoProviderTask` with explicit official binding; no Aigora base URL or shot preflight. Include unavailable results for schema/recovery only. |
 | Other Scaena MCP operations | `tools/list` and readable capability resources; optional installed CLI discovery | Confirm exact live actions and scopes before execute; do not invent tool names. |
+| auctra mcp text-creation operations | `auctra.search` + `auctra.execute` compact pair | Diagnostic entry is `auctra mcp capabilities --json`; unknown and not-yet-backed actions share one error, so read the `auctra://authoring/capabilities` resource instead of guessing; mutations require idempotency_key and never write canonical text |
+| Personal OneDrive/S3 creative file upload/download, `drivebridge://file/<id>` reference handoff to Scaena, or成品回存 (`save_output`) | `drivebridge-operator`; preflight `drivebridge doctor`, discover `drivebridge capabilities --json` or `drivebridge://capabilities` | Local stdio per machine, default off without `--enabled`; stable refs only — bytes move over owner transport, transient URLs never enter MCP output. Not the lark-drive (飞书云空间) or pinax (local notes) surface; remote personal-space mode uses a scoped Agent token from the web UI. |
 
 Gateway source maintenance (`yeisme-mcp-gateway-maintainer`), peering
 (`yeisme-mcp-gateway-peer-operator`), and publishing
@@ -42,9 +44,15 @@ replaces them.
      --json --full`) or `GET /api/v1/mcp/actions`;
    - scaena: one `tools/list`, then `scaena.search` and readable owner resources;
      `scaena mcp capabilities --json` is optional when the CLI is installed;
+   - auctra: `auctra mcp capabilities --json` then read the
+     `auctra://authoring/capabilities` resource; planned actions are
+     listed for honesty and are not executable;
    - sonora: `sonora mcp capabilities --json` or `sonora.search` with
      `types:["command"]`;
    - anatomia: `anatomia mcp doctor --json` then `anatomia mcp capabilities --json`;
+   - drivebridge: `drivebridge doctor` (read-only preflight) then
+     `drivebridge capabilities --json` or the `drivebridge://capabilities`
+     resource; `not_probed` statuses are honest, not failures;
    - gateway backends: one `tools/list` (compact; full schema per tool via
      `GET /v1/tools/{name}` only when needed);
    - gitea-mcp: the catalog `search` itself is discovery — never skip it.

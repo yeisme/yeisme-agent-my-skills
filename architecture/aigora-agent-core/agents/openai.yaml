@@ -1,0 +1,3 @@
+display_name: Aigora Agent Core
+short_description: Discover Aigora capabilities and keep redacted receipts on current CLI/HTTP/MCP surfaces
+default_prompt: Use $aigora-agent-core to discover current Aigora CLI/HTTP/MCP surfaces, freeze server-derived scope, and record redacted receipts. Pair generation recovery with $aigora-generation-jobs and R2+ handoff with $aigora-operator-guarded. Do not call well-known, aigora agent discover, or /agent/v1.

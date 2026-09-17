@@ -8,8 +8,17 @@ import sys
 
 SKILL_DIR = Path(__file__).resolve().parents[1]
 MODULE_ROOT = SKILL_DIR.parent
-YEISME_ROOT = MODULE_ROOT.parent
-WORKSPACE_ROOT = YEISME_ROOT.parents[1]
+# Runtime copies live under .claude/skills or .agents/skills while the
+# publishable source and the narrow handoff skills live under the workspace
+# .skills tree, so resolve the workspace root by marker, not fixed parent hops.
+WORKSPACE_ROOT = next(
+    (parent for parent in SKILL_DIR.parents if (parent / ".skills" / "profiles").is_dir()),
+    None,
+)
+if WORKSPACE_ROOT is None:
+    print("ERROR: cannot locate workspace root (.skills/profiles)", file=sys.stderr)
+    raise SystemExit(1)
+YEISME_ROOT = WORKSPACE_ROOT / ".skills" / "yeisme"
 
 SKILLS = {
     "creative-grilling": MODULE_ROOT / "creative-grilling",

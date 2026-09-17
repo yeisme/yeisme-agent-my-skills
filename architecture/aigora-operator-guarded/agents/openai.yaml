@@ -1,0 +1,3 @@
+display_name: Aigora Operator Guarded
+short_description: Hand off R2+ Aigora mutations with preview, CAS, and independent human approval
+default_prompt: Use $aigora-operator-guarded to prepare R0-R4 operator handoff. Discover with $aigora-agent-core. Do not self-approve, execute production mutations, or treat CLI --approve as independent human approval.

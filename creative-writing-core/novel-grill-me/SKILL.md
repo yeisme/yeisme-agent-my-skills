@@ -15,7 +15,7 @@ description: Use when the user explicitly wants a direct dependency-aware interv
 4. 按共享 depth 规则选择 `quick|standard|deep`。长篇、连载、改编、跨卷或 canonical 变更默认 `deep`。
 5. 生成 `creative.grill-route.v0.1`，然后按当前小说 phase 运行 frontier。
 6. 按 [references/novel-frontiers.md](references/novel-frontiers.md) 的阶段进入条件加载最窄阶段问法（想法、人物、结构、章节、场景、成稿、修订）；上游未定时不预问下游。
-7. 用户提供 `creative.owner-session-binding.v0.1` 时按 `frontier-protocol.md` 的恢复/刷新/重开规则执行；中途进入或接手已有项目时先读取 owner 当前版本的 accepted 决定，只访谈未决与被重开节点。
+7. 用户提供 `creative.owner-session-binding.v0.1` 时按 `creative-grilling/references/frontier-protocol.md` 的恢复/刷新/重开规则执行；中途进入或接手已有项目时先读取 owner 当前版本的 accepted 决定，只访谈未决与被重开节点。
 
 ## 小说范围
 
