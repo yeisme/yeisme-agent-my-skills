@@ -1,0 +1,4 @@
+interface:
+  display_name: "Radar Operator"
+  short_description: "Read short-drama opportunity intelligence and operate radar safely through its CLI"
+  default_prompt: "Use $radar-operator to read the latest Morning Edition and market brief, then propose the next confirmed radar command."
