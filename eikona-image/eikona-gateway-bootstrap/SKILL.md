@@ -35,15 +35,21 @@ eikona auth list --agent
 ```
 
 3. 选择 Eikona model ref：
-   - GPT Image 默认使用 `openai/gpt-5.4-image-2`。
+   - 已有 GPT Image 网关（本机 `noemi`）付费默认使用 `openai/gpt-image-2.5-sunburst`。复用现有 key，不要新建渠道。
+   - 用户点名 Flare 时用 `openai/gpt-image-2.5-flare`；2.5 不可用或用户点名 Image 2 时才用 `openai/gpt-5.4-image-2`。拒绝裸 `gpt-image-2.5`。
+   - 2.5 smoke 使用像素 `--size`（如 `1152x2048`）加 `--aspect` 和 `--quality high`，禁止 `--size 2k`。先 `eikona models readiness <ref> --channel <channel> --agent`。
    - bare 短别名 `gpt-5.4-image-2` / `gpt-image-2` 已在 Eikona 0.6.0 从主入口移除；所有配置与证据只写 slash canonical ref（v1 handoff 域保留独立 alias policy）。
    - 对 GPT Image，provider-colon 和重复 provider 前缀形式一律在联网前拒绝；不要为 canonical ref 添加 provider 前缀。
-   - 如果 `/v1/models` 返回的完整 ID 是 `openai/gpt-5.4-image-2`，必须把该 slash ID 原样复制到 Eikona。
+   - 如果 `/v1/models` 返回的完整 ID 是 `openai/gpt-5.4-image-2` 或 `openai/gpt-image-2.5-sunburst` / `...-flare`，必须把该 slash ID 原样复制到 Eikona。
    - ImageRouter 使用 `imagerouter:<exact-model-id>`。
    - OpenRouter 使用 `openrouter:<exact-model-id>`。
    - 前缀表示 Eikona adapter，不表示营销名称；不要把 `Nano Banana Pro` 自动改写成任何猜测 ID。
 
-4. 只通过受保护 stdin 或已存在的 mode-0600 key file 授权保存 key。未显式传入 `--config` 时，Eikona 默认把 channel 和 local secret 写入用户级 `~/.eikona/`；Agent 不得读取、缓存或转发 key，也不能把它放入参数、项目文件或 shell credential script。用户在受保护的交互 stdin 中输入 key 后可运行：
+4. 只通过受保护 stdin 或已存在的 mode-0600 key file 授权保存 key。未显式传入 `--config` 时，Eikona 默认把 channel 和 local secret 写入用户级 `~/.eikona/`；Agent 不得读取、缓存或转发 key，也不能把它放入参数、项目文件或 shell credential script。
+
+🔴 CHECKPOINT · 🛑 STOP：未得到当前用户对保存凭据的明确授权前，不得运行 `eikona auth set`。未得到对潜在费用的明确同意前，不得 probe 付费模型或 smoke generate。Agent 不读取、不回显 key。
+
+用户在受保护的交互 stdin 中输入 key 后可运行：
 
 ```bash
 eikona auth set gateway \
@@ -101,6 +107,13 @@ eikona "minimal geometric product image, white background, no text" \
   --agent
 ```
 
+已有 GPT Image 网关的 2.5 smoke（本机渠道 `noemi`；不要发明 `coglet-image25`）：
+
+```bash
+eikona models readiness openai/gpt-image-2.5-sunburst --channel noemi --agent
+eikona generate --use-channel noemi --model openai/gpt-image-2.5-sunburst --size 1152x2048 --aspect 9:16 --quality high --prompt "minimal geometric product image, white background, no text" --agent
+```
+
 网关明确要求 Chat Completions multimodal transport 时，使用准确 model ID：
 
 ```bash
@@ -156,6 +169,17 @@ eikona projects repair-root <project_id> --root /new/project/path --agent
 - 不调用 `auth env`，不从 human output 解析状态；例行 agent 自动化使用 `--agent`，观察非终态 run 用 `--events`，脚本/CI 用 `--json --compact`（共存期内裸 `--json` 仍是 legacy full），取证用 `--json --full`。
 - 如果当前 Eikona runtime 无法把该 channel、adapter 或 transport 路由到网关，停止生成并交给 `yeisme-eikona-cli-runtime`；不要绕过 Eikona 直接调用网关。
 - 不把纯文生图成功描述成编辑式图生图或参考图条件生成成功；三种能力必须分别验证和报告。
+
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| Model ID 未知或用户只给了产品名 | 要求网关列表中的准确 ID | 不猜测 Nano Banana / Gemini ID |
+| 带参考图失败 | `inspect --brief` + `providers doctor`；分清 edit vs generate | 不删 `--ref` 掩盖，不轮换 transport |
+| provider-colon / 重复前缀 | 联网前失败并改为 slash canonical | 不提交歧义 ref |
+| `configured=pass` 但未 live-ready | 报告 effective level | 不把配置成功说成可付费生成 |
+| `auth env` 被请求 | 拒绝；改用 `auth check` | 不把 secret 打到 stdout |
+| 用户要 2.5 却用了 `--size 2k` 或裸 `gpt-image-2.5` | 改成 slash ref + 像素 `--size`；先 `models readiness` | 不把 2.5 写成 channel 默认除非用户要求 |
 
 ## 验证
 

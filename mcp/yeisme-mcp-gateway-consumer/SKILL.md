@@ -43,6 +43,8 @@ user or operator. Do not guess a private URL, token, tenant, or approval id.
 
 ### 1. Configure the client
 
+🔴 CHECKPOINT · 🛑 STOP：do not save a Gateway token, put a bearer in a URL/prompt/file, or connect with credentials until the current user authorized this endpoint and secret-store source. Never print the token.
+
 Prefer the client's native MCP setup. For Codex:
 
 ```bash
@@ -64,11 +66,18 @@ real bearer token in a URL, prompt, source file, log, screenshot, or response.
 ### 2. Check reachability and discovery
 
 Use the public health check first, then an authenticated readiness check when
-the deployment protects it:
+the deployment protects it. Connecting with a token is the same credential
+gate as client setup: do not send `Authorization` until that CHECKPOINT is
+satisfied.
 
 ```bash
 export MCP_GATEWAY_BASE_URL=https://gateway.example.com
 curl -fsS "$MCP_GATEWAY_BASE_URL/healthz"
+```
+
+🔴 CHECKPOINT · 🛑 STOP：do not send `Authorization` or connect with a Gateway token until the current user authorized this credential. Never print the bearer.
+
+```bash
 curl -fsS \
   -H "Authorization: Bearer $MCP_GATEWAY_ACCESS_TOKEN" \
   "$MCP_GATEWAY_BASE_URL/readyz"
@@ -236,3 +245,14 @@ action, and any redacted evidence path.
 - `mcp/gateway/docs/token-management.md`
 - `mcp/gateway/docs/mock-mcp-smoke.md`
 - `mcp/gateway/README.md`
+
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| Guessed tool name | One `tools/list`; copy schema | Do not call hidden upstream tools |
+| `401` / `403` | Token/scope/tenant | Do not bypass Gateway |
+| `approval_required` | Return exact `approval_request.id` | Never invent or reuse an approval id |
+| `backend_failed` / timeout | Preserve request id; retry only read-only/idempotent | Do not replay an uncertain write |
+| Peer `blocked` / digest change | Stop; operator re-probes | Do not substitute a similarly named local tool |
+| Empty resources list | Discover with `tools/list` | Not proof that tools are absent |

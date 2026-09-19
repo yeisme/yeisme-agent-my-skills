@@ -1,0 +1,4 @@
+interface:
+  display_name: "Anatomia Gateway Service Operator"
+  short_description: "Owner-only Anatomia service-key preflight, issue, revoke, and 401/403 diagnosis."
+  default_prompt: "Use $anatomia-gateway-service-operator: run anatomia config doctor --json, then issue a 0600 key with anatomia service key create --out <new-file> --json. Do not print the key."

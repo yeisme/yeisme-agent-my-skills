@@ -22,6 +22,16 @@ Use this skill for `cli/pinax`, the local-first knowledge product runtime: CLI a
 4. Keep backend API, Cloud Sync, provider, storage, plugin, publish, MCP, proof-loop, template, asset, prompt, and vault writes behind Pinax app service/client boundaries.
 5. Treat `.agents/skills/` and `.claude/skills/` under `cli/pinax` as generated runtime copies. Update `.skills/yeisme/` source and profile files, then sync.
 
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| Implementation request | Enter `cli/pinax`; read local `AGENTS.md` | Do not implement from root |
+| Structured asset mutation | Pinax commands or app services | Do not hand-write `.pinax/**` |
+| Credential in repo, fixture, log, or evidence | Move to a user-level config or secret store | Never commit or print secrets |
+| Generated runtime copy looks stale | Update `.skills/yeisme/` source and profile, then sync | Do not edit `.agents/skills/` or `.claude/skills/` |
+| `task` unavailable | `golangci-lint` + `go test` + `go build` + `openspec validate --all` | Do not invent a different gate |
+
 ## Validation
 
 ```bash

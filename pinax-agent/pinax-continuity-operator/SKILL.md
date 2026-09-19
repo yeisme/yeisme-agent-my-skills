@@ -72,6 +72,16 @@ Each path yields at most one key question or one next action. Never infer facts 
 - Runtime differences are limited to ingress wording and rendering hints; Pinax request/response semantics are identical across Codex and Claude Code.
 - Rollback: removing this skill from the root and `cli/pinax` profiles and re-running skill sync removes all generated copies; Pinax CLI, vault, binding, handoff, and receipt data are untouched.
 
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| Missing binding | Offer one bind command or explicit `--vault/--scope` | Do not scan all vaults |
+| `continuity_binding_ambiguous` | Show candidates; wait for a pick | Do not read any candidate scope yet |
+| Older pinax binary / unknown command | Report the contract blocker and owning change | Do not simulate memory from chat |
+| Checkpoint oversized | Trim to bounded fields; retry once | Do not push transcript or chain-of-thought |
+| Feedback unanswered | Leave it missing | Do not record `trusted` by default |
+
 ## Validation
 
 - A resume answer renders only Pinax-returned facts with at most one next action; missing/ambiguous binding yields one question or one recovery command.

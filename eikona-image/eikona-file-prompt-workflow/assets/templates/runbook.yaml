@@ -2,8 +2,10 @@ schema_version: eikona.batch.v1
 goal: "<collection goal>"
 defaults:
   kind: image.generate
-  model: openai/gpt-5.4-image-2
-  size: 1024x1024
+  model: openai/gpt-image-2.5-sunburst
+  size: 2048x2048
+  aspect: "1:1"
+  quality: high
 matrix:
   prompt_files:
     - prompts/01-<direction>.md

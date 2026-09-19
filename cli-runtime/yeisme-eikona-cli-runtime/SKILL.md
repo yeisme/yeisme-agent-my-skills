@@ -9,31 +9,13 @@ Use this skill for `cli/eikona`, the headless image-generation and image-asset-m
 
 If the user explicitly says to use Eikona, `eikona`, or the Eikona CLI for image generation, this route takes precedence over generic built-in image generation tools. Enter `cli/eikona`, follow local `AGENTS.md`, and use Eikona commands such as `eikona generate ... --agent`. Only fall back to another image tool if the user explicitly changes the route or Eikona is unavailable and the user approves the fallback.
 
-## Precision edit workflow
+## Precision, canvas, and recovery
 
-Use installed help/capabilities to verify support before issuing new precision commands. `eikona edit prepare` captures a plan without image generation; optional `--analyze` interprets annotation marks under the selected analysis model/channel and cost limits. `--dry-run` suppresses all provider calls. `eikona edit plan show <plan-ref>` inspects the preview; `eikona edit --plan <plan-ref>` executes the pinned plan. Use repeated region/polygon/instruction flags when the agent already parsed the annotation instead of requesting another analysis.
-
-Keep image model selection independent from `editing.analysis.model/channel` and `editing.responses.model/channel`. Manage these optional leaves through `eikona config editing show/set/unset`, never hand-edit credential or plan metadata. Preserve the configured image default unless explicitly changed. New precision controls default to strict PNG protection; natural mode is explicit. Inspect existing run/plan references after an unknown submission rather than blindly rerunning. Do not promise background annotation execution or complete pricing solely from local development tests; use the installed capability evidence.
-
-When installed help advertises them, manage image rates through `eikona config image-pricing show/set/unset` and analysis/mainline rates through `eikona config mainline-pricing show/set/unset`. Omitted rates and missing measured usage remain unknown; a known component is not a settled workflow total. Use `eikona inspect <run-id> --refresh-cost --agent` to recompute from local receipts without provider calls. For an already successful precision run, `eikona edit --plan <plan-ref> --run-id <run-id> --agent` verifies and reuses the original result. An unavailable result or unknown submission is not permission to regenerate or delete execution/submission markers.
-
-## OpenRouter Image API
-
-Use explicit `--set api=images` for the dedicated Image API. Reference-conditioned generation uses `--ref <local-image> --reference-mode generate`; it is separate from masked editing. Read the actual USD receipt after every paid request and preserve the user’s cumulative budget. Unknown settlement stays unknown: stop unless the user has already authorized a bounded workload with unknown costs, in which case continue that authorized scope without asking repeatedly. The unknown-cost override is not an account-side spending cap. Exact OpenRouter model IDs keep the `openrouter:` adapter prefix. Do not apply an OpenRouter-only restriction to an unrelated gateway.
-
-## Canvas, full-body composition, and recovery
-
-Check installed help/input schemas before using additive controls. `size=1k/2k/4k` is a native channel label, not a universal pixel or long-edge definition. Record requested controls and actual original-image dimensions separately. Explicit pixels must not be rounded, cropped, stretched, or guessed into a different tier; configuration defaults also require capability admission.
-
-When `--full-body` is advertised, it opts into complete figure/garment framing and safe margins. `--require-review feet` additionally requires visible feet; a long skirt hiding feet is occlusion, not proof the file was cropped. Compare the complete original with the preview before diagnosing missing bottoms. Size pass does not satisfy composition: new composition observations require source refs, reasons and normalized bounds. Never invent a pass without inspecting the original or replace a cut hem by padding the canvas.
-
-When installed, `--recovery-policy` freezes a bounded candidate allowlist; `eikona recovery show <recovery_ref> --agent` inspects its durable next action. Same-model compatible channels are preferred; cross-model changes need explicit policy authority and must preserve exact canvas, references/masks, composition and input-transfer scope. Follow owner evidence: not_submitted or proven rejected_no_generation can switch; accepted/pending polls the original; generated recovers/downloads/reviews the original; submission_unknown returns a bounded deferred handle. No local image, 503 text, or expired lease alone proves no generation.
-
-Do not bypass an unsupported persistent-worker mode with a raw provider resubmit. New local implementation does not prove a released binary or remote MCP supports recovery. The opt-in foreground path is bounded by the policy timeout; explicit background recovery queues work for the existing worker/serve drive-runs executor. A queued coordinator points to child runs instead of claiming their images. Do not claim a worker is running merely because work was queued; automatic provider lookup remains a separate capability. Ordinary paid template matrices use the real CLI or explicit curl script and original-image receipts; mock tests validate code, not real composition or service availability.
+Read `references/precision-and-canvas.md` for precision edit, OpenRouter Image API, full-body composition, and recovery policy.
 
 ## Installed-binary bootstrap
 
-An installed Eikona binary is self-describing. Do not search for, clone, or require access to the private `yeisme/eikona` repository to determine environment names, configuration files, Skills, or next actions.
+An installed Eikona binary is self-describing. Do not search for, clone, or require the private `yeisme/eikona` repository.
 
 Start every fresh Homebrew, Scoop, package, archive, or public Bash installation with:
 
@@ -41,180 +23,51 @@ Start every fresh Homebrew, Scoop, package, archive, or public Bash installation
 eikona setup --agent
 ```
 
-Follow `action.next`. The default setup is a no-write preview. Only after local-write authority is clear may the Agent run:
+Follow `action.next`. Default setup is a no-write preview.
+
+🔴 CHECKPOINT · 🛑 STOP: without the current user's explicit authority for this local write, credential, or paid generation, do not run `eikona setup --yes`, `eikona auth set`, `--smoke`, or any generate/edit command.
+
+After local-write authority is clear:
 
 ```bash
 eikona setup --yes --agent
-```
-
-Setup creates only missing user configuration and installs Agent Skills from the public `https://github.com/yeisme/yeisme-dist` release that exactly matches the running released CLI. It must not fall back to latest, replace a package-manager-owned binary, accept credentials, edit shell startup files, change Codex/Claude MCP configuration, probe a provider, or generate an image. `SKILLS_RELEASE_NOT_MIRRORED` is a real public-distribution blocker; config-only recovery is:
-
-```bash
-eikona setup --yes --skip-skills --agent
-```
-
-Persistent local credentials use stdin and the user-owned auth store:
-
-```bash
 eikona auth set openai --protocol openai --api-key-stdin --agent
-```
-
-Environment discovery must remain metadata-only:
-
-```bash
-eikona config env --provider openai --agent
-eikona config env --all --json
-```
-
-These commands may expose variable names, sensitivity, set/unset state, source, and precedence, but never values. Ordinary Agents must not call `eikona auth env` because it is an advanced raw secret-export surface.
-
-After configuration, inspect adapted models and local channel defaults before any probe. Missing credentials are configuration status, not lack of adapter support:
-
-```bash
 eikona models list --source adapted --all --agent
-eikona models list --source adapted --provider openai --all
-eikona models default show --agent
-eikona auth list --agent
-eikona providers show openai --agent
 ```
 
-Bare `eikona models list` reads `models.lock` (`--source manifest`). An empty manifest is not an empty adapter catalog; next action is `--source adapted`. `auth list` shows channel `default_model` values, not every adapted model.
+`SKILLS_RELEASE_NOT_MIRRORED` recovery: `eikona setup --yes --skip-skills --agent`. Discovery is metadata-only (`eikona config env --all --json`); never call `eikona auth env` in ordinary agent flows. Empty `eikona models list` reads `models.lock`; next action is `--source adapted`. Missing credentials are config status, not missing adapters. Probe only when the user authorizes `eikona doctor --channel openai --model openai/gpt-5.4-image-2 --probe --agent`.
 
-A user may then authorize the explicit non-generating probe:
+Full bootstrap catalog: `references/bootstrap.md`.
 
-```bash
-eikona doctor --channel openai --model openai/gpt-5.4-image-2 --probe --agent
-```
+## Remote upload and current surfaces
 
-Do not run `--smoke` or any generation command during bootstrap without explicit user approval for the provider/model and potential cost.
-
-
-## Remote client image upload
-
-先用已安装版本的 `eikona upload --help`、MCP discovery 与 `eikona://docs/local-media-upload` 确认能力。开发版实现不代表当前发布包已包含；缺命令或 backing 时报告能力缺口，交回 Eikona owner，不把客户端路径传给远程服务。
-
-选择 PNG/JPEG/WebP 文件后，MCP 使用 `asset.upload.begin` 创建会话，客户端按返回的传输合同 HTTP PUT 文件字节，再用 `asset.upload.complete` 获得 `eikona://asset/<id>`。MCP JSON 不携带 base64 文件。CLI 等价路径：
-
-```bash
-eikona upload send ./reference.png --endpoint https://images.example.test --key-file /absolute/private/eikona-access.key --scope project-a --agent
-eikona upload status upl_0123456789abcdef --endpoint https://images.example.test --key-file /absolute/private/eikona-access.key --scope project-a --agent
-eikona upload abort upl_0123456789abcdef --endpoint https://images.example.test --key-file /absolute/private/eikona-access.key --scope project-a --agent
-eikona upload cleanup --endpoint https://images.example.test --key-file /absolute/private/eikona-access.key --scope project-a --agent
-```
-
-Owner 通过 `eikona config upload set/unset/show` 配置 `local|s3|disabled`，用 `eikona config upload doctor --agent` 检查配置。local 需 `public_base_url`，字节落服务端受控磁盘且无需 S3；既有 S3 配置与 presigned PUT 保留，不在失败后静默切换后端。创建或变更真实服务配置、凭据仍遵循用户权限；上传使用明确具备 `media-upload-v1` 与项目 scope 的 access key，旧生成 key 不自动扩权。key 文件应为绝对路径、用户拥有、非 symlink、0600；不把 owner bearer 发给 S3，不跟随上传重定向，不输出传输 URL、grant、凭据或私有路径。
-
-断流后先查状态，再用同文件与同幂等键重试；local PUT 从头传输，不声称字节偏移续传。元数据冲突先检查文件；过期或取消需新键新会话。abort/cleanup 只清理未完成数据，保留完成资产。使用 canonical asset ref 接入现有 edit/worker/delivery；上传完成不授予 rights、review 或付费生成权限，也不证明 URL-only provider 可达。缺 delivery route 时保留 blocker，交回 owner 修复，不触发付费探测或丢弃引用。
-
-local 上传的资源限制通过同一配置命令管理：`max_concurrent_uploads` 控制同一上传根目录跨进程共享的传输/图片解码并发，`min_free_bytes` 控制 PUT 前的磁盘余量检查。默认分别为 4 和 64 MiB。HTTP 503 `UPLOAD_BUSY` 时遵循 `Retry-After` 并重试原会话；507 `UPLOAD_STORAGE_FULL` 时先由 owner 恢复磁盘容量，再重试。不得通过删除完成资产或扩大权限解决容量问题；doctor 仍只说明配置，不证明部署存储可用。
-
-## Current surfaces
-
-- v0.6.9 adds first-class xAI Grok Imagine **image** models on top of v0.6.7 release provenance. Product default paid image model remains `openai/gpt-5.4-image-2`. Grok **video** refs are rejected and owned by Scaena.
-- Grok Imagine image: `--model xai:grok-imagine-image` or `xai:grok-imagine-image-quality` (aliases `grok-imagine-image-pro`, `grok-imagine-image-quality-latest`, `grok-imagine-image-quality-20260403`). Official default `https://api.x.ai/v1` + `XAI_API_KEY`; a user-local channel whose name and protocol are both `xai` auto-binds; a channel named `gateway` stays explicit (`--use-channel`). Doctor/readiness may emit `endpoint_class=official|custom` without printing host or key. Map `--aspect` → `aspect_ratio`, `--size 1k|2k` → `resolution`; JSON edits only, max 3 refs. Official USD rows apply even on a custom host for known Imagine image models.
-- LAN serve: `eikona serve --api-key-file <absolute-0600-file>` is the recommended LAN token source; there is no `EIKONA_SERVE_TOKEN`. Private-service `--config` remains the production path.
-- Version/update: `internal/update` owns release discovery (dist catalog + pinned upstream, ETag/bounded bodies/credential-guarded redirects); `internal/runtimeinfo` is the shared read-only version and cached update-status projection behind `eikona version`, `/api/v1/runtime/*`, and `eikona://runtime/*` with no remote apply authority. CLI family: `version`, `update --check|status|--dry-run|--yes`, `update policy show/set/reset`. Update notices decorate compact JSON (`facts.cli_update`) and agent (`notice.update.*`) output only, with the full suppression matrix in `internal/cli/update_notice.go`.
-- Command catalog: `eikona commands --emit-catalog` writes the release asset; `eikona commands diff --target <ver>` compares against `eikona-command-catalog_<version>.json` published with each release. A removed stable path without a recorded replacement fails `COMMAND_CATALOG_INCOMPATIBLE`.
-- Private service: `internal/serviceauth` owns the CLI-authored service config and scoped access-key store (salted-hash-only persistence, 0600 secret files). `eikona service config/access-key/doctor` author them; `eikona serve --config` mounts the TLS/trusted-proxy guard (`TLS_REQUIRED` before any side effect) and access-key authentication. `GET /api/v1/readiness` (`internal/api/runtimesurface`) projects ten independent readiness dimensions; repository test evidence must never promote live provider or public-hosting readiness.
-- MCP: `eikona mcp --transport stdio` runs the real protocol lifecycle on the official MCP Go SDK v1.7.0 (`internal/mcptransport`; stdout protocol-only, redacted stderr, stdin-EOF shutdown; the hand-rolled `internal/mcp/stdio.go` is deleted and no sibling adapter exists). Default stdio serves the in-process owner services; `--endpoint`+`--key-file` (absolute 0600) consumes the owner HTTPS backing statelessly with startup discovery that fails typed `OWNER_BACKING_UNAVAILABLE` when unreachable. `eikona mcp --json|--agent` stay one-shot projections; `eikona mcp doctor` and `eikona mcp capabilities` (tools/actions/resources/prompts plus `yeisme.media.capability.v1` links) are the diagnostics; `mcp_streamable_http` stays blocked.
-- Prompt repository: `internal/promptrepository` consumes public promptrepo v0.4.0 (repository scope, deny-wins policy-review, structured document selectors). Template and rendered bodies never enter output, events, or evidence.
+Read `references/upload.md` for client image upload. Read `references/surfaces.md` for Grok Imagine, LAN serve, MCP, and promptrepo.
 
 ## Boundary
 
 - Eikona owns image generation, provider execution, run/artifact evidence, review, reuse memory, asset catalog, binding, handoff, stage/apply, replacement/rollback, delivery outcomes, and consumer-neutral headless contracts.
 - Eikona does not own a Web app, dashboard, browser shell, frontend navigation/auth shell, or frontend design system. Display requirements belong to an explicitly approved external consumer and must use Eikona's stable CLI/API/SDK/MCP/event/resource contracts.
 - The existing `ui` discovery command and embedded root page are frozen compatibility surfaces. Do not add features to them; removing them requires a separate compatibility change with named consumers, at least one release of deprecation, migration guidance, and rollback.
-- CLI entrypoint: `cli/eikona/cmd/eikona`.
-- Command and JSON envelope wiring live in `cli/eikona/internal/cli`.
-- Config precedence and provider credential resolution live in `internal/config`.
-- Provider protocol adapters live in `internal/adapters/*`; adapters must not print CLI output or bypass runtime storage.
-- Run/job/artifact evidence lifecycle lives in `internal/runtime` and `internal/runstore`.
-- External capture, path-free delivery, and project service boundaries live in `internal/api/artifactimport`, `internal/api/artifactdelivery`, and `internal/api/projectservice`; they must reuse app/runstore/index facades instead of creating parallel persistence.
-- Project library, prompt memory, prompt skills, prompt decks, sessions, replacement ledger, index, HTTP playground helpers, storage backup/restore, and MCP integration live under their matching `internal/*` modules.
-- Multi-scenario prompt behavior is layered: `internal/prompts` owns prompt memory and prompt-skill records; `internal/promptdeck` owns immutable deck versions; workflow draw owns deterministic card-pull evidence; `internal/visualmemory` and `internal/stylepack` own authorized reference/style constraints; `internal/assessment` owns structured scoring/tag evidence; `internal/recipe` owns explainable reusable combinations. These layers consume one another through stable projections instead of creating parallel stores.
-- In a `cli/eikona` session, human-facing product, design, runtime, protocol, governance, evaluation, command, and delivery docs live in local `docs/**`; code behavior docs live in `README.md` and `AGENTS.md`. Root project-doc mirrors are not valid owners and must not be required for closeout.
-- Agent-facing command guidance lives in `cli/eikona/docs/commands/README.md`; cross-agent invocation rules live in `cli/eikona/docs/commands/agent-integration.md`.
-- Eikona task lifecycle follows the repository-wide OpenSpec rules in `docs/workflows/execution-slice-lifecycle.md`; migrated Eikona notes live in `cli/eikona/openspec/changes/archive/2026-05-11-eikona-checklists-index/legacy/README.md`. Execution task state must stay under `cli/eikona/openspec/changes/eikona-<slug>/` or its archive, not docs checklists, plans, or ad hoc work-item directories.
+- CLI entrypoint: `cli/eikona/cmd/eikona`. Command/JSON wiring: `internal/cli`. Config/credentials: `internal/config`. Adapters: `internal/adapters/*` (no CLI output, no bypassing storage). Run evidence: `internal/runtime` and `internal/runstore`.
+- External capture, path-free delivery, and project service live in `internal/api/artifactimport`, `internal/api/artifactdelivery`, and `internal/api/projectservice`; reuse app/runstore/index facades instead of parallel persistence.
+- Prompt layers consume one another through stable projections (`internal/prompts`, `internal/promptdeck`, workflow draw, `internal/visualmemory`, `internal/stylepack`, `internal/assessment`, `internal/recipe`). Do not create parallel stores.
+- In a `cli/eikona` session, human-facing product, design, runtime, protocol, governance, evaluation, command, and delivery docs live in local `docs/**`; code behavior docs live in `README.md` and `AGENTS.md`. Root project-doc mirrors are not valid owners.
+- Agent-facing command guidance: `cli/eikona/docs/commands/README.md` and `docs/commands/agent-integration.md`. Task lifecycle follows `docs/workflows/execution-slice-lifecycle.md`. Execution state stays under `cli/eikona/openspec/changes/eikona-<slug>/` or its archive.
 
 ## Workflow
 
-1. Start inside `cli/eikona` and read `AGENTS.md`, `README.md`, and the nearest package or command doc before editing.
-   - For an installed-binary usage or setup request, run `eikona setup --agent` first. Repository access is not a prerequisite for operating a released CLI.
-   - For CLI command documentation, read `docs/commands/README.md` and the matching `docs/commands/<command>.md` first.
-   - For other agents calling Eikona, read `docs/commands/agent-integration.md` first and prefer CLI `--json`/`--agent` contracts before adding MCP-only behavior.
-  - For storage backup/restore work, read `docs/commands/storage.md`, `docs/runtime/storage/storage-and-projection.md`, and root `docs/workflows/local-first-backup-sync.md` before changing code or docs.
-  - For multi-scenario prompt work, read `docs/product/scenario-playbook.md`, `docs/commands/prompts.md`, `docs/commands/workflow.md`, and `docs/commands/style.md` before changing code or docs.
-   - For creative visual generation requests, read the on-demand `eikona-visual-router` skill first. It will route Scaena subject/readiness work, Auctra handoff, subject asset direction, Xiaohongshu static visuals, ultrawide storyboards, or plain CLI/runtime work to the smallest owner skill.
-   - For temporary image persistence, Visual Library promotion, project/global scope, download grants, or asset APIs, load `eikona-asset-lifecycle` and read `docs/product/external-asset-capture.md` plus `docs/interfaces/api/openapi.yaml`.
-   - For active design tracks around scoring/tags or recipe reuse, read `openspec/changes/eikona-visual-assessment-tags/` and `openspec/changes/eikona-prompt-skill-reuse-recipes/` if they exist, then keep new implementation tasks in the owning Eikona OpenSpec change.
-2. Preserve Eikona product contracts:
-   - keep product planning and documentation headless: new roadmap items may improve generation quality, provider coverage, evidence, review/reuse, asset lifecycle, delivery, or consumer-neutral interfaces, but must not add an Eikona-owned Web/frontend backlog;
-   - `--json` output must remain machine-readable and stable for scripts, Ordo, CI, and shell pipelines: since v0.6.0 bare `--json` is the bounded compact default, `--json --compact` is its explicit equivalent, and `--json --full` is the permanent forensic projection. Routine agents still prefer `--agent`.
-   - new or changed CLI output must follow `ai-native-cli-output-contract`: human summary by default, strict `--json`, `--agent` for low-token parsing, optional `--events`, and secret-safe stdout/stderr separation.
-   - local project docs and OpenSpec artifacts should be Chinese by default; human CLI output, help text, logs, and user-visible errors should be English unless the user explicitly requests another language for that artifact or the content is Chinese-language product content.
-   - every successful provider artifact must be written through the run evidence store under `runs/<run_id>/outputs/`.
-   - provider requests in tests must use `httptest` or repository test adapters; do not call real remote providers in automated tests.
-   - user-level local Eikona config or the local auth store may store plaintext provider keys when the user explicitly configures them; secrets must never be written to project YAML, YAML examples with real values, traces, provider jobs, artifact manifests, test snapshots, or README output.
-   - Eikona must not create, recommend, or read shell credential scripts for provider keys; use direct user config, `eikona auth set <channel> --api-key-stdin`, or process environment for CI and temporary overrides.
-   - command examples in docs, help, skills, plans, reviews, and final responses must be real user-runnable commands such as `eikona workflow run ...`; do not expose local wrappers or agent-only prefixes.
-   - command docs must cover every visible subcommand and explicitly mark hidden/internal entries such as `models`, `worker`, and disabled `video` when relevant.
-   - do not add isolated scenario commands for Xiaohongshu, short-drama, product, game, docs, or graphic-design variants; scenario differences belong in workflow templates, prompt decks, prompt skills, profiles, style packs, assessment criteria, review policy, and recipe influence evidence.
-  - prompt skills are provenance-bearing reusable prompt sources; prompt decks are versioned card-pull assets; workflows snapshot prompt refs and deck selections into run evidence. Later edits to prompt skills, decks, style packs, or recipes must not reinterpret old runs.
-  - storage sync is backup/restore only by default: local output root remains the source of truth, S3-compatible storage is a mirror, `storage push` must produce encrypted content-addressed objects and receipts, and `pull`/`restore` must stage output instead of overwriting project files.
-  - do not add real-time sync, file watchers, automatic bidirectional merge, or multi-device conflict resolution to Eikona without a separate OpenSpec change.
-  - visual assessment and recipe reuse must be evidence-backed and explainable: store scores/tags/corrections/recipe influence as structured evidence, never as hidden reasoning or unbounded prose. Machine-only scores must not silently select winners without append-only human feedback.
-3. For OpenAI-compatible image generation:
-   - the canonical Eikona model ref is `openai/gpt-5.4-image-2`; gateway-native IDs must copy `/v1/models` exactly. The main CLI ingress rejects the removed bare aliases `gpt-5.4-image-2` and `gpt-image-2`. Only explicitly scoped historical handoff ingress may read them, emit `MODEL_ALIAS_LEGACY_INGESTED`, and immediately normalize to the canonical slash form.
-   - `codex:imagegen` is the implicit preview fallback when the caller leaves `--model` unset, the paid OpenAI/gateway API is unavailable, and a local Codex session is ready. It does not take an Eikona provider key and is hard-capped at the 1K size family. Project `model_selection`, `capability_class=preview`, `size_class=1k`, `auth_class=codex_session`, and `resolution_control=prompt_instruction` so agents do not treat the ceiling or prompt-delivery mode as a tool defect. Recommended Codex commands omit `--size 1k`; an explicit admitted size remains compatible, is injected into the execution prompt, and must return `PROMPT_CONTROLLED_RESOLUTION`. Explicit `--model`, `--use-channel`, edit/reference, or an explicit oversized canvas never fall back.
-   - reject provider-colon spellings such as `openai:gpt-5.4-image-2` before provider submission, with repair guidance pointing to `openai/gpt-5.4-image-2`.
-   - xAI Grok Imagine image refs are `xai:grok-imagine-image` and `xai:grok-imagine-image-quality`. Reject `grok-imagine-video*` before adapter construction and name Scaena as the video owner. Official default is `https://api.x.ai/v1`; inherit a same-named `xai` channel; never auto-bind `gateway`.
-   - provider flag support is not uniform — check it before recommending flags. Midjourney (`midjourney/v7` etc.) has no native resolution control: `--size 1k|2k|4k` tier tokens fail before submit with `UNSUPPORTED_CAPABILITY`, `--aspect` is currently dropped by the adapter (use `--set aspect_ratio=W:H` or `--size WxH` until `eikona-midjourney-controls-evidence-v1` lands), and `--count`, masks, and `--format` are unsupported; framing maps to `--ar` only. xAI Grok Imagine maps `--size 1k|2k` natively and accepts edits with at most 3 refs. Native 2K edits remain the `openai/gpt-5.4-image-2` lane. The full matrix lives in `cli/eikona/docs/runtime/adapters/midjourney-proxy.md` and `docs/commands/generate.md`.
-   - when a Midjourney run fails, do not guess from the generic error alone: submit-time rejection (proxy `code 24`) is already `CONTENT_REJECTED`, but a polled task `FAILURE` currently surfaces as a generic `PROVIDER_UNAVAILABLE`; read the redacted `fail_reason` with `eikona inspect <run_id> --json --full` before classifying the failure or retrying. A Grok `CONTENT_REJECTED` on an outfit/edit request for a photorealistic person is usually provider-side content moderation, not a parameter bug — report it as such instead of silently rewording prompts in a retry loop.
-   - local interactive auth must use an explicitly selected Eikona channel backed by the user-level secret store; never restore implicit `OPENAI_API_KEY` fallback.
-   - `gpt-image-2` is legacy compatibility only.
-   - before selecting a provider workflow or describing readiness, read `cli/eikona/docs/commands/agent-operability.md`; preserve its evidence vector and conservative effective level in the result.
-   - no reference input means `image.generate`; the ordinary OpenAI Images path uses `/images/generations`.
-   - `--reference-image` / `--ref` with `--reference-mode auto|edit` must preserve reference order, infer `image.edit`, and prefer multipart `/images/edits`.
-   - `--reference-mode generate` means the references are guidance rather than the editable canvas; keep `image.generate`, encode ordered refs as multimodal `input_image` content, and prefer `/responses`.
-   - agents must not start an additional transport-switching retry for auth, rate-limit, content-policy, timeout, TLS, or malformed-response failures. Preserve whatever attempts the current runtime records; changing automatic fallback policy requires runtime tests and a separate implementation scope.
-   - never silently remove reference inputs. If evidence proves that the configured gateway supports text-to-image but not reference input, preserve the failed run, explain the capability loss, and start a separate text-only run only when the user requested or accepted that semantic fallback.
-   - do not diagnose missing reference support from a generic failure alone. Inspect the redacted failure facts currently exposed by `eikona inspect <run_id> --brief --agent` and provider doctor (`--json --full` only for forensic deep dives); if endpoint or transport is not explicit, report `unknown/degraded` rather than inventing a distinction.
-   - do not skip TLS verification for self-signed gateways; use system trust or `SSL_CERT_FILE`.
-4. For CLI behavior changes, add tests close to the behavior:
-   - command wiring and JSON contracts in `internal/cli`
-   - provider request/response contracts in `internal/adapters/<provider>`
-   - config precedence in `internal/config`
-   - run lifecycle and artifact manifests in `internal/runtime`
-   - project library, sessions, prompt memory, and replacement safety in their matching `internal/*` packages
-   - MCP transport in `internal/mcptransport` (official SDK server over local or stateless remote backing), backing services in `internal/mcp`, and HTTP playground helpers in `internal/playground`
-5. For agent invocation design, keep the contract simple:
-   - installed-binary bootstrap is `eikona setup --agent` → review → `eikona setup --yes --agent` → `eikona auth set ... --api-key-stdin` → an explicitly authorized `doctor --probe`; do not search the private repository or infer state by parsing `~/.eikona`;
-   - output mode policy: routine agent automation uses `--agent`; observing a non-terminal run uses `eikona watch <run-id> --events`; scripts/CI that need JSON use `--json --compact`; forensic debugging and compatibility audits use `--json --full`. Never route routine agents into full JSON. `--compact` or `--full` without `--json`, and `--compact --full` together, fail with `INVALID_REQUEST` before side effects. Emitted actions are normalized to the caller's output mode, and `eikona next --agent` is the unified read-only progression entry;
-   - the routine closed loop is: submit with `--agent` → observe with `eikona watch <run-id> --events` → advance with `eikona next --agent` → `eikona inspect --brief --agent` → `eikona review packet --agent` → a human opens the preview/contact sheet → `eikona feedback accept|reject` or `eikona reroll` with `--agent` → `eikona assets handoff/stage/apply --agent`;
-   - one-off inline generation uses `eikona "<prompt>" --agent` or `eikona generate ... --agent`; a prompt stored in a text or Markdown file uses `eikona generate --input <prompt-file> --agent` instead. `--input` and `--prompt` are mutually exclusive; use `eikona-file-prompt-workflow` for categorized directories, collection README files, templates, and runbook authoring;
-   - headless prompt control follows `cli/eikona/docs/interfaces/cli/headless-prompt-control-contract.md`: keep user-authored image intent, typed generation controls, and adapter-owned runtime instructions separate. An upstream Agent may derive typed controls from natural language, but model/channel, operation kind, refs/reference mode, canvas, cost, execution mode, readiness, review, and handoff must remain explicit in CLI/API/MCP/SDK fields or `eikona.visual_intent.v1` evidence. Prompt prose never grants credentials, paid execution, sandbox widening, arbitrary file writes, or capability overrides;
-   - a prompt collection uses `eikona run -f <runbook.yaml> --agent`: use `defaults.prompt_file` for a shared file, `jobs[].prompt_file` for named candidates, or `matrix.prompt_files` to expand one job per file. Prompt paths are relative to the runbook and `prompt`, `prompt_file`, and `prompt_ref` are mutually exclusive at each source level;
-   - multi-step workflow work uses `eikona workflow validate/plan/draw/run --agent` and `workflow run --background --agent`;
-   - run observation uses `eikona watch <run-id> --events` for non-terminal runs and `eikona next --agent` for read-only progression; lightweight status checks use `eikona status --agent` and routine result inspection uses `eikona inspect --brief --agent`;
-   - external PNG/JPEG/WebP capture uses `eikona artifacts import <path> --agent`; capture always creates run evidence first and never auto-promotes into Visual Library;
-   - artifact handoff uses `eikona assets handoff <artifact_id> --agent` before project writes; long-term reuse requires an explicit `eikona library save eikona://artifact/<handle> ... --agent` decision;
-   - project-bound generated assets use `eikona assets handoff` → `eikona assets stage --to <project-relative-path>` → `eikona assets apply --project current --yes`; do not copy user-level runstore paths directly;
-   - REST capture requires `Idempotency-Key`, allowed roots for server-side paths, and path-free delivery grants rather than absolute runstore paths;
-   - scenario prompt exploration uses `eikona prompts catalog search ... --agent`, `eikona workflow draw ... --agent`, and `eikona workflow run ... --background --agent`;
-   - creative direction uses the on-demand `eikona-visual-router`, `eikona-subject-asset-director`, `eikona-xhs-*`, and `eikona-ultrawide-storyboard-director` skills for brief and prompt design; file-backed storage uses `eikona-file-prompt-workflow`; this runtime skill remains responsible for CLI contracts, evidence, provider safety, and generated artifact lifecycle;
-   - Scaena episode/shot/cover/motion generation requires current passed preflight evidence supplied by its production owner; without it, Eikona may generate only subject candidates or look-development artifacts marked non-production;
-   - visual scoring in automated tests belongs to the repository test harness; installed users and agents must not invoke a test-only scoring channel. A configured production scorer returns its model ref/version and explicitly indeterminate missing dimensions; an unavailable scorer fails closed with `MODEL_UNCONFIGURED`. Scores and tags remain review evidence, while acceptance still requires append-only human feedback;
-   - recipe reuse uses `eikona recipes ... --agent` and supported workflow recipe inputs; preserve recipe influence, prompt/deck/style refs, version and review evidence so later edits cannot reinterpret old runs;
-   - long-lived integrations can use `eikona mcp`, but ordinary CLI output remains the primary contract;
-   - remote LAN MCP `edit` forbids the MCP host’s local filesystem path as `reference_image`; use a server-owned `eikona://artifact/<handle>` or a completed upload's `eikona://asset/<id>` when the installed upload capability is available. Remote `wait` is a bounded snapshot; worker-failed runs must project `failed`, not remain `queued`. Same-host `eikona edit --input` is unchanged;
-   - Anatomia provider-neutral handoff packages import as refs-only references via `eikona assets import-anatomia <package.json> --agent` (idempotent by handoff ref, receipt returns the resolvable `eikona://references/anatomia/<handoff_ref>`); unknown versions, non-Eikona targets, missing digests, and non-logical refs fail closed with typed `ANATOMIA_HANDOFF_*` blockers and never touch `.anatomia/**`;
-   - storage backup uses `eikona storage backend set s3 ...`, `eikona storage push ...`, and `eikona storage restore ...`; for reusable Git plus S3/rclone/cloud-drive policy, use `local-first-backup-sync-policy` on demand.
-   - OpenAI image calls use `openai/gpt-5.4-image-2` with an explicit channel such as `--use-channel openai`. New commands and persisted metadata must use the slash-form canonical ref; main CLI calls using removed bare aliases fail closed with repair guidance.
-   - resolution control is adapter-owned: `native_parameter` keeps the existing provider field, `prompt_instruction` injects a deterministic runtime constraint without mutating user prompt provenance, and `hybrid` may use both. For prompt-controlled models, preserve normalized size as evidence, distinguish `size_source=explicit|default`, warn only for explicit size syntax, and keep JSON/agent/human output on one typed projection.
-   - never reverse-parse arbitrary prompt phrases such as “2K” or “4K” into typed resolution authority. The normalized typed/default size is admitted before adapter execution; a prompt-controlled runtime instruction has higher execution priority than conflicting resolution wording in the image description. Recommended `codex:imagegen` commands omit the default size flag, while explicitly supplied admitted sizes remain compatibility inputs with `PROMPT_CONTROLLED_RESOLUTION`.
-   - CLI, MCP, REST, and Go SDK generation changes must prepare one shared Generation Intent and expose the same prompt-free request summary, ordered reference roles, `model_ref`, and `original_model_ref`.
-   - `assets.apply` remains dry-run unless the caller explicitly supplies `confirm=true`; responses expose project-relative `target_path`, never absolute project or artifact paths.
-6. For Eikona plan/checklist work, keep `proposal.md`, `design.md`, `tasks.md`, and `specs/**/spec.md` under `cli/eikona/openspec/changes/eikona-<slug>/`; migrate any misplaced checklist or root `openspec/` implementation task before continuing. Do not leave completed execution changes active. After closeout, update readiness/specs, record verification in `tasks.md` or `design.md`, and archive ordinary changes to `cli/eikona/openspec/changes/archive/YYYY-MM-DD-eikona-<slug>/`.
+1. Start inside `cli/eikona` and read `AGENTS.md`, `README.md`, and the nearest command doc. Installed-binary usage starts with `eikona setup --agent`; repository access is not required. Read-before-edit map: `references/agent-invocation.md`.
+2. Preserve product contracts in `references/product-contracts.md`: headless planning only; `--json` compact default / `--json --full` forensic / routine `--agent`; artifacts under `runs/<run_id>/outputs/`; tests use `httptest`; secrets only in the user auth store; no shell credential scripts; no isolated scenario commands; storage is backup/restore only; assessment/recipe evidence is never a silent machine winner.
+3. For generation and models, follow `references/generation-and-models.md` and `references/gpt-image-2.5.md`. Live paid default is `openai/gpt-image-2.5-sunburst` with `--quality high` and pixel `--size` on the existing GPT Image channel (`noemi` here). Reuse the existing key; do not create a channel. Fall back to `openai/gpt-5.4-image-2` only if 2.5 is not ready. Reject provider-colon spellings, bare `gpt-image-2.5`, and `--size 2k` on 2.5. Never silently drop reference inputs or skip TLS. Do not run paid generate without approval.
+4. For CLI behavior changes, add tests next to the behavior: `internal/cli`, `internal/adapters/<provider>`, `internal/config`, `internal/runtime`, matching `internal/*`, and MCP transport.
+5. Agent closed loop: submit `--agent` → `eikona watch <run-id> --events` → `eikona next --agent` → `eikona inspect --brief --agent` → `eikona review packet --agent` → human preview → `eikona feedback` / `reroll` → `eikona assets handoff/stage/apply --agent`. `assets.apply` is dry-run unless `confirm=true`. Full catalog: `references/agent-invocation.md`.
+6. Keep OpenSpec under `cli/eikona/openspec/changes/eikona-<slug>/`. Migrate misplaced root `openspec/` implementation tasks before continuing. Archive completed changes to `cli/eikona/openspec/changes/archive/YYYY-MM-DD-eikona-<slug>/`.
+
+Example (live default on the existing GPT Image gateway):
+
+```bash
+eikona generate --use-channel noemi --model openai/gpt-image-2.5-sunburst --size 1152x2048 --aspect 9:16 --quality high --prompt "a product still life on a studio table" --agent
+```
 
 ## 文件提示词集合约束
 
@@ -251,39 +104,22 @@ openspec validate --all
 
 If CI, tags, or release artifacts change, also use the Go/GitHub release guardrails skill.
 
-## Visual Intent Evidence
+## Visual intent, pricing, DriveBridge
 
-The runtime consumes validated `eikona.visual_intent.v1` evidence through `eikona workflow import intent`. It is the only Skill responsible for provider execution and artifact lifecycle. Evidence files (`visual_intent.json`, `skill_receipt.json`, `intent_compile.json`) are written under each run directory and linked through existing runstore paths.
+Read `references/visual-intent.md` for visual-intent evidence, canvas recovery, official pricing, and DriveBridge remote CLI.
 
-The runtime distinguishes claimed from verified skill identity; unverified receipts cannot support promoted/core evidence. Default model: `openai/gpt-5.4-image-2`.
+## If this fails
 
-Contract reference: `../eikona-visual-router/references/visual-intent-contract.md`.
-
-### Canvas recovery implementation boundary
-
-- Use `--full-body` for versioned framing controls; add `--require-review feet` when visible feet are required. An intact hem does not prove visible feet. Read `eikona review composition RUN_ID --artifact ARTIFACT_ID --json` and inspect the complete original before recording observations.
-- Explicit `--recovery-policy` accepts configured candidates and bounded attempts/deadlines. Only adapter-proven pre-generation rejection or local non-submission permits switching. Read `eikona recovery show RECOVERY_REF --json`; `deferred` is a durable unknown outcome, not permission to regenerate. Legacy retry must not bypass this policy.
-- Explicit background recovery uses the existing worker. Read child run IDs from `recovery.attempts`; the coordinator owns no copied images. Automatic foreground-to-background handoff, automatic unknown-submit lookup and unconfigured candidate discovery are not implemented. Private digest-only prompt sources currently require foreground execution.
-- A gateway tier without a trusted native pixel table remains `unverified`, even when its observed ratio is correct. Never promote measured samples into a guaranteed tier table. Recovery charges must distinguish provider settlement from catalog estimates; historical `actual_usd` fallback values are not independent billing evidence. Proven no-generation rejection does not prove zero cost: without a calculated cost, a frozen provisional reservation, or explicit unknown-cost authority, `needs_policy_change/unknown_settlement_not_authorized` stops switching when settlement remains unknown. Inspect the existing handle instead of resubmitting.
-- Preparation now exposes local `recovery_candidates` admission and frozen canvas digests. This is not proof of online availability. `recover_artifact` means the provider generated an image but original materialization is incomplete: use the existing child run's `resume --download-only` only when job evidence exists; never start a new generation to replace an unknown outcome. Recovered original bytes make the handle reviewable while dimension and composition gates remain independent.
-- Recovery candidate normalization prioritizes same-model alternatives before allowlisted cross-model candidates, retaining order within each group. Read the prepared candidate order rather than inferring it from the raw input list.
-- A recovery handle's availability is checked against current original bytes. Missing originals return `recover_artifact`; a late original recovered from an accepted job can become `review_artifact` without a new submission. Neither transition bypasses dimension/composition review or rewrites historical lineage.
-- Follow the returned `next_step`/MCP `next_action` or CLI `action.next`. A saved original provider job permits the existing `resume` path; unknown submission without a job permits only recovery inspection. These recommendations do not grant broader authority or permit a new generation Submit.
-- New recovery preparations default `lookup_timeout_seconds` to 120 (0 disables it). On REMOTE_TIMEOUT after acceptance with a saved provider job, the service claims one bounded existing-job lookup under the root deadline. A recovered original is returned with `review_artifact` while timeout history remains; read both run status and recovery before choosing another action. No-job unknown submissions are never automatically regenerated or queried through an invented lookup endpoint.
-- For full trailing fabric, use `--complete-drapery` on generate/edit/preparation preview. It freezes full-body framing plus `accessory_extent`; add `--require-review feet` separately when visible feet are needed. Ordinary `--full-body` does not imply the new drapery requirement, and old preparations are not silently upgraded.
-
-### Official pricing and provisional budget
-
-- Discover installed `pricing show/quote/set/unset` before use. Quotes are offline; price changes use the owner host's config CLI, not hand-written metadata. Channel/model overrides take priority over model defaults and verified official cards. A partial override never borrows missing official components.
-- New billing receipts keep `calculated_usd`, `reserved_usd`, `budget_usd`, `basis` and price snapshots separate from `actual_usd`. Measured costs and frozen estimates can advance bounded recovery without a verified provider invoice. Unknown submission still forbids resubmission.
-- Per-image pricing requires exact operation/quality/resolution and confirmed generated count. Do not equate a native tier with a pixel size, count downloaded files as generated images, or bill image output both by tokens and by image.
-- No official price mapping is assumed for `openai/gpt-5.4-image-2`; keep the configured model and resolve a missing price through explicit owner configuration. Never restore a hard-coded gateway discount or borrow another model's official price.
-- Without a CLI, discover `pricing.quote` through registered MCP schemas and `eikona://docs/pricing`. Do not send credentials, prompts, or client-supplied price snapshots to the quote action.
-
-### DriveBridge remote CLI interaction
-
-- Development assets saveback select/status/resume/cancel, feedback effort and report effort support optional --endpoint/--key-file/--scope. Reuse the existing typed SDK and upload transport; incomplete explicit remote options must fail instead of silently writing local state.
-- Preserve local owner-host defaults when remote options are absent. Source connection configuration stays on the owner host; operator/service-api purpose is distinct from input-only permission.
-- All structured modes use structuredOutputEnabled and the shared renderer. blocked/partial transfer results retain original IDs and advisory recovery; do not report them as completed deliveries.
-- For client-without-CLI interaction, use advertised MCP schemas and eikona://docs/drivebridge. Computer-local files need a local reader/relay or existing input page, never remote filesystem path interpretation.
-- Keep the independently frozen recovery release separate from later DriveBridge interaction changes. Local verification does not publish or deploy a service.
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| User said Eikona but a generic image tool ran | Stop; enter `cli/eikona` and use `eikona generate ... --agent` | Fall back only if the user approves |
+| Fresh install, unknown env | `eikona setup --agent` | `eikona setup --yes --skip-skills --agent` on `SKILLS_RELEASE_NOT_MIRRORED` |
+| Empty `eikona models list` | `eikona models list --source adapted --all --agent` | Missing credentials are config status, not missing adapter |
+| Paid generate without approval | Do not run `--smoke` or generate | Ask for provider/model/cost authority |
+| Secret in output | Redact; use `--api-key-stdin` / auth store | Never `eikona auth env` in ordinary agent flows |
+| Library auto-promote after import | Keep run evidence only | Explicit `eikona library save` |
+| `assets.apply` wrote files | Must be dry-run unless `confirm=true` | Restore via owner CLI, do not copy runstore paths |
+| Generic provider error | `eikona inspect <run_id> --json --full` for `fail_reason` | Do not silently reword prompts and retry |
+| Live generate used Image 2 or `--size 2k` | Switch to `openai/gpt-image-2.5-sunburst`, pixel `--size`, `--quality high`, existing channel | Do not create a new channel or request a new key |
+| Bare `gpt-image-2.5` | Use Sunburst | Do not guess Flare unless the user wants speed |
+| `xhigh`/`max` on gpt-5.4-image-2 | Reject before submit | Those quality values are 2.5-only |

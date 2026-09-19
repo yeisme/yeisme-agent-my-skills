@@ -65,6 +65,15 @@ pinax vault stats --agent
 - Do not include secrets, provider payloads, raw prompts, hidden prompts, or full chain-of-thought in notes or evidence.
 - Treat Markdown body content as user-owned; preserve language and intent.
 
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| User asked for a Pinax note without approving a vault write | Show the exact `pinax note add --dir index --stdin --json` | Do not write Markdown files directly |
+| Vault is ambiguous | `pinax vault list --agent` | Do not guess a vault from the cwd |
+| Request is repair/organize/restore | Route to `pinax-proof-maintenance-operator` | Do not `--yes` from this operator |
+| Generated note would land in vault root or a guessed topic folder | Force `--dir index` | Do not invent a destination |
+
 ## Validation
 
 - After setup: `pinax vault validate --json`.

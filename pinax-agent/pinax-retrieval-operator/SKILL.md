@@ -65,6 +65,15 @@ pinax query run "SELECT title, path FROM notes LIMIT 10" --json
 - Do not run arbitrary SQL outside `pinax query` surfaces.
 - Do not create or refresh managed index pages unless the task is authoring or maintenance; route those writes to `pinax-template-authoring-operator` or `pinax-proof-maintenance-operator` as appropriate.
 
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| Search looks stale | `pinax index refresh --json` | Do not rebuild an index just to answer one question |
+| Zero results | Report a search gap | Do not claim the fact is absent |
+| Decision brief should be saved | Route to `pinax-vault-operator` after explicit accept | Do not infer save permission from a usefulness rating |
+| Arbitrary SQL / SQLite file | Use `pinax query` only | Do not open `.pinax/index.sqlite` |
+
 ## Validation
 
 - `pinax index refresh --json` returns `status=success` before relying on fresh deterministic search.

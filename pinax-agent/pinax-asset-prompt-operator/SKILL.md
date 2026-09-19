@@ -44,6 +44,8 @@ pinax graph query --kind technique --match storyboard --vault ./my-notes --agent
 3. For vault-wide asset metadata, use `pinax asset add/link/move/remove/repair/verify`; do not edit manifests by hand.
 4. For prompt assets, import schemas through `pinax prompt import` and resolve through `pinax prompt resolve pinax://prompt/<id> --agent` instead of reading SQLite or metadata files.
 5. For content bundles, run `collection import --dry-run` and `collection doctor` before `collection import --yes`.
+
+🔴 CHECKPOINT · 🛑 STOP：未完成 dry-run、未得到当前用户对本次 `--yes` import、lifecycle promotion 或 asset remove 的明确授权前，不得写入 vault 资产。
 6. Rebuild graph projections only when needed; they are rebuildable local projections, not proof of provenance.
 7. Require explicit approval for moving, removing, lifecycle promotion/retirement, or bundle import with `--yes`.
 
@@ -53,6 +55,15 @@ pinax graph query --kind technique --match storyboard --vault ./my-notes --agent
 - Do not hand-edit `.pinax/assets/**`, prompt projection rows, collection receipts, or graph projection files.
 - `collection export` may write prompt bodies only to the user-requested output file; summaries should remain bounded.
 - Pinax stores prompt assets and evidence; it does not execute Eikona, crawl sources, or render images.
+
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| Bundle import requested | `collection import --dry-run` then doctor | Do not `--yes` first |
+| Asset missing or verify failed | `pinax asset missing` / `repair --plan` | Do not hand-edit manifests |
+| Prompt URI unknown | `pinax prompt search` then `resolve` | Do not read SQLite |
+| Binary or full prompt body in projection | Keep summaries bounded | Do not print payloads |
 
 ## Validation
 

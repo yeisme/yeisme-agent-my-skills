@@ -47,6 +47,8 @@ pinax briefing run --dry-run --vault ./my-notes --json
 4. For plugins, validate and inspect before install; install disabled first when supported; grant permissions explicitly; run only enabled capabilities with approved permissions.
 5. For API, prefer `pinax api serve --readonly` on loopback. Use `--allow-write` only after the user understands the remote mutation boundary.
 6. For tokens, show only token ids, labels, scopes, expiry, and redacted digests. If a command prints a one-time token secret, do not store it in repo files, docs, logs, or notes.
+
+🔴 CHECKPOINT · 🛑 STOP：未得到当前用户明确授权前，不得 `token create`、`api serve --allow-write`、bind beyond loopback、`plugin permissions grant`、publish deploy，或把一次性 token secret 写入任何文件。
 7. For profiles, store endpoint, workspace, device, scope, and secret refs only. Do not store raw token values.
 8. For MCP, keep the surface read-only unless the Pinax command and user approval explicitly enable controlled writes.
 
@@ -57,6 +59,15 @@ pinax briefing run --dry-run --vault ./my-notes --json
 - Do not bind API/MCP servers beyond loopback unless the user explicitly requests and approves it.
 - Do not confuse Remote API Mode (`pinax api serve`, `--api-url`, profiles/tokens) with Cloud Sync (`pinax cloud`, `pinax sync`).
 - Do not deploy publish output or enable plugin writes without explicit approval.
+
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| Publish/plugin/API write requested | Stay on plan/doctor/validate | Do not deploy or `--allow-write` without approval |
+| Token secret appeared in output | Show id/scope/expiry only; do not persist the secret | Do not paste it into notes, docs, or logs |
+| User confuses API mode with Capsa Sync | Keep `--api-url` separate from `pinax sync --target capsa` | Do not mix the two as one surface |
+| Plugin install without permissions | Install disabled first; grant explicitly | Do not run ungranted capabilities |
 
 ## Validation
 

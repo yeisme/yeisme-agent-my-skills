@@ -184,6 +184,8 @@ pinax vault ignore apply --yes --json
 6. Use separate prefixes for local storage backend data and Cloud Sync data when possible, for example `pinax-storage/` and `pinax-sync/`.
 7. Before remote writes, require a remote-aware `pinax sync diff --target capsa --json` and push dry-run.
    If the diff output plans operations but also reports that real remote writes are not wired, treat the result as a blocked/partial implementation state rather than a user configuration problem.
+
+🔴 CHECKPOINT · 🛑 STOP：未完成 remote-aware diff 与 push dry-run、未得到当前用户对本次远程写入/bootstrap `--yes`/Keychain unlock 的明确授权前，不得 `sync push --yes`、`repo bootstrap --yes` 或 `repo migrate ... --yes`。不要把 dry-run 或 Git push 说成 native S3 backup 成功。
 8. For automatic sync, use `pinax sync daemon` only when current help lists it and repository credentials resolve non-interactively from Keychain/file/secret manager. Never let a daemon prompt.
 9. On conflicts, inspect `pinax sync conflicts list`, `show`, or `diff`, then stop before choosing local, remote, or merged resolution without user approval.
 10. Keep Cloud Sync transports (`server`, `file`, `s3`, `rclone`) separate from localhost Remote API Mode (`pinax api serve` and `--api-url`).
@@ -196,6 +198,15 @@ pinax vault ignore apply --yes --json
 - Do not claim a remote write succeeded unless the Pinax command returns `remote_write=true` or an equivalent success fact.
 - Remote API Mode is not Capsa Sync; keep `--api-url` workflows separate from `pinax sync --target capsa` and sync repository configuration.
 - Do not treat a direct object store list or upload as a successful sync unless the Pinax sync command committed the revision and reported the success fact.
+
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| `real remote writes are not wired` / `remote_write=false` without `up_to_date` | Report blocked/partial; keep the original command | Do not switch to adjacent backend commands to look successful |
+| Missing credentials asked again while doctor says configured | Reuse the existing secret identity | Do not echo keys or rewrite `~/.aws/credentials` into the repo |
+| Conflict listed | `pinax sync conflicts list` then stop | Do not pick local/remote/merge without approval |
+| Git push or object list succeeded | Treat as not native backup | Require `remote_write=true` plus revision read-back |
 
 ## Validation
 

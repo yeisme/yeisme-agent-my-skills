@@ -168,3 +168,13 @@ Also validate with the project-local parser, for example `jq`, Node, Go, or Pyth
 - Do not put full schema descriptions into `--agent`; keep complex data in `--json` or MCP tool schemas.
 - Do not rely on color for meaning. `NO_COLOR=1` and `--color never` must remain readable.
 - Do not emit secrets, auth headers, provider tokens, raw prompts, hidden system prompts, cookies, full chain-of-thought, private tool arguments, model-internal reasoning, provider payloads, or full unredacted stack traces in any output mode.
+
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| `--json` mixed with logs/ANSI | Renderer from one projection; logs to stderr | Envelope still required on `status=failed` |
+| `--agent` parsed from human text | Stable `key=value`; required `spec_version/mode/command/status` | Put nested data in `--json` |
+| Envelope field renamed/removed | Stop; `yeisme-evolutionary-change-policy` | Dual-emit during deprecation |
+| Agent hand-wrote YAML/JSON metadata | Add `app … set/append` command | User prose files only |
+| Secret in stdout/sidecar | Redact; `--no-output` for auth commands | No shell credential scripts |

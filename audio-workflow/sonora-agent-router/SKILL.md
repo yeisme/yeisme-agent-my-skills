@@ -112,6 +112,17 @@ Ask the user to install a matching shell script with `sonora completion <shell>`
 
 Use `sonora <command> --agent` for low-token output checks and `sonora <command> --json` when validating complete payloads. Do not expose credentials, audio bytes, raw provider payloads, private tool arguments, or hidden reasoning.
 
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| Unknown command | `sonora commands suggest "<intent>" --agent` | Do not invent verbs |
+| `credential_missing` | User-level `~/.sonora/config.yaml` `api_key` slot | Not an adapter gap; do not write keys to the repo |
+| Paid TTS/music without confirm | Estimate then `--confirm-external-call` | `unknown_preview` also needs `--confirm-unknown-price` |
+| Cover/generate `artifact_host_forbidden` | Add host from the error, then `music job reconcile` | Do not resubmit |
+| Native video audio treated as accepted mix | `sonora audio native register`; keep `pending_review` | Sonora never marks Scaena timeline accepted |
+| Dialogue as first-line TTS on Seedance native shots | Leave `video_native`; only `replace_after_generation` is full TTS | Do not rebuild EpisodeAudioPlan by hand |
+
 ## Single-file multitransport intake
 
 For a client file, discover `sonora://input/capabilities` and the installed execute schemas. Use `input.prepare` with purpose `audio_input` and one stable idempotency key. Prefer executable `object_storage` through the transient HTTP `POST /input-requests/{id}/transfer` plan, then `http_put`; a user may select/preview a file on the one-time page. Only when explicitly advertised, a client program may encode a file up to the owner's inline limit (default 4 MiB) for `input.upload_base64` with file name, MIME, size, SHA-256 and `data_base64`. The dedicated MCP envelope permits 6 MiB; ordinary/legacy actions retain their original limits. Never ask the model to produce or echo base64.

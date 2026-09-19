@@ -127,6 +127,17 @@ staged checkpoint commits → visual + functional acceptance
 - 验收矩阵：每个状态的可观察结果、测试入口、截图或运行证据路径。
 - 垂直切片任务：owner、路径、依赖、并行 lane、验证命令、失败重检方式。
 
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| 模式无法判断 | 只问一个短问题 | 不默认加载整套评审链 |
+| 用户明确跳过完整流程 | 停止本路由器，走最近 `AGENTS.md` 与快速本地迭代 | 不加载 `grill-me`、完整 PRD 或自动评审链 |
+| 单 owner 本地非生产新增/修复 | `yeisme-coding-execution-driver` 加一个本域 skill | 不把新增模块或 mock 当成规格审批门 |
+| 命令未知 | 先查 `package.json`、`Taskfile.yml`、`Makefile`、README 或 CI | 不要臆造 |
+| 未获授权的子 agent / 提交 / 推送 / 生产写 | 停止 | 不把“并行”当授权 |
+| 要在根目录实现子项目代码 | 进入代码 owner 并读其 `AGENTS.md` | 不在根实现 |
+
 ## 强制边界
 
 - 不因用户说“做个应用”就静默运行全部产品、设计、工程、QA 和发布技能；先选模式，再渐进加载。

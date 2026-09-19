@@ -21,6 +21,15 @@ Use this skill for `cli/quaestor`, the Yeisme research product engine whose curr
 3. Preserve CLI output contracts for human summaries, `--json`, `--agent`, stderr diagnostics, and redaction.
 4. Reuse existing local test and fixture patterns before adding new test systems.
 
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| Implementation request | Enter `cli/quaestor`; read local `AGENTS.md` | Do not implement from root |
+| Internet, crawl, or provider call | Keep it behind an explicit adapter | Redact credentials, raw prompts, payloads, and chain-of-thought |
+| Independent frontend requested | Needs its own approved client owner | Do not put frontend implementation in this CLI |
+| Move Quaestor behavior into Connectors | Stop | Invoke only through stable command or API surfaces |
+
 ## Validation
 
 ```bash

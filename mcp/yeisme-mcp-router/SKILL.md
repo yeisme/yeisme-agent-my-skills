@@ -33,7 +33,17 @@ against the MCP surface directly.
 Gateway source maintenance (`yeisme-mcp-gateway-maintainer`), peering
 (`yeisme-mcp-gateway-peer-operator`), and publishing
 (`yeisme-mcp-gateway-provider`) keep their own triggers; this router never
-replaces them.
+replaces them. They are on-demand after this router, not root-runtime defaults.
+
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| Guessed tool/action name or `UNKNOWN_ACTION` | One `tools/list` or owner `search`; copy `exec_example` | Do not pluralize or retry the guessed name |
+| Opaque denial | Reassess lane/principal | Do not probe nearby names |
+| Card digest disagrees with a typed error | Re-run the owner card / capabilities | Stop improvising against stale maps |
+| File path on a remote MCP host | Owner `://input/capabilities` then advertised input tools | Do not send client filesystem paths |
+| Need Gateway admin/connect/peer | Load the dedicated Gateway skill from source | Do not stretch this router into administration |
 
 ## First-call verification discipline (all surfaces)
 

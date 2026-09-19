@@ -172,3 +172,13 @@ When running `plan-eng-review`, `plan-ceo-review`, `review`, or any deputy-archi
 - For skill schema changes, run `scripts/skills.sh validate-custom`, `validate-profiles`, and `validate-runtime`.
 
 If a compatibility test does not exist for the surface you changed, add one before claiming the change is safe.
+
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| Rename/remove/retype a released field, key, column, or symbol | Stop coding | OpenSpec with expand-then-contract, deprecation window, rollback |
+| Tests pass after deleting a contract test | Restore the pin | Widening a validator is not compatibility |
+| Pre-1.0 labeled unstable | Additive iteration OK | Still record the "stable from" point |
+| Security fix cannot be compatible | OpenSpec still required | Deprecation window may collapse |
+| Unclear if breaking | Treat as stable | Hard stop until classified |

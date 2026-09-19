@@ -51,6 +51,17 @@ description: Use when coordinating multi-stage Chinese creative-writing tasks ac
 - Auctra 项目内的材料、正文、review、export 必须使用对应 CLI，不手写结构化状态。
 - 不自动 accept review，不自动覆盖正文，不自动发布。
 
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| 任务类型不明确 | 先读 router、任务角色图和匹配的 skill descriptions | 不把所有创作决策塞进一个提示词 |
+| 点名创作者、作品或流派 | 先调用 `creative-style-lens-builder` | 不把 persona identity 直接传给 writer |
+| Auctra 项目状态变更 | `auctra material` / `text` / `review` / `text export` | 不手写 `.auctra/**`，不自动 accept、覆盖或发布 |
+| 登录、发布、私信或刷量 | 停止 | 不执行平台互动，不伪造发布结果 |
+| 未运行 Auctra 命令 | 不声称 review / export 已完成 | 只给建议命令 |
+| 自然度编辑 | `natural-writing-editor` 一次与场景匹配的编辑 | 不叠加多个 humanizer；AI 检测器分数不是质量门 |
+
 ## 边界
 
 - 不伪造用户经历、数据、采访、截图、平台反馈或真实发布结果。

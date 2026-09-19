@@ -10,3 +10,11 @@ Run one bounded local transform on one authorized local video: `anatomia video g
 Install this skill with `npx skills add yeisme/yeisme-agent-my-skills --skill anatomia-video-transform-operator --agent codex --copy --full-depth -g -y`. Skills do not install the `anatomia` binary or ffmpeg.
 
 These are local deterministic transforms, not model analysis: no provider is called and nothing enters an evidence bundle automatically. Grayscale utility output always carries `evidence_binding=none`. Shot lists are segmentation evidence, never a production storyboard; canonical storyboard review/freeze belongs to Scaena. Commands: `references/commands.md`. Troubleshooting and boundaries: `references/handoff.md`.
+
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| `video_transform_usage_invalid` or invalid window | Fix flags or re-encode, then rerun | Do not retry unchanged; nothing ran |
+| `ffmpeg` missing or probe failure | Install ffmpeg/ffprobe on PATH | These transforms never call a provider |
+| Canonical storyboard freeze | Scaena owns review/freeze | Do not treat shot lists as a production storyboard |

@@ -72,6 +72,17 @@ Use the returned recovery instruction with the same identity/project and origina
 
 A partial saveback must retain completed file receipts and resume missing work. Complete requires the provenance manifest too. Transfer recovery never authorizes generation, paid retries, permission expansion or deletion. Saving a file is not consumer adoption.
 
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| Tool denial or unknown action | Re-read tools/list and capabilities | Do not guess aliases or install extra tools |
+| `network_readiness=not_probed` | Treat as discovery, not a live connection | Probe on the owning host; do not invent success |
+| Relay/handoff missing from the installed service | Explain the gap; use an existing upload/input route | Do not auto-expand permissions |
+| Import/saveback review failed | Fix through Eikona review | Do not switch to candidate/paid retry |
+| Cancelled or expired operation | Inspect retained evidence; new intent only if the user asks | Do not resume as a different actor |
+| Credential or transient URL in output | Redact and rerun | Stable file/grant IDs are not credentials |
+
 ## Intranet CAS and mounts (design-stage)
 
 Server blob reuse and local WebDAV/FUSE mounts are specified, not shipped. Until capabilities advertise `cas_reuse=available` (not merely the key existing) or `mount.adapter=webdav` with a live `mount_status`, keep using ordinary upload/download and original operations.

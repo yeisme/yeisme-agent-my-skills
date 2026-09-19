@@ -49,6 +49,15 @@ pinax plan snapshot --vault ./my-notes --json
 - Do not create financial, medical, or legal advice claims from learning packs; keep them as study notes and source tracking.
 - Do not execute planning action drafts from Pinax; Pinax only generates drafts for local review.
 
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| Archive or broad cleanup | Snapshot first; require approval | Do not hand-edit `.pinax/projects/**` |
+| Plan write requested | Start with `--dry-run` | Do not `--save --yes` without approval |
+| Learning pack looks like advice | Keep it as study notes | Do not issue financial/medical/legal claims |
+| Remote tracker sync requested | Stop; that is another owner | Do not pretend Pinax is GitHub Issues |
+
 ## Validation
 
 - After project setup: `pinax project subproject show <project> <slug> --agent`.

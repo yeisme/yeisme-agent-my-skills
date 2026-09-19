@@ -55,6 +55,8 @@ not an arbitrary HTTP method/path proxy.
 
 ## Plan, approve, apply
 
+🔴 CHECKPOINT · 🛑 STOP：do not `admin apply`, pack apply, or `config rollback` on a live Gateway until the current user authorized this revision-bound mutation and any required `approval-id`. Inspect and `admin plan` first. Do not auto-merge a CAS conflict.
+
 Every mutation is revision-bound and idempotent:
 
 ```bash
@@ -86,6 +88,11 @@ mcp-gateway pack validate ./packs/team-shared --json
 mcp-gateway pack fetch https://example.com/packs/team-shared/0.1.0/pack.json \
   --digest sha256:xxx \
   --json
+```
+
+🔴 CHECKPOINT · 🛑 STOP：do not `pack plan` / `admin apply` / `config rollback` on a live Gateway until the current user authorized this pack mutation, expected revision, and approval-id.
+
+```bash
 mcp-gateway pack plan pack:team-shared@0.1.0 \
   --expected-revision cfgrev_xxx \
   --json
@@ -96,13 +103,26 @@ Do not follow `latest`, auto-upgrade, accept executable fields, or enable
 unsigned artifacts outside explicit loopback development mode. Publisher trust
 is local-owner bootstrap state.
 
-Rollback creates a new revision; it never rewrites history:
+Rollback creates a new revision; it never rewrites history.
+
+🔴 CHECKPOINT · 🛑 STOP：do not `config rollback` on a live Gateway until the current user authorized this revision-bound mutation and `--expected-revision`.
 
 ```bash
 mcp-gateway config rollback cfgrev_previous \
   --expected-revision cfgrev_current \
   --json
 ```
+
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| CAS conflict | Inspect the new active revision and create a new plan | Do not auto-merge |
+| Approval reused with a different payload | Treat as an error | An approval is valid only for its plan digest, revision, principal, and expiry |
+| Pack `latest`, unsigned, or executable fields | `mcp-gateway pack validate` with an exact digest | Do not follow `latest` or auto-upgrade |
+| Token or secret in output | Redact | Do not print tokens or Authorization headers |
+| Bootstrap settings via admin Action | Stop; those remain local configuration | Do not change listen/TLS/data-dir/trust through Actions |
+| Source code change requested | `yeisme-mcp-gateway-maintainer` | This skill does not change Gateway source |
 
 ## Boundaries and handoff
 

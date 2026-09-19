@@ -50,6 +50,8 @@ the directory containing `go.mod` and this project's `AGENTS.md` as the root.
    `.goreleaser.yml`, `.github/workflows/release.yml`, and
    `docs/deployment-and-key-distribution.md`.
 4. Keep credential roles separate:
+
+   🔴 CHECKPOINT · 🛑 STOP：do not `grant create`, `tokens create`, `tokens import`, or distribute credential files until the current user authorized this issue path. Keep files `0600`; never print or commit token contents. Pair every issue with revoke/rotation.
    - upstream provider keys stay on the Gateway host in its secret manager or
      referenced environment file; clients never receive them
    - the quickstart operator token is an operator credential, not a consumer
@@ -71,6 +73,17 @@ the directory containing `go.mod` and this project's `AGENTS.md` as the root.
    `openspec archive -y <change-name>` and validate the resulting main spec;
    do not hand-move OpenSpec state files.
 
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| Token or key in output | Redact; keep generated credentials in `0600` files | Never commit or print Gateway tokens, provider keys, or Authorization headers |
+| Failed backend | Isolate the failure | Do not break unrelated backends |
+| `web-search-prime` | Keep it disabled | Use the Firecrawl CLI from its owning checkout, not a maintainer-absolute path |
+| Archive OpenSpec | `openspec archive -y <change-name>` | Do not hand-move OpenSpec state files |
+| Web UI / marketplace requested | Stop | This project is CLI/API only |
+| Missing GoReleaser, services, or credentials | Report explicitly with the next runnable command | Do not print token file contents |
+
 ## Validation
 
 Run the narrowest useful checks, then broaden if shared behavior changed:
@@ -85,6 +98,8 @@ task validate
 task status
 openspec validate --all --strict
 ```
+
+🔴 CHECKPOINT · 🛑 STOP：do not `goreleaser release`, deploy, or distribute release credentials until the current user authorized this release. Use disposable credential directories for smoke; never print token file contents.
 
 For deployment, release, or credential changes:
 

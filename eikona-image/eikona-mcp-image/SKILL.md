@@ -14,15 +14,21 @@ typed blocker that requires it.
 
 Check installed capabilities before using `edit.prepare`, `edit.plan.show`, or `precision_edit`; development examples do not prove installed support. Provide a clean original first, plus exactly one annotation copy, mask, or typed regions. Keep annotation and mask out of ordinary reference images. If the agent already understands the marks, submit regions directly and skip model analysis.
 
-Preserve the user or agent's explicit model/channel choice. GPT Image 2.5 Sunburst and Flare are optional choices, not forced defaults. Use strict PNG protection for new precision controls unless natural mode is explicitly requested. Clear requests submit one edit for all regions; ambiguous arrows, missing instructions or overlaps require preview and correction, not one generation per region or automatic visual retries.
+Preserve the user or agent's explicit model/channel choice. Unspecified paid generate/edit prefers `openai/gpt-image-2.5-sunburst` and `quality: "high"` on the existing GPT Image channel. Flare is for speed; Image 2 is fallback only. Use strict PNG protection for new precision controls unless natural mode is explicitly requested. Clear requests submit one edit for all regions; ambiguous arrows, missing instructions or overlaps require preview and correction, not one generation per region or automatic visual retries.
 
 Use `edit.prepare` with `analyze=true` only when analysis is intended and cost policy permits it; `dry_run=true` makes no model call. Reuse `edit_plan_ref` and inspect `analysis_run_id` after interruption. Correct regions through a child plan. The image run's cost is not the total analysis-plus-image cost. If capability is unavailable, report the installed limitation rather than inventing an action or installing updates automatically.
 
 When advertised by the installed action contract, `inspect` accepts `refresh_cost: true` to recompute local workflow costs. Preserve unknown totals even when an orchestration component is priced. To recover a completed edit, pass its original `run_id` and `edit_plan_ref` to `edit`; verify the returned run and artifact references. Recovery errors require inspection, not automatic resubmission or claim-file removal. Project selection determines the output owner; source images require separate current authorization, including after a plan was prepared.
 
+## GPT Image 2.5 identity
+
+Unspecified paid generate/edit uses `openai/gpt-image-2.5-sunburst`, `quality: "high"`, pixel `size`/`aspect`, and `use_channels` of the existing GPT Image gateway (`noemi` here). Flare only for speed. Image 2 only as fallback. Reject bare `gpt-image-2.5`. Never size `2k`. Do not create a new channel. Full card: [gpt-image-2.5.md](references/gpt-image-2.5.md).
+
+Without CLI, discover `eikona://docs/image25-mcp` with doc query `image25-mcp`.
+
 ## Coglet Sunburst / Flare acceptance boundary
 
-When the user selects `openai/gpt-image-2.5-sunburst` or `openai/gpt-image-2.5-flare` on the configured `coglet-image25` channel, explicitly pass `use_channels: ["coglet-image25"]`, `execution_mode: "foreground"`, `provider_options: {"api":"images"}`, `quality: "medium"`, `count: 1`, and matching exact `size`/`aspect`. These are the 2026-09-11 verified settings, not universal model defaults. Keep `openai/gpt-5.4-image-2` as the default for unspecified models.
+This workspace’s GPT Image gateway is the existing channel (`noemi`). Pass `use_channels: ["noemi"]` (or the installed name from discovery), `model_ref` Sunburst, `quality: "high"`, `count: 1`, and matching exact `size`/`aspect`. Do not invent `coglet-image25`. The 2026-09-11 coglet foreground/`medium` settings are historical verification only.
 
 Read the installed `eikona://docs/image25-mcp` when size selection or recovery guidance is needed. The verified matrix is 1024x1024, 1536x1024, 1024x1536, 2048x2048, 2048x1152, 1152x2048, 3840x2160, 2160x3840 for each model. Do not infer 4096x4096, edit, batch or background support from these foreground results. The channel name must exist in the target installation; it is configuration, not a hardcoded model alias.
 
@@ -30,12 +36,15 @@ Read the installed `eikona://docs/image25-mcp` when size selection or recovery g
 
 ## Ordinary generation and editing
 
+🔴 CHECKPOINT · 🛑 STOP：do not call `generate` or `edit` until the current user has authorized this paid/write effect. Do not resubmit an unknown submit. Do not pass client filesystem paths to a remote MCP host.
+
 Call `eikona.execute` directly. Do not begin an ordinary request with
 `eikona.search`, model-catalog scans, provider doctor, or `resources/read`.
 Use `action: "generate"` for a new image and `action: "edit"` for a supplied
 image, with a stable `idempotency_key` and the user intent. Preserve an
 explicit supported Eikona model selection, including Grok or Midjourney. When
-the user does not specify a model, default to `openai/gpt-5.4-image-2`. Do not
+the user does not specify a model, default to `openai/gpt-image-2.5-sunburst`
+with `quality: "high"` on the existing GPT Image channel. Do not
 select test-only model identifiers.
 
 For remote Eikona LAN MCP (`https://<host>:<port>/mcp`; non-loopback
@@ -113,6 +122,19 @@ This client-side downloader issues its own grant and verifies length and SHA.
 Do not read, print, copy, or request the key file. If the CLI or protected key
 file is unavailable, report MCP-host download incompatibility; do not claim
 that the image was downloaded.
+
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| Typed `UNKNOWN_ACTION` or missing precision controls | Re-read installed actions; report the limitation | Do not invent `edit.prepare` or auto-install |
+| Client path on remote MCP | `eikona://input/capabilities` then advertised input tools | Do not send `/Users` or `/var/folders` paths |
+| Submit outcome lost before `run_id` | Report unknown; stop | Do not resubmit the same idempotency key |
+| `ResourceLink` 404 / expired | One `artifact.access` when advertised | Do not create a replacement run |
+| `AUTH_ACTION_DENIED` on `providers.doctor` | Treat as purpose isolation | Do not conclude the server is down |
+| `CONTENT_REJECTED` or canvas capability changed | Inspect the original run | Do not silently rewrite the prompt or poll a failed run |
+| Image 2.5 with size `2k` or bare `gpt-image-2.5` | Sunburst + pixel `size`/`aspect` + `quality=high` | Do not copy `--size 2k` from the Image 2 lane |
+| Missing GPT Image channel | Use `eikona auth list` / advertised `use_channels` | Do not invent `coglet-image25` or request a new key |
 
 ## Local Skill assistance
 

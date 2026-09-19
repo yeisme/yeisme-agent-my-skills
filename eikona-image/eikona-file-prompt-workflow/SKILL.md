@@ -33,7 +33,7 @@ description: Use when creating, organizing, reviewing, or executing Eikona image
 
 ## 尺寸与完整人物构图
 
-- 尺寸、比例与主体完整性分开表达。1k/2k/4k 是具体通道的档位，不能在模板中写成通用像素保证；只提高分辨率不会自动把裙摆或脚放回画面。
+- 尺寸、比例与主体完整性分开表达。付费 runbook 默认 `openai/gpt-image-2.5-sunburst` 与 `quality: high`；`size` 必须是像素（如 `1152x2048`）并带 `aspect`，禁止 `2k`/`1k`/`4k`。Flare 仅快稿；Image 2 仅回退。
 - 安装版本支持 `--full-body` 时，使用 typed 构图块与原模板共同渲染并冻结摘要，不反复在文件里追加互相冲突的远景、特写、全身指令。`--require-review feet` 表示脚部必须可见；完整裙摆不自动意味着露脚。
 - 优先检查完整原图、底部留白、脚部遮挡与披帛边界；缩略图必须与原图对照。新构图观察包含源图引用和理由，边距通过需要原图上的主体边界。未知保持待审，不以口头 pass 掩盖裁切。
 - 比较模板效果时固定通道、档位、比例，先做基线与明确构图块的分组对照，再跑 1k/2k/4k 比例矩阵；保留失败样本。用户已授权有限真实测试及未知费用时，在其范围内继续，不反复索要相同确认。
@@ -45,16 +45,22 @@ description: Use when creating, organizing, reviewing, or executing Eikona image
 
 ```bash
 eikona generate \
-  --model openai/gpt-5.4-image-2 \
+  --use-channel noemi \
+  --model openai/gpt-image-2.5-sunburst \
   --input prompts/product/landing-hero/local-first-cli/prompts/01-clean-editorial.md \
   --size 1536x1024 \
+  --aspect 3:2 \
+  --quality high \
   --dry-run \
   --agent
 
 eikona generate \
-  --model openai/gpt-5.4-image-2 \
+  --use-channel noemi \
+  --model openai/gpt-image-2.5-sunburst \
   --input prompts/product/landing-hero/local-first-cli/prompts/01-clean-editorial.md \
   --size 1536x1024 \
+  --aspect 3:2 \
+  --quality high \
   --agent
 ```
 
@@ -91,6 +97,18 @@ eikona run \
 - dry-run 命令与结果摘要。
 - 真实生成、review、feedback、handoff 下一步。
 
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| 文件仍含 `<...>` 占位符 | 从 `assets/templates/` 复制并替换 | 不直接运行占位文件 |
+| `--input` 指向目录或集合 README | 指向一个普通 prompt 文件 | `--input` 与 `--prompt` 互斥 |
+| 未 dry-run 就要真实 generate | `eikona generate` / `eikona run --dry-run --agent` | 等用户批准真实 provider run |
+| 未接受 canon / 未冻结 subject | 不写入可执行 prompt | 不手改 run evidence、snapshot 或 `prompt_sources.json` |
+| 模板已进入模板仓库 | 以仓库为 canonical；`contract refresh` 更新 digest | 不回填或复制模板正文 |
+| 任务状态未知 | 查原任务并有界返回 | 不无限轮询、不直接再生图 |
+| 2.5 runbook 写了 `size: 2k` | 改成已核验像素 + aspect | 不把档位通道的 2k 套到 Image 2.5 |
+
 ## 边界
 
 - 不在 prompt 文件中放 API key、provider payload、run ID、成本、审批状态、隐藏系统提示或完整思维链。
@@ -105,4 +123,4 @@ eikona run \
 - prompt 文件不含未替换的 `<...>` 占位符。
 - runbook 中引用的文件存在，且路径相对于 runbook 正确。
 - `eikona run -f <runbook> --dry-run --agent` 成功并展开预期 job 数。
-- 真实远程示例和新默认使用 `openai/gpt-5.4-image-2`；短别名只作为显式兼容输入，provider-colon、重复前缀和 underscore 形式不得写入新 runbook。
+- 真实远程示例和新默认使用 `openai/gpt-image-2.5-sunburst` 与像素 `size`；短别名只作为显式兼容输入，provider-colon、重复前缀和 underscore 形式不得写入新 runbook。

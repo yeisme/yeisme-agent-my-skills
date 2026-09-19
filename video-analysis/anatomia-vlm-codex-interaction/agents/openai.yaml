@@ -1,0 +1,4 @@
+interface:
+  display_name: "Anatomia VLM-Codex Interaction"
+  short_description: "Inspect or reconcile a local VLM-Codex interaction session without live Provider calls."
+  default_prompt: "Use $anatomia-vlm-codex-interaction: GET /api/v1/interactions/{session_ref}/events, then POST .../attempts/{attempt_ref}/reconcile with the original Idempotency-Key. Do not call a provider."

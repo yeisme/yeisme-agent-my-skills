@@ -29,3 +29,13 @@ Use for any new DSH Web surface: conversation view tabs, pane workbench views, h
 4. **Build the client face**: zh/en locale dictionaries via `ctx.effect`; per-session tab = subscribe `sessions.list`, walk `parentId` ancestry with a cycle guard, register/dispose `conversation.view` on preset membership; pane = `createOfficialPaneSurface(ctx)?.registerView({descriptor: {kind, label, componentKey, role, preferredRegion, retention, singleton}})`.
 5. **Gate and verify**: `pnpm run typecheck && pnpm run test && pnpm run build && pnpm run check:bundles && pnpm run check:plugins && pnpm run check:surfaces`. Completion is repo protocol conformance — never gated on official DSH seams. Optional host evidence: `dsh plugin --profile web add`, `--dump-config` row check, `timeout 40 dsh --profile web --port 0` boot smoke (errors=0), recorded sanitized under `temp/integration-test-runs/<run-id>/`.
 6. **For vendored upstream bundles**: exclude `.git`/lockfiles/upstream per-package build outputs/process docs; commit the pinned `lib/` (add a `.gitignore` directory negation); pin commit + license + upgrade procedure in `YEISME-VENDORED.md`; upgrade = fresh-clone byte diff + human review + full gate rerun.
+
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| Overlay used as a pane host | Official Sidebar pane or `conversation.view` | Never `shell.overlay` for durable panes |
+| Missing capability hidden the entry | Show disabled + `disabledReason()` | No silent hide, no fake fallback |
+| Host plugin re-inserted on the web row | Empty `apply` on web host half | Duplicate tools cause command invalidation loops |
+| Raw prompts/paths in the browser | Safe projection only | Opaque refs, bounded summaries, reason codes |
+| Visual tokens skipped | Read unified panel visual system; `check:surfaces` | Vendored faces still need bilingual/focus/disabled honesty |

@@ -142,6 +142,16 @@ Cross-change goal / execution DAG (not a tasks.md replacement)?
 
 Canonical pages live under those directories. `docs/<name>.md` at the docs root is a compatibility stub only.
 
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| User asks to read all skills | Refuse and return this tree | Do not load every Aigora skill |
+| Would rename/remove/retype a released contract | `yeisme-evolutionary-change-policy` | If no OpenSpec migration + deprecation + rollback: STOP |
+| Thinking / product / architecture with no code request | `openspec-explore` | Do not load `yeisme-coding-execution-driver` |
+| Operator Console / frontend / visual | `yeisme-frontend-design-router` then that skill's chain | Do not also load `backend-system-workflow` unless a shared API contract is the leaf |
+| Named skill is missing | Keep the same tree role; discover the closest local equivalent | Do not block on installation; do not implement inside this skill |
+
 ## Conflict Rules
 
 - One aesthetic authority for frontend: `yeisme-frontend-design-router` picks it. Do not load Taste, Impeccable, and `ui-spec-frontend-workflow` as equals.

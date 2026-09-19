@@ -216,3 +216,13 @@ For this routing skill, validation means the route is minimal, non-conflicting, 
 - browser loop is used for evidence, not as sole acceptance
 - unavailable skills/tools fall back to discovery rather than blocking
 - output includes Route, Reason, Do not load, and Fallback
+
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| Multiple aesthetic skills loaded as equals | Pick one direction layer | Keep others as references, not authorities |
+| `od` is GNU coreutils / wrapper | Report native CLI unavailable | HTTP fallback only for supported ops; do not fake native evidence |
+| Dashboard routed through Taste | Switch to product UI / `ui-spec-frontend-workflow` | Taste is for marketing/brand |
+| Browser loop used as acceptance | Add Playwright/Storybook/Axe evidence | Browser success is diagnosis, not the gate |
+| Routed skill missing | Discover nearest equivalent role | Do not block the user on an install list |

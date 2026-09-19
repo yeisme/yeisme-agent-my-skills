@@ -49,6 +49,15 @@ pinax draft index refresh --vault ./my-notes --json
 - Template previews are read-only. If an index is stale, run an explicit index command instead of silently writing.
 - Generated notes should not contain secrets, raw prompts, provider payloads, hidden prompts, or full chain-of-thought.
 
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| Unknown template name | `pinax template recommend --intent` | Do not invent a template id |
+| Design-draft `schema_version: pinax.template_design.v1` | Keep as draft | Do not use it for executable note creation |
+| Index is stale | Run the explicit index command | Do not hand-write managed pages |
+| Agent note from a template | Still pass `--dir index` unless the user named a destination | Do not guess a topic folder |
+
 ## Validation
 
 - Before writing: `pinax template preview <name> --agent` or `pinax index page preview <name> --agent` succeeds.

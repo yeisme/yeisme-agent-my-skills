@@ -63,3 +63,13 @@ Run only the commands for the affected owner:
 (cd backend-server/template-registry && task test:integration)
 (cd data/yeisme-prompt-templates && openspec validate --all --strict --no-interactive)
 ```
+
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| Prompt body in logs/events/evidence | Inspect/render stay provider-free | Bodies never enter ordinary structured output |
+| Two owners writing the same template | One canonical writer; others consume refs/digests | Do not copy private state |
+| `bind` treated as generation | `--dry-run` then refs-only draft | Acceptance stays with the consuming owner |
+| Chinese file compiled as Agent template | `docs/template-zh-CN.md` is review-only | `en` is the only compilable locale |
+| Registry metadata hand-written | Template Registry CLI | Content owner may edit prose, not catalog JSON |

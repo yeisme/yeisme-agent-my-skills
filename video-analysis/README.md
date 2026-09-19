@@ -27,4 +27,9 @@ anatomia analyze file --file /absolute/path/demo.mp4 --to ./anatomia-output/demo
 | `anatomia-asset-handoff-builder` | 准备 package 并交给下游 owner |
 | `anatomia-scaena-learning-loop` | 只路由已复核证据；learning CLI 尚未发布 |
 
-维护者 planned runtime（如 `anatomia-vlm-codex-interaction`）留在 Anatomia 代码仓，不从这里安装。
+Owner-only（不要装进用户五件套；`anatomia skills list` 默认隐藏，`--all` 才可见）：
+
+| Skill | 一句话 |
+| --- | --- |
+| `anatomia-gateway-service-operator` | 只读预检后签发/撤销服务访问 key，诊断 401/403 |
+| `anatomia-vlm-codex-interaction` | 检查或 reconcile 本地 interaction session；不打真实 Provider |

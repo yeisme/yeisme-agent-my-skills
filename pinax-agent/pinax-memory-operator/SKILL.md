@@ -41,6 +41,15 @@ pinax memory stats --agent
 - Do not capture unverified LLM guesses as `confirmed`; use a source or leave the candidate out.
 - Cloud Sync treats memory as a local rebuildable projection, not a remote source of truth.
 
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| Duplicate of an existing fact | `pinax memory recall` / `context` first | Do not recapture |
+| Capture has no source | Add `--source` or skip | Do not store unverified guesses as `confirmed` |
+| User asks for link/prune | Report experimental/unavailable | Do not invent those workflows |
+| Secret or raw prompt in the object | Redact and skip | Do not write it into the ledger |
+
 ## Validation
 
 - After capture: `pinax memory recall "<keyword>" --entity <entity> --agent`.

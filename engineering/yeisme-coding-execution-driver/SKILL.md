@@ -69,28 +69,8 @@ changes throughout.
 
 See `docs/workflows/rapid-local-iteration.md` for the repository-wide policy.
 
-## Workspace And Checkpoint Defaults
 
-Choose the workspace before the first write:
-
-- Keep a client/Web lane in the current checkout/current branch when it needs live preview, rendering, browser inspection, or screenshot iteration.
-- Put a backend API/service/worker/daemon lane in an isolated `feature/<topic>` branch/worktree when it needs hot reload, long-running processes, migrations, database/cache state, separate ports, or verbose diagnostics.
-- Treat API contracts, schemas, generated clients, mocks, fixtures, and shared configuration as single-owner paths. Freeze the contract before splitting lanes.
-- Record `workspace_mode`, `owned_paths`, `shared_read_paths`, `forbidden_paths`, startup commands, ports, runtime/data directories, and focused verification in the checklist.
-
-At stable boundaries, use narrow checkpoints in this order: contract ready, previewable client slice, backend slice plus focused tests, and real integration/visual verification. Before a root-owned checkpoint commit, run `git status --short`, `git diff --check`, and the owner-provided focused command; stage only owned paths. A child agent returns the checkpoint manifest and does not commit, push, merge, or delete worktrees.
-
-## Automated Backend Debugging Loop
-
-When the backend lane fails or hot reload becomes unstable, keep the loop bounded and evidence-driven:
-
-1. Start the service with the owning project's real `Taskfile.yml`, package script, or documented command; record the command, process identity, port, health endpoint, log path, and isolated data directory.
-2. Wait for readiness, then reproduce with the smallest focused test or request. Do not infer readiness from process existence alone.
-3. Inspect structured logs, health output, trace/request IDs, and the smallest relevant diff. Redact credentials, tokens, provider payloads, and private prompts.
-4. Patch only the backend lane's owned paths, rerun the focused check, and then rerun the readiness/integration check that crosses the client boundary.
-5. Return a compact debug envelope: failure signature, reproduction command, evidence path, patch scope, verification result, and whether the failure is introduced, pre-existing, concurrent, environmental, or ambiguous.
-
-If the same deterministic failure repeats without new evidence, stop the loop at the owning skill's stop condition instead of restarting another backend process or creating a duplicate writer. A worktree does not authorize destructive cleanup or killing an unrelated process.
+Workspace, checkpoint, and backend debug loop: `references/workspace-debug.md`.
 
 ## Checklist Model
 
@@ -166,28 +146,8 @@ P0 Step: Run focused test [blocked by failure]
 
 Keep parent nodes open until every required child is `done` or intentionally `cut`.
 
-## Live Checklist Format
 
-Use the plan/update tool when available. If writing the checklist in text, use this compact format:
-
-```markdown
-- [ ] P0 Goal: Implement <outcome>
-- [ ] P0 Phase: <capability> (depends: none)
-- [ ] P0 Task: <slice> (depends: probe-api, verify: npm test path)
-- [ ] P0 Step: <leaf action> (depends: none, verify: command)
-- [~] P0 Step: <active leaf>
-- [x] P1 Step: <verified leaf> (evidence: command passed)
-- [!] P0 Step: <blocked leaf> (needs: credential/user decision)
-- [-] P3 Step: <cut leaf> (reason: out of scope)
-```
-
-Legend:
-
-- `[ ]` pending
-- `[~]` in progress
-- `[x]` done
-- `[!]` blocked
-- `[-]` cut
+Live checklist markdown format: `references/checklist-format.md`.
 
 ## Start Of Session
 
@@ -291,6 +251,17 @@ For formal delivery plan/checklist/work-item workflows, also apply the OpenSpec 
 - sync any owning readiness, roadmap, README, document-map, or `openspec/specs/` paths
 - move completed ordinary changes to the owner archive path, such as `<subproject>/openspec/changes/archive/YYYY-MM-DD-<change-id>/`
 - fix stale references that still point to the old task-management paths
+
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| Verification failed | Recurse under the failing leaf: probe, smallest patch, re-run | Stop after repeated failure with no new evidence; report blocker |
+| Dirty unrelated files | Leave them; `git status --short` before edit | Do not revert user-owned changes |
+| Global lint/e2e red during implementation | Classify introduced vs pre-existing | Only repair `introduced` in owned paths |
+| Need subagent / overlapping writers | Serialize; one writer per owned path | Do not spawn without explicit user authorization |
+| Generation-breaking contract change | Stop; create owning OpenSpec with migration | Do not rename/remove released fields |
+| Destructive, credential, deploy, or paid action | Ask | Do not proceed on assumption |
 
 ## Final Response
 

@@ -40,6 +40,8 @@ npx --yes skills update credentialctl-usage --yes
 
 ## Central credential workflow
 
+🔴 CHECKPOINT · 🛑 STOP：do not run `setup`, `set`, or `rotate` until the current user authorized this secret write. Never print, log, or commit the value; there is no `get`.
+
 ```bash
 credentialctl setup openai/personal-default --preset local-ai --json
 credentialctl status openai/personal-default --json
@@ -80,8 +82,13 @@ Keys already living in config files (`~/.env`, `~/.netrc`, `~/.aws/credentials`,
 ```bash
 credentialctl discover --json                       # scan well-known locations (read-only, redacted)
 credentialctl discover --path ~/.env --format dotenv --json
-credentialctl import-config ~/.env --format dotenv --key OPENAI_API_KEY --json
 credentialctl import-config ~/.env --format dotenv --key OPENAI_API_KEY --dry-run --json
+```
+
+🔴 CHECKPOINT · 🛑 STOP：do not `import-config` until the current user authorized copying that file into the store. Never `cat` the source to find a key.
+
+```bash
+credentialctl import-config ~/.env --format dotenv --key OPENAI_API_KEY --json
 ```
 
 - Never `cat` a config file to find a key — run `discover` first; output carries only proposed refs, digests and provenance notes.
@@ -95,12 +102,17 @@ credentialctl import-config ~/.env --format dotenv --key OPENAI_API_KEY --dry-ru
 Configure tools with a key WITHOUT ever reading its value. The value flows store→process or store→file in-process only:
 
 ```bash
+credentialctl render --output ~/tools/.env --dry-run --json
+credentialctl sink list --json && credentialctl sink verify --json
+```
+
+🔴 CHECKPOINT · 🛑 STOP：do not `exec` or `render` until the current user authorized injecting or sinking the secret. Never `cat` the rendered sink; stdout is never a sink.
+
+```bash
 credentialctl exec --env OPENAI_API_KEY=openai/main -- ./tool --flag   # env injection, shell-free
 credentialctl exec openai/main -- ./tool --flag                       # uses the stored env_name
 printf 'OPENAI_API_KEY={{credential:openai/main}}\n' \
   | credentialctl render --output ~/tools/.env --json                 # pipe template → 0600 sink
-credentialctl render --output ~/tools/.env --dry-run --json
-credentialctl sink list --json && credentialctl sink verify --json
 ```
 
 - `exec`: argv after a literal `--`, no shell; same-named host env vars are dropped so the injection is authoritative; machine output modes are rejected (child owns stdout); the child's exit code propagates. Loader/shell-startup env names (`LD_PRELOAD`, `BASH_ENV`, …) are refused.
@@ -113,12 +125,17 @@ credentialctl sink list --json && credentialctl sink verify --json
 MCP client configs get keys through the same target machinery, with a builtin JSON writer (no owner CLI needed):
 
 ```bash
+credentialctl sync mcp/brave --dry-run --json
+```
+
+🔴 CHECKPOINT · 🛑 STOP：do not `export`/`import`/`sync` MCP slots until the current user authorized writing that client config. Repo-local `.mcp.json` still needs `--allow-repo-sink --yes`.
+
+```bash
 credentialctl export openai/main --to yeisme-target://mcp/claude-user/context7 \
   --env CONTEXT7_API_KEY --json
 credentialctl export gateway/main --to yeisme-target://mcp/claude-project/fetch \
   --env FETCH_API_KEY --allow-repo-sink --yes --json   # repo-local .mcp.json needs the escape hatch
 credentialctl import yeisme-target://mcp/cursor-user/brave-search --as mcp/brave --json
-credentialctl sync mcp/brave --dry-run --json
 ```
 
 - Clients: `claude-project` (`./.mcp.json`), `claude-user` (`~/.claude.json`), `cursor-user` (`~/.cursor/mcp.json`); slots: `env.<NAME>` (via `--env` or the stored `env_name`) or `headers.Authorization` (`--authorization`).
@@ -130,6 +147,8 @@ credentialctl sync mcp/brave --dry-run --json
 ## Opt-in encrypted store (encrypted-file)
 
 The default store stays plaintext 0600. Users who want at-rest encryption migrate explicitly:
+
+🔴 CHECKPOINT · 🛑 STOP：do not `storage migrate` or `storage rollback` until the current user authorized the backend change. Do not guess a passphrase on `UNLOCK_REQUIRED`.
 
 ```bash
 credentialctl storage migrate openai/main --from file --to encrypted-file --yes --json \
@@ -149,11 +168,16 @@ Target URIs have the fixed shape `yeisme-target://<tool>/<kind>/<slot...>`. Supp
 
 ```bash
 credentialctl target list --json
+credentialctl sync openai/personal-default --dry-run --json
+credentialctl binding list --json
+```
+
+🔴 CHECKPOINT · 🛑 STOP：do not `export` or `sync` a target copy until the current user authorized this inline write. Do not also write `api_key_env`.
+
+```bash
 credentialctl export openai/personal-default \
   --to yeisme-target://eikona/channel/openai --json
-credentialctl sync openai/personal-default --dry-run --json
 credentialctl sync openai/personal-default --json
-credentialctl binding list --json
 ```
 
 - `export` writes the central value into the target owner's single user-level `api_key` slot (0600 inline copy) and removes the legacy ref after a successful atomic write. Do not also write `api_key_env`.
@@ -167,9 +191,14 @@ credentialctl binding list --json
 
 ```bash
 credentialctl migrate local-tools --dry-run --json
-credentialctl migrate local-tools --yes --json
 credentialctl storage migrate openai/personal-default \
   --from keychain --to file --dry-run --json
+```
+
+🔴 CHECKPOINT · 🛑 STOP：do not `migrate local-tools --yes`, `cleanup`, or `purge` until the current user authorized deletion or storage migration. Purge does not revoke the provider key.
+
+```bash
+credentialctl migrate local-tools --yes --json
 credentialctl storage migrate openai/personal-default \
   --from keychain --to file --yes --json
 credentialctl binding rollback <binding-id> --yes --json
@@ -211,4 +240,14 @@ task release:verify VERSION=v0.3.0
 ```
 
 Require a clean GitHub Release, checksums, per-archive SPDX SBOMs, public-mirror sync, Homebrew cask generation, and an anonymous install smoke test before declaring the version available.
+
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| Want to print a secret | There is no `get` | Use `export`/`sync`/`exec`/`render`; never `cat` sinks |
+| `UNLOCK_REQUIRED` / `UNLOCK_FAILED` | Provide `--unlock-file` / env / TTY | Exit 4; do not guess the passphrase |
+| Target drift | Review copies; `--force-target --yes` only after review | Do not pick a winner silently |
+| `SINK_REFUSED` | Choose a 0600 non-tmp, non-git path | Repo sink needs `--allow-repo-sink --yes` |
+| Key in chat / repo / logs | Rotate the ref; treat as leaked | Purge does not revoke the provider key |
 

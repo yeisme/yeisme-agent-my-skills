@@ -57,6 +57,16 @@ description: Use when routing Chinese creative-writing, screenplay, AI drama, se
 - 已有中文/英文稿件去 AI 味、润色、声音校准或终稿清理 → `natural-writing-editor`；其中英文虚构叙事与工程类专业文体（release notes、postmortem、tickets、PR 回复、技术文章）的深度去 AI 味由其 `sepia` 参考层按需加载，不另派 owner；不要默认叠加多个完整 humanizer 流程。
 - 跨格式或多阶段项目 → `creative-writing-orchestrator`。
 
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| 点名人物/作品风格 | 先 `creative-style-lens-builder` | 不加载 persona imitation |
+| 事实性成稿无来源 | `needs_evidence` | 不编热点/数据 |
+| 多个 writer 争同一 artifact | `writer_conflict` | 只保留一个 primary |
+| candidate 未审就要覆盖/导出 | `needs_review` | 不手写 canonical |
+| 登录/发布/付费 | `external_side_effect` | 不把“继续”当授权 |
+
 ## 严格失败条件
 
 - `needs_style_lens`：点名人物/作品风格但没有维度化原创约束。

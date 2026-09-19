@@ -56,6 +56,17 @@ eikona review packet <run_id> --agent
 - 视觉 brief：目标、主体、构图、文案安全区、风格、禁用项。
 - 分类 prompt 目录、集合 README、候选文件、runbook、Eikona 执行命令和 review/feedback/handoff 下一步。
 
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| 3:1 超宽剧情走位 / 转视频参考图 | 停止本路由；交给 `eikona-ultrawide-storyboard-director` | 不在本 router 内处理 |
+| 缺标题、正文要点或目标读者 | 先提取已有信息；仍不足时问一个最小澄清问题 | 不猜视觉类型 |
+| 本地验证 | `--dry-run` 和 `openai/gpt-5.4-image-2` | 不提交 provider 请求 |
+| 生成后无 review | `eikona review packet` 和 `feedback` | 不凭主观文字宣称“最佳” |
+| 权限不明的参考图 | 只做本地说明或要求用户确认来源 | 不上传 |
+| 视频、动效、发布或账号操作 | 停止 | 只处理静态图 |
+
 ## 边界
 
 - 只处理静态图，不处理视频、动效、发布或平台账号操作。

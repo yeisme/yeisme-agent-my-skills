@@ -103,6 +103,17 @@ Produce a concise routing/design packet containing:
 6. validation commands and evidence paths;
 7. non-goals and explicit unresolved decisions.
 
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| Request is one product's ordinary note/image/video | Use that domain owner | Do not force the knowledge-plane contract |
+| Canonical owner unclear | Keep source body, bytes, and review in that owner; Inferrum gets opaque refs | Do not merge stores or make LanceDB authoritative |
+| Caller-supplied `allowed_ids` or an empty set | Require authenticated principal/org/project scope and policy version | Never treat it as unrestricted |
+| Entity freeze/merge requested | Owner or human evidence | Do not auto-merge/freeze or mutate ProductionGraph |
+| Stable-surface break | OpenSpec migration, deprecation, and rollback | Do not silently break `inferrum.sidecar.v1` |
+| Command would reach another project's private state | Use that owner's `AGENTS.md` and OpenSpec | Do not invent a root-level command |
+
 ## Boundaries
 
 - Do not create a parallel Inferrum importer for Pinax, Eikona, Auctra, Anatomia or Scaena.

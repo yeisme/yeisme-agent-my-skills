@@ -58,105 +58,32 @@ description: Use when the user explicitly requests Eikona/eikona visual generati
 | 夏日抓拍写真批量候选、多维随机组合、批内去重、seed 复现 | `eikona-candid-photo-director` | 随机矩阵采样；正文模板在模板仓库 `solutions/image/candid-portrait-matrix`，技能只做采样与绑定。 |
 | 城市地标系列海报/封面（ICONIC LANDMARK SERIES）、城市 spec、系列编号与变体 | `eikona-iconic-landmark-poster-director` | 固定视觉系统 + 城市参数化；正文模板在模板仓库 `solutions/image/iconic-landmark-poster`。 |
 | 单镜头精调抓拍、量化机位/占幅/色板/光源、shot spec | `eikona-precision-candid-director` | 全量化单镜头；正文模板在模板仓库 `solutions/image/precision-candid-shot`，规范投递语言为英文。 |
+| 付费出图、GPT Image 2.5、Sunburst、Flare、高质量 | CLI 走 `yeisme-eikona-cli-runtime`；MCP 走 `eikona-mcp-image` | 默认 `openai/gpt-image-2.5-sunburst` + `--quality high` + 像素 `--size`；复用已有 GPT Image 渠道（本机 `noemi`）；不要 `--size 2k`、不要新建渠道。 |
 | 单张通用图片、参考图编辑、provider 适配、run evidence、workflow/prompt deck/recipe/assessment/runtime 行为 | `yeisme-eikona-cli-runtime` | 这是 CLI/runtime owner，不替代文件提示词组织或具体创意导演。 |
 
 ## 工作流
 
-1. 判断是否已有可用 provider。付费 OpenAI/gateway 不可用且本机 Codex session 可用时，普通文生图走 `codex:imagegen` 预览回退，并明确告诉用户这是 1K preview。提供网关或用户明确要付费 2K/编辑时交给 `eikona-gateway-bootstrap`。
-2. 判断 owner：外部资产生命周期、Scaena production、产品仓库、Auctra 内容链、小红书、影视/故事看板、还是 Eikona CLI/runtime。
-3. Scaena context 先判定 purpose。episode/shot/cover/motion 必须提供 production owner 的 current passed preflight evidence；否则只允许 candidate/lookdev/correction，不得继续 production Eikona generation。
-4. 判断是否已有 accepted source。Auctra 来源必须先通过 Auctra review；外部临时图片先交给 `eikona-asset-lifecycle` 捕获，普通素材必须确认权限和禁用项。
-5. 选择最小 skill；需要文件落盘时同时加载 `eikona-file-prompt-workflow`，但只选择一个创意 director。当已有可复用的视觉方向或资产集合时，优先用 `eikona themes` 和 `eikona library collections` 引用既有 theme/asset refs，而不是重新描述或复制素材：先 `eikona themes list` / `eikona library collections list` 查找匹配 alias，再在 workflow 的 `theme_bindings` / `collection_bindings` 里绑定 canonical URI，让 plan 记录不可变 snapshot。
-6. 要求下游输出：visual brief、推荐命令、review packet、feedback、handoff/apply 下一步，以及 Scaena context 的 freeze/preflight/consistency 下一步。
-7. 本地离线验证使用 `--dry-run`，不提交 provider 请求；repository test harness 不属于 installed-user/agent workflow。用户未显式选择模型时，离线与远程默认均使用 `openai/gpt-5.4-image-2`；用户选择其他已适配模型或渠道时保留该选择，包括 GPT Image 2.5 Sunburst／Flare。旧默认模型的别名只在明确兼容入口归一化，新命令使用该模型的 slash canonical ref；不要把这一拼写规则扩展为禁止其他已支持模型。
-8. 精准区域编辑保持原图画布，由 owner 做最小补齐及裁回，不自动附加 `--size 2k` 或改变比例；需要缩放时先明确准备新原图。普通生成的尺寸参数按 provider 控制方式处理：付费 OpenAI/gateway 原生参数路径在用户未指定尺寸时统一使用 `--size 2k` 或 runbook `size: 2k`；用户明确给出其他 size 时原样设置，不换算、不降级。`codex:imagegen` 是 `prompt_instruction` 路径，推荐不写 `--size 1k`，由 runtime 自动向提示词注入 1K 约束；只有确需指定受支持画布时才保留显式 `--size` 并接受 warning。请求 2k/4k 会在提交前失败，这是通道上限。比例继续用 `--aspect` 单独表达，不能用 1024/1536 示例替代 2K 请求。
-9. 用户点名 Grok 或 Midjourney 时先确认通道能力再发命令：Midjourney（如 huanwang 通道）没有原生分辨率控制，`--size 1k|2k|4k` 会在提交前失败、`--aspect` 当前被适配器丢弃——画幅改用 `--set aspect_ratio=W:H` 或 `--size WxH`，原生 2K 需求直接说明 MJ 给不了并建议 openai 通道；Grok Imagine 编辑对写实人物的换装/泳装类请求容易被 provider 内容审核拒绝（`CONTENT_REJECTED`），被拒后如实报告审核归因，不要静默改写提示词反复重试。详见 `yeisme-eikona-cli-runtime` 的 provider flag 支持矩阵。
-10. 不从最终 prompt 文本反向推断 provider 权限或 typed controls。用户说“不要付费”“使用参考图”“编辑背景”“竖版 2K”时，router 必须把这些决定映射到明确的 model/channel、reference mode、canvas 或 execution policy；若无法安全映射，就保留为未决输入而不是让 provider 自行猜测。
+逐步命令、尺寸/通道例外和文件提示词集合见 [workflow.md](references/workflow.md)。正文只保留必须规则：
 
-选模型前先分清「代码已适配」和「本机已配置」。缺凭据不得说成模型未适配：
+1. 无付费 key 且 Codex 可用时，普通文生图走 `codex:imagegen` 1K preview；付费 2K/编辑交给 `eikona-gateway-bootstrap`。
+2. 先定 owner，再定 purpose。Scaena episode/shot/cover/motion 必须有 current passed preflight；否则只允许 candidate/lookdev/correction。
+3. Auctra 来源必须已 review；临时图片先走 `eikona-asset-lifecycle`。只选一个创意 director；文件落盘同时加载 `eikona-file-prompt-workflow`。
+4. 离线用 `--dry-run`。付费未指定模型时默认 `openai/gpt-image-2.5-sunburst`、`--quality high`、像素画布，渠道用已配置的 GPT Image 网关（本机 `noemi`），不新建 key/渠道。2.5 不可用才回退 `openai/gpt-5.4-image-2`。Flare 仅在用户要快稿。不得使用 bare alias、provider-colon 或隐式 `OPENAI_API_KEY`。
+5. 精准编辑保持原图画布，优先 Sunburst。2.5 禁止 `--size 2k`。Codex preview 不写 `--size 1k`。不从 prompt 文本反推 typed controls。
 
-```bash
-eikona models list --source adapted --all --agent
-eikona models list --source adapted --provider openai --all
-eikona models default show --agent
-eikona auth list --agent
-```
+命令骨架（含 2.5 像素示例）：[command-skeletons.md](references/command-skeletons.md)。视觉意图：[visual-intent-contract.md](references/visual-intent-contract.md)、[role-outputs.md](references/role-outputs.md)。编译：`eikona workflow import intent`。GPT Image 2.5 身份/尺寸：`cli/eikona/docs/commands/models.md`；MCP 无 CLI 时读 `eikona://docs/image25-mcp`。加载 `yeisme-eikona-cli-runtime` 后可读其 `references/gpt-image-2.5.md`。
 
-新的 Eikona 调用默认绑定用户级 channel，不依赖项目内复制的 credential 或 `.env`：
+## If this fails
 
-```bash
-eikona providers doctor codex --agent
-eikona generate --prompt "preview icon" --agent
-eikona providers doctor --channel openai --model openai/gpt-5.4-image-2 --probe --agent
-eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --input ./prompt.md --size 2k --aspect 2:3 --agent
-```
-
-新 Skills、prompt 文件、runbook、文档和 evidence 在引用旧默认模型时使用 `openai/gpt-5.4-image-2`，其他明确选择的模型保留其 canonical ref。不要在新示例中使用旧默认模型的 bare aliases；兼容入口由 owner 负责归一化。
-
-韩国转绘网关使用 slash ID，并显式选择已保存密钥的 channel：
-
-```bash
-eikona models readiness openai/gpt-5.4-image-2 --channel openai --agent
-eikona providers doctor openai --channel openai --model openai/gpt-5.4-image-2 --probe --agent
-eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --input ./prompt.md --size 2k --aspect 2:3 --agent
-```
-
-不得使用 bare `gpt-5.4-image-2`、`gpt-image-2` 或 provider-colon/重复前缀/下划线变体；不得隐式读取 `OPENAI_API_KEY`。
-
-## 文件提示词与出图集合
-
-- 先按 `eikona-file-prompt-workflow` 的 `owner/asset-type/collection/candidate` 规范建立目录、README、prompt 文件和 runbook。
-- 每个提示词文件只放可审阅的自然语言提示词；推荐使用 `.md` 或 `.txt`，并以一个文件对应一个可追踪的视觉方向或候选。
-- 单文件生成使用 `generate --input`。`--input` 与 `--prompt` 互斥。
-- 集合生成使用一个已有 runbook；`defaults.prompt_file` 适合共享基础提示词，`jobs[].prompt_file` 适合命名候选，`matrix.prompt_files` 适合逐个展开同一批提示词文件。文件路径相对于 runbook 所在目录解析。
-- `prompt`、`prompt_file`、`prompt_ref` 在同一 defaults、matrix entry 或 job 中互斥。先 `--dry-run` 检查扩展结果，再批准真实 provider run。
-- prompt 文件是可编辑的创作输入；runbook、`prompt_sources.json`、队列和 run evidence 是结构化资产，必须通过 Eikona CLI 创建或推进，不能由 agent 直接改写。
-
-输出模式政策：例行自动化一律用 `--agent`；非终态 run 用 `eikona watch <run_id> --events` 观察，`eikona next --agent` 是统一只读推进入口；脚本/CI 需要 JSON 时用 `--json --compact`；取证/兼容性审计用 `--json --full`。从 v0.6.0 起裸 `--json` 已是 compact 默认投影（等价 `--json --compact`），不要把例行 agent 推向 full JSON；`--compact`/`--full` 不带 `--json` 或两者同给会在副作用前报 `INVALID_REQUEST`。emitted actions 会按调用方输出模式自动归一化。
-
-## 命令骨架
-
-普通 Eikona 文件生成：
-
-```bash
-eikona generate --model openai/gpt-5.4-image-2 --aspect 3:1 --size 2k --input prompts/story/storyboard/scene/prompts/01-planning-board.md --dry-run --agent
-eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --aspect 3:1 --size 2k --input prompts/story/storyboard/scene/prompts/01-planning-board.md --agent
-eikona review packet <run_id> --agent
-eikona feedback accept <run_id> --artifact <artifact_id> --reason composition --agent
-eikona assets handoff <artifact_id> --agent
-```
-
-直接从提示词文件出图：
-
-```bash
-eikona generate --model openai/gpt-5.4-image-2 --input prompts/product/landing-hero/launch/prompts/01-clean-editorial.md --size 2k --dry-run --agent
-eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --input prompts/product/landing-hero/launch/prompts/01-clean-editorial.md --size 2k --agent
-```
-
-从提示词集合批量出图。runbook 中使用 `defaults.prompt_file`、`jobs[].prompt_file` 或 `matrix.prompt_files` 引用 `prompts/*.md`；先验证计划，再执行：
-
-```bash
-eikona run -f prompts/product/landing-hero/launch/runbook.yaml --dry-run --agent
-eikona run -f prompts/product/landing-hero/launch/runbook.yaml --background --agent
-eikona watch <run_id> --events
-```
-
-网关首次接入：
-
-```bash
-eikona init --user --agent
-eikona auth check gateway --agent
-eikona projects register . --agent
-```
-
-Auctra 来源必须先走 brief/export/import：
-
-```bash
-auctra visual brief <unit-id> --profile short_video_storyboard --json
-auctra review accept <review_item_id> --json
-auctra visual export-brief <brief-id> --for eikona --to .auctra/exports/<brief-id>.json --json
-eikona workflow import auctra -f .auctra/exports/<brief-id>.json --out .eikona/workflows/<brief-id>.workflow.yaml --agent
-```
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| Effective level 未 live-ready | 报告 evidence vector；只做 `--dry-run` 或配置 | 不把 probe/harness 说成已可付费生成 |
+| 缺凭据被说成模型未适配 | `eikona models list --source adapted` 与 `eikona auth list --agent` | 不改模型 ID 掩盖缺 key |
+| Scaena 未冻结/无 preflight | 只路由 candidate/lookdev；交给 `scaena-subject-asset-readiness` | 不直接 storyboard/generic generate |
+| Auctra 来源未 accept | 先走 Auctra review / visual brief | 不降级成无来源通用出图 |
+| 参考图/编辑失败或 HTTP 500 | 分开判断 generate vs edit；inspect 原 run | 不丢图改纯文生图，不轮换接口 |
+| `2k`/`4k` 在 Codex preview 被拒 | 说明通道上限；付费走 gateway | 不静默降级或改 prompt 尺寸 |
+| 付费出图仍走 Image 2 或 `--size 2k` | 改成 Sunburst + 像素 `--size` + `--quality high` + 现有渠道 | 不新建渠道、不另要 key |
 
 ## 边界
 
@@ -170,24 +97,10 @@ eikona workflow import auctra -f .auctra/exports/<brief-id>.json --out .eikona/w
 - 不把用户级 runstore 的临时输出路径直接写入项目；项目落盘必须走 `assets handoff` → `assets stage` → `assets apply`。
 - 不把原始提示词、供应商载荷、私密素材、隐藏系统提示或完整思维链写入结构化资产。
 - 提示词正文模板的 canonical owner 是模板仓库 promptrepo 解决方案包（`data/yeisme-prompt-templates/solutions/**`）；director 技能只持有数据 spec、编译器、采样/去重/变体合并与 tags，不在技能内复制模板正文；模板改动必须走模板仓库并用 template-registry `contract refresh` 更新 digest。语言约定：编译与投递只用 `prompts/main.en.md`，`docs/template-zh-CN.md` 为人工审阅译文、不进入编译；Scaena 项目模板遵循同一约定。
-- 不新增 Eikona 默认图像模型；未指定模型的示例使用 `openai/gpt-5.4-image-2`，用户明确选择时使用对应受支持模型的 canonical ref，不静默换回默认模型。
+- 付费默认使用 `openai/gpt-image-2.5-sunburst`（高质量）；不要静默换回 Image 2。用户点名 Flare / Image 2 / 其他已适配模型时保留该选择。复用已有 GPT Image 渠道和 key。
 
 ## 验证
 
 - 推荐必须匹配 owner 和视觉用途。
 - router 不直接产出最终 prompt；它只输出分派、边界和下一步。
 - 展示给用户的命令必须是真实可运行命令。
-
-## 视觉意图契约 (visual_intent.v1)
-
-本路由器是推荐的公共入口。路由后输出 `eikona.visual_intent.v1` 意图的 `skill_chain`、`scenario` 和未决输入，不直接产出最终 prompt 或调用 provider。
-
-详见 `references/visual-intent-contract.md`（意图契约）和 `references/role-outputs.md`（角色输出模板）。
-
-编译意图到工作流：
-
-```bash
-eikona workflow import intent -f visual-intent.yaml --out workflow.yaml --agent
-eikona workflow validate -f workflow.yaml --agent
-eikona workflow plan -f workflow.yaml --agent
-```

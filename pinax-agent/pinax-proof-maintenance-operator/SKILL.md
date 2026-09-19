@@ -41,6 +41,8 @@ pinax record adopt --vault ./my-notes --plan --json
 3. Generate and inspect plans before any apply: `pinax metadata plan`, `pinax repair plan --save`, or `pinax organize plan --save`.
 4. Before `metadata apply`, `repair apply`, `organize apply`, `version restore`, broad record adoption, or any high-risk write, create a fresh snapshot with `pinax version snapshot --message "before maintenance" --json`.
 5. Require explicit user approval before commands with `--yes`, `--apply`, restore, destructive cleanup, or bulk moves.
+
+🔴 CHECKPOINT · 🛑 STOP：未完成 snapshot、未得到当前用户对本次 `--yes`/`--apply`/restore 的明确授权前，不得执行任何会改写多条笔记、`.pinax/**`、version evidence 或 record ledger 的 apply。
 6. After an apply, run the matching diagnostic again, such as `pinax vault doctor --json`, `pinax proof loop run --json`, or `pinax record status --agent`.
 7. If an operation reports partial success, conflict, snapshot required, or approval required, stop and surface the exact next safe command.
 
@@ -50,6 +52,15 @@ pinax record adopt --vault ./my-notes --plan --json
 - Do not run `--yes`, `--apply`, or restore commands without a snapshot and explicit approval.
 - Do not treat `proof loop run --apply --yes` as a default command; use the read-only proof loop first.
 - Do not hide warnings about untracked files, missing snapshots, conflicts, or unsupported restore backends.
+
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| Doctor/proof reports conflict or snapshot required | `pinax version snapshot` then re-run read-only proof | Do not `--yes` to skip the gate |
+| Apply is partial | Surface the exact next safe command | Do not re-apply the same plan blindly |
+| User said continue but not `--yes` | Show the exact apply command | Do not treat continue as approval |
+| Untracked files or unsupported restore backend | Stop and report the warning | Do not hide it or hand-edit `.pinax/**` |
 
 ## Validation
 

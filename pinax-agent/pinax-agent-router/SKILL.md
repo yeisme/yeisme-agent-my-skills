@@ -63,6 +63,16 @@ For Pinax code implementation, use `yeisme-pinax-cli-runtime` plus the normal co
 - Cloud Sync and Remote API Mode are different workflows; do not mix them unless the user explicitly asks.
 - Publish, plugin, API, token, profile, and MCP workflows expose integration surfaces; start read-only and require explicit approval before writes or network-facing services.
 
+## If this fails
+
+| Trigger | First fix | Still failing |
+| --- | --- | --- |
+| No vault / wrong vault | `pinax vault list --agent` | Ask the user to `pinax vault add` / select; do not guess a path |
+| Operator skill not in this session runtime | Read `.skills/yeisme/pinax-agent/<operator>/SKILL.md` | Do not bulk-load all eight operators |
+| Write without snapshot on high-risk maintenance | `pinax version snapshot --message "before agent changes" --json` | Stop; do not hand-edit `.pinax/**` |
+| User asked to complete a note but only chat text was produced | Route to `pinax-vault-operator` and `pinax note add --dir index --stdin --json` | Do not claim the note is saved |
+| Gateway/MCP admin mixed into Pinax | Hand off to `yeisme-mcp-router` | Pinax operators do not own Gateway policy |
+
 ## Validation
 
 - A routed answer names the selected operator skill and why.
