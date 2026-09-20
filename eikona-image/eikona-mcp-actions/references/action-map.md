@@ -1,6 +1,6 @@
 # Eikona MCP development action map
 
-Navigation reference for 110 executable development `eikona.execute`
+Navigation reference for 125 executable development `eikona.execute`
 actions. This includes unreleased precision-edit and upload lifecycle actions;
 an installed older release must not be assumed to expose them. It is verified
 against `ActionDescriptors`; use it directly instead
@@ -187,3 +187,23 @@ consumer actions only; unknown and non-entitled actions return the identical
 | `prompt.preview` | readonly | consumer | Execute allowlisted Eikona action prompt.preview. |
 | `prompt.tune` | readonly | consumer | Execute allowlisted Eikona action prompt.tune. |
 | `report.effort` | readonly | consumer | Owner-scoped measured effort or explicit selected-image saveback. Does not generate, approve images or count saveback as adoption. Discover exact fields; query original records before retrying. |
+
+## Additional registered development actions
+
+| Action | Kind | Lane | Purpose |
+| --- | --- | --- | --- |
+| `design.accept` | mutation | consumer | Edit a versioned design through the owner. Propose previews without applying. Accept uses the proposal base revision; conflicts require a new preview. No provider calls. |
+| `design.apply` | mutation | consumer | Edit a versioned design through the owner. Propose previews without applying. Accept uses the proposal base revision; conflicts require a new preview. No provider calls. |
+| `design.asset.capture` | mutation | consumer | Edit a versioned design through the owner. Propose previews without applying. Accept uses the proposal base revision; conflicts require a new preview. No provider calls. |
+| `design.asset.read` | readonly | consumer | Edit a versioned design through the owner. Propose previews without applying. Accept uses the proposal base revision; conflicts require a new preview. No provider calls. |
+| `design.create` | mutation | consumer | Edit a versioned design through the owner. Propose previews without applying. Accept uses the proposal base revision; conflicts require a new preview. No provider calls. |
+| `design.export` | mutation | consumer | Edit a versioned design through the owner. Propose previews without applying. Accept uses the proposal base revision; conflicts require a new preview. No provider calls. |
+| `design.get` | readonly | consumer | Edit a versioned design through the owner. Propose previews without applying. Accept uses the proposal base revision; conflicts require a new preview. No provider calls. |
+| `design.history` | readonly | consumer | Edit a versioned design through the owner. Propose previews without applying. Accept uses the proposal base revision; conflicts require a new preview. No provider calls. |
+| `design.import` | mutation | consumer | Edit a versioned design through the owner. Propose previews without applying. Accept uses the proposal base revision; conflicts require a new preview. No provider calls. |
+| `design.list` | readonly | consumer | Edit a versioned design through the owner. Propose previews without applying. Accept uses the proposal base revision; conflicts require a new preview. No provider calls. |
+| `design.proposals` | readonly | consumer | Edit a versioned design through the owner. Propose previews without applying. Accept uses the proposal base revision; conflicts require a new preview. No provider calls. |
+| `design.propose` | mutation | consumer | Edit a versioned design through the owner. Propose previews without applying. Accept uses the proposal base revision; conflicts require a new preview. No provider calls. |
+| `design.reconstruct` | mutation | consumer | Edit a versioned design through the owner. Propose previews without applying. Accept uses the proposal base revision; conflicts require a new preview. No provider calls. |
+| `design.reject` | mutation | consumer | Edit a versioned design through the owner. Propose previews without applying. Accept uses the proposal base revision; conflicts require a new preview. No provider calls. |
+| `design.restore` | mutation | consumer | Edit a versioned design through the owner. Propose previews without applying. Accept uses the proposal base revision; conflicts require a new preview. No provider calls. |
