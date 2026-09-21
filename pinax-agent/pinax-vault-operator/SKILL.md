@@ -64,6 +64,7 @@ pinax vault stats --agent
 - Do not apply repair or organize plans from this operator; route to `pinax-proof-maintenance-operator`.
 - Do not include secrets, provider payloads, raw prompts, hidden prompts, or full chain-of-thought in notes or evidence.
 - Treat Markdown body content as user-owned; preserve language and intent.
+- If the user wants the vault on object storage, do not make Pinax talk to S3. The specified path is DriveBridge `preset pinax-vault` (user terminal) then this operator on the local `--vault-root`. Do not start that mount. Do not treat `pinax storage set s3` as a live vault filesystem.
 
 ## If this fails
 
@@ -73,6 +74,8 @@ pinax vault stats --agent
 | Vault is ambiguous | `pinax vault list --agent` | Do not guess a vault from the cwd |
 | Request is repair/organize/restore | Route to `pinax-proof-maintenance-operator` | Do not `--yes` from this operator |
 | Generated note would land in vault root or a guessed topic folder | Force `--dir index` | Do not invent a destination |
+| Object-storage vault / 笔记在桶里 | Show DriveBridge `preset pinax-vault` as user-terminal setup; then `pinax storage set local` on `vault_root` | Do not add a Pinax S3 vault adapter or `hydrate` as the main path |
+| `content_unmounted` / notes dir not writable | Ask the user to run `drivebridge mount vault --preset pinax ...` | Do not call S3 from Pinax |
 
 ## Validation
 

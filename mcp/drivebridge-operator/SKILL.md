@@ -91,3 +91,18 @@ Server blob reuse and local WebDAV/FUSE mounts are specified, not shipped. Until
 - A matching digest does not authorize a read. If create_upload/download reports `blob_reused` or zero transferred bytes, still `stat` the returned version before consuming. `blob_unavailable` means re-upload the original file with a new idempotency key; never treat an empty body as a hit.
 - Do not start mounts through MCP. There is no Server `POST /api/v1/mounts`. `drivebridge mount webdav` is a user-terminal command; default binaries return `unsupported` for `mount fuse`. Unlink in a mount is trash, not purge.
 - Do not treat a local `.drivebridge-cas` path as a stable reference or send it to a remote tool.
+
+## Pinax object-storage vault
+
+Plaintext notes on S3/MinIO/COS are a **path mount**, not a Pinax remote adapter. Contract: `openspec/changes/pinax-drivebridge-mounted-vault-v1/`. Check `drivebridge capabilities --json` for `mount.path_preset=pinax-vault` and `mount.path_adapters` including `s3`. Agents must not start the mount. Until `mount status` shows `preset=pinax-vault`, `vault_root` set, `alive=true`, tell the user to run the terminal recipe.
+
+```bash
+drivebridge storage add --kind s3 --space pinax-vault \
+  --remote minio --remote-path '<bucket>/<prefix>' --local-root /abs/workspace --json
+drivebridge preset pinax-vault --space pinax-vault --vault-root /abs/Pinax/cloud --json
+drivebridge mount status --json
+```
+
+S3 uses the host `rclone` CLI (`rclone mount`, `--vfs-cache-mode writes`) plus FUSE/macFUSE/WinFsp. `kind=local` alias spaces overlay without FUSE. Missing rclone/FUSE returns `mount_path_adapter_missing`; do not treat a WebDAV port as `vault_root`.
+
+Then Pinax uses only local commands on that `vault_root` (`pinax init`, `pinax storage set local`, `pinax note add`). Do not point Pinax at `.drivebridge-cas`. Do not use the same prefix as Capsa ciphertext. `.pinax/**` stays on local disk.

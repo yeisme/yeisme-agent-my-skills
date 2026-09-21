@@ -9,9 +9,11 @@ Operate Pinax Capsa Sync, repository-encrypted S3/COS bootstrap, storage profile
 
 ## Recommendation Order
 
-For a Pinax vault, recommend these options in this order:
+First classify the job. **Plaintext notes whose truth is an object-storage prefix** are not this operator's Capsa path. That job is DriveBridge `preset pinax-vault` (user terminal, path mount) plus `pinax storage set local` on `--vault-root`. Do not recommend `pinax storage set s3` as a live vault filesystem, and do not treat `storage hydrate` as the object-storage vault primary path. See `pinax-vault-operator` and `drivebridge-operator`.
 
-1. **Preferred target: Pinax-native repository-encrypted S3/COS.** Use `.pinax/pinax-sync.yaml` plus `.pinax/project-secrets.yaml`, `pinax sync repo migrate device-profile`, and clone-time `pinax sync repo bootstrap --pull`. Git distributes the declaration and ciphertext; Capsa direct S3 stores encrypted content blobs, manifests, and revisions.
+For **encrypted multi-device Capsa Sync** of a Pinax vault, recommend these options in this order:
+
+1. **Preferred target: Pinax-native repository-encrypted S3/COS.** Use `.pinax/pinax-sync.yaml` plus `.pinax/project-secrets.yaml`, `pinax sync repo migrate device-profile`, and clone-time `pinax sync repo bootstrap --pull`. Git distributes the declaration and ciphertext; Capsa direct S3 stores encrypted content blobs, manifests, and revisions. Use a **different prefix** from any DriveBridge pinax-vault mount.
 2. **Git fallback/companion.** Use Git for Markdown history, review, rollback, and distribution of the encrypted repository declaration. Do not present Git as a substitute for Capsa attachment/blob/revision backup when Pinax-native S3 is available.
 3. **rclone fallback.** Use rclone only for generic archive/mirror recovery when the current Pinax binary or provider cannot complete the native workflow. Prefer rclone crypt or another encrypted destination, restore into staging, and label it external backup rather than Pinax Sync.
 

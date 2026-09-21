@@ -37,6 +37,7 @@ For Pinax code implementation, use `yeisme-pinax-cli-runtime` plus the normal co
 | Search notes, refresh indexes, links/backlinks/orphans, query/dataview/database/view/folder inspection | `pinax-retrieval-operator` | `pinax index refresh --json`, `pinax search "..." --agent`, `pinax note links "..." --agent` |
 | Capture or recall durable facts, decisions, events, and tasks | `pinax-memory-operator` | `pinax memory context "..." --agent`, `pinax memory recall "..." --agent` |
 | Capsa Sync, repository-encrypted S3/COS bootstrap, sync logs/conflicts, storage backend, S3/rclone fallback, backend object diagnostics | `pinax-sync-storage-operator` | `pinax sync status --agent`, `pinax sync repo doctor --json`, `pinax sync diff --target capsa --json` |
+| Plaintext object-storage vault (S3/MinIO/COS as notes disk) | `drivebridge-operator` then `pinax-vault-operator` | User terminal `drivebridge preset pinax-vault ...`; then `pinax storage set local --root <vault-root>`. Do not make Pinax talk to S3. |
 | Proof loop, doctor/stats, metadata/repair/organize apply, snapshot/restore, record ledger, high-risk maintenance | `pinax-proof-maintenance-operator` | `pinax proof loop run --json`, `pinax vault doctor --json`, `pinax version snapshot --message "before maintenance" --json` |
 | Project workspace, learning packs, project board/items, personal daily/weekly/monthly plans, local planning action drafts | `pinax-project-workspace-operator` | `pinax project list --agent`, `pinax project board show <project> --agent`, `pinax plan daily --dry-run --json` |
 | Templates, template-backed `note add`, index pages, inbox/draft review indexes, journal template workflows | `pinax-template-authoring-operator` | `pinax template recommend --intent "..." --agent`, `pinax template preview <name> --agent`, `pinax index page preview <name> --agent` |
@@ -60,7 +61,8 @@ For Pinax code implementation, use `yeisme-pinax-cli-runtime` plus the normal co
 - Pinax vault Markdown notes are user content. Preserve the user's language and do not rewrite unrelated notes.
 - Structured assets are CLI-authored. Use Pinax commands for `.pinax/**` changes.
 - Do not print, save, or infer raw credentials. Refer to credential profiles, token files, env var names, or secret refs only.
-- Cloud Sync and Remote API Mode are different workflows; do not mix them unless the user explicitly asks.
+- Cloud Sync, Remote API Mode, DriveBridge attach/hydrate, and DriveBridge pinax-vault path mounts are different workflows; do not mix them unless the user explicitly asks.
+- A plaintext object-storage vault is a DriveBridge path mount plus local Pinax. Do not route it to a Pinax S3 vault adapter.
 - Publish, plugin, API, token, profile, and MCP workflows expose integration surfaces; start read-only and require explicit approval before writes or network-facing services.
 
 ## If this fails
@@ -72,6 +74,7 @@ For Pinax code implementation, use `yeisme-pinax-cli-runtime` plus the normal co
 | Write without snapshot on high-risk maintenance | `pinax version snapshot --message "before agent changes" --json` | Stop; do not hand-edit `.pinax/**` |
 | User asked to complete a note but only chat text was produced | Route to `pinax-vault-operator` and `pinax note add --dir index --stdin --json` | Do not claim the note is saved |
 | Gateway/MCP admin mixed into Pinax | Hand off to `yeisme-mcp-router` | Pinax operators do not own Gateway policy |
+| User wants vault on object storage | Route to `drivebridge-operator` for `preset pinax-vault`, then local Pinax | Do not `pinax storage set s3` as live vault FS; do not start the mount from the agent |
 
 ## Validation
 
