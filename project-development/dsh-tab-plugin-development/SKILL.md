@@ -5,7 +5,7 @@ description: Use when designing, implementing, reviewing, or evolving a DeepSeek
 
 # DSH Tab Plugin Development
 
-Guidance for building DSH Web 界面插件（会话内 tab / workspace pane / overlay 兜底）in `agent/harness-plugins`. It extracts the verified patterns from two reference implementations: the vendored `packages/bundle/dsh-pentest/` (per-session pentest view tab + graph visualization) and the repo-native `packages/bundle/dsh-token-usage/` (process-scoped ledger pane). The full extracted guide is `agent/harness-plugins/docs/plugin-tab-development.md` — read it before writing code; this skill routes and enforces.
+Guidance for building DSH Web 界面插件（会话内 tab / workspace pane / overlay 兜底）in `agent/harness-plugins`. It extracts the verified patterns from two reference implementations: the vendored `packages/bundle/dsh-pentest/` (per-session pentest view tab + graph visualization) and the repo-native `packages/bundle/dsh-session-tags/` trio (client `ui-session-tags` + host `dsh-session-tags-host` + bundle). The full extracted guide is `agent/harness-plugins/docs/plugin-tab-development.md` — read it before writing code; this skill routes and enforces.
 
 ## Scope
 
@@ -14,7 +14,7 @@ Use for any new DSH Web surface: conversation view tabs, pane workbench views, h
 ## Non-negotiable boundaries
 
 - Read `agent/harness-plugins/docs/design/dsh-unified-panel-visual-system.md` before any React/Web UI; repo-native faces consume `ui-surface`/`ui-visual-kit` tokens and pass `check:surfaces` + `test:visual`. Vendored upstream faces are visually exempt but follow the same interaction-quality bar (bilingual, focus return, honest disabled reasons).
-- Choose the seam by data scope: session-scoped domain view → `slots.register('conversation.view')` mounted/disposed per session; cross-session process/project data → `applyOfficialPanePlugin` / `createOfficialPaneSurface` (official right Sidebar); an action entry → header action with honest disable, never `shell.overlay` as a pane host. Architecture: `agent/harness-plugins/docs/architecture/dsh-pane-plugin-ecosystem.md`.
+- Choose the seam by data scope: session-scoped domain view → `slots.register('conversation.view')` mounted/disposed per session; cross-session process/project data → `applyOfficialPanePlugin` / `createOfficialPaneSurface` (official right Sidebar); an action entry → header action with honest disable, never `shell.overlay` as a pane host.
 - Client `inject` declares required services (`slots`, `locale`, `sessions`, …); every registration (pane, slot, locale, subscription) flows into disposer(s) returned by `apply` — symmetric teardown on HMR, profile switch, plugin disable, session switch.
 - Capability probe before query: missing Remote/capability = entry visible but disabled with a readable `disabledReason()`, never hidden silently, never a fake fallback.
 - The web row's host half is an empty `apply` — re-inserting the host plugin duplicates its scoped tool catalog and causes client command invalidation loops. Domain host rows belong in the domain agent preset, not the global patch.
