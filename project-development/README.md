@@ -2,6 +2,5 @@
 
 项目级开发路由模块。`project-development-router` 先在 `quick-demo`、`full-project` 和 `workflow-off` 三种模式间选择，再判断直接本地实现、规格驱动、API 并行工作或垂直切片交付。完整流程渐进加载，不替代代码 Owner、测试证据或外部动作审批。
 
-`dsh-ordo-agent-ops` 只覆盖 DeepSeek Harness 对 Ordo Agent Operations 的适配：租户上下文、快照/事件游标、runtime/lease 投影、审批、收据和对 Workbench 的交接。
+`delivery-phase-contract` 把跨端请求收窄为单一阶段任务：`CONTRACT`、`FRONTEND`、`BACKEND` 或 `INTEGRATION`。每端独立开发、独立验收，合同在单端阶段只读，Mock 由合同派生，本端通过只记 `PHASE_PASS`，未执行的联调记 `INTEGRATION_PENDING`。规则真源为仓库 `docs/workflows/phase-scoped-delivery.md`；流水线角色分工见 `agent-pipeline-development-constraints`。
 
-`dsh-plugin-grill-me` 是 DSH 插件开发的显式质询入口：在 OpenSpec change、脚手架或实现之前，沿 DSH 插件专属 frontier（表面、owner 边界、投影、seam、形态、视觉、生命周期、验证）做依赖感知的高强度访谈。与 `grill-me` 协议成对激活，只在用户明确要求质询、挑战、压力测试或逐问时运行。

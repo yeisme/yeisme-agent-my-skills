@@ -24,7 +24,7 @@ For a decision question that should reuse old notes, use this branch before the 
 5. Let the user supplement missed notes and revise affected conclusions. Preserve the original miss in evaluation. Zero results mean a search gap, not proof of absence. Unreadable, outdated and conflicting sources stay visible as limitations.
 6. Keep unaccepted briefs in the conversation. After explicit acceptance and authorization to save (including an already agreed accept-then-save workflow), route to `pinax-vault-operator`: `pinax note add "Research brief" --vault ./my-notes --dir index --stdin --dry-run --json`, then the same command without `--dry-run`. Include the question, source links and actual observed dates/version; verify the returned ID and body. On failure or unknown outcome, reconcile the ID/path before retrying; stop if the outcome remains unknown. Do not infer save permission merely from a usefulness rating.
 
-Retrospective targets must be fixed before rerunning searches and kept separate from a blind baseline. Missing user feedback is not success; initial recall without advance targets remains unmeasured. No semantic backend, auto-archive or DSH integration is implied. Historical KB examples below do not authorize using removed commands.
+Retrospective targets must be fixed before rerunning searches and kept separate from a blind baseline. Missing user feedback is not success; initial recall without advance targets remains unmeasured. No semantic backend, auto-archive or external-host integration is implied. Historical KB examples below do not authorize using removed commands.
 
 ## Command Patterns
 

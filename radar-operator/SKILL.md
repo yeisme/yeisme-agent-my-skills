@@ -52,7 +52,7 @@ When there is no edition or no data yet, relay `status`/`error.code`/`facts`/`ac
 ## Boundaries
 
 - Do not read radar SQLite, audit, or internal state files; consume CLI output and CLI-generated exports only.
-- Hermes and DSH panes are consumers of CLI projections: read-only display plus user-confirmed feedback commands.
+- External viewers are consumers of CLI projections: read-only display plus user-confirmed feedback commands.
 - Radar has no MCP surface (removed 2026-09-15). Never suggest connecting to a radar MCP server, HTTP API, or resident service; the CLI is the only agent interface.
 - Show source status, confidence, degraded flags, evidence refs, and the next command so the user can tell "nothing changed" from "nothing collected". A blocked or unavailable channel is reported with its recovery command, never silently swapped for an undeclared backend.
 
