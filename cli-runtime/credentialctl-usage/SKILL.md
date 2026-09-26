@@ -164,7 +164,7 @@ credentialctl storage rollback openai/main --to file --yes --json
 
 ## Inline target workflow
 
-Target URIs have the fixed shape `yeisme-target://<tool>/<kind>/<slot...>`. Supported v1 owners are Eikona, Scaena, Sonora, and Inferrum.
+Target URIs have the fixed shape `yeisme-target://<tool>/<kind>/<slot...>`. Supported v1 owners are Eikona, Scaena, and Sonora.
 
 ```bash
 credentialctl target list --json
