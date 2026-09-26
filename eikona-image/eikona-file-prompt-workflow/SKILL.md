@@ -39,7 +39,7 @@ description: Use when creating, organizing, reviewing, or executing Eikona image
 - 比较模板效果时固定通道、档位、比例，先做基线与明确构图块的分组对照，再跑 1k/2k/4k 比例矩阵；保留失败样本。用户已授权有限真实测试及未知费用时，在其范围内继续，不反复索要相同确认。
 - 恢复能力须以安装版本为准。确认未生成后才按授权候选切换；状态未知时查原任务并有界返回，不无限轮询、不直接再生图。切换不得丢弃参考图、mask、比例或完整衣摆要求。
 
-模板归属约束：若某类提示词的正文模板已进入模板仓库（`data/yeisme-prompt-templates/solutions/**` 的 promptrepo 解决方案包，如 `image/candid-portrait-matrix`、`image/iconic-landmark-poster`、`image/precision-candid-shot`、`image/xianxia-hazy-fantasy`），模板以仓库为 canonical；本地 prompt 文件是对应 director 技能编译器绑定数据 spec 后的产物，不回填、不在技能或集合目录复制模板正文。模板改动走模板仓库并用 template-registry `contract refresh` 更新 digest。语言约定：编译与投递只使用 `prompts/main.en.md`（en 给 agent/模型）；`docs/template-zh-CN.md` 是人工审阅译文，不进入编译。新增图像提示词内容的决策树与食谱见模板仓库 `docs/adding-image-prompts.md`。
+模板归属约束：若某类提示词的正文模板已进入模板仓库（`data/yeisme-prompt-templates/solutions/**` 的 promptrepo 解决方案包，如 `image/candid-portrait-matrix`、`image/iconic-landmark-poster`、`image/precision-candid-shot`、`image/xianxia-hazy-fantasy`），模板以仓库为 canonical；本地 prompt 文件是模板仓库渲染脚本（`data/yeisme-prompt-templates/scripts/`）绑定数据 spec 后的产物，不回填、不在技能或集合目录复制模板正文。模板改动走模板仓库并用 template-registry `contract refresh` 更新 digest。语言约定：编译与投递只使用 `prompts/main.en.md`（en 给 agent/模型）；`docs/template-zh-CN.md` 是人工审阅译文，不进入编译。新增图像提示词内容的决策树与食谱见模板仓库 `docs/adding-image-prompts.md`。
 
 ## 单文件生成
 

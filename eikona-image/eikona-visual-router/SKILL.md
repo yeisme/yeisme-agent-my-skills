@@ -55,9 +55,9 @@ description: Use when the user explicitly requests Eikona/eikona visual generati
 | Scaena 角色定妆、主体参考资产、人物一致性、服装/地点/道具/风格包、剧集/镜头/封面/动态视觉 | `eikona-subject-asset-director` | 必须携带 production owner 提供的 current passed preflight evidence；未冻结/无 preflight 时只允许主体候选/lookdev/correction，不得直接生成剧集资产。 |
 | 小红书封面、3/6/9 图文卡片、信息图、漫画静态图文 | `eikona-xhs-visual-router` | 继续分派到 cover/card/infographic/comic director。 |
 | 非 Scaena 的超宽连续空间故事看板、动作调度图、影视预演、历史战役推演长卷、从看板转视频镜头 | `eikona-ultrawide-storyboard-director` | 用一个连续背景空间表达多个时间点；Scaena production context 必须先通过 subject readiness/preflight。 |
-| 夏日抓拍写真批量候选、多维随机组合、批内去重、seed 复现 | `eikona-candid-photo-director` | 随机矩阵采样；正文模板在模板仓库 `solutions/image/candid-portrait-matrix`，技能只做采样与绑定。 |
-| 城市地标系列海报/封面（ICONIC LANDMARK SERIES）、城市 spec、系列编号与变体 | `eikona-iconic-landmark-poster-director` | 固定视觉系统 + 城市参数化；正文模板在模板仓库 `solutions/image/iconic-landmark-poster`。 |
-| 单镜头精调抓拍、量化机位/占幅/色板/光源、shot spec | `eikona-precision-candid-director` | 全量化单镜头；正文模板在模板仓库 `solutions/image/precision-candid-shot`，规范投递语言为英文。 |
+| 夏日抓拍写真批量候选、多维随机组合、批内去重、seed 复现 | 模板仓库 `candid-portrait-matrix` | 内容 owner 是模板仓库；`data/yeisme-prompt-templates/scripts/sample_candid_matrix.py` 采样绑定，出图执行走 `yeisme-eikona-cli-runtime`。 |
+| 城市地标系列海报/封面（ICONIC LANDMARK SERIES）、城市 spec、系列编号与变体 | 模板仓库 `iconic-landmark-poster` | 内容 owner 是模板仓库；`data/yeisme-prompt-templates/scripts/render_landmark_poster.py` 渲染，出图执行走 `yeisme-eikona-cli-runtime`。 |
+| 单镜头精调抓拍、量化机位/占幅/色板/光源、shot spec | 模板仓库 `precision-candid-shot` | 内容 owner 是模板仓库；`data/yeisme-prompt-templates/scripts/render_precision_candid.py` 渲染，规范投递语言为英文，出图执行走 `yeisme-eikona-cli-runtime`。 |
 | 付费出图、GPT Image 2.5、Sunburst、Flare、高质量 | CLI 走 `yeisme-eikona-cli-runtime`；MCP 走 `eikona-mcp-image` | 默认 `openai/gpt-image-2.5-sunburst` + `--quality high` + 像素 `--size`；复用已有 GPT Image 渠道（本机 `noemi`）；不要 `--size 2k`、不要新建渠道。 |
 | 单张通用图片、参考图编辑、provider 适配、run evidence、workflow/prompt deck/recipe/assessment/runtime 行为 | `yeisme-eikona-cli-runtime` | 这是 CLI/runtime owner，不替代文件提示词组织或具体创意导演。 |
 
