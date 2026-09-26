@@ -1,6 +1,6 @@
 # Default SaaS operations console posture
 
-Use this default for Yeisme engineering tools, Agent consoles, MCP Gateway, Ordo, diagnostics, internal systems, and control surfaces unless a local design system overrides it:
+Use this default for Yeisme engineering tools, Agent consoles, MCP Gateway, diagnostics, internal systems, and control surfaces unless a local design system overrides it:
 
 - Product type: modern SaaS operations console, engineering tool, Agent console, internal system, or operations workbench.
 - Style keywords: restrained, clear, trustworthy, high information density without crowding, low saturation, non-marketing.

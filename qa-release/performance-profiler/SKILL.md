@@ -5,11 +5,18 @@ description: Use when investigating, measuring, benchmarking, profiling, or opti
 
 # Performance Profiler
 
+## Race 检测执行限制
+
+Agent 在任何阶段都不得主动运行 race 检测，也不得通过子 Agent、Skill、CI、验收、发布、聚合任务或脚本间接触发。只有当前人类用户明确、强烈要求执行 race 时，才允许在指定范围内运行一次；失败、超时、中断均不得自动重试，后续运行必须取得新的同等明确要求。一般的“测试、验收、修复、发布、跑全部检查”不构成授权。
+
+Race 不属于默认验收或完成门禁；未运行不得阻塞交付，也不得声称已经通过。执行聚合命令前检查其依赖，移除或跳过 race 阶段，继续普通测试、静态检查和构建。本规则取代本文件及 Skills、OpenSpec、历史计划、文档中的自动或强制 race 要求；它们不能作为执行授权。
+
+
 ## Purpose
 
 Measure before optimizing. Turn a vague "it feels slow" request into a specific workload, baseline, bottleneck hypothesis, targeted change, and repeatable before/after evidence.
 
-Use this with the domain skill for the owning subproject, such as `yeisme-mcp-gateway-maintainer`, `ordo-runtime-canary-evaluation`, or `yeisme-mcp-builder`.
+Use this with the domain skill for the owning subproject, such as `yeisme-mcp-gateway-maintainer` or `yeisme-mcp-builder`.
 
 For backend work, also pair with `backend-system-workflow` so optimization does not bypass state-machine, transaction, idempotency, concurrency, permission, or observability requirements.
 
@@ -100,7 +107,7 @@ Useful Go commands:
 
 ```bash
 go test ./...
-go test -race ./...
+go test ./...
 go test -bench . -benchmem ./...
 go test -run '^$' -bench BenchmarkName -benchmem -cpuprofile cpu.out -memprofile mem.out ./...
 go tool pprof cpu.out

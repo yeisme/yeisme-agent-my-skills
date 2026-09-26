@@ -46,7 +46,7 @@ Use the project language and existing runner. Do not add a parallel testing fram
 Required fields:
 
 - `schema_version`: `yeisme.integration_test_evidence.v1`
-- `project`: owning project path such as `agent/ordo`
+- `project`: owning project path such as `cli/auctra`
 - `run_id`: unique run id
 - `layer`: usually `integration`; may be `component`, `system`, or `e2e` when that is the actual layer
 - `command`: real command that was run
@@ -125,8 +125,8 @@ openspec validate --all --strict
 Subproject implementation validation examples:
 
 ```bash
-cd agent/ordo
-bun run test:integration
+cd agent/scaena
+task test:integration
 find temp/integration-test-runs -maxdepth 2 -type f | sort
 ```
 

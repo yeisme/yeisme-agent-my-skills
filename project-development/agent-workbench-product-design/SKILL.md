@@ -49,7 +49,7 @@ description: Use when designing, implementing, reviewing, or routing Yeisme Work
 - Text Development 是 `agent.text-development.v1alpha1` domain-lens document，不是 `/studio` 或新的 docking shell。
 - Auctra 拥有正文、Working Copy、Checkpoint、ReviewItem 与 Canon；浏览器只暂存 active editor buffer/undo/selection，saved 只来自 owner receipt。
 - Conversation Runtime 拥有 Pi session、Profile/Grant、project-full retrieval、web search、visible Blocks 与 egress receipt；Working Set 是 must-use context，不是全文权限的替代品。
-- Ordo 拥有 Team Profile、Plan、DAG、writer lease、run 与 evidence；Workbench 只能 preview/simulate/start/status/reconcile typed action，不能编辑 owner DAG 或创建第二 scheduler。
+- 执行 owner（原 owner 已退役，待重新准入）拥有 Team Profile、Plan、DAG、writer lease、run 与 evidence；Workbench 只能 preview/simulate/start/status/reconcile typed action，不能编辑 owner DAG 或创建第二 scheduler。
 - Agent/Team 只产生 candidate。接受 candidate 只更新 Working Copy，不自动 Checkpoint、submit Review 或接受 Canon。
 - `Create`/`Collaborate` 是同一 layout posture；四个领域 deck 为 `Structure|Review|Versions|Team`，窄屏转 labelled Sheet，action identity 不变。
 
@@ -66,6 +66,6 @@ description: Use when designing, implementing, reviewing, or routing Yeisme Work
 1. 判定能力准入 `fit | split-owner | reject-now`；用户明确要求的能力进 required-capability ledger，不得静默删除。
 2. 读取 Blueprint、Agent-first UI、接口合同、UI governance 与实际 owning OpenSpec；归档 change 只作历史证据，不重新打开。
 3. 清点现有组件、token、icon、motion、overlay、滚动与稳定 aria/data selector；先写 UI Contract、低保真 wireframe、component tree 和 interactive-control inventory。
-4. 把 change 与当前 active specs 对齐，明确复用与 blocked owner gate。Text Development 还需对照根 `text-development-workbench-program-v1`、Auctra `auctra-text-working-copy-v1` 与 Ordo `ordo-workbench-team-control-v1`。
+4. 把 change 与当前 active specs 对齐，明确复用与 blocked owner gate。Text Development 还需对照根 `text-development-workbench-program-v1`、Auctra `auctra-text-working-copy-v1` 与原执行 owner team-control change（该子项目已退役）。
 5. 实现遵循子项目 `AGENTS.md` 验证命令：`openspec validate --all --strict --no-interactive`、`bun run typecheck`、`bun run web:test`、`bun run test:contract`、`bun run test:integration`、`bun run web:e2e`；涉及服务端时再运行 `CGO_ENABLED=0 go test ./service/...`。
 6. 完成前核对：无并列主壳回潮、无浏览器直连 owner、无第二套状态机、无新 off-system 组件、状态/响应式/a11y/locale/视觉证据分层齐全。

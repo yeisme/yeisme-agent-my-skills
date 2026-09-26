@@ -3,7 +3,7 @@
 Preserve these contracts when planning, documenting, or changing `cli/eikona`:
 
 - Keep product planning and documentation headless: new roadmap items may improve generation quality, provider coverage, evidence, review/reuse, asset lifecycle, delivery, or consumer-neutral interfaces, but must not add an Eikona-owned Web/frontend backlog.
-- `--json` output must remain machine-readable and stable for scripts, Ordo, CI, and shell pipelines: since v0.6.0 bare `--json` is the bounded compact default, `--json --compact` is its explicit equivalent, and `--json --full` is the permanent forensic projection. Routine agents still prefer `--agent`.
+- `--json` output must remain machine-readable and stable for scripts, CI, and shell pipelines: since v0.6.0 bare `--json` is the bounded compact default, `--json --compact` is its explicit equivalent, and `--json --full` is the permanent forensic projection. Routine agents still prefer `--agent`.
 - New or changed CLI output must follow `ai-native-cli-output-contract`: human summary by default, strict `--json`, `--agent` for low-token parsing, optional `--events`, and secret-safe stdout/stderr separation.
 - Local project docs and OpenSpec artifacts should be Chinese by default; human CLI output, help text, logs, and user-visible errors should be English unless the user explicitly requests another language for that artifact or the content is Chinese-language product content.
 - Every successful provider artifact must be written through the run evidence store under `runs/<run_id>/outputs/`.

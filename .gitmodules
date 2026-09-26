@@ -10,10 +10,6 @@
 	path = agent-workflow
 	url = https://github.com/yeisme/agent-workflow-skills.git
 	branch = main
-[submodule "ordo"]
-	path = ordo
-	url = https://github.com/yeisme/ordo-skills.git
-	branch = main
 [submodule "scaena"]
 	path = scaena
 	url = https://github.com/yeisme/scaena-skills.git

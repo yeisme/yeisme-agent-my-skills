@@ -5,6 +5,13 @@ description: Use when designing, implementing, reviewing, optimizing, or testing
 
 # Backend System Workflow
 
+## Race 检测执行限制
+
+Agent 在任何阶段都不得主动运行 race 检测，也不得通过子 Agent、Skill、CI、验收、发布、聚合任务或脚本间接触发。只有当前人类用户明确、强烈要求执行 race 时，才允许在指定范围内运行一次；失败、超时、中断均不得自动重试，后续运行必须取得新的同等明确要求。一般的“测试、验收、修复、发布、跑全部检查”不构成授权。
+
+Race 不属于默认验收或完成门禁；未运行不得阻塞交付，也不得声称已经通过。执行聚合命令前检查其依赖，移除或跳过 race 阶段，继续普通测试、静态检查和构建。本规则取代本文件及 Skills、OpenSpec、历史计划、文档中的自动或强制 race 要求；它们不能作为执行授权。
+
+
 Use this skill for backend work where correctness depends on more than writing handlers and models. It applies to Go services, TypeScript/Node services, CLI daemons, MCP servers, agent orchestration runtimes, workers, queues, database-backed APIs, and operations control planes.
 
 Pair it with:
@@ -23,7 +30,7 @@ Do not accept AI-generated backend code because it compiles or returns a happy-p
 
 Backend acceptance requires explicit treatment of ownership and layering, data model and relationships, ORM/query-builder selection and repository boundary, state machine and transition authority, idempotency, transactions and concurrency, structured errors, permissions and audit, API contract stability, logging/observability, queue or worker lifecycle, migrations/indexes/constraints/rollback, config and secrets, artifact lifecycle, edge-case tests, and performance evidence when relevant.
 
-For Ordo, Agent Team, MCP Gateway, and engineering consoles, the backend should usually be an event-driven task state system, not a thin CRUD app.
+For agent-team runtimes, MCP Gateway, and engineering consoles, the backend should usually be an event-driven task state system, not a thin CRUD app.
 
 Database migrations and API/RPC contracts evolve incrementally. `DROP COLUMN`/`DROP TABLE`, narrowing a type, adding `NOT NULL` without a default, renaming a populated column, and changing an HTTP method/path or proto field number are generation-breaking changes. Follow `yeisme-evolutionary-change-policy`: gate them behind an OpenSpec change with expand-then-contract migrations, a deprecation window, and a rollback before touching the schema or wire format.
 
@@ -155,7 +162,7 @@ Reject or rewrite AI-generated backend code that:
 - treats TraceEvent as stdout
 - writes artifacts only to raw paths
 - has no tests beyond happy path
-- adds concurrency without cancellation and race verification
+- adds concurrency without cancellation and ordinary concurrency tests
 - claims performance improvement without measurement
 
 ## Validation
@@ -166,7 +173,7 @@ Run the narrowest relevant checks for the owning project:
 - integration tests for DB/API/queue behavior
 - migration apply or validation command
 - contract tests for API response and error shape
-- race tests for Go concurrency-sensitive code
+- ordinary concurrency tests for Go concurrency-sensitive code
 - benchmark or profiling command for performance-sensitive code
 - lint/static checks
 - health or diagnostics smoke test when operational behavior changed

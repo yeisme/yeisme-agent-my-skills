@@ -130,7 +130,6 @@ scripts/skills.sh --project /path/to/project list-source --json
 | [`ai-drama/`](ai-drama/README.md) | [ai-drama-skills](https://github.com/yeisme/ai-drama-skills) | AI 做剧路由、编剧、导演、连续性、评审和生产交接 |
 | [`auctra-novel/`](auctra-novel/README.md) | [auctra-novel-skills](https://github.com/yeisme/auctra-novel-skills) | Auctra 与中文长篇小说创作矩阵 |
 | [`agent-workflow/`](agent-workflow/README.md) | [agent-workflow-skills](https://github.com/yeisme/agent-workflow-skills) | 通用 Agent runtime、仓库路由和 Skill 治理 |
-| [`ordo/`](ordo/README.md) | [ordo-skills](https://github.com/yeisme/ordo-skills) | Ordo DAG、worktree 和 runtime canary |
 | [`scaena/`](scaena/README.md) | [scaena-skills](https://github.com/yeisme/scaena-skills) | Scaena 生产、主体资产门禁和视频转绘 |
 
 独立项目保留原 Skill 名称，宿主 profile 按名称解析，因此拆仓不要求调用方重命名 Skill。
@@ -189,7 +188,6 @@ python3 ai-drama/scripts/validate_skills.py
 python3 ai-drama/ai-drama-router/scripts/validate_drama_matrix.py
 python3 auctra-novel/scripts/validate_skills.py
 python3 agent-workflow/scripts/validate_skills.py
-python3 ordo/scripts/validate_skills.py
 python3 scaena/scripts/validate_skills.py
 ```
 

@@ -9,7 +9,6 @@ flowchart TD
   A["yeisme-agent-my-skills 聚合索引"] --> B["AI Drama Skills"]
   A --> C["Auctra Novel Skills"]
   A --> D["Agent Workflow Skills"]
-  A --> E["Ordo Skills"]
   A --> F["Scaena Skills"]
   A --> G["后续产品仓库"]
   G --> H["Eikona Skills"]
@@ -25,8 +24,8 @@ flowchart TD
 | --- | --- | --- |
 | AI Drama | 已独立 | 做剧矩阵拥有自己的 Router、格式/类型、编剧、导演、连续性、评审和生产交接 |
 | Auctra Novel | 已独立 | 小说矩阵与 Auctra runtime 一起维护，避免和通用内容写作混合 |
-| Agent Workflow | 已独立 | 只保留通用 runtime、仓库路由和 Skill 治理，不再夹带 Ordo/Scaena 产品技能 |
-| Ordo | 已独立 | DAG、worktree lease 和 runtime canary 由 Ordo Owner 维护 |
+| Agent Workflow | 已独立 | 只保留通用 runtime、仓库路由和 Skill 治理，不再夹带产品专属技能 |
+| Ordo（原拆分项） | 已退役（2026-09-26） | 原 DAG、worktree lease 和 runtime canary Skills 随执行 owner 子项目整体退役移除 |
 | Scaena | 已独立 | 生产、主体资产就绪和视频转绘由 Scaena Owner 维护 |
 
 ## 下一批建议
@@ -45,11 +44,11 @@ flowchart TD
 
 ## `cli-runtime/` 的清理原则
 
-`cli-runtime/` 不是长期项目边界。它同时包含 Ordo、Connectors、Eikona、Pinax、Quaestor 和 Git worktree 流程，后续应按 Owner 移动：
+`cli-runtime/` 不是长期项目边界。它同时包含 Connectors、Eikona、Pinax、Quaestor 和 Git worktree 流程，后续应按 Owner 移动：
 
 - Eikona runtime → `eikona-skills`；
 - Pinax runtime → `pinax-skills`；
-- Ordo、Connectors、Quaestor runtime → 对应产品 Skills 仓库；
+- Connectors、Quaestor runtime → 对应产品 Skills 仓库；
 - 通用 Git worktree workflow → `agent-workflow-skills`；
 - 迁移期间保留原 Skill 名称，并在聚合仓库中使用 submodule 指针升级，不建立重复副本。
 

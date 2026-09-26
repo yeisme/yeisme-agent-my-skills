@@ -55,7 +55,7 @@
 | 连续性 | `ai-drama-continuity-supervisor` | `ai-drama-director` |
 | 候选评分与修复 | `ai-drama-critic-panel` | `ai-drama-producer` |
 | 成本、批次、权限和 acceptance | `ai-drama-producer` | `ai-drama-critic-panel` |
-| Scaena/Ordo 运行 handoff | `ai-drama-production-orchestrator` | `ai-drama-producer` |
+| Scaena 运行 handoff | `ai-drama-production-orchestrator` | `ai-drama-producer` |
 
 ## 自媒体与平台内容
 

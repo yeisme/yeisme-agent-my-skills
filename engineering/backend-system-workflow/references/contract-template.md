@@ -6,7 +6,7 @@ Use this shape when no project-specific template exists:
 backend_surface:
   name: Approval Decision API
   type: api + application-service + state-machine
-  owner_subproject: agent/ordo
+  owner_subproject: cli/auctra
 
 entities:
   - name: Approval
