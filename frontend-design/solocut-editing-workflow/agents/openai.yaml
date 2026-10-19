@@ -1,0 +1,4 @@
+interface:
+  display_name: "SoloCut Editing Workflow"
+  short_description: "Contract-first editing workbench"
+  default_prompt: "请按 SoloCut 剪辑工作台 Skill 工作，只处理素材、时间线、对白、字幕、候选采用、恢复和交付合同，不引入 3D 或第二份制作状态。"
