@@ -1,0 +1,3 @@
+display_name: DSH Plugin Development
+short_description: Choose official DSH surfaces and avoid custom tab/pane/window systems.
+default_prompt: Design or review this DeepSeek Harness plugin using official client surfaces, official tabs and panes, host/client contracts, and foundation-first verification.
