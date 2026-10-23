@@ -1,27 +1,116 @@
-# Initial project-owned scaffold from Yeisme modular CI rollout.
+# Change-aware CI maintained by scripts/maintain-workspace-ci.py.
 name: CI
-
-on:
-  workflow_dispatch:
-
 permissions:
   contents: read
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
-
 jobs:
-  quick:
+  scope:
+    runs-on: ubuntu-latest
+    outputs:
+      level: ${{ steps.select.outputs.level }}
+      integration: ${{ steps.select.outputs.integration }}
+      docs_changed: ${{ steps.select.outputs.docs_changed }}
+      go_changed: ${{ steps.select.outputs.go_changed }}
+      python_changed: ${{ steps.select.outputs.python_changed }}
+      web_changed: ${{ steps.select.outputs.web_changed }}
+      legacy_changed: ${{ steps.select.outputs.legacy_changed }}
+      spec_changed: ${{ steps.select.outputs.spec_changed }}
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+        submodules: recursive
+        fetch-depth: 0
+    - id: select
+      run: python3 scripts/ci/changed_scope.py select
+  docs-check:
+    needs: scope
+    if: needs.scope.outputs.level == 'docs' || needs.scope.outputs.docs_changed == 'true' || needs.scope.outputs.spec_changed
+      == 'true'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+        submodules: recursive
+        fetch-depth: 0
+    - uses: actions/setup-node@v4
+      if: needs.scope.outputs.spec_changed == 'true'
+      with:
+        node-version: '22'
+    - run: python3 scripts/ci/changed_scope.py docs
+  quick-check:
+    needs: scope
+    if: needs.scope.outputs.level == 'quick'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+        submodules: recursive
+        fetch-depth: 0
+    - run: python3 scripts/validate_repository.py
+  quick-full:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-          submodules: recursive
-      - name: Run quick gate
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 scripts/validate_repository.py
+    - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+        submodules: recursive
+    - name: Run quick gate
+      shell: bash
+      run: |
+        set -euo pipefail
+        python3 scripts/validate_repository.py
+    name: Full / quick
+    needs:
+    - scope
+    if: needs.scope.outputs.level == 'full'
+  full-extension:
+    needs:
+    - scope
+    - quick-full
+    if: needs.scope.outputs.level == 'full'
+    uses: ./.github/workflows/reusable-ci-full-extension.yml
+  quick:
+    name: quick
+    if: always()
+    needs:
+    - scope
+    - docs-check
+    - quick-check
+    - quick-full
+    - full-extension
+    runs-on: ubuntu-latest
+    env:
+      NEEDS_JSON: ${{ toJSON(needs) }}
+    steps:
+    - name: Require selected checks
+      shell: python
+      run: |
+        import json, os, sys
+        needs = json.loads(os.environ["NEEDS_JSON"])
+        if needs["scope"]["result"] != "success":
+            sys.exit("Change selection did not succeed")
+        level = needs["scope"]["outputs"]["level"]
+        if level not in ("docs", "quick", "full"):
+            sys.exit("Unknown check level")
+        for name, value in needs.items():
+            if name == "scope":
+                continue
+            expected = (name == "docs-check" and (level == "docs" or needs["scope"]["outputs"].get("docs_changed") == "true" or needs["scope"]["outputs"].get("spec_changed") == "true")) or (name == "quick-check" and level == "quick") or (name not in ("docs-check", "quick-check") and level == "full")
+            wanted = "success" if expected else "skipped"
+            if value["result"] != wanted:
+                sys.exit(f"{name}: expected {wanted}, got {value['result']}")
+        print(f"CI passed: level={level}; unrelated lanes intentionally skipped")
+'on':
+  pull_request: null
+  push:
+    branches:
+    - main
+    - develop
+  workflow_dispatch: null
