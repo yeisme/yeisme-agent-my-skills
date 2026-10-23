@@ -35,7 +35,7 @@ mcp-gateway peer plan add partner \
   --json
 mcp-gateway peer apply plan_xxx --plan-digest sha256:xxx --approval-id appr_xxx --json
 mcp-gateway peer probe partner --json
-mcp-gateway peer show partner --json
+mcp-gateway peer describe partner --json
 ```
 
 The first successful probe pins the remote instance identity and semantic

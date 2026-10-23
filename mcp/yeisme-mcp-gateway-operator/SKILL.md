@@ -119,7 +119,7 @@ mcp-gateway config rollback cfgrev_previous \
 | --- | --- | --- |
 | CAS conflict | Inspect the new active revision and create a new plan | Do not auto-merge |
 | Approval reused with a different payload | Treat as an error | An approval is valid only for its plan digest, revision, principal, and expiry |
-| Pack `latest`, unsigned, or executable fields | `mcp-gateway pack validate` with an exact digest | Do not follow `latest` or auto-upgrade |
+| Pack `latest`, unsigned, or executable fields | `mcp-gateway pack validate --help` with an exact digest | Do not follow `latest` or auto-upgrade |
 | Token or secret in output | Redact | Do not print tokens or Authorization headers |
 | Bootstrap settings via admin Action | Stop; those remain local configuration | Do not change listen/TLS/data-dir/trust through Actions |
 | Source code change requested | `yeisme-mcp-gateway-maintainer` | This skill does not change Gateway source |
@@ -141,3 +141,10 @@ rollback revision, redacted evidence path, and the exact safe next command.
 - `mcp/gateway/docs/remote-admin.md`
 - `mcp/gateway/docs/auth.md`
 - `mcp/gateway/README.md`
+
+
+## 资源命令与版本合同
+
+先读取安装版的 help/结构化发现面，确认 canonical 路径存在。运行 `mcp-gateway backends list --agent`，从 `fact.backend.N.id` 取真实 ID，再调用 `mcp-gateway backends describe <id> --agent`；`<id>` 是待替换的语法说明，不作为可直接执行的 Next。保持原项目、配置、过滤与权限范围。解析失败报告合同或版本问题，可查 `--json`，不要解析人读表或猜 ID。
+
+详情类旧 show 只作隐藏兼容；正常操作使用 describe，独立 inspect/export/download 等动作保持原义。补全是同一目录的只读视图；需要安装时显式运行 completion install，并用 completion doctor 区分文件存在与 shell 可发现。源码候选通过不代表 PATH 安装版已更新。
