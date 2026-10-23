@@ -1,29 +1,7 @@
-# Commands
+# 当前 CLI 路由
 
-Released CLI only. Every leaf supports `--json`, `--agent`, `--events`, and `--explain`; pick exactly one. All paths are local; no provider or credential is involved.
+先执行 `anatomia source list --agent` 并从 `fact.source.N.id` 选择真实身份；详情使用 `anatomia source describe <id> --agent`，身份字段用 `anatomia source get <id> --json`。
 
-Grayscale numeric derivation and human-viewable preview (single-shot window 3-10 seconds, source <=30fps, output long edge <=1280):
+需要新分析时查 `anatomia source register --help` 和当前 analysis/understand 合同。completion 使用 `anatomia completion install zsh --yes` 与 `anatomia completion doctor zsh --agent`。不把未知 id、缺少 service key 或目录不可读当作空结果。
 
-```
-anatomia video grayscale derive --source /absolute/path/shot.mp4 --start 500000 --end 4500000 --to ./gray-out --json
-anatomia video grayscale derive --source /absolute/path/shot.mp4 --start 500000 --end 4500000 --to ./gray-out --chunk-frames 64 --preview-to ./preview.mp4 --agent
-anatomia video grayscale preview --source /absolute/path/shot.mp4 --start 500000 --end 4500000 --to ./preview.mp4 --json
-```
-
-Shot segmentation evidence, listing, and per-shot materialization:
-
-```
-anatomia video shots detect --source /absolute/path/ep1.mp4 --source-ref source:ep1 --to ./shot-list.json --agent
-anatomia video shots detect --source /absolute/path/ep1.mp4 --source-ref source:ep1 --threshold 0.4 --min-shot 500000 --json
-anatomia video shots list --from ./shot-list.json --agent
-anatomia video shots extract --source /absolute/path/ep1.mp4 --from ./shot-list.json --to ./shots-out --json
-```
-
-Per-purpose placeholder keyframes (`thumbnail,character,composition,action,text,scene,style`):
-
-```
-anatomia video placeholders extract --source /absolute/path/ep1.mp4 --source-ref source:ep1 --shot-ref source:ep1:shot:0 --start 500000 --end 1500000 --purpose thumbnail,character --agent
-anatomia video placeholders extract --source /absolute/path/ep1.mp4 --source-ref source:ep1 --shot-ref source:ep1:shot:0 --start 500000 --end 1500000 --purpose text --stride 400000 --to ./selection.json --json
-```
-
-Start/end and stride are microseconds. `--source-ref` and `--shot-ref` are stable identity refs you choose once and reuse, not file paths.
+旧 login、analyze file、analysis delivery show、breakdown、package、handoff、learning 路径属于历史或尚未实现合同，不执行。输出、审阅与跨 owner handoff 仍是保留能力；从当前六资源和 export 合同确认可用边界，不制造完成证据。

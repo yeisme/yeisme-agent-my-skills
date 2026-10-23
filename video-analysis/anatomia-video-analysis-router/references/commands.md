@@ -1,22 +1,7 @@
-# Commands
+# 当前 CLI 路由
 
-Released CLI only. Ordinary users hold a service endpoint and a key file; they do not configure provider credentials. Do not run `anatomia models list` or `anatomia provider list` on this path; those commands belong to the owner-only self-hosted operator.
+先执行 `anatomia source list --agent` 并从 `fact.source.N.id` 选择真实身份；详情使用 `anatomia source describe <id> --agent`，身份字段用 `anatomia source get <id> --json`。
 
-```
-anatomia login --endpoint https://anatomia.example.com --key-file /absolute/private/anatomia-access.key
-anatomia doctor --json
-anatomia analyze file --file /absolute/path/demo.mp4 --to ./anatomia-output/demo --json
-```
+需要新分析时查 `anatomia source register --help` 和当前 analysis/understand 合同。completion 使用 `anatomia completion install zsh --yes` 与 `anatomia completion doctor zsh --agent`。不把未知 id、缺少 service key 或目录不可读当作空结果。
 
-Detached automation:
-
-```
-anatomia source upload --file /absolute/path/demo.mp4 --json
-anatomia analysis start --source source:demo --json
-anatomia analysis status analysis:demo --json
-anatomia analysis watch analysis:demo --events
-anatomia analysis cancel analysis:demo --expected-version 3 --json
-anatomia analysis result analysis:demo --to ./anatomia-output/demo --json
-```
-
-`analyze file` owns upload, start, wait, and download. A running or HTTP 202 analysis means wait or resume; do not start a duplicate job with the same source.
+旧 login、analyze file、analysis delivery show、breakdown、package、handoff、learning 路径属于历史或尚未实现合同，不执行。输出、审阅与跨 owner handoff 仍是保留能力；从当前六资源和 export 合同确认可用边界，不制造完成证据。

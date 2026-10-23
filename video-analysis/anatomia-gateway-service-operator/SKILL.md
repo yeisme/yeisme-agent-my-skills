@@ -7,16 +7,15 @@ description: Use when an Anatomia owner must run read-only preflight, issue or r
 
 Owner-only. Remote users receive a `0600` key file and use `$anatomia-video-analysis-router`. This skill never prints plaintext keys, DSN, Authorization headers, or provider payloads.
 
-🔴 CHECKPOINT · 🛑 STOP before `service key create`, `service key revoke`, `deploy up`, or any Provider canary. Read-only preflight is not authorization.
+Confirm current authorization before credential mutation or deployment lifecycle actions. Reuse authorization already given for the exact action and target; read-only preflight alone is not authorization. Provider canaries are outside this skill.
 
-Preflight (no writes):
+Local preflight (no listener probes or egress):
 
 ```bash
 anatomia config doctor --json
-anatomia deploy plan --release-manifest <release-manifest> --stage <stage> --json
 ```
 
-Issue a key into a new `0600` file (stdout has fingerprint only):
+Before issuing a key, collect the recipient label, approved endpoint, scope, state-store identity, owner authority and new private output path as described in `references/commands.md`. Once authorized, issue into a new `0600` file (stdout has fingerprint only):
 
 ```bash
 anatomia service key create \
@@ -30,3 +29,5 @@ anatomia service key create \
 ```
 
 Public `postgres_minio` deployments use `--state-store postgres` instead of `--db`. `--db` and `--state-store` are mutually exclusive. Commands: `references/commands.md`. Handoff: `references/handoff.md`.
+
+Deployment planning and active observation are described separately in the commands reference. Current `deploy plan` is a local projection; `deploy status` can run container and storage probes. Neither grants deployment or paid Provider authority.
