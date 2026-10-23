@@ -40,7 +40,7 @@ npx --yes skills update credentialctl-usage --yes
 
 ## Central credential workflow
 
-🔴 CHECKPOINT · 🛑 STOP：do not run `setup`, `set`, or `rotate` until the current user authorized this secret write. Never print, log, or commit the value; there is no `get`.
+🔴 CHECKPOINT · 🛑 STOP：do not run `setup`, `set`, or `rotate` until the current user authorized this secret write. Never print, log, or commit the value; `get` returns metadata only.
 
 ```bash
 credentialctl setup openai/personal-default --preset local-ai --json
@@ -61,7 +61,7 @@ Local single-user default is an inline key in the owner user config (`api_key`, 
 Every credential can carry secret-free metadata — `note` (what the key is for), `tags`, `kind` (`api-key|mcp-server|remote-service|registry-token|other`), and `env_name`. Agents select credentials from this knowledge axis and never need the value:
 
 ```bash
-credentialctl describe openai/personal-default \
+credentialctl metadata set openai/personal-default \
   --note "company OpenAI relay key for chat and embedding" \
   --tag ai,prod --kind api-key --env-name OPENAI_API_KEY --json
 credentialctl search "openai" --agent        # matches provider/account/note/tags/env_name
@@ -69,10 +69,10 @@ credentialctl search "" --kind mcp-server --json
 credentialctl describe openai/personal-default --json   # view without mutating
 ```
 
-- There is deliberately no `get`/`print` command; if you find yourself wanting the value, you want `export`/`sync` or a consumer resolver instead.
+- `get` returns identity metadata and never secret bytes; if you find yourself wanting the value, you want `export`/`sync` or a consumer resolver instead.
 - Secrets are rejected in metadata (`METADATA_INVALID`); describe the purpose, never paste the key.
 - `set`/`rotate` keep existing metadata; `--clear-note` removes a note.
-- Lifecycle: every value mutation stamps `rotated_at`; set an expiry with `describe <ref> --expires <RFC3339>` (`--clear-expires` removes it) and `doctor` warns `expired`/`expiring` (within 30 days) locally.
+- Lifecycle: every value mutation stamps `rotated_at`; set an expiry with `metadata set <ref> --expires <RFC3339>` (`--clear-expires` removes it) and `doctor` warns `expired`/`expiring` (within 30 days) locally.
 - `search` results include `matched_on` plus the metadata, redacted in every output mode.
 
 ## Collect scattered keys (discover / import-config)
@@ -93,7 +93,7 @@ credentialctl import-config ~/.env --format dotenv --key OPENAI_API_KEY --json
 
 - Never `cat` a config file to find a key — run `discover` first; output carries only proposed refs, digests and provenance notes.
 - `import-config` copies the value file→store in-process; it never prints, never writes temp files, and never modifies the source.
-- Imports attach provenance automatically (tags `imported,<format>`, note citing path+key) — annotate further with `describe`.
+- Imports attach provenance automatically (tags `imported,<format>`, note citing path+key) — annotate further with `metadata set`.
 - Re-import of the same value is `unchanged`; a different value needs `--replace-central --expected-revision <rev> --yes`.
 - Sources must be regular non-world-writable files ≤1 MiB (`SOURCE_UNREADABLE`); malformed content fails closed (`SOURCE_FORMAT_INVALID`).
 
@@ -245,9 +245,16 @@ Require a clean GitHub Release, checksums, per-archive SPDX SBOMs, public-mirror
 
 | Trigger | First fix | Still failing |
 | --- | --- | --- |
-| Want to print a secret | There is no `get` | Use `export`/`sync`/`exec`/`render`; never `cat` sinks |
+| Want to print a secret | `get` never returns secret bytes | Use `export`/`sync`/`exec`/`render`; never `cat` sinks |
 | `UNLOCK_REQUIRED` / `UNLOCK_FAILED` | Provide `--unlock-file` / env / TTY | Exit 4; do not guess the passphrase |
 | Target drift | Review copies; `--force-target --yes` only after review | Do not pick a winner silently |
 | `SINK_REFUSED` | Choose a 0600 non-tmp, non-git path | Repo sink needs `--allow-repo-sink --yes` |
 | Key in chat / repo / logs | Rotate the ref; treat as leaked | Purge does not revoke the provider key |
 
+
+
+## 资源命令与版本合同
+
+先读取安装版的 help/结构化发现面，确认 canonical 路径存在。运行 `credentialctl list --agent`，从 `fact.credential.N.id` 取真实 ID，再调用 `credentialctl describe <id> --agent`；`<id>` 是待替换的语法说明，不作为可直接执行的 Next。保持原项目、配置、过滤与权限范围。解析失败报告合同或版本问题，可查 `--json`，不要解析人读表或猜 ID。
+
+详情类旧 show 只作隐藏兼容；正常操作使用 describe，独立 inspect/export/download 等动作保持原义。补全是同一目录的只读视图；需要安装时显式运行 completion install，并用 completion doctor 区分文件存在与 shell 可发现。源码候选通过不代表 PATH 安装版已更新。

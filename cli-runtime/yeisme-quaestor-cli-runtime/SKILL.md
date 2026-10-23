@@ -38,3 +38,10 @@ gofmt -w ./cmd ./internal ./tests
 go test ./...
 go build -trimpath ./cmd/quaestor
 ```
+
+
+## 资源命令与版本合同
+
+先读取安装版的 help/结构化发现面，确认 canonical 路径存在。运行 `quaestor thesis list --agent`，从 `fact.thesis.N.id` 取真实 ID，再调用 `quaestor thesis describe <id> --agent`；`<id>` 是待替换的语法说明，不作为可直接执行的 Next。保持原项目、配置、过滤与权限范围。解析失败报告合同或版本问题，可查 `--json`，不要解析人读表或猜 ID。
+
+详情类旧 show 只作隐藏兼容；正常操作使用 describe，独立 inspect/export/download 等动作保持原义。补全是同一目录的只读视图；需要安装时显式运行 completion install，并用 completion doctor 区分文件存在与 shell 可发现。源码候选通过不代表 PATH 安装版已更新。

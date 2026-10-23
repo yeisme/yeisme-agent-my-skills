@@ -40,9 +40,9 @@ After configuration, inspect adapted models and local channel defaults before an
 ```bash
 eikona models list --source adapted --all --agent
 eikona models list --source adapted --provider openai --all
-eikona models default show --agent
+eikona models default describe --agent
 eikona auth list --agent
-eikona providers show openai --agent
+eikona providers describe openai --agent
 ```
 
 Bare `eikona models list` reads `models.lock` (`--source manifest`). An empty manifest is not an empty adapter catalog; next action is `--source adapted`. `auth list` shows channel `default_model` values, not every adapted model.
@@ -50,7 +50,7 @@ Bare `eikona models list` reads `models.lock` (`--source manifest`). An empty ma
 A user may then authorize the explicit non-generating probe:
 
 ```bash
-eikona doctor --channel openai --model openai/gpt-5.4-image-2 --probe --agent
+eikona doctor --channel openai --model openai/gpt-image-2.5-sunburst --probe --agent
 ```
 
 Do not run `--smoke` or any generation command during bootstrap without explicit user approval for the provider/model and potential cost.

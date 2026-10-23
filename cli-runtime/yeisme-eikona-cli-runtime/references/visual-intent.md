@@ -2,7 +2,7 @@
 
 The runtime consumes validated `eikona.visual_intent.v1` evidence through `eikona workflow import intent`. It is the only Skill responsible for provider execution and artifact lifecycle. Evidence files (`visual_intent.json`, `skill_receipt.json`, `intent_compile.json`) are written under each run directory and linked through existing runstore paths.
 
-The runtime distinguishes claimed from verified skill identity; unverified receipts cannot support promoted/core evidence. Default model: `openai/gpt-5.4-image-2`.
+The runtime distinguishes claimed from verified skill identity; unverified receipts cannot support promoted/core evidence. Default model: `openai/gpt-image-2.5-sunburst`.
 
 Contract reference: `../eikona-visual-router/references/visual-intent-contract.md`.
 
@@ -24,7 +24,7 @@ Contract reference: `../eikona-visual-router/references/visual-intent-contract.m
 - Discover installed `pricing show/quote/set/unset` before use. Quotes are offline; price changes use the owner host's config CLI, not hand-written metadata. Channel/model overrides take priority over model defaults and verified official cards. A partial override never borrows missing official components.
 - New billing receipts keep `calculated_usd`, `reserved_usd`, `budget_usd`, `basis` and price snapshots separate from `actual_usd`. Measured costs and frozen estimates can advance bounded recovery without a verified provider invoice. Unknown submission still forbids resubmission.
 - Per-image pricing requires exact operation/quality/resolution and confirmed generated count. Do not equate a native tier with a pixel size, count downloaded files as generated images, or bill image output both by tokens and by image.
-- No official price mapping is assumed for `openai/gpt-5.4-image-2`; keep the configured model and resolve a missing price through explicit owner configuration. Never restore a hard-coded gateway discount or borrow another model's official price.
+- No official price mapping is assumed for `openai/gpt-image-2.5-sunburst`; keep the configured model and resolve a missing price through explicit owner configuration. Never restore a hard-coded gateway discount or borrow another model's official price.
 - Without a CLI, discover `pricing.quote` through registered MCP schemas and `eikona://docs/pricing`. Do not send credentials, prompts, or client-supplied price snapshots to the quote action.
 
 ### DriveBridge remote CLI interaction

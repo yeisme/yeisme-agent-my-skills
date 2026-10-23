@@ -11,12 +11,12 @@ Paid Eikona generate/edit on the existing GPT Image gateway uses the 2.5 series.
 | Default live | `openai/gpt-image-2.5-sunburst` | Unspecified paid generate/edit; user asked for high quality |
 | Fast / cheap | `openai/gpt-image-2.5-flare` | User asked for speed, draft, or Flare |
 | Snapshot | `*-2026-09-08` | User named that snapshot |
-| Fallback | `openai/gpt-5.4-image-2` | 2.5 not ready on this channel, or user named Image 2 |
+| Fallback | `openai/gpt-image-2.5-sunburst` | 2.5 not ready on this channel, or user named Image 2 |
 | Preview | `codex:imagegen` | No paid gateway; 1K Codex session only |
 
 Default 2.5 quality is `high`. Use `xhigh`/`max` only when the user asks for maximum quality. `medium` is a historical coglet verification overlay, not this gateway's preference.
 
-`openai/gpt-5.4-image-2` remains a gateway identity, not official `gpt-image-2`. Builtin CLI default may still list it; agent commands must still pass the 2.5 slash ref until a user/channel default is set.
+`openai/gpt-image-2.5-sunburst` remains a gateway identity, not official `gpt-image-2`. Builtin CLI default may still list it; agent commands must still pass the 2.5 slash ref until a user/channel default is set.
 
 ## Identity rules
 

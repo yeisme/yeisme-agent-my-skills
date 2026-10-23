@@ -7,9 +7,11 @@ description: Use when the user explicitly asks to use Eikona/eikona, needs post-
 
 Use this skill for `cli/eikona`, the headless image-generation and image-asset-management foundation for agents and services.
 
-If the user explicitly says to use Eikona, `eikona`, or the Eikona CLI for image generation, this route takes precedence over generic built-in image generation tools. Enter `cli/eikona`, follow local `AGENTS.md`, and use Eikona commands such as `eikona generate ... --agent`. Only fall back to another image tool if the user explicitly changes the route or Eikona is unavailable and the user approves the fallback.
+If the user explicitly says to use Eikona, `eikona`, or the Eikona CLI for image generation, this route takes precedence over generic built-in image generation tools. Enter `cli/eikona`, follow local `AGENTS.md`, and use Eikona commands such as `eikona generate --help`. Only fall back to another image tool if the user explicitly changes the route or Eikona is unavailable and the user approves the fallback.
 
 ## Precision, canvas, and recovery
+
+Kie and OpenRouter are independent native Image channels. Use their exact provider model IDs and explicit channel bindings; new tasks select latest verified contracts, historical models are read/reconcile-only. Never switch channel/model or replay a paid submission after unknown outcome: reconcile the original run/task. Inspect provider, credential, model and pricing readiness separately. Catalog presence, local fixtures and health checks are not live delivery proof. Read `cli/eikona/docs/interfaces/native-image-relays.md` for supported per-model controls, reference limits, pricing and unimplemented edit/upscale features before recommending commands. Discovery does not grant execution capability.
 
 Read `references/precision-and-canvas.md` for precision edit, OpenRouter Image API, full-body composition, and recovery policy.
 
@@ -25,17 +27,20 @@ eikona setup --agent
 
 Follow `action.next`. Default setup is a no-write preview.
 
-🔴 CHECKPOINT · 🛑 STOP: without the current user's explicit authority for this local write, credential, or paid generation, do not run `eikona setup --yes`, `eikona auth set`, `--smoke`, or any generate/edit command.
+🔴 CHECKPOINT · 🛑 STOP: without the current user's explicit authority for this local write, credential, or paid generation, do not run `eikona setup --yes`, `eikona auth set --help`, `eikona routes add --help`, `eikona routes use --help`, `--smoke`, or any generate/edit command.
 
 After local-write authority is clear:
 
 ```bash
 eikona setup --yes --agent
-eikona auth set openai --protocol openai --api-key-stdin --agent
+eikona routes presets --agent
+eikona routes add openai --preset openai-official --api-key-stdin --use --agent
 eikona models list --source adapted --all --agent
 ```
 
-`SKILLS_RELEASE_NOT_MIRRORED` recovery: `eikona setup --yes --skip-skills --agent`. Discovery is metadata-only (`eikona config env --all --json`); never call `eikona auth env` in ordinary agent flows. Empty `eikona models list` reads `models.lock`; next action is `--source adapted`. Missing credentials are config status, not missing adapters. Probe only when the user authorizes `eikona doctor --channel openai --model openai/gpt-5.4-image-2 --probe --agent`.
+`routes add` writes the same user auth channel as `auth set` and also stores a generation profile under the same name. `routes use <name>` sets `defaults.profile`. Later `generate` and `edit` calls that omit `--use-channel` inherit that profile's channel, model, quality, size, and aspect. An explicit `--model` still keeps the current route channel. `--use-channel` skips the current route. `auth set` remains the flag-level path. Presets never contain secrets.
+
+`SKILLS_RELEASE_NOT_MIRRORED` recovery: `eikona setup --yes --skip-skills --agent`. Discovery is metadata-only (`eikona config env --all --json`); never call `eikona auth env --help` in ordinary agent flows. Empty `eikona models list` reads `models.lock`; next action is `--source adapted`. Missing credentials are config status, not missing adapters. Probe only when the user authorizes `eikona doctor --channel openai --model openai/gpt-image-2.5-sunburst --probe --agent`.
 
 Full bootstrap catalog: `references/bootstrap.md`.
 
@@ -56,11 +61,13 @@ Read `references/upload.md` for client image upload. Read `references/surfaces.m
 
 ## Workflow
 
+资源发现先执行 `eikona providers list --agent`，从 `fact.provider.N.id` 取真实 id，再用 `eikona providers describe <provider-id> --agent`；只需身份时用 `providers get`。模型同样先 `models list --source adapted --agent` 再 `models describe`。先确认安装版 help 有 canonical 命令；缺失时报告版本差异，不猜人读表、不静默改用别的 provider。旧 show 只作一个功能版本的隐藏兼容入口。补全使用 `eikona completion install zsh --yes` 和 `eikona completion doctor zsh --agent`，安装文件与 shell 可见性分别判定。
+
 1. Start inside `cli/eikona` and read `AGENTS.md`, `README.md`, and the nearest command doc. Installed-binary usage starts with `eikona setup --agent`; repository access is not required. Read-before-edit map: `references/agent-invocation.md`.
 2. Preserve product contracts in `references/product-contracts.md`: headless planning only; `--json` compact default / `--json --full` forensic / routine `--agent`; artifacts under `runs/<run_id>/outputs/`; tests use `httptest`; secrets only in the user auth store; no shell credential scripts; no isolated scenario commands; storage is backup/restore only; assessment/recipe evidence is never a silent machine winner.
-3. For generation and models, follow `references/generation-and-models.md` and `references/gpt-image-2.5.md`. Live paid default is `openai/gpt-image-2.5-sunburst` with `--quality high` and pixel `--size` on the existing GPT Image channel (`noemi` here). Reuse the existing key; do not create a channel. Fall back to `openai/gpt-5.4-image-2` only if 2.5 is not ready. Reject provider-colon spellings, bare `gpt-image-2.5`, and `--size 2k` on 2.5. Never silently drop reference inputs or skip TLS. Do not run paid generate without approval.
+3. For generation and models, follow `references/generation-and-models.md` and `references/gpt-image-2.5.md`. Live paid default is `openai/gpt-image-2.5-sunburst` with `--quality high` and pixel `--size` on the existing GPT Image channel (`noemi` here). Reuse the existing key; do not create a channel. Fall back to `openai/gpt-image-2.5-sunburst` only if 2.5 is not ready. Reject provider-colon spellings, bare `gpt-image-2.5`, and `--size 2k` on 2.5. Never silently drop reference inputs or skip TLS. Do not run paid generate without approval.
 4. For CLI behavior changes, add tests next to the behavior: `internal/cli`, `internal/adapters/<provider>`, `internal/config`, `internal/runtime`, matching `internal/*`, and MCP transport.
-5. Agent closed loop: submit `--agent` → `eikona watch <run-id> --events` → `eikona next --agent` → `eikona inspect --brief --agent` → `eikona review packet --agent` → human preview → `eikona feedback` / `reroll` → `eikona assets handoff/stage/apply --agent`. `assets.apply` is dry-run unless `confirm=true`. Full catalog: `references/agent-invocation.md`.
+5. Agent closed loop: submit `--agent` → `eikona watch <run-id> --events` → `eikona next --agent` → `eikona inspect --brief --agent` → `eikona review packet <run-id> --agent` → human preview → `eikona feedback --help` / `reroll` → `eikona assets handoff --help`, `eikona assets stage --help`, `eikona assets apply --help`. `assets.apply` is dry-run unless `confirm=true`. Full catalog: `references/agent-invocation.md`.
 6. Keep OpenSpec under `cli/eikona/openspec/changes/eikona-<slug>/`. Migrate misplaced root `openspec/` implementation tasks before continuing. Archive completed changes to `cli/eikona/openspec/changes/archive/YYYY-MM-DD-eikona-<slug>/`.
 
 Example (live default on the existing GPT Image gateway):
@@ -112,11 +119,12 @@ Read `references/visual-intent.md` for visual-intent evidence, canvas recovery, 
 
 | Trigger | First fix | Still failing |
 | --- | --- | --- |
-| User said Eikona but a generic image tool ran | Stop; enter `cli/eikona` and use `eikona generate ... --agent` | Fall back only if the user approves |
+| User said Eikona but a generic image tool ran | Stop; enter `cli/eikona` and use `eikona generate --help` | Fall back only if the user approves |
 | Fresh install, unknown env | `eikona setup --agent` | `eikona setup --yes --skip-skills --agent` on `SKILLS_RELEASE_NOT_MIRRORED` |
+| Gateway needs protocol, URL, model, and channel flags | `eikona routes presets` then `routes add <name> --preset openai-gateway --base-url <url> --api-key-stdin --use` | Keep `auth set` when the preset does not match |
 | Empty `eikona models list` | `eikona models list --source adapted --all --agent` | Missing credentials are config status, not missing adapter |
 | Paid generate without approval | Do not run `--smoke` or generate | Ask for provider/model/cost authority |
-| Secret in output | Redact; use `--api-key-stdin` / auth store | Never `eikona auth env` in ordinary agent flows |
+| Secret in output | Redact; use `--api-key-stdin` / auth store | Never `eikona auth env --help` in ordinary agent flows |
 | Library auto-promote after import | Keep run evidence only | Explicit `eikona library save` |
 | `assets.apply` wrote files | Must be dry-run unless `confirm=true` | Restore via owner CLI, do not copy runstore paths |
 | Generic provider error | `eikona inspect <run_id> --json --full` for `fail_reason` | Do not silently reword prompts and retry |

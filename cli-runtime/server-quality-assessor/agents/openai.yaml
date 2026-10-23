@@ -1,0 +1,4 @@
+interface:
+  display_name: "服务器质量检查与长期维护"
+  short_description: "读取服务器档案与历史证据，区分采集故障、业务失败与过期信息，并规划长期维护"
+  default_prompt: "使用 $server-quality-assessor 读取这台服务器的缓存、近期事件和历史变化，说明证据覆盖率，并给出最有价值的补测与维护建议。"
