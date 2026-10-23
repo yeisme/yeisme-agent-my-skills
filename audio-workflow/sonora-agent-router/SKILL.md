@@ -30,7 +30,7 @@ Use `--json` only when the task needs full nested capabilities, strategy compari
 | Voices for one provider | `sonora tts voices list --provider <provider-id> --agent` |
 | Music provider catalog | `sonora music providers list --json` |
 | Music fixture lifecycle | `sonora music brief create --purpose <purpose> --instrumental --agent` → `sonora music plan create --brief <ref> --provider fixture --agent` → `sonora music generate --plan <ref> --idempotency-key <key> --agent` |
-| Music cover (suno-kie) | `sonora music brief create --mode cover --source-asset <audio-asset-ref> --output-format mp3 --json` → `sonora music plan create --capability cover --provider suno-kie --rights-snapshot <ref> --json` → approval → `sonora music generate ... --confirm-external-call --confirm-unknown-price --json` |
+| Music cover (suno-kie) | `sonora music brief create --mode cover --source-asset <audio-asset-ref> --output-format mp3 --json` → `sonora music plan create --capability cover --provider suno-kie --rights-snapshot <ref> --json` → approval → `sonora music generate --help` |
 | Music cover HTTP/SDK | `CreateMusicBrief`/`POST /api/v1/music/briefs` (`mode=cover`, `source_asset_refs`) → `CreateMusicPlan` (`provider_capability=cover`, `rights_snapshot_refs`) → `IssueMusicApproval` → `CreateMusicJob` (`confirm_live`, `confirm_unknown_price`) |
 | Music job status/list/reconcile | `sonora music job status <job-id> --agent` / `sonora music job list --agent` / `sonora music job reconcile <job-id> --agent` |
 | Music approval lane (paid providers) | `sonora music approval issue --plan <ref> --project-id <p> --authorization-epoch <e> --idempotency-key <k> --max-cost-usd <cap> --agent` |
@@ -106,11 +106,15 @@ When the caller comes from an AI drama director or Scaena production stage, firs
 
 ## Tab Completion
 
-Ask the user to install a matching shell script with `sonora completion <shell>`. The CLI supplies local candidates for provider IDs, catalog voice-model refs and project-local workflow refs; completion never performs a provider network call.
+资源发现先 `sonora provider list --agent`，从 `fact.provider.N.id` 获取真实 id，再 `sonora provider describe <provider-id> --agent`；只需身份使用 `provider get`。机器解析失败应报告合同/版本差异，不能改猜默认表格。当前安装版必须在 help 中支持这些 canonical 路径；旧 show 为隐藏兼容入口。
+
+优先 `sonora completion install zsh --yes` 后 `sonora completion doctor zsh --agent`。安装不编辑 rc；文件安装成功不等于父 shell 已加载。按 doctor 的 activation_command 在当前 shell 启用，不把生成脚本 source 到 rc。
+
+Ask the user to install a matching shell script with `sonora completion install zsh --yes`. The CLI supplies local candidates for provider IDs, catalog voice-model refs and project-local workflow refs; completion never performs a provider network call.
 
 ## Validation
 
-Use `sonora <command> --agent` for low-token output checks and `sonora <command> --json` when validating complete payloads. Do not expose credentials, audio bytes, raw provider payloads, private tool arguments, or hidden reasoning.
+Use `sonora provider list --agent` for low-token output checks and `sonora provider list --json` when validating complete payloads. Do not expose credentials, audio bytes, raw provider payloads, private tool arguments, or hidden reasoning.
 
 ## If this fails
 
