@@ -1,0 +1,3 @@
+display_name: "yeisme-code-taste"
+short_description: "在代码实现时复用 Yeisme 的代码取舍与正反例，保留项目约束并按实际反馈演进。"
+default_prompt: "Use $yeisme-code-taste for this task. Discover actual capabilities, preserve project constraints and pin the selected versions."

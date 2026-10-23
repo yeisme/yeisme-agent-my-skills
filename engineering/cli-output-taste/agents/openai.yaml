@@ -1,0 +1,4 @@
+interface:
+  display_name: "CLI Output Taste"
+  short_description: "Design readable, recoverable CLI resource views."
+  default_prompt: "Review this CLI resource flow from list through describe, errors and completion; implement the smallest verified improvement from one resource projection."

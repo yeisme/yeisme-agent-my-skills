@@ -59,6 +59,16 @@ Use command-specific schema under `data`; keep the envelope stable.
 
 ## Mode Rules
 
+### Resource views
+
+For resource discovery, the list is the product: render rows with complete IDs instead of applying the generic Status/Highlights template. One read-only catalog supplies list, get, describe and completion. Human output caps at 20 rows with separate filtered/truncated counts; machine list payloads retain every row within the same query/page, including `fact.<resource>.N.*` in agent mode and arrays under JSON `data`. Existing pagination remains explicit.
+
+Use `get` for identity/key fields and `describe` for detail/relations. In the approved resource convergence migration, hide legacy detail `show` for one functional release; preserve legacy machine fields and command identity. Canonical paths alone appear in help, suggestions, completion menus and normal examples. Preserve independent verbs and published video flag syntax.
+
+Actions and human Next share one safely quoted, scoped command. Missing IDs and unknown resources return exit 2, stable error code, field, visible known IDs and a discovery action. Empty lists succeed with a recovery action; unreadable catalogs fail. Do not expose raw Cobra argument errors or turn unknown IDs into empty success.
+
+Completion is a read-only projection, not another catalog: stable prefix filtering, 50 candidates, 250ms budget, no network/state creation/secret resolution; failures are silent with NoFileComp. Read `cli-output-taste` when designing table layout, narrow-terminal behavior or recovery UX.
+
 Default output is for humans:
 
 - Prefer `Status`, `Highlights`, optional `Risks`, optional `Evidence`, and one `Recommended next step`.

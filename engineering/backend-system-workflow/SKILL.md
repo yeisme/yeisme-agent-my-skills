@@ -52,7 +52,11 @@ At stable boundaries, report or create narrow checkpoints for contract/schema, b
 6. Add tests for unhappy paths, duplicate requests, illegal transitions, permissions, concurrent claims, retries, timeout, cancellation, transaction rollback, pagination boundaries, and external failures. Layering and Go testscript: `references/testing-tools.md`.
 7. Add or verify the service logging contract: JSON logs by default, stdout/stderr separation, optional rotating file sink, call correlation, redaction, metrics, health, diagnostics, audit, TraceEvent. Details: `references/logging.md`.
 8. For Go backends or concurrent runtimes, evaluate goroutine ownership, cancellation, `context.Context`, `sync`, channels, atomics, locks, race detection, pprof, and benchmarks. Rules: `references/go-and-performance.md`.
-9. Run focused functional checks plus race, integration, and performance checks when the change affects workers, state, queues, or shared resources.
+9. Run focused functional checks, ordinary concurrency tests, and relevant integration/performance checks when the change affects workers, state, queues, or shared resources. Never initiate race detection directly or through aggregate gates without the current human’s explicit, emphatic single-run authorization.
+
+## 数据库交互架构与优化
+
+涉及数据模型、GORM 热路径、预算/配额汇总、队列 claim/reclaim、pool 或在线索引时，按需读取 [references/database-interaction-performance.md](references/database-interaction-performance.md)。先做“少查、少搬、少锁、可重放”：保留单一权威、事务/幂等/CAS、全部 writer 与锁总序、可重建与回滚，再用同负载证据评估吞吐、尾延迟和恢复余量。没有数据库实测不承诺倍率；不默认引入专用时序/检索引擎，不以 CPU 100% 或增大连接池为目标。
 
 ## ORM And Database Access Rules
 

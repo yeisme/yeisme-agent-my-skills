@@ -1,0 +1,4 @@
+interface:
+  display_name: "SoloCut Service"
+  short_description: "实现 SoloCut Go API、GORM/PostgreSQL 与操作恢复。"
+  default_prompt: "Use $solocut-service in client/solocut/server. Preserve owner boundaries, use GORM, and verify errors, idempotency, ETag conflicts, permissions, and recovery."

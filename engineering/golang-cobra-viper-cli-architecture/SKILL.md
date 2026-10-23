@@ -71,6 +71,11 @@ testdata/
 
 ## Cobra 规则
 
+- 资源读取以 `list/get/describe` 表达发现、身份与详情。迁移详情 `show` 时使用隐藏薄入口共享 use case，保留其历史 machine command identity；不能复制业务实现或让三个名字返回同一产品。
+- 使用类型化参数错误投影替代直接暴露 `cobra.ExactArgs` 文案：exit 2、稳定 code/field、可见已知 id 与恢复命令；unknown subcommand 不能作为成功 help 返回。
+- `ValidArgsFunction` 与资源 list 使用同一个只读查询；250ms/50 条、NoFileComp、失败静默、禁止网络和自动建库。completion 请求绕过普通初始化、更新通知和日志。
+- 命令树导出、help、建议与 completion 只从当前注册生成。人读体验调整按需读取 `cli-output-taste`；不要在本 Skill 复制其表格规则。
+
 - `main.go` 只创建 root command、注入版本信息并执行；不要放业务逻辑。
 - 每个命令使用 `RunE`，返回 error，由根执行层统一决定 stdout/stderr 和退出码。
 - Cobra command 只解析参数、构造请求、调用 service、选择 renderer。
