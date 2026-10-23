@@ -3,17 +3,18 @@ name: aigora-agent-core
 description: Use when a downstream vendor or enterprise agent must discover Aigora capabilities, establish server-derived scope, classify errors, and keep redacted receipts. Orchestrates current CLI/HTTP/MCP surfaces only.
 ---
 
-# Aigora Agent Core
+# Aigora 下游 Agent 基础交互（Agent Core）
 
-下游 agent 的发现与核对技能。只编排当前可运行表面，不新增协议，不持久化 credential，不把 MCP 当 primary fact。
+供接入 Aigora 的下游 Agent 使用：负责查询可用能力与模型、核对服务端权限范围、处理常见报错，并保存脱敏调用回执。
 
-配对：异步生成/恢复走 `$aigora-generation-jobs`；R2+ Operator mutation 走 `$aigora-operator-guarded`。不要同时加载 Operator 前端或 mcp-gateway-sidecar Operator API skills。
+配套技能：
+- 提交和恢复异步生成任务（如视频生成）请搭配 `$aigora-generation-jobs`。
+- 涉及高风险（R2 及以上）的配置变更预览与人工交接请搭配 `$aigora-operator-guarded`。
+- 详细接口约定见 `docs/protocols/downstream-agent-interaction.md`。
 
-文档：`docs/protocols/README.md` → `downstream-agent-interaction.md`。
+安全原则：不自动安装或热更新技能；不在命令、日志或证据里保存密钥；权限范围一律以服务端返回为准。
 
-禁止 auto-install、auto-update、hot-update。默认无 network、无 credential access、无 production write。认证材料只由企业 secret manager 或已批准 helper 在进程内提供。
-
-## 当前可运行入口
+## 常用查询命令
 
 ```bash
 aigora capabilities list --json
@@ -25,9 +26,9 @@ aigora mcp search --query models --json
 aigora mcp invoke aigora.search --args '{"query":"models"}' --json
 ```
 
-本地 owner 需要全量 Operator catalog 时才用 `aigora mcp tools --json`（默认 full）或 `--catalog full`。远程默认 compact，不要把本地全量目录当成远程发现。
+注：远程调用 MCP 时默认返回精简工具目录（`--catalog compact`）；只有本地管理员排查全部工具时才显式使用 `--catalog full`。
 
-HTTP 浅层 discovery（部署 base URL 由企业配置；不要把 credential 写入命令、文档或 evidence）：
+也可以直接调 HTTP 接口查询能力列表（实际域名以部署配置为准，不要把密钥写进命令行参数或文档）：
 
 ```bash
 curl --fail-with-body --silent --show-error \
@@ -35,29 +36,25 @@ curl --fail-with-body --silent --show-error \
   'https://aigora.example.invalid/v1/capabilities'
 ```
 
-远程 Operator MCP 默认 compact catalog。全量目录仅在本地 owner 或显式 `--catalog full` / `profile=legacy`。
+## 标准调用步骤
 
-## 循环
+1. **确认权限范围**：先确定本次要调用的能力（capability）以及所属租户、工作区和调用身份；如果范围不明确就先停下来核实。
+2. **查询可用能力与模型**：用 CLI 或 `GET /v1/capabilities`、`GET /v1/models` 查看支持的参数，只记录 `spec_version` 和资源引用 ID，不记录完整提示词或请求正文。
+3. **以服务端鉴权为准**：租户和工作区范围必须由服务端根据会话或 Token 推导，不能轻信请求头里自填的 `X-Tenant-ID`。
+4. **保存脱敏回执**：证据里只保留 `request_id`、`trace_id`、`receipt_ref`、调用的能力/模型名称和状态码；不要保存 `Authorization`、Cookie、原始提示词、签名下载链接、完整 Base64 或游标（cursor）明文。
 
-1. 冻结 capability、操作意图与企业 tenant/workspace/principal 上下文。scope 不明即停止。
-2. 用 CLI 或 `GET /v1/capabilities`、`GET /v1/models` 发现；记录 `spec_version` 与 opaque refs，不记录 prompt/payload。
-3. 认证结果只处理“已建立/未建立”。scope 必须由服务端从会话/token/policy 推导；不得把 `X-Tenant-ID` 等 caller header 当授权事实。
-4. 读取走 CLI/HTTP/MCP observer 投影。MCP 是可选 bridge；receipt 以 HTTP/CLI 为准。
-5. 证据只保留 request/trace/receipt refs、capability/model、redacted status。禁止 Authorization、cookie、raw prompt、provider payload、signed URL、完整 base64、opaque cursor 值。
+## 常见错误处理
 
-## 错误
-
-| 类别 | 行为 |
+| 状态码 | 处理方式 |
 | --- | --- |
-| 400/422 | 修正已授权 intent 后重新 discovery |
-| 401/403 | 停止并交给企业 identity owner |
-| 404 | 核对 scope/ref，不跨租户寻找 |
-| 429 | 等待 retry-after；不绕过 limit |
-| 5xx/unknown | 保留 refs，先 inspect/reconcile |
+| `400` / `422` | 检查并修正请求参数，重新查询能力支持范围后再调 |
+| `401` / `403` | 停止重试，交由管理员检查账号或 Key 权限 |
+| `404` | 核对当前工作区范围和资源 ID，不要跨租户盲猜 |
+| `429` | 按 `Retry-After` 等待后再试，不要强行绕过限流 |
+| `5xx` / 网络超时 | 保留原请求引用和幂等键，先查状态或对账，不要盲目重发 |
 
-## 不要做
+## 注意事项
 
-- 不要依赖 `/.well-known/aigora-agent.json`、`aigora agent discover` 或 `/agent/v1`。
-- 不要发明通用 agent HTTP body；按具体 OpenAPI endpoint 构造。
-- 不要把 `aigora mcp serve --stdio` 的本地全量 catalog 当成远程默认。
-- 不要执行 R2+ production mutation；交给 `aigora-operator-guarded`。
+- 不要依赖尚未实现的 `/.well-known/aigora-agent.json`、`aigora agent discover` 或 `/agent/v1`。
+- 请求体格式严格按对应 OpenAPI 接口定义构造。
+- 不要直接执行 R2 及以上的生产配置写操作，这类变更一律走 `aigora-operator-guarded` 生成预览并交由人工审批。

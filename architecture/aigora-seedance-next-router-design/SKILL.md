@@ -5,42 +5,33 @@ description: Use when designing or reviewing Aigora Seedance eligibility-first r
 
 # Aigora Seedance 下一代路由设计
 
-## 用途
+用于设计和审查 Seedance 视频生成请求的路由逻辑，核心思路是：**先过滤不合资格的渠道（Eligibility First），再对可用候选渠道打分排序（Ranking）**，并保证重试绑定（sticky attempt）、受理状态未知（`UNKNOWN_ACCEPT`）时的对账恢复、回调验签以及产物与扣费记录一致。
 
-在不修改任何文件或运行状态的前提下，为 Seedance 视频请求提出可审计的路由设计。重点是 eligibility-before-ranking、sticky attempt、`UNKNOWN_ACCEPT` reconciliation、callback 安全和 artifact/billing 事实链。
+## 参考文件
 
-## 必读路径
-
-从 Aigora session 根目录读取：
+在 Aigora 根目录下按需查阅：
 
 1. `AGENTS.md`
-2. `docs/seedance-core-modules-and-next-router.md`
-3. `docs/runtime-architecture-detail.md`
-4. `docs/data-model.md`
-5. `docs/upstream-profile-conformance.md`
-6. `docs/implementation-plan.md`
-7. `openspec/changes/aigora-seedance-video-core/design.md`
-8. `internal/scheduling/route/controller.go`
-9. `internal/scheduling/budget/controller.go`
-10. `internal/protocol/seedance/video_parser.go`
-11. `references/router-blueprint.md`
+2. `docs/architecture/runtime-architecture-detail.md`
+3. `docs/architecture/data-model.md`
+4. `docs/upstreams/upstream-profile-conformance.md`
+5. `docs/routing/video-model-routing.md`
+6. `openspec/changes/aigora-seedance-video-core/design.md`
+7. `internal/scheduling/route/controller.go`
+8. `internal/scheduling/budget/controller.go`
+9. `internal/protocol/seedance/video_parser.go`
+10. `references/router-blueprint.md`
 
-## 只读工作流
+## 设计梳理要点
 
-1. 描述 request 到 `CapabilityIR`、eligibility、ranking、reservation、job/attempt、adapter、callback/poll、mirror、ledger/trace 的事实流。
-2. 先列出不可排序覆盖的拒绝条件：filing/authorization、channel stage、asset readiness、安全、quota/rate、预算和 incident。
-3. 为 eligible candidates 定义排序输入、稳定 tie-breaker 和可解释的 redacted decision record。
-4. 定义 job 与 attempt 的不变量：幂等 job、每次执行的 snapshot、sticky attempt、限制重试与 `UNKNOWN_ACCEPT` 对账。
-5. 定义 callback 验签、去重、轮询恢复、镜像失败、账本 reconciliation 和 operator read-only workbench 的边界。
-6. 给出仅 test channel 的验证矩阵；明确哪些命令是现有可运行命令，哪些仍是目标接口。
+1. **全链路流转**：从请求解析为统一中间表示（`CapabilityIR`），依次经过资格过滤、候选排序、预算预留、创建任务（Job / Attempt）、调用 Adapter、回调或轮询对账、产物转存（Mirror）到记账归档。
+2. **硬性准入条件（一票否决，不能靠打分绕过）**：备案与授权资质、渠道发布阶段（test / gray / default）、输入素材就绪状态、内容安全策略、配额与限流、预算余额以及故障冻结状态。
+3. **候选渠道排序**：对通过准入检查的渠道，明确打分维度、同分决胜规则（tie-breaker）以及脱敏的路由决策记录（方便在控制台解释“为什么选了这个渠道、为什么排除了别的渠道”）。
+4. **Job 与 Attempt 边界**：同一个幂等键对应唯一的 Job；每次实际调用生成一条固定配置快照的 Attempt；轮询、回调和取消都严格绑定到当前 Attempt。当请求超时、不确定上游是否已受理时，进入 `UNKNOWN_ACCEPT` 状态，必须先对账确认，不能盲目重发。
+5. **回调与产物交付**：回调必须先验签、去重并核对关联 Attempt；上游生成成功不等于产物已就绪，只有转存到自有对象存储（MinIO/S3）成功后才算交付完成，转存失败要明确标记为 `mirror_failed`。
 
-## 约束
+## 注意事项
 
-- 不声称 router、attempt、callback 或 `UNKNOWN_ACCEPT` 已经实现。
-- 不以 ranking 分数绕过备案、授权、预算、安全或 promotion gate。
-- 不输出原始 prompt、provider payload、凭据、签名 URL 或 callback secret。
-- 不执行网络、live smoke、route promotion、账单对账、callback 重放或任何写操作。
-
-## 输出格式
-
-输出：输入与边界、eligibility matrix、ranking policy、状态机与不变量、失败/恢复规则、证据与验证计划、未决风险。使用“建议/目标”描述未实现能力。
+- 区分现有代码和目标设计，不要把还在规划中的路由或状态机说成已经上线。
+- 无论质量评分多高，都不能绕过备案授权、预算上限、安全审查或渠道发布门禁。
+- 不要在设计文档或日志中暴露原始提示词、厂商返回正文、密钥或回调签名密钥。

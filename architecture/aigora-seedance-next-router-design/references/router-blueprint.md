@@ -1,44 +1,44 @@
-# 下一代 Seedance 路由蓝图
+# Seedance 下一代路由设计蓝图
 
-## 决策顺序
+## 1. 请求处理与路由顺序
 
 ```text
-request -> CapabilityIR
-        -> filing/authorization/asset/safety/quota/budget/incident eligibility
-        -> ranking eligible channels only
-        -> reserve budget + create idempotent job
-        -> create sticky attempt snapshot
-        -> adapter submit
-        -> accepted | UNKNOWN_ACCEPT | typed failure
-        -> callback/poll reconciliation
-        -> artifact mirror
-        -> ledger/trace/scorecard facts
+收到视频请求 -> 解析为统一中间表示（CapabilityIR）
+            -> 硬性资格过滤（备案资质 / 权限 / 素材就绪 / 安全策略 / 配额 / 预算 / 故障状态）
+            -> 对通过过滤的候选渠道打分排序（Ranking）
+            -> 预留预算并创建幂等任务（Job）
+            -> 生成固定配置快照的执行尝试（Sticky Attempt）
+            -> 调用 Adapter 提交上游请求
+            -> 明确结果（accepted / UNKNOWN_ACCEPT / 明确失败）
+            -> 回调或轮询对账（Reconcile）
+            -> 产物转存到自有对象存储（Artifact Mirror）
+            -> 写入消费账本、Trace 与质量评分
 ```
 
-## Eligibility matrix
+## 2. 硬性准入检查表（一票否决）
 
-| 类别 | 必须检查 | 拒绝后的记录 |
+| 检查维度 | 必查内容 | 不通过时的记录内容 |
 | --- | --- | --- |
-| Channel | capability、model family、site/region、stage、health | redacted eligibility reason 与 channel ref |
-| 合规 | filing/business profile、授权主体、callback domain、content policy | reason code、profile ref、audit ref |
-| 资产 | 输入 ref、mirror/下载、MIME、size、duration、hash、retention | asset readiness reason 与 artifact ref |
-| 控制 | quota、rate limit、预算 reservation、并发、incident freeze | policy reason、route/incident ref |
-| 安全 | input labels、blocked reason、manual review gate | redacted safety result 与 review ref |
+| **渠道状态** | 支持能力、模型系列、地区/站点、发布阶段（test/gray/default）、健康状态 | 脱敏的排除原因码与渠道引用（channel ref） |
+| **合规与资质** | 备案/主体资质、调用方授权范围、回调域名白名单、内容合规策略 | 原因码、配置方案引用（profile ref）、审计引用 |
+| **输入素材** | 素材引用 ID、下载/转存状态、MIME 类型、文件大小、时长、哈希值、有效期限 | 素材未就绪原因码与产物引用（artifact ref） |
+| **额度与风控** | 配额余量、速率限制、预算预留结果、并发上限、故障冻结状态 | 策略原因码、路由/故障单引用 |
+| **内容安全** | 输入安全标签、拦截原因、是否需要人工复核 | 脱敏的安全检查结果与复核单引用 |
 
-## Job 与 attempt 不变量
+## 3. 任务（Job）与执行尝试（Attempt）规则
 
-- 一个 idempotency key 对应一个 gateway job；不因网络不确定性创建重复 job。
-- 一个 attempt 固定 channel、profile、route version、credential/site-account ref snapshot 和 provider task correlation。
-- callback、poll、cancel、mirror 只操作匹配的 sticky attempt。
-- provider 接受状态不明时进入目标状态 `UNKNOWN_ACCEPT`，先对账后重投。
-- retry 需要 typed retryable error、cost guard、attempt/elapsed limit 与 fallback policy；adapter 不能自行切 route。
+- **一请求一任务**：同一个幂等键（`Idempotency-Key`）唯一对应一个网关 Job，绝不因为网络超时或状态不明而重复创建新 Job。
+- **Attempt 快照固定**：每次实际发起的 Attempt 都会锁定当时的渠道、配置方案、路由版本、密钥/账号引用以及上游任务 ID。
+- **操作严格绑定 Attempt**：后续的回调接收、状态轮询、取消任务和产物转存，都必须精确匹配当前绑定的 Attempt。
+- **受理状态不明先对账**：当请求超时或断连、无法确认上游是否已接收时，状态记为 `UNKNOWN_ACCEPT`；此时必须先向原渠道轮询对账，确认未受理后才能按策略重试。
+- **重试受控**：只有在拿到明确的可重试错误码，且未超出预算上限、重试次数和超时窗口时，才允许由调度层发起下一次 Attempt；Adapter 本身不能私自切换渠道。
 
-## Callback 与产物
+## 4. 回调验签与产物交付
 
-- callback 先验证 attempt 关联、签名、时间窗、nonce/source 与幂等 key，再写入审计事实。
-- provider success 与 artifact availability 分开：必需 mirror 失败必须可见为 `mirror_failed` 或受控失败，不能伪造可用 artifact。
-- ledger 按 estimate/reservation/commit-intent/observed/reconciled 追加；trace/workbench 只消费 redacted refs 与摘要。
+- **回调先验签再去重**：收到上游回调时，先核对关联的 Attempt、校验签名、时间戳、防重放标识（nonce）和幂等键，验证通过后再写入状态与审计记录。
+- **生成成功不等于交付完成**：上游返回成功但尚未转存到自有对象存储（MinIO/S3）时，不能直接算作最终可用；如果必须转存的产物转存失败，要明确标记为 `mirror_failed`，不能返回失效的临时外链。
+- **账本只追加不篡改**：消费记录按预估（estimate）、预留（reservation）、待扣减（commit-intent）、实测（observed）和对账完成（reconciled）依次追加写入；控制台和日志只读取脱敏后的引用与汇总数据。
 
-## 验证边界
+## 5. 本地验证说明
 
-当前可运行的基础检查是 `task smoke`、`task test`、`task test:cgo0`、`task openspec` 和 `task diff-check`。`aigora conformance run --profile seedance.b2b.video.v1 --channel ch_seedance_test --events` 是现有文档定义的目标 conformance 接口，实施与受控配置完成前不得视作可执行 live 测试。
+日常修改可运行 `task check:quick`、`task test`、`task test:cgo0` 和 `task openspec`。文档中提到的 `aigora conformance run --profile seedance.b2b.video.v1 --channel ch_seedance_test --events` 是规划中的兼容性测试命令，在对应配置和适配器完全就绪前不要当成默认必跑检查。

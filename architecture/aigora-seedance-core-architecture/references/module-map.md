@@ -1,13 +1,13 @@
-# Seedance 模块映射
+# Seedance 模块代码与职责对照
 
-| 关注域 | 已确认路径 | 当前可确认状态 | 目标责任 |
+| 模块方向 | 相关代码路径 | 当前实现现状 | 目标设计职责 |
 | --- | --- | --- | --- |
-| Seedance 入站解析 | `internal/protocol/seedance/video_parser.go` | 解析基础视频字段与 filing/business refs；未知字段标记为 mock parser 不支持 | Service Plane 将协议请求投影为 `CapabilityIR` |
-| 视频 HTTP 入口 | `internal/httpapi/v1_videos.go` | 调用 `gateway.HandleVideo` 并投影结果；未证明异步 job 生命周期 | Service Plane 接受请求和投影 job/result ref |
-| 网关视频路径 | `internal/app/gateway_service.go` | 存在 Seedance parser 调用；需逐次审查实现，不能假定真实 provider 调用 | 由 Scheduling 决定执行和状态真相 |
-| 路由与预算 | `internal/scheduling/route/`、`internal/scheduling/budget/` | 已有 route/budget 包；未证明 Seedance eligibility-first 或 attempt binding | Scheduling Plane 路由、预算与 incident guard |
-| provider adapter | `internal/adapters/` | 有 core/mock/compat adapter；未发现 `internal/adapters/seedance/` | 独立 Seedance render/submit/poll/callback adapter |
-| job 与 artifact 模型 | `internal/persistence/models/operator.go` | 有简化 `JobRecord`/`ArtifactRecord`；未发现 attempt 模型 | job/attempt 分离、artifact manifest 与 mirror 状态 |
-| 观测与账本 | `internal/observability/`、`docs/data-model.md` | 已有 observability 包与目标数据设计；需按具体调用确认覆盖 | append-only ledger、trace vault、scorecard、workbench read model |
+| Seedance 请求解析 | `internal/protocol/seedance/video_parser.go` | 已支持解析基础视频参数、备案与业务引用；暂不支持的扩展字段会记录在元数据中 | 由 Service Plane 将外部协议请求统一转换为内部 `CapabilityIR` |
+| 视频 HTTP 接口 | `internal/httpapi/v1_videos.go` | 已接入 `gateway.HandleVideo` 并返回任务结果；完整异步生命周期仍需按具体接线核对 | 由 Service Plane 接收请求并返回任务引用（job/result ref） |
+| 网关视频服务 | `internal/app/gateway_service.go` | 已调用 Seedance 解析器；审查时需结合具体实现确认是否接通真实厂商 | 由 Scheduling Plane 统一管理系统状态与任务调度 |
+| 路由与预算控制 | `internal/scheduling/route/`、`internal/scheduling/budget/` | 已有基础路由和预算模块；Seedance 专属的资格过滤与 Attempt 绑定需逐项核对 | 由 Scheduling Plane 负责资格过滤、候选排序、预算预留和故障熔断 |
+| 厂商适配器 | `internal/adapters/` | 已有通用/模拟（mock）/兼容适配器；独立的 Seedance 生产适配器按需扩展 | 提供独立的请求构造、提交、轮询与回调验签适配器 |
+| 任务与产物模型 | `internal/persistence/models/operator.go` | 已有基础 `JobRecord` 和 `ArtifactRecord`；细粒度 Attempt 与转存状态按规划演进 | 区分 Job 与 Attempt，记录产物清单（manifest）及对象存储转存状态 |
+| 可观测与消费账本 | `internal/observability/`、`docs/architecture/data-model.md` | 已有观测模块与数据表设计；具体字段覆盖需结合调用链路核实 | 维护只追加（append-only）账本、Trace 归档、质量评分卡与控制台查询视图 |
 
-该表是导航而非实现清单；每次设计结论须回到具体源码、测试和 OpenSpec 核实。
+> 注：本表用于快速定位代码位置；做架构评估或任务验收时，请以实际源码、测试用例和对应 OpenSpec 文档为准。
