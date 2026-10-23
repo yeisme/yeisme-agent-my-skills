@@ -21,7 +21,7 @@
 - 保留摘要、排序、空值、权限与 scope。不能为“快”删除 digest 或只保留 COUNT。批量 IN 按参数上限分块并给出 SQL 上界公式，不无限 Preload。
 - 精确 total 可显式 opt-in，但旧合同默认不变；未请求总数不能伪装为 0。沿用已稳定 keyset，排序加唯一 ID，不把所有分页推倒重写。
 - 状态迁移显式 Updates/零值列选择、scope/state/version 条件、RowsAffected；0 行读回分类。禁止 Save 覆盖整行、read-check 后仅按 ID 无条件写。
-- 一次业务事务向所有 repository 传同一 tx，不偷用 root DB/另开池；锁内不做 Provider、对象存储或慢网络。
+- 一次业务事务向所有 repository 传同一 tx，不偷用 root DB/另开池；锁内不做 Provider、对象存储或慢网络。若 prepared runtime 要求真实 root-created transaction seal，最外层必须走 owner 的 sealed transaction helper，子 service/savepoint 继承同一 seal；“已是 gorm.Transaction”不代表受信任，不能为通过 guard 而降级 managed root 或手工复制 Settings。测试应到达真实末项 DML 后注错，不把 seal 提前拒绝的空回滚当作端到端原子性证据。
 - CreateInBatches 按 bytes、参数上限、锁时长、WAL/RSS 确定，复用现有实现。PrepareStmt 仅有界实验：GORM/驱动双层 cache、SQL 形状数、IN 长度、代理模式与关闭结果。
 - 不全局关闭默认事务或跳过正确性 hooks。普通业务保留 owner ORM；PG 专用 COPY/DDL/session 原语需要明确例外、参数绑定、固定/allowlist 标识符与隔离适配器。
 
@@ -35,7 +35,7 @@
 - 多项审批/结算不能机械循环单项 writer：先核全量 Attempt/policy/head/reservation/price/enterprise 锁序与跨项累积，permit 的同 policy 重入不能当跨 policy 嵌套授权。数据库 guard 的拒绝只能证明 fail closed，不能冒充入口可用或全 writer 覆盖。
 - 新旧协议混跑也要入锁图：新路径持 reservation 后等 price、旧路径持 price 后等 reservation，可形成独立于 enterprise 的环。若兼容期不能统一总序，可在显式新路径的首次反向行锁使用 NOWAIT 并整体回滚，保留旧默认；批量先锁固定去重集合、确认全部命中并持续持有，后续只重取同集合。排序不等于消环；NOWAIT 不保证表锁不等待，不能吞 55P03、改成业务成功或自动重试。同步 opposing-edge 探针与真实死锁、单笔与批量、前缀模拟与完整旧命令应分别报告。
 - 保守 tenant 排他围栏只能串行化遵守同一围栏的路径，并非全图证明；Explain 等持 policy 锁的读取也须按该合同进场。提前取 tenant EX 后，还须核旧路径是否先持 parent/items 再请求 tenant SHARE，不能把原环换成新环。成功 savepoint 的锁会留到最外事务；内部返回不是外层提交，权限前 busy/重放阻塞和同租户串行化成本须明确披露。
-- 写维护必须绑定真实当前 actor/session、独立审批、完整 snapshot CAS、一次消费与审计；自报 actor/approve 字符串不是授权。把已存在的 root 事务体拆成私有同 executor 原语后再接鉴权，不在外层 check 后另开 root 事务。某些校验以“提交 blocked 后返回 domain error”为原义，必须区分 committed-domain-failure 与数据库/审计失败，保留前者回执而让后者整体回滚。
+- 写维护必须绑定真实当前 actor/session、独立审批、完整 snapshot CAS、一次消费与审计；自报 actor/approve 字符串不是授权。HTTP认证与执行捕获同一control owner，热请求只验证其实际pool/代次/fingerprint，不借新owner重建；凡完整fingerprint失效的服务，其cache key须用同边界失效，避免安全503无法经健康重组恢复。CLI只消费受认证API，不另建local写捷径；已提交domain-failure必须先投影安全receipt再失败退出，数据库/审计失败无receipt。字段白名单不足以防恶意远端将已知session/CSRF/reason反射进safe ID，所有renderer之前拒绝已知私密值；该检查不是任意未知秘密/编码变形防护。把已存在的 root 事务体拆成私有同 executor 原语后再接鉴权，不在外层 check 后另开 root 事务。某些校验以“提交 blocked 后返回 domain error”为原义，必须区分 committed-domain-failure 与数据库/审计失败，保留前者回执而让后者整体回滚。
 - 维护锁序不能以未授权的非事务副作用为代价：将drain/advisory锁获取与setval等非事务marker推进拆开；前者可按既有顺序先取，后者须在当前身份、双方资格、审批状态与expiry通过且非receipt replay后才执行。拒绝事务回滚不会撤销sequence marker；用真实PG拒绝例验证marker前后不变，不只比较业务表。已授权晚失败仍可能保守推进，需明确披露。
 - 独立审批的双方资料应在同一事务中一次有序捕获；先验证当前调用者，回执未命中才用已捕获事实作完整资格检查，避免先锁当前用户再补锁另一用户。尾部只复核捕获的有效期限，不在审计后重新查询。NOWAIT 可保守拒绝竞争但不证明全图无死锁；已提交回放仍认证当前调用者，不因另一方未来撤权再次执行业务。
 - 完整行hash只能发现当前差异，不能证明policy/funding改后恢复的历史ABA。增强快照使用显式登记、单调永久counter及独立版本路径；共享funding用per-funding见证，不向全部policy扇出。合法source更新、删除重插、换ID应推进已登记counter并保留墓碑，true no-op fence不递增；旧pending证明不能当新版本资格，已提交结果仍遵守当前身份鉴权重放。首次登记与旧RR必须通过实际源行的早期写锁/MVCC fence串行化，不能把counter缺失当零或在hot path建schema。
