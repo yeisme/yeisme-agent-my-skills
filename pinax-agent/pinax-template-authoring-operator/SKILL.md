@@ -19,7 +19,7 @@ Operate Pinax templates and template-authored notes. Templates are CLI-managed a
 pinax template init --vault ./my-notes --json
 pinax template list --vault ./my-notes --agent
 pinax template recommend --intent "论文" --vault ./my-notes --agent
-pinax template show idea.research_seed --vault ./my-notes --agent
+pinax template describe idea.research_seed --vault ./my-notes --agent
 pinax template inspect idea.research_seed --vault ./my-notes --json
 pinax template validate weekly --vault ./my-notes --json
 pinax template preview weekly --title "Client Meeting" --var client=Acme --vault ./my-notes --agent
@@ -61,5 +61,5 @@ pinax draft index refresh --vault ./my-notes --json
 ## Validation
 
 - Before writing: `pinax template preview <name> --agent` or `pinax index page preview <name> --agent` succeeds.
-- After template note creation: `pinax note show "<title>" --agent` or `pinax search "<title>" --agent` finds the note.
+- After template note creation: `pinax note describe "<title>" --agent` or `pinax search "<title>" --agent` finds the note.
 - After managed index writes: run the matching preview command again.

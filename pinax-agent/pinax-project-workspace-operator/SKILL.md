@@ -20,9 +20,9 @@ pinax project create research --name "Research" --notes-prefix notes/research --
 pinax project list --vault ./my-notes --agent
 pinax project learning init investing stock-learning --title "学习炒股的全部笔记" --project-name "学习炒股" --preset stock-learning --vault ./my-notes --json
 pinax project subproject create research stock-learning --title "Stock Learning" --template scenario --vault ./my-notes --json
-pinax project subproject show research stock-learning --vault ./my-notes --agent
+pinax project subproject describe research stock-learning --vault ./my-notes --agent
 pinax project board configure research --columns inbox,next,doing,blocked,review,done --vault ./my-notes --json
-pinax project board show research --subproject stock-learning --vault ./my-notes --agent
+pinax project board describe research --subproject stock-learning --vault ./my-notes --agent
 pinax project item add research "Read annual report" --subproject stock-learning --column next --vault ./my-notes --json
 pinax project item move item_abc123 doing --vault ./my-notes --json
 pinax plan daily --dry-run --vault ./my-notes --json
@@ -34,7 +34,7 @@ pinax plan snapshot --vault ./my-notes --json
 
 ## Workflow
 
-1. Resolve vault and active project state with `pinax vault list --agent`, `pinax project list --agent`, or `pinax project board show <project> --agent`.
+1. Resolve vault and active project state with `pinax vault list --agent`, `pinax project list --agent`, or `pinax project board describe <project> --agent`.
 2. For new workspace setup, create or show the project first, then create subprojects or learning packs.
 3. For learning packs, choose an explicit preset such as `learning` or `stock-learning`; keep educational notes separate from recommendations or investment decisions.
 4. For boards, use `project board show` before changing columns or moving items.
@@ -60,6 +60,6 @@ pinax plan snapshot --vault ./my-notes --json
 
 ## Validation
 
-- After project setup: `pinax project subproject show <project> <slug> --agent`.
-- After board changes: `pinax project board show <project> --agent`.
+- After project setup: `pinax project subproject describe <project> <slug> --agent`.
+- After board changes: `pinax project board describe <project> --agent`.
 - After plan writes: `pinax plan snapshot --json` or the relevant `pinax plan <period> --dry-run --json` shows expected state.

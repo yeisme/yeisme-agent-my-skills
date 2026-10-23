@@ -18,7 +18,7 @@ Operate Pinax media/binary assets, note attachments, prompt assets, content coll
 ```bash
 pinax asset add ./diagram.png --vault ./my-notes --json
 pinax asset list --vault ./my-notes --agent
-pinax asset show diagram.png --vault ./my-notes --agent
+pinax asset describe diagram.png --vault ./my-notes --agent
 pinax asset link diagram.png --note "Auth Plan" --vault ./my-notes --json
 pinax asset backlinks diagram.png --vault ./my-notes --agent
 pinax asset missing --vault ./my-notes --agent
@@ -39,7 +39,7 @@ pinax graph query --kind technique --match storyboard --vault ./my-notes --agent
 
 ## Workflow
 
-1. Inspect before writes with `pinax asset list --agent`, `pinax asset show --agent`, `pinax note attachments --agent`, `pinax prompt search --agent`, `pinax collection doctor`, or `pinax graph query --agent`.
+1. Inspect before writes with `pinax asset list --agent`, `pinax asset describe --agent`, `pinax note attachments --agent`, `pinax prompt search --agent`, `pinax collection doctor`, or `pinax graph query --agent`.
 2. For note-local files, prefer `pinax note attach` so the note reference and asset metadata stay consistent.
 3. For vault-wide asset metadata, use `pinax asset add/link/move/remove/repair/verify`; do not edit manifests by hand.
 4. For prompt assets, import schemas through `pinax prompt import` and resolve through `pinax prompt resolve pinax://prompt/<id> --agent` instead of reading SQLite or metadata files.

@@ -46,6 +46,12 @@ pinax record adopt --vault ./my-notes --plan --json
 6. After an apply, run the matching diagnostic again, such as `pinax vault doctor --json`, `pinax proof loop run --json`, or `pinax record status --agent`.
 7. If an operation reports partial success, conflict, snapshot required, or approval required, stop and surface the exact next safe command.
 
+## Selected Daily Review (experimental)
+
+For a few selected notes, use `pinax organize plan --note <id-a> --note <id-b> --vault ./my-notes --json`, then the same selection with `--save`. Selection accepts exact IDs/paths, requires canonical identity, and limits writes to 20 unique objects while retaining full-vault relationship context. Missing identity requires separate `record adopt --plan` review. Omission of `--note` is still a full-vault workflow, never a fallback.
+
+Inspect with `pinax pipeline describe <plan-id> --vault ./my-notes --json`. After explicit user approval, scoped apply creates a fresh snapshot itself; `--snapshot-message` labels it. The existing manual snapshot workflow remains safe but is not necessary twice. Scoped plans reject `--allow-stale` and persist planned/applying/applied/partial/failed outcomes. Do not retry interrupted or consumed plans; use the original plan, receipt and snapshot to inspect completed/failed/pending operations before explicit restore or replanning. Unsupported non-overwriting moves fail closed. `index_status=not_refreshed` requires explicit index refresh, not a claim that search has caught up.
+
 ## Safety Boundaries
 
 - Do not hand-edit `.pinax/**`, SQLite stores, repair/organize plan JSON, record ledgers, or version metadata.

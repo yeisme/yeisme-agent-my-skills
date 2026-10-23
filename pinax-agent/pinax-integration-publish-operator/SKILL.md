@@ -74,4 +74,4 @@ pinax briefing run --dry-run --vault ./my-notes --json
 - Publish: `pinax publish doctor <profile> --json` after profile or build changes.
 - Plugin: `pinax plugin doctor --json` and `pinax plugin inspect <id> --json` after install/permission changes.
 - API: `pinax api routes --agent` and `pinax api schema export --format openapi --agent` before exposing clients.
-- Token/profile: `pinax token list --agent` or `pinax profile show <name> --agent` must not reveal raw secrets.
+- Token/profile: `pinax token list --agent` or `pinax profile describe <name> --agent` must not reveal raw secrets.
