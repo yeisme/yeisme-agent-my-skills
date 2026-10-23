@@ -39,11 +39,11 @@ description: Use when an agent building a website, application, documentation si
 eikona projects register . --agent
 eikona models list --source adapted --all --agent
 eikona auth list --agent
-eikona models default show --agent
+eikona models default describe --agent
 eikona auth check gateway --agent
 ```
 
-3. 形成 visual brief：目标、主体、构图、标题安全区、色彩、风格、尺寸、裁切策略、禁用项和目标文件。用户未指定尺寸时使用原生 `2k`；用户明确给出其他 size 时原样保留。默认真实模型使用 `openai/gpt-5.4-image-2`；`gpt-5.4-image-2` 与 `gpt-image-2` 作为兼容短别名，用户指定其他模型时必须使用网关准确 model ID。
+3. 形成 visual brief：目标、主体、构图、标题安全区、色彩、风格、尺寸、裁切策略、禁用项和目标文件。用户未指定尺寸时使用原生 `2k`；用户明确给出其他 size 时原样保留。默认真实模型使用 `openai/gpt-image-2.5-sunburst`；`gpt-5.4-image-2` 与 `gpt-image-2` 作为兼容短别名，用户指定其他模型时必须使用网关准确 model ID。
    - 输入图是要被局部修改或重绘的画布时，使用 `reference_mode=edit`。
    - 输入图只提供风格、布局、主体或品牌语言，且目标是全新画布时，使用 `reference_mode=generate`；产品 UI canary 默认属于这一类。
    - 网关不支持参考输入时，不得静默删除 reference。先保留失败证据并报告能力缺口；只有用户接受后，才把可见约束转写为明确 brief，创建独立的纯文生图 run，并标注无法保证像素级或 identity/style 一致性。

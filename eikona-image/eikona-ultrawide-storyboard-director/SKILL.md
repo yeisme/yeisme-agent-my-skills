@@ -51,13 +51,13 @@ description: Use when designing ultrawide continuous-space storyboards, action b
 本地验证规划看板：
 
 ```bash
-eikona generate --model openai/gpt-5.4-image-2 --aspect 3:1 --size 1536x512 --input prompts/story/storyboard/night-market-conflict/prompts/01-planning-board.md --dry-run --agent
+eikona generate --model openai/gpt-image-2.5-sunburst --aspect 3:1 --size 1536x512 --input prompts/story/storyboard/night-market-conflict/prompts/01-planning-board.md --dry-run --agent
 ```
 
 真实生成规划看板：
 
 ```bash
-eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --aspect 3:1 --size 1536x512 --input prompts/story/storyboard/night-market-conflict/prompts/01-planning-board.md --agent
+eikona generate --use-channel openai --model openai/gpt-image-2.5-sunburst --aspect 3:1 --size 1536x512 --input prompts/story/storyboard/night-market-conflict/prompts/01-planning-board.md --agent
 eikona review packet <run_id> --agent
 eikona feedback accept <run_id> --artifact <artifact_id> --reason spatial_continuity --reason beat_clarity --agent
 eikona assets handoff <artifact_id> --agent
@@ -66,7 +66,7 @@ eikona assets handoff <artifact_id> --agent
 视频参考图必须生成干净电影镜头：
 
 ```bash
-eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --aspect 16:9 --size 1536x864 --input prompts/story/storyboard/night-market-conflict/prompts/02-clean-video-reference.md --agent
+eikona generate --use-channel openai --model openai/gpt-image-2.5-sunburst --aspect 16:9 --size 1536x864 --input prompts/story/storyboard/night-market-conflict/prompts/02-clean-video-reference.md --agent
 ```
 
 ## 输出

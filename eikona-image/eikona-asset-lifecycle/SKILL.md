@@ -19,7 +19,7 @@ Keep the clean original, annotation copy and mask as distinct roles. Remote inpu
 4. Keep every captured image in `library_state=not_imported` until a human or owning workflow explicitly saves it.
 5. Use a download grant for network delivery. Never return or copy an absolute runstore path.
 
-For new Eikona generations without an explicit model selection, the default canonical remote model ref is `openai/gpt-5.4-image-2`. The short aliases `gpt-5.4-image-2` and `gpt-image-2` are accepted only at an explicit compatibility ingress; provider-colon, duplicate-prefix, and underscore forms are rejected and must not enter new commands or metadata.
+For new Eikona generations without an explicit model selection, the default canonical remote model ref is `openai/gpt-image-2.5-sunburst`. The short aliases `gpt-5.4-image-2` and `gpt-image-2` are accepted only at an explicit compatibility ingress; provider-colon, duplicate-prefix, and underscore forms are rejected and must not enter new commands or metadata.
 
 Preserve an explicitly selected supported model and channel, including GPT Image 2.5 variants. Model provenance records the actual source model; never relabel an imported or edited image with the default model. Precision edits preserve the original canvas and keep masks and annotation copies out of ordinary references.
 
@@ -39,7 +39,7 @@ Preserve prompt, model, and source tool whenever available:
 eikona artifacts import ./icon.png \
   --scope project \
   --prompt "small product icon" \
-  --model openai/gpt-5.4-image-2 \
+  --model openai/gpt-image-2.5-sunburst \
   --source-tool codex-imagegen \
   --agent
 ```
@@ -100,7 +100,7 @@ Read [references/asset-lifecycle-contract.md](references/asset-lifecycle-contrac
 - Never expose absolute paths, credentials, raw provider payloads, or signed URLs as durable identifiers.
 - Never auto-promote, auto-accept, or widen project assets to global scope.
 - Routine agent automation uses `--agent`; scripts/CI use `--json --compact` (bare `--json` is still legacy full during coexistence); forensic audits use `--json --full`; non-terminal run observation uses `eikona watch <run-id> --events`.
-- Keep the recommended model spelling `openai/gpt-5.4-image-2`; accept `gpt-5.4-image-2` and `gpt-image-2` only as explicit input aliases, and reject provider-colon, duplicate-prefix, and underscore forms.
+- Keep the recommended model spelling `openai/gpt-image-2.5-sunburst`; accept `gpt-5.4-image-2` and `gpt-image-2` only as explicit input aliases, and reject provider-colon, duplicate-prefix, and underscore forms.
 
 ## Verification
 

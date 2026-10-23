@@ -11,7 +11,7 @@ description: Use when converting a character into a 4x4 transparent pixel-art ba
 
 1. 准备角色参考图（可选）与角色一句话描述。
 2. 绑定模板 `promptrepo://official/image/pixel-battle-sprite@1.0.0?locale=en` 的变量：`character`（必填）、`reference_binding`（参考图附加说明）、`combat_style`（有默认值）。
-3. 经 Eikona 出图（参考图用编辑/参考输入通道；模型默认 `openai/gpt-5.4-image-2`，用户指定更新的图像模型时从其指定）。
+3. 经 Eikona 出图（参考图用编辑/参考输入通道；模型默认 `openai/gpt-image-2.5-sunburst`，用户指定更新的图像模型时从其指定）。
 4. 验收对照模板自检清单：4×4、16 帧、真透明、无文字网格、帧间一致、可循环。
 
 ## 第二步：代码转 GIF

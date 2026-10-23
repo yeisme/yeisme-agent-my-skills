@@ -50,7 +50,7 @@ description: Use when creating or repairing Eikona character identity sheets, su
 - 一个 `.md`/`.txt` 文件对应一个候选方向；runbook/prompt source/evidence 由 Eikona CLI 创建，不手写结构化 metadata。
 - Prompt 只使用允许公开给 provider 的 source facts；不要包含完整 canon、隐藏剧透、credential、provider payload 或内部推理。
 
-本工作流唯一接受并推荐的默认模型 ref 是 `openai/gpt-5.4-image-2`。必须拒绝 bare `gpt-5.4-image-2`、`gpt-image-2` 以及 provider-colon、重复前缀和下划线变体，并给出该 canonical ref 作为修复提示；不得用“兼容”或“历史”措辞把这些输入引回新命令、prompt 文件、runbook 或 evidence。
+本工作流唯一接受并推荐的默认模型 ref 是 `openai/gpt-image-2.5-sunburst`。必须拒绝 bare `gpt-5.4-image-2`、`gpt-image-2` 以及 provider-colon、重复前缀和下划线变体，并给出该 canonical ref 作为修复提示；不得用“兼容”或“历史”措辞把这些输入引回新命令、prompt 文件、runbook 或 evidence。
 
 ### 4. 先 dry-run，再真实生成
 
@@ -58,7 +58,7 @@ description: Use when creating or repairing Eikona character identity sheets, su
 
 ```bash
 eikona generate \
-  --model openai/gpt-5.4-image-2 \
+  --model openai/gpt-image-2.5-sunburst \
   --input prompts/scaena/subject-candidate/<subject-ref>/prompts/01-candidate-a.md \
   --size 2k \
   --aspect 2:3 \
@@ -67,7 +67,7 @@ eikona generate \
 
 eikona generate \
   --use-channel openai \
-  --model openai/gpt-5.4-image-2 \
+  --model openai/gpt-image-2.5-sunburst \
   --ref subject=./references/source-subject.png \
   --reference-mode generate \
   --input prompts/scaena/subject-candidate/<subject-ref>/prompts/01-candidate-a.md \
@@ -85,14 +85,14 @@ eikona run -f prompts/scaena/subject-candidate/<subject-ref>/runbook.yaml --back
 eikona watch <run_id> --events
 ```
 
-真实生成默认使用 `openai/gpt-5.4-image-2`。不要为 Scaena 专门创建 provider script 或另一套 scenario command。
+真实生成默认使用 `openai/gpt-image-2.5-sunburst`。不要为 Scaena 专门创建 provider script 或另一套 scenario command。
 
 真实生成前先检查新 Eikona 的用户级 channel readiness：
 
 ```bash
 eikona auth check openai --agent
-eikona models readiness openai/gpt-5.4-image-2 --channel openai --agent
-eikona providers doctor openai --channel openai --model openai/gpt-5.4-image-2 --probe --agent
+eikona models readiness openai/gpt-image-2.5-sunburst --channel openai --agent
+eikona providers doctor openai --channel openai --model openai/gpt-image-2.5-sunburst --probe --agent
 ```
 
 用户级 channel 尚未配置时，必须显式提示用户通过受保护 stdin 或已有 mode-0600 key file 保存 key；不要隐式读取 `OPENAI_API_KEY`，也不要推荐 `--from-env OPENAI_API_KEY`。Agent 不得读取、缓存或转发 key：
@@ -102,7 +102,7 @@ eikona auth set openai \
   --protocol openai \
   --base-url https://openai-compatible.example.invalid/v1 \
   --api-key-stdin \
-  --default-model openai/gpt-5.4-image-2 \
+  --default-model openai/gpt-image-2.5-sunburst \
   --agent
 ```
 

@@ -9,7 +9,7 @@ description: Use when the user explicitly requests Eikona/eikona visual generati
 
 用户明确说“用 Eikona / eikona 出图 / Eikona 生成”时，本路由优先于通用 `imagegen` 或内置图片工具。先进入 `cli/eikona` 并使用 Eikona CLI；只有 Eikona 不可用且用户确认 fallback 时，才允许改用其他图片工具。
 
-当用户没有付费 OpenAI/gateway key，但本机已登录 Codex 时，隐式 `eikona generate --prompt ... --agent` 会默认走 `codex:imagegen` 预览回退。结果会带 `model_selection`、`capability_class=preview`、`size_class=1k`、`auth_class=codex_session`、`resolution_control=prompt_instruction`。推荐省略 `--size 1k`：Eikona 会把默认 1K 约束注入 `codex exec` 的 stdin 提示词；显式传入受支持尺寸仍兼容，但会返回 `PROMPT_CONTROLLED_RESOLUTION` warning。请求 `2k`/`4k`、参考图或 edit 不会静默降级。生产级 2K/编辑仍走 `openai/gpt-5.4-image-2`。先跑 `eikona providers doctor codex --agent`，不要把 1K 上限说成工具故障。
+当用户没有付费 OpenAI/gateway key，但本机已登录 Codex 时，隐式 `eikona generate --prompt ... --agent` 会默认走 `codex:imagegen` 预览回退。结果会带 `model_selection`、`capability_class=preview`、`size_class=1k`、`auth_class=codex_session`、`resolution_control=prompt_instruction`。推荐省略 `--size 1k`：Eikona 会把默认 1K 约束注入 `codex exec` 的 stdin 提示词；显式传入受支持尺寸仍兼容，但会返回 `PROMPT_CONTROLLED_RESOLUTION` warning。请求 `2k`/`4k`、参考图或 edit 不会静默降级。生产级 2K/编辑仍走 `openai/gpt-image-2.5-sunburst`。先跑 `eikona providers doctor codex --agent`，不要把 1K 上限说成工具故障。
 
 用户说“提示词文档”“提示词库”“分门别类”“提示词集合”“从文件加载提示词”或“一组 prompt 批量出图”时，加载 `eikona-file-prompt-workflow`。单张读取一个 text/Markdown 文件；多张通过 runbook 的 `prompt_file` / `prompt_files` 引用一组文件。不要把集合拼成长命令行字符串，也不要把提示词正文塞进 run evidence 或 provider 配置。
 
@@ -68,7 +68,7 @@ description: Use when the user explicitly requests Eikona/eikona visual generati
 1. 无付费 key 且 Codex 可用时，普通文生图走 `codex:imagegen` 1K preview；付费 2K/编辑交给 `eikona-gateway-bootstrap`。
 2. 先定 owner，再定 purpose。Scaena episode/shot/cover/motion 必须有 current passed preflight；否则只允许 candidate/lookdev/correction。
 3. Auctra 来源必须已 review；临时图片先走 `eikona-asset-lifecycle`。只选一个创意 director；文件落盘同时加载 `eikona-file-prompt-workflow`。
-4. 离线用 `--dry-run`。付费未指定模型时默认 `openai/gpt-image-2.5-sunburst`、`--quality high`、像素画布，渠道用已配置的 GPT Image 网关（本机 `noemi`），不新建 key/渠道。2.5 不可用才回退 `openai/gpt-5.4-image-2`。Flare 仅在用户要快稿。不得使用 bare alias、provider-colon 或隐式 `OPENAI_API_KEY`。
+4. 离线用 `--dry-run`。付费未指定模型时默认 `openai/gpt-image-2.5-sunburst`、`--quality high`、像素画布，渠道用已配置的 GPT Image 网关（本机 `noemi`），不新建 key/渠道。2.5 不可用才回退 `openai/gpt-image-2.5-sunburst`。Flare 仅在用户要快稿。不得使用 bare alias、provider-colon 或隐式 `OPENAI_API_KEY`。
 5. 精准编辑保持原图画布，优先 Sunburst。2.5 禁止 `--size 2k`。Codex preview 不写 `--size 1k`。不从 prompt 文本反推 typed controls。
 
 命令骨架（含 2.5 像素示例）：[command-skeletons.md](references/command-skeletons.md)。视觉意图：[visual-intent-contract.md](references/visual-intent-contract.md)、[role-outputs.md](references/role-outputs.md)。编译：`eikona workflow import intent`。GPT Image 2.5 身份/尺寸：`cli/eikona/docs/commands/models.md`；MCP 无 CLI 时读 `eikona://docs/image25-mcp`。加载 `yeisme-eikona-cli-runtime` 后可读其 `references/gpt-image-2.5.md`。
@@ -89,6 +89,8 @@ description: Use when the user explicitly requests Eikona/eikona visual generati
 
 - 不直接调用 provider SDK，不绕过 Eikona CLI evidence。
 - 不把 key 放入命令参数、项目文件、日志或结构化输出；配置凭据必须使用默认用户级 `eikona auth set <channel> --api-key-stdin` 流程。
+- Kie.ai 与 OpenRouter 是独立 Image channels；新任务只用 latest model，historical 只允许历史 reconcile，不自动 fallback。
+- exact model ID、provider/credential/model/pricing readiness 分开核验；catalog presence、health 与本地 fixture 不等于可执行或真实交付。unknown outcome 只沿原 run/task reconcile。以 Eikona `docs/interfaces/native-image-relays.md` 的逐型号合同为准，目录中的其他系列、蒙版、精准编辑或 upscale 不因可见就获得执行能力。
 - 不猜测 Nano Banana、Gemini 或其他网关模型 ID。
 - 不把 Auctra 的 accepted canon、review 决策或 `.auctra/**` 状态手写到文件里。
 - Auctra 上下文的视觉请求必须保留 accepted brief/source refs，并经 `eikona-file-prompt-workflow` 建立 prompt、review 与 handoff 链路；不能降级成无来源的通用图片工具。

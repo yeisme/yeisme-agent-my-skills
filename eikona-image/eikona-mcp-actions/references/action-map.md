@@ -1,6 +1,6 @@
 # Eikona MCP development action map
 
-Navigation reference for 125 executable development `eikona.execute`
+Navigation reference for 131 executable development `eikona.execute`
 actions. This includes unreleased precision-edit and upload lifecycle actions;
 an installed older release must not be assumed to expose them. It is verified
 against `ActionDescriptors`; use it directly instead
@@ -207,3 +207,14 @@ consumer actions only; unknown and non-entitled actions return the identical
 | `design.reconstruct` | mutation | consumer | Edit a versioned design through the owner. Propose previews without applying. Accept uses the proposal base revision; conflicts require a new preview. No provider calls. |
 | `design.reject` | mutation | consumer | Edit a versioned design through the owner. Propose previews without applying. Accept uses the proposal base revision; conflicts require a new preview. No provider calls. |
 | `design.restore` | mutation | consumer | Edit a versioned design through the owner. Propose previews without applying. Accept uses the proposal base revision; conflicts require a new preview. No provider calls. |
+
+## Additional registered development actions
+
+| Action | Kind | Lane | Purpose |
+| --- | --- | --- | --- |
+| `control_center.capabilities` | readonly | consumer | Read scoped task snapshots without resuming execution. Progress is evidence-derived, never an estimated timer. |
+| `control_center.tasks.cancel` | mutation | consumer | Cancel only a never-claimed queued run with independent cancel permission, expected revision and stable idempotency key. Unknown outcomes must query the original receipt, never resubmit. |
+| `control_center.tasks.cancel_receipt` | readonly | consumer | Read the original cancellation receipt. Never resubmits cancellation or contacts a provider. |
+| `control_center.tasks.events` | readonly | consumer | Read scoped task snapshots without resuming execution. Progress is evidence-derived, never an estimated timer. |
+| `control_center.tasks.get` | readonly | consumer | Read scoped task snapshots without resuming execution. Progress is evidence-derived, never an estimated timer. |
+| `control_center.tasks.list` | readonly | consumer | Read scoped task snapshots without resuming execution. Progress is evidence-derived, never an estimated timer. |

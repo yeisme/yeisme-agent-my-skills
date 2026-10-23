@@ -30,13 +30,13 @@ description: Use when designing Xiaohongshu infographics, process diagrams, comp
 本地验证：
 
 ```bash
-eikona generate --model openai/gpt-5.4-image-2 --aspect 3:4 --size 1024x1536 --input prompts/xhs/infographic/skincare-steps/prompts/01-five-step-flow.md --dry-run --agent
+eikona generate --model openai/gpt-image-2.5-sunburst --aspect 3:4 --size 1024x1536 --input prompts/xhs/infographic/skincare-steps/prompts/01-five-step-flow.md --dry-run --agent
 ```
 
 真实生成：
 
 ```bash
-eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --aspect 3:4 --size 1024x1536 --input prompts/xhs/infographic/skincare-steps/prompts/01-five-step-flow.md --agent
+eikona generate --use-channel openai --model openai/gpt-image-2.5-sunburst --aspect 3:4 --size 1024x1536 --input prompts/xhs/infographic/skincare-steps/prompts/01-five-step-flow.md --agent
 eikona review packet <run_id> --agent
 eikona feedback accept <run_id> --artifact <artifact_id> --reason fact_layout --reason mobile_readability --agent
 eikona assets handoff <artifact_id> --agent

@@ -30,13 +30,13 @@ description: Use when designing Xiaohongshu cover images, first-frame visuals, o
 本地验证：
 
 ```bash
-eikona generate --model openai/gpt-5.4-image-2 --aspect 3:4 --size 1024x1536 --input prompts/xhs/cover/skincare-morning/prompts/01-clean-lifestyle.md --dry-run --agent
+eikona generate --model openai/gpt-image-2.5-sunburst --aspect 3:4 --size 1024x1536 --input prompts/xhs/cover/skincare-morning/prompts/01-clean-lifestyle.md --dry-run --agent
 ```
 
 真实生成：
 
 ```bash
-eikona generate --use-channel openai --model openai/gpt-5.4-image-2 --aspect 3:4 --size 1024x1536 --input prompts/xhs/cover/skincare-morning/prompts/01-clean-lifestyle.md --agent
+eikona generate --use-channel openai --model openai/gpt-image-2.5-sunburst --aspect 3:4 --size 1024x1536 --input prompts/xhs/cover/skincare-morning/prompts/01-clean-lifestyle.md --agent
 eikona review packet <run_id> --agent
 eikona feedback accept <run_id> --artifact <artifact_id> --reason title_safe --reason composition --agent
 eikona assets handoff <artifact_id> --agent

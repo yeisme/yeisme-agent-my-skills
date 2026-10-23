@@ -36,31 +36,46 @@ eikona auth list --agent
 
 3. 选择 Eikona model ref：
    - 已有 GPT Image 网关（本机 `noemi`）付费默认使用 `openai/gpt-image-2.5-sunburst`。复用现有 key，不要新建渠道。
-   - 用户点名 Flare 时用 `openai/gpt-image-2.5-flare`；2.5 不可用或用户点名 Image 2 时才用 `openai/gpt-5.4-image-2`。拒绝裸 `gpt-image-2.5`。
+   - 用户点名 Flare 时用 `openai/gpt-image-2.5-flare`；2.5 不可用或用户点名 Image 2 时才用 `openai/gpt-image-2.5-sunburst`。拒绝裸 `gpt-image-2.5`。
    - 2.5 smoke 使用像素 `--size`（如 `1152x2048`）加 `--aspect` 和 `--quality high`，禁止 `--size 2k`。先 `eikona models readiness <ref> --channel <channel> --agent`。
    - bare 短别名 `gpt-5.4-image-2` / `gpt-image-2` 已在 Eikona 0.6.0 从主入口移除；所有配置与证据只写 slash canonical ref（v1 handoff 域保留独立 alias policy）。
    - 对 GPT Image，provider-colon 和重复 provider 前缀形式一律在联网前拒绝；不要为 canonical ref 添加 provider 前缀。
-   - 如果 `/v1/models` 返回的完整 ID 是 `openai/gpt-5.4-image-2` 或 `openai/gpt-image-2.5-sunburst` / `...-flare`，必须把该 slash ID 原样复制到 Eikona。
+   - 如果 `/v1/models` 返回的完整 ID 是 `openai/gpt-image-2.5-sunburst` 或 `openai/gpt-image-2.5-sunburst` / `...-flare`，必须把该 slash ID 原样复制到 Eikona。
    - ImageRouter 使用 `imagerouter:<exact-model-id>`。
    - OpenRouter 使用 `openrouter:<exact-model-id>`。
    - 前缀表示 Eikona adapter，不表示营销名称；不要把 `Nano Banana Pro` 自动改写成任何猜测 ID。
 
 4. 只通过受保护 stdin 或已存在的 mode-0600 key file 授权保存 key。未显式传入 `--config` 时，Eikona 默认把 channel 和 local secret 写入用户级 `~/.eikona/`；Agent 不得读取、缓存或转发 key，也不能把它放入参数、项目文件或 shell credential script。
 
-🔴 CHECKPOINT · 🛑 STOP：未得到当前用户对保存凭据的明确授权前，不得运行 `eikona auth set`。未得到对潜在费用的明确同意前，不得 probe 付费模型或 smoke generate。Agent 不读取、不回显 key。
+🔴 CHECKPOINT · 🛑 STOP：未得到当前用户对保存凭据的明确授权前，不得运行 `eikona routes add` 或 `eikona auth set`。未得到对潜在费用的明确同意前，不得 probe 付费模型或 smoke generate。Agent 不读取、不回显 key。
 
-用户在受保护的交互 stdin 中输入 key 后可运行：
+用户在受保护的交互 stdin 中输入 key 后，优先用内置路线预设一次写好渠道和当前默认：
+
+```bash
+eikona routes presets --agent
+eikona routes add gateway \
+  --preset openai-gateway \
+  --base-url https://gateway.example.invalid/v1 \
+  --default-model openai/gpt-image-2.5-sunburst \
+  --api-key-stdin \
+  --use \
+  --agent
+```
+
+`--use` 把这条路线写成 `defaults.profile`。之后省略 `--use-channel` 的 `generate` / `edit` 会沿用它的渠道、模型、质量和尺寸；显式 `--model` 仍走同一渠道。已有渠道只切换当前路线时用 `eikona routes use <name> --agent`。
+
+预设对不上时再退回逐项 `auth set`：
 
 ```bash
 eikona auth set gateway \
   --protocol openai \
   --base-url https://gateway.example.invalid/v1 \
   --api-key-stdin \
-  --default-model openai/gpt-5.4-image-2 \
+  --default-model openai/gpt-image-2.5-sunburst \
   --agent
 ```
 
-把 `--default-model` 替换为网关公开的准确 Eikona model ref。只有用户明确要求隔离 channel 时才使用 `eikona --config <path> auth set ...`。不要运行 `eikona auth env`，因为它会把 secret 输出到 stdout。
+把 `--default-model` 替换为网关公开的准确 Eikona model ref。只有用户明确要求隔离 channel 时才使用 `eikona --config <path> routes add ...` 或 `auth set`。不要运行 `eikona auth env`，因为它会把 secret 输出到 stdout。
 
 私有或开发网关必须由用户提供其 HTTPS base URL 和准确 model ID；Skill 不得硬编码内网或明文 endpoint。其授权方式仍为受保护 stdin 或已有 mode-0600 key file，且 agent 不读取 key 内容。
 
@@ -72,7 +87,7 @@ provider-colon、重复 provider 前缀或未知 model ref 是歧义错误形式
 eikona auth check gateway --agent
 eikona config inspect --agent
 eikona projects register . --agent
-eikona models readiness openai/gpt-5.4-image-2 --channel gateway --agent
+eikona models readiness openai/gpt-image-2.5-sunburst --channel gateway --agent
 ```
 
 6. 先把纯文生图作为独立基线。只有用户任务需要参考图、且用户同意潜在费用时，才继续验证参考输入；不要把三种能力混成一次 smoke：
@@ -86,13 +101,13 @@ eikona models readiness openai/gpt-5.4-image-2 --channel gateway --agent
 编辑能力 smoke：
 
 ```bash
-eikona generate --use-channel gateway --model openai/gpt-5.4-image-2 --ref ./reference.png --reference-mode edit --size 1024x1024 --prompt "Keep the source composition and make the background warmer." --agent
+eikona generate --use-channel gateway --model openai/gpt-image-2.5-sunburst --ref ./reference.png --reference-mode edit --size 1024x1024 --prompt "Keep the source composition and make the background warmer." --agent
 ```
 
 参考条件生成 smoke：
 
 ```bash
-eikona generate --use-channel gateway --model openai/gpt-5.4-image-2 --ref style=./reference.png --reference-mode generate --size 2k --aspect 16:9 --prompt "Create a new product page using only the reference's visual language." --agent
+eikona generate --use-channel gateway --model openai/gpt-image-2.5-sunburst --ref style=./reference.png --reference-mode generate --size 2k --aspect 16:9 --prompt "Create a new product page using only the reference's visual language." --agent
 ```
 
 7. 根据网关协议做真实 smoke generation。GPT Image 的 OpenAI Images-compatible 示例：
@@ -100,7 +115,7 @@ eikona generate --use-channel gateway --model openai/gpt-5.4-image-2 --ref style
 ```bash
 eikona "minimal geometric product image, white background, no text" \
   --channel gateway \
-  --model openai/gpt-5.4-image-2 \
+  --model openai/gpt-image-2.5-sunburst \
   --size 1024x1024 \
   --set api=images \
   --wait \
@@ -179,6 +194,7 @@ eikona projects repair-root <project_id> --root /new/project/path --agent
 | provider-colon / 重复前缀 | 联网前失败并改为 slash canonical | 不提交歧义 ref |
 | `configured=pass` 但未 live-ready | 报告 effective level | 不把配置成功说成可付费生成 |
 | `auth env` 被请求 | 拒绝；改用 `auth check` | 不把 secret 打到 stdout |
+| 每次生成都要重写渠道和模型 | `eikona routes use <name>` | 显式 `--use-channel` 仍优先于当前路线 |
 | 用户要 2.5 却用了 `--size 2k` 或裸 `gpt-image-2.5` | 改成 slash ref + 像素 `--size`；先 `models readiness` | 不把 2.5 写成 channel 默认除非用户要求 |
 
 ## 验证

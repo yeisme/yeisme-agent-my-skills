@@ -6,7 +6,7 @@ Live paid generate/edit prefers `openai/gpt-image-2.5-sunburst` with `quality: "
 
 - Default: `openai/gpt-image-2.5-sunburst`
 - Fast draft: `openai/gpt-image-2.5-flare`
-- Fallback: `openai/gpt-5.4-image-2` only if 2.5 is not ready or the user names Image 2
+- Fallback: `openai/gpt-image-2.5-sunburst` only if 2.5 is not ready or the user names Image 2
 - Snapshots `*-2026-09-08` only when named
 - Reject bare `gpt-image-2.5` (use Sunburst) and provider-colon forms
 - Channel goes in `use_channels`, never in `model_ref`
