@@ -1,0 +1,4 @@
+interface:
+  display_name: "MuWeave 3D Director"
+  short_description: "Contract-first director handoff workspace"
+  default_prompt: "请按幕织 3D 导演台 Skill 工作，只处理宿主注入的安全启动上下文、fixture/host preview、WebGL 只读交互和导演交接合同。"

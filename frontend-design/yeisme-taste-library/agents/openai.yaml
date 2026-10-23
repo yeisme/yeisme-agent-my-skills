@@ -1,0 +1,3 @@
+display_name: "yeisme-taste-library"
+short_description: "在前端任务中检索、比较、选择和转译固定版本的 Taste，组合个人偏好与模板。"
+default_prompt: "Use $yeisme-taste-library for this task. Discover actual capabilities, preserve project constraints and pin the selected versions."

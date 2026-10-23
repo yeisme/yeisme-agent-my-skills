@@ -1,0 +1,4 @@
+interface:
+  display_name: "MuWeave Infinite Canvas"
+  short_description: "Node-first story graph with safe local view state"
+  default_prompt: "请按幕织无限画布 Skill 工作，只处理节点 projection、引用边和 UI-only 视野状态。"

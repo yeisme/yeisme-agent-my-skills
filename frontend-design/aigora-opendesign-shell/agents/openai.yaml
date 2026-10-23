@@ -1,0 +1,4 @@
+interface:
+  display_name: Aigora OpenDesign App Shell
+  short_description: Build the Aigora console shell from OpenDesign
+  default_prompt: Implement the next bounded Aigora gateway console app-shell task from the active OpenSpec owner, preserving Neutral visual parity, live/demo isolation, and browser evidence boundaries.

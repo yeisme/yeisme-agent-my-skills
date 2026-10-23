@@ -1,0 +1,4 @@
+interface:
+  display_name: "幕织页面 Lane 交付"
+  short_description: "按隔离 feature 页面包并行推进幕织前端"
+  default_prompt: "请按幕织页面 Lane 交付规则工作，只修改分配的 feature 路径和测试；共享壳层、合同、路由注册和全局样式交给集成 owner。"

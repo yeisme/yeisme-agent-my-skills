@@ -1,0 +1,4 @@
+interface:
+  display_name: "MuWeave Storyboard"
+  short_description: "Contract-first storyboard workspace"
+  default_prompt: "请按幕织专业分镜 Skill 工作，只处理 OpenDesign 视觉基线、Scaena safe projection、候选比较、显式媒体预览、版本保护 action 和响应式审阅状态。"

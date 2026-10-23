@@ -1,3 +1,11 @@
 display_name: UI Spec Frontend Workflow
-short_description: Use Open Design discovery first when available, choose one design direction layer, then enforce Tailwind CSS 4 tokens, page patterns, component recipes, React animation rules, and screenshot regression.
-default_prompt: Turn this product idea, PRD, wireframe, Open Design handoff, or UI image into a React workflow: Open Design discovery, single design direction selection, UI Spec, page pattern, low-fidelity wireframe, component recipes, implementation, animation policy, and screenshot-based visual review.
+short_description: >-
+  Use Open Design discovery first when available, choose one design direction
+  layer, then enforce Tailwind CSS 4 tokens, page patterns, component recipes,
+  React animation rules, and screenshot regression.
+
+default_prompt: >-
+  Turn this product idea, PRD, wireframe, Open Design handoff, or UI image into
+  a React workflow: Open Design discovery, single design direction selection,
+  UI Spec, page pattern, low-fidelity wireframe, component recipes,
+  implementation, animation policy, and screenshot-based visual review.

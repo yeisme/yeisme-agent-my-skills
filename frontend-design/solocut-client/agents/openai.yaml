@@ -1,0 +1,4 @@
+interface:
+  display_name: "SoloCut Client"
+  short_description: "规划或实现 SoloCut 前先检查设计进度、owner 边界和公开合同。"
+  default_prompt: "Use $solocut-client in client/solocut. Read AGENTS.md and the OpenDesign gate first. Keep task, candidate, adoption, render, and delivery states separate, and do not copy owner state or prototype code."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "MuWeave Script Workbench"
+  short_description: "Five-view screenplay workspace and project-local novel bible"
+  default_prompt: "请按幕织剧本工作台 Skill 工作，维护五视图、工具书二级工作区、项目内 mock 小说、ScriptDraftV1 和 Auctra owner 边界。"

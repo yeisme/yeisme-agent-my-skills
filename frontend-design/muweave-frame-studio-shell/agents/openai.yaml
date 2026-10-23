@@ -1,0 +1,4 @@
+interface:
+  display_name: "幕织 Frame Studio App Shell"
+  short_description: "实现受 owner 合同约束的幕织桌面创作壳层"
+  default_prompt: "请按幕织 Frame Studio App Shell Skill 实现或审查导航、Pane、projection 状态、响应式和无障碍，不复制领域状态，也不把 mock 证据当作 live readiness。"
