@@ -1,0 +1,4 @@
+interface:
+  display_name: "漫剧榜单助手"
+  short_description: "可核查榜单、原始名次、来源时间与覆盖缺口"
+  default_prompt: "Use $manju-hotlist to fetch verifiable source-specific manju boards, report original ranks and dates, and clearly label stale or unavailable coverage."
