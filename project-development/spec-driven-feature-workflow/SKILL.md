@@ -18,7 +18,7 @@ description: Use when turning a product idea, PRD, screenshot, Figma/Open Design
 3. API contract：endpoint、request、response、错误、认证、权限、分页、幂等、并发和兼容策略。已有 OpenAPI 时，以它为规范源。
 4. 数据规格：实体、关系、状态转移、约束、索引、迁移和数据保留边界。
 5. 验收矩阵：每个状态的可观察结果、验证入口、测试层级、截图或运行证据。
-6. 垂直切片任务：owner、owned paths、依赖、并行 lane、验证命令和失败重检方式。
+6. 垂直切片任务：owner、owned paths、依赖、并行 lane、验证命令和失败重检方式。若输入来自根仓，任务必须落到 owner 本地 OpenSpec，根只保留 handoff。
 
 ## 何时不应先走本技能
 
@@ -93,7 +93,7 @@ Verify: <真实项目命令、截图路径或检查入口>
 
 本技能负责规格编排，不负责代替 owner 实现代码、生成生产数据库、修改外部服务或凭空决定产品方向。实现阶段切换到 `yeisme-coding-execution-driver` 与具体领域 skill；前后端并行使用 `api-contract-parallel-workflow`；集成测试使用 `project-integration-test-evidence`。
 
-规格完成后至少运行：
+根仓规格只允许做静态文档检查；真实验收、Provider、付费、部署、发布和生产数据操作不属于本 Skill 的默认动作。规格完成后至少运行：
 
 ```bash
 git diff --check

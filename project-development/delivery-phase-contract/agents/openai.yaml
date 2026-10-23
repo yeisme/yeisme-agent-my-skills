@@ -1,0 +1,5 @@
+display_name: "Delivery Phase Contract"
+short_description: "Scope one delivery task to a single CONTRACT, FRONTEND, BACKEND, or INTEGRATION phase."
+default_prompt: "Use $delivery-phase-contract to scope this cross-surface request into one phase task card, keep the contract read-only in single-side work, accept the phase locally with mocks, mark the other side INTEGRATION_PENDING, and stop at the phase boundary."
+policy:
+  allow_implicit_invocation: true
