@@ -2,6 +2,18 @@
 
 角色表示当前 artifact 的职责，不表示真实人物人格。每次只选择一个 primary role；兼容 skill 只能提供证据、连续性、风格或质量约束。
 
+## 五个作者动作
+
+| 动作 | 主要 phase | 结果 |
+| --- | --- | --- |
+| 写作 | `draft` | 新候选正文或结构草案 |
+| 规划 | `brief` / `outline` | brief、结构、人物或课程顺序 |
+| 审稿 | `review` | 候选、差异、事实和连续性问题 |
+| 修订 | `revise` | 基于已选反馈的 successor candidate |
+| 整理 | `organize` / `handoff` | 归档、重排、引用核对和交接准备 |
+
+动作是作者可见标签；稳定的 `phase`、`operation`、`artifact`、`desired_effect`、`style_lens_skill`、`style_dimensions`、`originality_constraints`、`canonical_owner` 和 gate 字段继续输出。审稿不等于采纳，整理不等于保存。
+
 ## 通用阶段
 
 | Phase | 主要问题 | 常见角色 | 退出条件 |
@@ -20,7 +32,7 @@
 | --- | --- | --- |
 | 项目 brief、读者与素材边界 | `chinese-novel-brief-architect` | `creative-style-lens-builder` |
 | 类型契约、反套路、阶段回报 | `chinese-novel-genre-contract-strategist` | `chinese-novel-length-form-architect` |
-| project bible 与 canon 维护 | `chinese-novel-project-bible-keeper` | `chinese-novel-continuity-editor` |
+| 世界规则、作品说明与 canon 维护 | `chinese-novel-setting-editor` | `chinese-novel-continuity-editor` |
 | 写前最小上下文 | `chinese-novel-context-pack-builder` | `character-intelligence-router` |
 | 分卷/大纲/前十章 | `chinese-novel-volume-arc-planner` 或 `chinese-novel-outline-architect` | `chinese-novel-reader-retention-editor` |
 | 人物研究、设计、验压 | `character-intelligence-router` | 最多一个 character specialist |
@@ -34,27 +46,27 @@
 | 连载节奏、下章承诺和反馈归因 | `chinese-novel-serial-operations-editor` | `auctra-novel-optimization-loop` |
 | 改编/社媒衍生 | `chinese-novel-adaptation-architect` 或 `chinese-novel-content-spinoff-architect` | 目标媒介 worker |
 
-## Auctra 项目准备
+## 小说项目准备
 
 | Job | Primary skill | 可选约束 |
 | --- | --- | --- |
-| `zh-CN/chinese-novel` 新项目、素材/大纲/人物/首章启动 | `auctra-chinese-project-starter` | `chinese-novel-brief-architect` |
-| locale、layout preset、display path、migration plan/apply | `auctra-i18n-workspace-router` | `yeisme-auctra-cli-runtime` |
+| 新小说、素材/大纲/人物/首章启动 | `auctra-novel-project-starter` | `chinese-novel-brief-architect` |
+| 普通作者目录、AGENTS 入口和继续方法 | `auctra-novel-project-starter` | `yeisme-auctra-cli-runtime` |
 | profile 中缺少已选定创作 skill | `creative-writing-installer` | `yeisme-skill-routing-governance` |
 
 ## 剧本与 AI 漫剧
 
 | Job | Primary skill | 可选约束 |
 | --- | --- | --- |
-| premise、主题、核心冲突 | `ai-drama-story-architecture` | `ai-drama-character-engine` |
-| 季/集/单集节奏 | `ai-drama-showrunner` | `ai-drama-story-architecture` |
-| 人物动机、秘密、关系、选择 | `ai-drama-character-engine` | `ai-drama-continuity-supervisor` |
-| 可拍场景与对白 | `screenplay-scene-writer` | `creative-style-lens-builder` |
+| premise、主题、核心冲突 | `ai-drama-router` → `template:writing/ai-drama-story-architecture` | `template:writing/ai-drama-character-engine` |
+| 季/集/单集节奏 | `ai-drama-router` → `template:writing/ai-drama-showrunner` | `template:writing/ai-drama-story-architecture` |
+| 人物动机、秘密、关系、选择 | `ai-drama-router` → `template:writing/ai-drama-character-engine` | `ai-drama-continuity-supervisor` |
+| 可拍场景与对白 | `ai-drama-router` → `template:writing/ai-drama-scene-writing` | `creative-style-lens-builder` |
 | 场面调度、情绪转动作 | `ai-drama-director` | `ai-drama-continuity-supervisor` |
 | 视觉语言与候选 brief | `ai-drama-visual-language` | `creative-style-lens-builder` |
 | 连续性 | `ai-drama-continuity-supervisor` | `ai-drama-director` |
-| 候选评分与修复 | `ai-drama-critic-panel` | `ai-drama-producer` |
-| 成本、批次、权限和 acceptance | `ai-drama-producer` | `ai-drama-critic-panel` |
+| 候选评分与修复 | `ai-drama-router` → `template:writing/ai-drama-critic-review` | `ai-drama-producer` |
+| 成本、批次、权限和 acceptance | `ai-drama-producer` | `ai-drama-continuity-supervisor` |
 | Scaena 运行 handoff | `ai-drama-production-orchestrator` | `ai-drama-producer` |
 
 ## 自媒体与平台内容
@@ -75,12 +87,20 @@
 | 新稿终稿自然度复检 | 原平台 writer 保持 primary | `natural-writing-editor` |
 | 跨平台矩阵 | `creative-writing-orchestrator` | 各平台 worker 顺序 handoff |
 
+## 教学、PPT 与长期讲课视频
+
+三类内容都以 `tutorial-writer` 为 primary，并按需读取 `../../content-writing/tutorial-writer/references/teaching-and-presentation.md`：
+
+- 课件：课程目标、学习顺序、例子、讲义、练习和答案；不硬套故事冲突。
+- PPT 讲稿：每页标题与要点对应口头讲稿、页间衔接和预计时长；不增加渲染引擎。
+- 长期讲课视频：课程/课次、先修知识、口播、演示步骤、时长、复习与练习；不复用短视频强钩子。
+
 ## 风格请求示例
 
 | 用户表达 | 路由结果 |
 | --- | --- |
 | “准备一部王家卫感的都市爱情小说” | `creative-style-lens-builder` → `chinese-novel-genre-contract-strategist` → `chinese-novel-outline-architect`；人名只留在 source refs。 |
-| “做一个奉俊昊式阶层反转短剧开场” | `creative-style-lens-builder` → `ai-drama-story-architecture` → `screenplay-scene-writer`；禁止复现来源专名、场景或台词。 |
+| “做一个奉俊昊式阶层反转短剧开场” | `creative-style-lens-builder` → `ai-drama-router` → `template:writing/ai-drama-scene-writing`；禁止复现来源专名、场景或台词。 |
 | “像某 AI 大 V 一样写工具教程” | 拆成实测证据、分级教学、反焦虑语气、平台格式，再路由 `internet-access` + 对应 platform writer。 |
 | “混合三位作者的文风” | 先确定 target effect 和 counter lens；禁止把三套标志性句式拼贴成仿写。 |
 
