@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pinax Daily Interaction Operator"
+  short_description: "编排 Pinax 日常记录、找回、审阅、计划与交接"
+  default_prompt: "用 Pinax 现有命令完成一次日常交互闭环；先读取状态，再给出一个真实下一步，不越过确认和恢复门。"

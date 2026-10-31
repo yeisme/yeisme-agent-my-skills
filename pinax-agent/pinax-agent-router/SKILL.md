@@ -45,6 +45,7 @@ For Pinax code implementation, use `yeisme-pinax-cli-runtime` plus the normal co
 | Templates, template-backed `note add`, index pages, inbox/draft review indexes, journal template workflows | `pinax-template-authoring-operator` | `pinax template recommend --intent "..." --agent`, `pinax template preview <name> --agent`, `pinax index page preview <name> --agent` |
 | Assets, note attachments, prompt assets, content collections, prompt graph rebuild/query | `pinax-asset-prompt-operator` | `pinax asset list --agent`, `pinax prompt search "..." --agent`, `pinax graph query --kind technique --match "..." --agent` |
 | Publish, plugin, local API, API token, backend profile aliases, MCP, briefing | `pinax-integration-publish-operator` | `pinax publish plan --agent`, `pinax plugin list --agent`, `pinax api routes --agent` |
+| Cross-command daily interaction: capture → retrieve → review → plan → continue/checkpoint | `pinax-daily-interaction-operator` | `pinax vault list --agent`, then the primary command returned by `pinax.daily_interaction.v1` |
 
 ## Workflow
 
