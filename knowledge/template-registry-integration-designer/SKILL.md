@@ -64,3 +64,14 @@ promptrepo://official/agent/template-skill-integration-design-beta@1.0.0-beta.1?
 - [持久化与编译](references/persistence-and-compilation.md)
 - [安装与交接](references/install-and-handoff.md)
 - [video-shotcraft 完整示例](references/video-shotcraft-example.md)
+
+## 从需求到可复用入口
+
+- “把会议记录整理成行动项”：现有 template + Operator 会话即可。
+- “根据用户选择读取资料并逐步确认”：Skill 负责交互，template 保留语义输出合同。
+- “先 Brief 再镜头计划”：recipe 表达依赖；前一步实际产物得到确认后再绑定 step_output。
+- “出图、配音或发布”：交给领域 owner，编译不能替代执行。
+
+设计前按 exact ref/role 读取 guide 和 inspect；交接时提供每个角色的完整教程、示例输入、预期输出、失败恢复与来源。保留用户要求的全部角色，不以目录顺序推断 DAG。
+
+多步骤验收须展示 needs_step_output → 导入真实或明确标记的合成前序结果 → 下游完成；修改上游后检查失效传播与原会话接续。研究模板使用英文后继 research-summary-en，旧研究 recipe 保留历史兼容。按需读取 guide 章节，避免每个角色重复加载全文。

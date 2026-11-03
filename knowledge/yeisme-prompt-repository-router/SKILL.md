@@ -73,3 +73,11 @@ Run only the commands for the affected owner:
 | `bind` treated as generation | `--dry-run` then refs-only draft | Acceptance stays with the consuming owner |
 | Chinese file compiled as Agent template | `docs/template-zh-CN.md` is review-only | `en` is the only compilable locale |
 | Registry metadata hand-written | Template Registry CLI | Content owner may edit prose, not catalog JSON |
+
+## 完整指南的归属
+
+指南正文和逐角色用例归内容仓 docs/README.md；可选 GuideReader、固定来源路径与一致性校验归公共 SDK；prompt guide、MCP guide/resource 和显式文件导出归 Registry。既有 Client 不增加必实现方法。指南不属于可执行 Prompt，不改变 catalog/template digest 或编译资格。
+
+先发现安装版能力，再读取指南与 inspect。MCP 客户端不要求安装 CLI；本地 stdio 和已配置的 Streamable HTTP 复用同一应用合同。
+
+教程 case authoring 与固定验证流程归 Registry/内容 owner；领域 schema 与接受仍归消费者。section 为 GuideReader 的增量读取选择，不改变原全文 digest。独立 Operator 升级由 Registry 宿主 CLI 管理单一内置 Skill；profile 管理项目保持原 manager，不扩展成第二个通用 Skill manager。

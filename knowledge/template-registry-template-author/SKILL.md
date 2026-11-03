@@ -89,3 +89,17 @@ template-registry catalog validate --repository . --json
 
 - [语言与目录](references/locale-and-layout.md)
 - [发布前检查](references/validation.md)
+
+## 完整教程完成标准
+
+每个 solution 的 docs/README.md 是完整教程入口；保留已有专业说明和链接。逐角色覆盖：可复制中文需求提示词、实际 contract 字段/类型/必填/范围、合成输入、完整 CLI 与等价 MCP 顺序、真实用户确认、可见交付、结果检查、恢复、许可与成熟度。多角色说明实际依赖，不能拿前一步提示词当实际结果。
+
+官方内容仓使用 scripts/author_guides.py 维护 contract 派生部分，专项内容可保留在原有说明中；scripts/check_guides.py 执行隔离的合成示例。修改生成区应调整作者脚本并重生成。结构化业务输入须符合 owner 的语义 schema；{} 只能说明传输格式，不能冒充完成示例。
+
+以 template-registry prompt guide 复读已同步版本并核对 digest。新 API/指南属于本地源码能力时说明发行状态；不因教程齐全提升 maturity 或修改 rights。
+
+## 第二轮案例维护
+
+通过 Registry tutorial case set/validate 维护每个英文角色的正例和反例，绑定 template/contract digest；已有语义 fixture 使用 case 引用，不能复制后漂移。输入为数据，不允许命令或脚本字段。空对象仅用于明确合法的初始状态，并填写 input_notes；复杂 JSON 使用已存在领域结构。
+
+官方内容仓先运行 scripts/tutorial_cases.py，再运行 scripts/author_guides.py；指南 section 标记由作者脚本生成。check_guides.py 使用固定 argv 操作验证，不执行 Markdown。合成检查与人工审阅独立，原 FixtureSet 的更严格策略保持不变。
