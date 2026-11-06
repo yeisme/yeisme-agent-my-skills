@@ -1,6 +1,8 @@
 # 做剧执行内核（Drama Execution Kernel, DEK v1）
 
-本目录是做剧 skills 的**抽象设计与执行单元设计**真源，属于独立仓库 `yeisme/yeisme-agent-my-skills` 的一个自包含模块。它不新建生成引擎、不新建 router、不复制任何外部技能包的角色或脚本，只把散落在 Auctra / Scaena / Eikona / Aigora / 控制中心里的既有合同归纳成统一语义，并组装成可组合执行单元。
+本目录是做剧 skills 的**抽象设计与执行单元设计**真源，属于独立仓库 `yeisme/yeisme-agent-my-skills` 的一个自包含模块。它不新建生成引擎、不新建 router、不复制任何外部技能包的角色或脚本，只把散落在 Auctra / Scaena / Eikona / Aigora / Sonora / 控制中心里的既有合同归纳成统一语义，并组装成可组合执行单元。
+
+> **先读 [HANDOFF.md](HANDOFF.md)**：研究结论 → 抽象 → 执行单元 → 自动化 → 能力抽象 → Skills → 提示词 → 落地状态 → 后续路线的单一总览。继续推进看 [implementation-roadmap.md](implementation-roadmap.md)。
 
 ## 定位
 
@@ -25,6 +27,8 @@
 
 | 文件 | 内容 |
 | --- | --- |
+| [HANDOFF.md](HANDOFF.md) | **总览与交接**：演进版本、唯一真源表、三仓关系、抽象/Skills/合同状态、已知缺口、验证入口、后续路线 |
+| [implementation-roadmap.md](implementation-roadmap.md) | **后续实现规格**：C1/C2/C3 的 owner、并行 lane、依赖、验收命令、失败重查、交接纪律 |
 | [abstract-design.md](abstract-design.md) | 六个抽象 + 一条调度律的定义、真实承载点、不变量总图 |
 | [execution-units.md](execution-units.md) | EU 通用形状、9 个领域 EU、2 个横切层、编排 DAG、三场景组合 |
 | [automation-core.md](automation-core.md) | 自动化做剧核心流程：流程纪律提取、`automation_profile`、六阶段 stage_plan、门禁矩阵、完成分级 |

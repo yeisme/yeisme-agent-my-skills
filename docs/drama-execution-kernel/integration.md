@@ -1,5 +1,7 @@
 # 接入与验证（DEK v1）
 
+> 总览见 [HANDOFF.md](HANDOFF.md)；C1/C2/C3 的后续实现规格、并行 lane 与验收命令见 [implementation-roadmap.md](implementation-roadmap.md)。
+
 ## 独立仓库关系
 
 | 仓库 | 角色 |

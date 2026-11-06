@@ -138,6 +138,8 @@ scripts/skills.sh --project /path/to/project list-source --json
 
 做剧执行链横跨 `ai-drama/` 与 `scaena/` 两个独立项目。本仓库的 [`docs/drama-execution-kernel/`](docs/drama-execution-kernel/README.md) 是**抽象设计、执行单元、合同与流程纪律的唯一真源**；两个独立仓只放指针，不重复正文。目标：把一份剧本或小说交给 Agent 后，从环境安装到生成前准备全程可自动推进、可审计、可恢复。
 
+**总览入口**：[`docs/drama-execution-kernel/HANDOFF.md`](docs/drama-execution-kernel/HANDOFF.md)（版本、真源表、Skills/合同状态、已知缺口、后续路线）；[`implementation-roadmap.md`](docs/drama-execution-kernel/implementation-roadmap.md)（C1/C2/C3 后续实现规格与交接）。
+
 ### 设计来源：流程核心纪律提取
 
 从外部「糯米工作流程」里只提取**流程编排纪律**，不引入其角色、脚本、Windows 路径、桌面 CLI、模型白名单或单主控会话快照；全部改用现有做剧工具的真实合同表达。
