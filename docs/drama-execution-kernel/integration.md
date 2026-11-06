@@ -22,6 +22,8 @@
 
 `ai-drama-router` 已在 root runtime，不重复分配。所有新 skill **按需加载**，由 Router 的 `execution_lane` 轴选中，不进 root runtime、不批量激活。
 
+`ai-drama-bootstrap` 是 Router 之前的环境准备层（安装 skills / CLI、配置连接、交接 Router），由用户复制主提示词触发，**按需、不加入任何 target profile**。可复制提示词的唯一源在 `yeisme/ai-drama-skills` 的 `ai-drama-bootstrap/references/bootstrap-prompt.md`。自动化核心流程与 `automation_profile` 见 [automation-core.md](automation-core.md)。
+
 ## 完善清单（向后兼容，只加引用段落，不改 frontmatter）
 
 | Skill | 追加内容 |

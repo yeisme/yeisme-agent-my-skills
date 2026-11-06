@@ -27,6 +27,7 @@
 | --- | --- |
 | [abstract-design.md](abstract-design.md) | 六个抽象 + 一条调度律的定义、真实承载点、不变量总图 |
 | [execution-units.md](execution-units.md) | EU 通用形状、9 个领域 EU、2 个横切层、编排 DAG、三场景组合 |
+| [automation-core.md](automation-core.md) | 自动化做剧核心流程：流程纪律提取、`automation_profile`、六阶段 stage_plan、门禁矩阵、完成分级 |
 | [contracts/owner-action.v1.md](contracts/owner-action.v1.md) | C1 跨 owner 动作收据 |
 | [contracts/draw-batch.v1.md](contracts/draw-batch.v1.md) | C2 抽卡批量合同 |
 | [contracts/replacement-bound.v1.md](contracts/replacement-bound.v1.md) | C3 有界替换合同 |
@@ -36,6 +37,7 @@
 
 | Skill | 承载 |
 | --- | --- |
+| `ai-drama-bootstrap` | Router 之前的环境准备层：安装 skills / CLI、配置连接、交接 Router；可复制的主提示词在 `ai-drama-skills` 的 `ai-drama-bootstrap/references/bootstrap-prompt.md` |
 | `ai-drama-action-receipt` | EU 通用形状、C1、A1/A3/A4 词汇与 UNKNOWN 决策表 |
 | `scaena-asset-draw-batch` | EU-02/03/04、C2、B1 |
 | `scaena-bounded-replacement` | EU-09、EU-31、C3、A5 判定门 |
