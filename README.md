@@ -134,6 +134,19 @@ scripts/skills.sh --project /path/to/project list-source --json
 
 独立项目保留原 Skill 名称，宿主 profile 按名称解析，因此拆仓不要求调用方重命名 Skill。
 
+### 跨模块执行内核（DEK v1）
+
+做剧执行链横跨 `ai-drama/` 与 `scaena/` 两个独立项目，其**抽象设计、执行单元与三份合同**统一放在 [`docs/drama-execution-kernel/`](docs/drama-execution-kernel/README.md)，不在各拆仓重复正文。四个新 Skill 按现有模块归位：
+
+| Skill | 模块 | 职责 |
+| --- | --- | --- |
+| `ai-drama-action-receipt` | `ai-drama/` | 冻结引用、幂等授权、结果词汇与 UNKNOWN 恢复 |
+| `ai-drama-remote-operations` | `ai-drama/` | owner HTTP 服务 + remote profile + 控制中心投影对齐 |
+| `scaena-asset-draw-batch` | `scaena/` | 确认清单批量抽卡、wave 依赖、统一回查、快覆盖 |
+| `scaena-bounded-replacement` | `scaena/` | `identity_equal` 门、有界替换、失败受控修复 |
+
+DEK 不新建 router、不建跨 owner 网关、不改变上表各独立项目的 owner 边界；发布时按模块同步到对应拆仓，源层只在本仓库修改。
+
 ## 聚合模块
 
 | 模块 | 说明 |

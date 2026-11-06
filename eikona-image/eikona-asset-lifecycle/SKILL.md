@@ -112,3 +112,12 @@ openspec validate --all
 ```
 
 For runtime or API implementation changes, also run focused tests followed by `go test ./... -timeout 180s`, `task lint`, and `task fmt-check`.
+
+## 执行内核接入（DEK v1）
+
+`eikona.asset_handoff.v2` 已固定 `permission: handoff_candidate`（Eikona accepted ≠ Scaena production-ready）。补充两条与 DEK 一致的边界：
+
+- `eikona replace` / `assets apply` / `eikona rollback` 属于**技术替换与回滚**：`replacement_status: applied` 与 `binding_digest` 只证明技术完成，**不等于验收通过、备案完成或生产接受**；`rollback` 校验当前文件 hash，不覆盖后续用户编辑，也不产生 `REVIEWED` / `PRODUCTION_ADMITTED` / `EXPORT_READY`；
+- candidate-period artifact grant（24h）与 accepted delivery / handoff grant 继续分离；短期 capability URL 是 path-free、revocable、无需额外 header 的，不写入 durable evidence。
+
+有界替换合同 C3 见 `../../docs/drama-execution-kernel/contracts/replacement-bound.v1.md`；跨 owner 动作收据 C1 见 `../../docs/drama-execution-kernel/contracts/owner-action.v1.md`。本 Skill 仍是 Eikona 资产生命周期的唯一 owner。
