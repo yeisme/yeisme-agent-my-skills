@@ -21,14 +21,16 @@ D0 交接（本仓）        → 合同形状 + 依赖 + 验收口径
 D5 收口（本仓）        → Skills/profile 同步 + 总结
 ```
 
-| 阶段 | owner | 可并行 lane | 依赖 |
-| --- | --- | --- | --- |
-| D0 | 主仓 | — | 已完成 |
-| D1 | `agent/scaena` + `cli/eikona` | 2 条（各自 owner 内） | D0 |
-| D2 | `agent/scaena` | 1 条 | D1 |
-| D3 | `cli/eikona` + `agent/scaena` | 2 条 | D1 |
-| D4 | `client/yeisme-control-center` | 1 条 | D1 |
-| D5 | 主仓 + 三个独立 skills 仓 | 1 条 | D1–D4 稳定 |
+| 阶段 | owner | 可并行 lane | 依赖 | 交接状态 |
+| --- | --- | --- | --- | --- |
+| D0 | 主仓 | — | — | ✅ 已完成：`openspec/changes/drama-execution-kernel-handoff-v1/`（proposal/design/tasks/spec，`openspec validate` 通过） |
+| D1 | `agent/scaena` + `cli/eikona` | 2 条（各自 owner 内） | D0 | ⏳ 已交接 → `scaena-dek-typed-action-v1` / `eikona-dek-action-receipt-v1` |
+| D2 | `agent/scaena` | 1 条 | D1 | ⏳ 已交接 → `scaena-dek-draw-batch-v1` |
+| D3 | `cli/eikona` + `agent/scaena` | 2 条 | D1 | ⏳ 已交接 → `eikona-dek-action-receipt-v1` / `scaena-dek-bounded-replacement-v1` |
+| D4 | `client/yeisme-control-center` | 1 条 | D1 | ⏳ 已交接 → `control-center-dek-action-projection-v1` |
+| D5 | 主仓 + 三个独立 skills 仓 | 1 条 | D1–D4 稳定 | ✅ Skills 源层已收口：5 个 Skills 对齐、三版提示词、索引整合、三仓校验全绿；代码 owner 侧收口待 D1–D4 |
+
+根 change 已把 D1–D4 的实现任务**全部转入对应 owner OpenSpec 路径**，不在根 `tasks.md` 维护实现进度。本轮**未在三个代码 owner 的工作树写入任何文件**，避免污染其 git 状态；各 owner 的 change 由各自会话建立。
 
 ## D1 — C1 `yeisme.owner_action.v1` typed action 路由
 

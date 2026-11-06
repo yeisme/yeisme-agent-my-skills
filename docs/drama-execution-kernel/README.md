@@ -29,6 +29,7 @@
 | --- | --- |
 | [HANDOFF.md](HANDOFF.md) | **总览与交接**：演进版本、唯一真源表、三仓关系、抽象/Skills/合同状态、已知缺口、验证入口、后续路线 |
 | [implementation-roadmap.md](implementation-roadmap.md) | **后续实现规格**：C1/C2/C3 的 owner、并行 lane、依赖、验收命令、失败重查、交接纪律 |
+| 主仓 `openspec/changes/drama-execution-kernel-handoff-v1/` | **正式跨项目交接**：proposal / design（Mermaid + capability ledger）/ tasks / spec；实现任务已转入五个 owner OpenSpec 路径 |
 | [abstract-design.md](abstract-design.md) | 六个抽象 + 一条调度律的定义、真实承载点、不变量总图 |
 | [execution-units.md](execution-units.md) | EU 通用形状、9 个领域 EU、2 个横切层、编排 DAG、三场景组合 |
 | [automation-core.md](automation-core.md) | 自动化做剧核心流程：流程纪律提取、`automation_profile`、六阶段 stage_plan、门禁矩阵、完成分级 |

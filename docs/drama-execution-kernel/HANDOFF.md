@@ -80,13 +80,24 @@
 
 ## 三份合同状态
 
-| 合同 | 内容 | 状态 |
-| --- | --- | --- |
-| C1 `yeisme.owner_action.v1` | 跨 owner 动作收据 + 5 个能力字段 | **设计完成，待 owner 侧实现** |
-| C2 `scaena.draw_batch.v1` | 抽卡批量 + identity-equal 快覆盖 | **设计完成，待实现** |
-| C3 `yeisme.replacement_bound.v1` | 有界替换 + 失败受控修复 | **设计完成，待实现** |
+| 合同 | 内容 | 状态 | 交接路径 |
+| --- | --- | --- | --- |
+| C1 `yeisme.owner_action.v1` | 跨 owner 动作收据 + 5 个能力字段 | **设计完成，已交接，待 owner 实施** | `agent/scaena/openspec/changes/scaena-dek-typed-action-v1/`、`cli/eikona/openspec/changes/eikona-dek-action-receipt-v1/` |
+| C2 `scaena.draw_batch.v1` | 抽卡批量 + identity-equal 快覆盖 | **设计完成，已交接，待 owner 实施** | `agent/scaena/openspec/changes/scaena-dek-draw-batch-v1/` |
+| C3 `yeisme.replacement_bound.v1` | 有界替换 + 失败受控修复 | **设计完成，已交接，待 owner 实施** | `cli/eikona/openspec/changes/eikona-dek-action-receipt-v1/`、`agent/scaena/openspec/changes/scaena-dek-bounded-replacement-v1/` |
 
 实现规格、依赖顺序与验收命令见 [implementation-roadmap.md](implementation-roadmap.md)。
+
+## OpenSpec 交接（根级，2026-11-06）
+
+根 `openspec/changes/drama-execution-kernel-handoff-v1/` 已建立并通过 `openspec validate <change-id>`：
+
+- `proposal.md`：为什么做、做什么、不做什么、影响哪些子项目，含五个 owner change 路径；
+- `design.md`：Mermaid 分层图与 D1–D5 依赖图、**capability ledger**（七项 `fit` / 四项 `split-owner` / 一项 `reject-now`）、跨 owner 不变式、风险取舍；
+- `tasks.md`：只记设计评审、文档同步、跨项目 handoff 与治理验证；实现任务全部转入 owner change；
+- `specs/cross-project-drama-execution-handoff/spec.md`：5 条 Requirement + 7 个 Scenario，约束唯一真源、能力不删减、根不承载实现、合同状态不冒充实现、治理验证与真实验收分离。
+
+**根 change 不改任何代码 owner 的工作树**；D1–D4 的 `proposal.md` / `design.md` / `tasks.md` / `specs/**/spec.md` 及实现、测试、closeout 由各 owner 在自己的 OpenSpec 中承接。
 
 ## 三版引导提示词
 
@@ -136,6 +147,15 @@ python3 scripts/validate_skills.py
 - 不在 UNKNOWN 写 / 已受理 / 业务拒绝 / 创意输入变化时重试；
 - 不在独立仓复制设计正文，不手写 runtime 副本或结构化资产。
 
-## 后续路线
+## 后续路线与完成状态
 
-见 [implementation-roadmap.md](implementation-roadmap.md)：D0 交接 → D1 C1 typed action → D2 C2 抽卡批 → D3 C3 有界替换 → D4 控制中心投影 → D5 Skills/profile 收口。owner 侧实现分别归 `agent/scaena`、`cli/eikona`、`client/yeisme-control-center` 的 OpenSpec，**主仓只留合同与交接**。
+| 阶段 | 状态 |
+| --- | --- |
+| D0 根交接 | ✅ 已完成（`openspec/changes/drama-execution-kernel-handoff-v1/`） |
+| D1 C1 typed action | ⏳ 已交接，待 `agent/scaena` + `cli/eikona` 实施 |
+| D2 C2 抽卡批 | ⏳ 已交接，待 `agent/scaena` 实施 |
+| D3 C3 有界替换 | ⏳ 已交接，待 `cli/eikona` + `agent/scaena` 实施 |
+| D4 控制中心投影 | ⏳ 已交接，待 `client/yeisme-control-center` 实施 |
+| D5 Skills/profile 收口 | ✅ Skills 源层已完成（5 个 Skills 对齐、三版提示词、索引整合、三仓校验全绿） |
+
+见 [implementation-roadmap.md](implementation-roadmap.md)。owner 侧实现分别归 `agent/scaena`、`cli/eikona`、`client/yeisme-control-center` 的 OpenSpec，**主仓只留合同与交接**；不在根 `openspec/` 写实现任务，不在本轮修改代码 owner 的工作树。
