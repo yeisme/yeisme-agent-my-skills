@@ -31,6 +31,9 @@ automation_profile?:
   visual_review_default: text_first         # 默认不看图
   subagents: disabled_unless_explicit      # 默认关闭
   unknown_policy: reconcile_readonly       # UNKNOWN 不重投、不换幂等键
+  retry_budget: 2                          # 可重试错误自动重试上限；UNKNOWN 不消耗
+  approval_window_ref: <FrozenRef>          # 一次审批 = 一个自动化窗口
+  binding_policy: auto_executable           # resolver 自动选 executable binding，不问 cli/mcp
   completion_evidence:
     per_stage: stage_receipt               # 逐阶段 receipt
     per_episode: verify_preparation_complete
@@ -45,10 +48,10 @@ Router 的解析顺序不变：先 `OriginalityDecision` → 十五轴 → `cont
 | # | `stage_kind` | Primary Skill | 可选 constraint | Canonical owner | 输入 `FrozenRef` | 阶段 receipt | 停止条件 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | `source_admission` | `ai-drama-router` + `ai-drama-context-pack-builder` | `ai-drama-producer` | Auctra（`story_canon_owner`） | 剧本/小说文件、`canon_digest`、`OriginalityDecision` | ContextPack + `source_revision` | 原文未读完、hash 漂移、原创性 blocker |
-| 2 | `asset_gap` | `scaena-subject-asset-readiness`（单槽位）/ `scaena-asset-draw-batch`（批量） | `ai-drama-visual-language` | Scaena | `creative.owner-handoff.v0.1`、frozen slots | `batch_ref` / `frozen_subject_version_ref` | wave 上游未 frozen、无费用授权 |
+| 2 | `asset_gap` | `scaena-subject-asset-readiness`（单槽位）/ `scaena-asset-draw-batch`（批量）+ `GenerationCapability<image>` | `ai-drama-visual-language` | Scaena / Eikona | `GenerationIntent` + `ApprovalWindow`、frozen slots | `batch_ref` / `frozen_subject_version_ref` / `GenerationReceipt` | wave 上游未 frozen、无审批窗口、binding 非 executable、重试耗尽 |
 | 3 | `director_compose` | `ai-drama-director` | `ai-drama-visual-language` | Auctra planning proposal | ContextPack、frozen assets | `ShotDesign` / `ShotAudioIntent` / 正式提示词组件 | 对白/mention/时长未冻结 |
 | 4 | `semantic_acceptance` | `ai-drama-continuity-supervisor` / `ai-drama-assessment` | `ai-drama-producer` | story_canon_owner | 阶段 3 正文 + 原文 | raw-first 复核结论、导演验收证据 | 语义异议未解决、rights/cost blocker |
-| 5 | `controlled_write` | DEK `ai-drama-action-receipt` + `scaena-production-operator` | `ai-drama-remote-operations` | Scaena / Eikona（各自 EU） | 冻结 execution / bundle / target | `action_id` + `readback_ref` + `event_cursor` | UNKNOWN、写前状态不符、无 idempotency key |
+| 5 | `controlled_write` | `GenerationCapability<video\|audio>` + DEK `ai-drama-action-receipt` + `scaena-production-operator` | `ai-drama-remote-operations` | Scaena / Eikona / Sonora / Aigora（各自 EU） | 冻结 execution / bundle / `ShotAudioIntent` | `GenerationReceipt`（`action_id` + `readback_ref` + `event_cursor` + `binding_ref` + `retry_used`） | UNKNOWN、写前状态不符、无 idempotency key、越审批窗口、重试耗尽 |
 | 6 | `scope_completion` | `ai-drama-production-orchestrator` | `ai-drama-producer` | Scaena delivery | 逐集 receipt 汇总 | 逐集证据 + 全请求范围核对 | 任一集未收口；**停在正片提交前** |
 
 规则：
@@ -63,7 +66,10 @@ Router 的解析顺序不变：先 `OriginalityDecision` → 十五轴 → `cont
 | 门禁 | 触发 | 行为 |
 | --- | --- | --- |
 | `originality_gate` | 参考作品 / 改编 / 风格指向 | refs-only `OriginalityDecision`；blocker 停 ProductionGraph |
-| `cost_gate` | 任何付费生成 | 用户显式 `--confirm` / 明确授权原文；准备任务默认不触发 |
+| `cost_gate` | 任何付费生成（image / video / audio） | 一次 `ApprovalWindow` 授权 + 按动作独立凭证；准备任务默认不触发 |
+| `approval_gate` | 凡 agent 发起的非只读动作 | 必须有 `ApprovalWindow` 且 `intent_digest` / `capability_kinds[]` / `binding_allowlist` / `count` / `cost_ceiling` / `retry_budget` 全部匹配；漂移重新审批 |
+| `retry_gate` | 可重试错误 | `retry_budget=2` 内自动重试，同 `action_id` + 同 `idempotency_key` + 同 `intent_digest`；禁止重试 UNKNOWN 写 / 已受理 / 业务拒绝 / 创意变化；耗尽交 `needs_decision` |
+| `binding_gate` | 选择执行入口 | resolver 只选 `executable` binding；`planned/readonly/unavailable` fail-closed；选择理由写 `receipt.binding_ref`；不问 `cli/mcp` |
 | `human_gate` | `select` / `freeze` / `review decide` | `--actor <human>` / `--confirm`；自动跃迁不可达 |
 | `submission_gate` | 正片视频提交 | `stop_before_final_submit: true`；独立授权 |
 | `unknown_gate` | 超时 / 断线 / `unknown_accept` | 只读 `reconcile` 原 `action_id`，不重投 |
@@ -75,7 +81,7 @@ Router 的解析顺序不变：先 `OriginalityDecision` → 十五轴 → `cont
 | 阶段 | 对应 EU |
 | --- | --- |
 | 1 | EU-01 `CanonIntake` |
-| 2 | EU-02/03/04/05 `DrawBatch` → `CandidateGenerate` → `CandidateRecord` → `HumanSelectFreeze` |
+| 2 | EU-02/03/04/05 `DrawBatch` → `GenerationInvoke<image>` → `CandidateRecord` → `HumanSelectFreeze` |
 | 3 | EU-06 `ShotBind`（frozen intent/spec/bundle） |
 | 4 | `Outcome.REVIEWED` 证据，不产生新写入 |
 | 5 | EU-07/08 `VideoSubmit` → `Reconcile`（准备任务停在此前）、EU-09 替换、EU-31 修复 |
@@ -95,7 +101,26 @@ FULL_SCOPE_PREPARED 全请求范围核对通过
 
 `FULL_SCOPE_PREPARED` **不等于**正片已提交、成片完成或审美验收。报告只给紧凑 receipt + 精确 next command + 预期副作用 + 停止条件；新会话从 refs 恢复，不重读全仓库或 provider 输出。
 
+## 六之二、全自动化与审批窗口
+
+**一个作用**：`GenerationCapability<kind>`（`image|video|audio`）；CLI / MCP / HTTP / SDK / Sonora / 第三方只是 `GenerationBinding`。流程不感知入口，`SURFACE=cli|mcp|both` 不再是门禁。
+
+```text
+DISCOVERED → APPROVED → INVOKING → (RETRY×≤2) → ACCEPTED → COMPLETED
+                                    └→ TERMINAL_REJECTED / UNKNOWN / NEEDS_DECISION
+```
+
+- 用户在任务开始给**一次审批**生成 `ApprovalWindow`（`capability_kinds[]` / `intent_digest` / `binding_allowlist` / `count` / `cost_ceiling` / `retry_budget=2` / `stop_before_final_submit`）；窗口内全自动：自动发现 binding、自动选 `executable`、自动重试、连续推进六阶段。
+- 免审批只读：`probe` / `discover` / `tools/list` / `resources/read` / `status` / `reconcile`。必须审批：三类付费生成、绑定 / 替换 / 回滚、`select` / `freeze`、导出 / 发布、凭据 / 连接变更、正片提交、新增 kind 或超预算。
+- 可重试：瞬时网络 / 5xx / 429 / 超时且 `mutationAttempted=false`、`binding=unavailable` 换另一个 executable binding。禁止重试：UNKNOWN 写、`ACCEPTED`/付费已受理、业务/权限/语义拒绝、创意输入变化、模型/正文/时长/渠道变化。
+- 每次重试保持同一 `action_id` + `idempotency_key` + `intent_digest` + 审批窗口；换 binding 记理由；不新建 state、不改预算。`reconcile` 只读，不消耗预算。
+- 越界（新 kind / 超预算 / 漂移 / 新增动作 / 正片提交）或重试耗尽 → `needs_decision` 交回人，保留全部尝试证据；「继续」/ 进度询问不重置也不扩大授权。
+
+三类合同、能力发现矩阵、等价准则与完整规则见 [capability-abstraction.md](capability-abstraction.md)。
+
 ## 七、明确不做
+
+- 不把 `cli` / `mcp` / 具体产品名做成流程分支或必答问题；入口差异只在 `GenerationBinding` 层，由 resolver 自动选择。
 
 - 不新建第二个做剧 router；`ai-drama-bootstrap` 只是 Router 之前的环境准备层，完成后立即交接。
 - 不把「文件已创建 / 命令退出 0 / 检查表生成」写成任务完成。

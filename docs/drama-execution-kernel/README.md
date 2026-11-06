@@ -28,6 +28,7 @@
 | [abstract-design.md](abstract-design.md) | 六个抽象 + 一条调度律的定义、真实承载点、不变量总图 |
 | [execution-units.md](execution-units.md) | EU 通用形状、9 个领域 EU、2 个横切层、编排 DAG、三场景组合 |
 | [automation-core.md](automation-core.md) | 自动化做剧核心流程：流程纪律提取、`automation_profile`、六阶段 stage_plan、门禁矩阵、完成分级 |
+| [capability-abstraction.md](capability-abstraction.md) | **一个作用**：`GenerationCapability<kind>`（`image\|video\|audio`）与 `GenerationBinding`；三类合同、能力发现矩阵、`retry_budget=2`、`ApprovalWindow` |
 | [contracts/owner-action.v1.md](contracts/owner-action.v1.md) | C1 跨 owner 动作收据 |
 | [contracts/draw-batch.v1.md](contracts/draw-batch.v1.md) | C2 抽卡批量合同 |
 | [contracts/replacement-bound.v1.md](contracts/replacement-bound.v1.md) | C3 有界替换合同 |
@@ -53,10 +54,10 @@
 | 简短版 | `bootstrap-prompt-short.md` | ~20 行，委托给 Skill |
 | 渐进式 | `bootstrap-prompt-progressive.md` | L0 / L0.5 / L1 / L2 / L3 / L4，每层可独立发送、可停 |
 | 选择指南 | `prompt-variants.md` | 三版对照 |
-| 方式差异 | `surface-choice.md` | CLI / MCP / both 命令、差异、不变式 |
+| binding 参考 | `surface-choice.md` | CLI / MCP / HTTP / SDK 命令与差异；**已降级为参考，不再是流程门禁** |
 | 命令全表 | `install-and-connect.md` | 安装与连接真实命令 |
 
-**方式门禁**：阶段 0 之后、任何安装或连接之前，必须明确询问 `SURFACE = cli | mcp | both`，不自动推断、不接受模糊表达、不静默切换。`mcp` 路径不需要产品 CLI，动作参数只从 `tools/list` / `inputSchema` / 资源读取，远程参考输入必须是 `eikona://` URI；`cli` 路径用 `remote connect` + `--json` / `--agent`。`both` 时同一个 `action_id` 只在一侧执行。
+**审批窗口（替代方式门禁）**：不再询问 `cli|mcp|both`。流程只认 `GenerationCapability<kind>`（`image|video|audio`），resolver 自动选 `executable` binding，理由写入 `receipt.binding_ref`。凡 agent 发起的非只读动作都要审批，但用**一次带边界的 `ApprovalWindow`** 实现：窗口绑定 `capability_kinds[] / intent_digest / binding_allowlist / count / cost_ceiling / retry_budget=2 / stop_before_final_submit`，窗口内全自动（含自动重试、自动换 binding、连续推进六阶段）；越界或重试耗尽 → `needs_decision`。UNKNOWN 只 `reconcile` 且不消耗预算；付费生成与正片提交仍是独立新授权。三类合同与完整规则见 [capability-abstraction.md](capability-abstraction.md)。
 
 ## 独立分发
 

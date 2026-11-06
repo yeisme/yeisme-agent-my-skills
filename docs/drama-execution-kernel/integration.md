@@ -30,10 +30,10 @@
 | 简短版 | `bootstrap-prompt-short.md` |
 | 渐进式 | `bootstrap-prompt-progressive.md` |
 | 选择指南 | `prompt-variants.md` |
-| 方式门禁与命令差异 | `surface-choice.md` |
+| binding 参考（已降级） | `surface-choice.md` |
 | 命令全表 | `install-and-connect.md` |
 
-三版共同的硬门禁：阶段 0 之后、任何安装或连接之前必须明确询问 `SURFACE = cli | mcp | both`，不自动推断、不接受模糊表达、不静默切换；`mcp` 路径不需要产品 CLI，动作参数只从 `tools/list` / `inputSchema` / 资源读取，远程参考输入必须是 `eikona://` URI。自动化核心流程与 `automation_profile` 见 [automation-core.md](automation-core.md)。
+三版共同的机制：**不再询问 `cli|mcp|both`**，流程只认 `GenerationCapability<kind>`（`image|video|audio`），resolver 自动选 `executable` binding；凡 agent 发起的非只读动作都要审批，但用一次 `ApprovalWindow`（`capability_kinds[]` / `intent_digest` / `binding_allowlist` / `count` / `cost_ceiling` / `retry_budget=2`）实现窗口内全自动，含可重试错误自动重试最多 2 次。UNKNOWN 只 `reconcile` 且不消耗预算；越界或耗尽交 `needs_decision`。`surface-choice.md` 已降级为 binding 参考。完整设计见 [capability-abstraction.md](capability-abstraction.md)，自动化流程见 [automation-core.md](automation-core.md)。
 
 ## 完善清单（向后兼容，只加引用段落，不改 frontmatter）
 

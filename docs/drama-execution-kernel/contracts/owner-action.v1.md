@@ -32,6 +32,13 @@
 | `event_cursor` | string | owner 事件流位置（Eikona `eikona events tail` 的 NDJSON 位置 / Scaena `workflow status` 位置） |
 | `next_actions` | array | owner 给出的下一步命令提示，不替代调用方判断 |
 | `error` | object? | 统一 envelope 的 `{code, message, suggestion}` |
+| `capability_id` | string | `image_generation.v1` / `video_generation.v1` / `audio_generation.v1`；一个动作只属一个 `GenerationCapability<kind>` |
+| `kind` | enum | `image \| video \| audio` |
+| `binding_ref` | string | 实际选用的 `GenerationBinding` + 选择理由（可用性 / 成本 / 延迟 / 审计）；`surface` 只是标签，不是流程分支 |
+| `retry_used` | int | 已用重试次数；上限来自 `ApprovalWindow.retry_budget`（默认 2）；只读 `reconcile` / `discover` 不消耗 |
+| `approval_ref` | string | 本次 `ApprovalWindow` 的 `FrozenRef`；越界必须重新审批 |
+
+见 [capability-abstraction.md](../capability-abstraction.md)：`GenerationIntent` / `GenerationCapability<kind>` / `GenerationBinding` / `GenerationReceipt` 四个对象、三类合同、有界重试与审批窗口。
 
 ## 不变量
 
@@ -41,6 +48,9 @@
 4. artifact 交付使用 path-free `eikona://` URI 与短期 capability URL，不暴露 host filesystem path 或 runstore path。
 5. 响应统一 `ai-native-cli-output-contract` envelope；命令特有数据放 `data`，不新增顶层字段。
 6. 不返回 provider key、Authorization header、raw provider payload、private prompt 或全链路推理。
+7. 换 `GenerationBinding` 不得增加权限：`cost_gate` / `IdempotentGrant` / 幂等 / 回读 / 脱敏在 Capability 层；`planned|readonly|unavailable` 一律 fail-closed。
+8. 一次 `ApprovalWindow` 绑定 `(capability_kinds[], intent_digest, binding_allowlist, count, cost_ceiling, retry_budget)`；窗口内全自动，越界重新审批。
+9. 可重试错误在 `retry_budget`（默认 2）内自动重试，且每次保持同一 `action_id` / `idempotency_key` / `intent_digest` / `approval_ref`；UNKNOWN 写、已 `ACCEPTED`、业务/权限/语义拒绝、创意输入变化禁止重试；`reconcile` 只读不消耗预算；耗尽交 `needs_decision`。
 
 ## 恢复决策表
 

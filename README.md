@@ -157,9 +157,10 @@ scripts/skills.sh --project /path/to/project list-source --json
 
 ### 抽象与执行单元
 
-- **六个抽象 + 一条调度律**：`FrozenRef` / `OwnerAction` / `Outcome` / `IdempotentGrant` / `LineageReuse` / `HumanGate` + `WaveBatch`，全部有现有 CLI 承载点与不变量 → [abstract-design.md](docs/drama-execution-kernel/abstract-design.md)。
-- **9 个领域 EU + 2 个横切层**：`CanonIntake` → `DrawBatch` → `CandidateGenerate` → `CandidateRecord` → `HumanSelectFreeze` → `ShotBind` → `VideoSubmit` → `Reconcile` → `BoundedReplace` / `FailedRepair`；横切 `RemoteAction`（transport）与 `ProjectionAlign`（控制中心）→ [execution-units.md](docs/drama-execution-kernel/execution-units.md)。
-- **三份待实现合同**：`yeisme.owner_action.v1`、`scaena.draw_batch.v1`、`yeisme.replacement_bound.v1` → [contracts/](docs/drama-execution-kernel/contracts/)。
+- **六个抽象 + 一条调度律**：`FrozenRef` / `CapabilityInvocation` / `Outcome` / `IdempotentGrant` / `LineageReuse` / `HumanGate` + `WaveBatch` → [abstract-design.md](docs/drama-execution-kernel/abstract-design.md)。
+- **一个作用，三类能力**：`GenerationCapability<kind>`（`image|video|audio`）+ `GenerationBinding`；CLI / MCP / HTTP / SDK / 第三方只是绑定，流程不感知入口 → [capability-abstraction.md](docs/drama-execution-kernel/capability-abstraction.md)。
+- **9 个领域 EU + 2 个横切层**：`CanonIntake` → `DrawBatch` → `GenerationInvoke<kind>` → `CandidateRecord` → `HumanSelectFreeze` → `ShotBind` → `VideoSubmit` → `Reconcile` → `BoundedReplace` / `FailedRepair`；横切 `RemoteAction` 与 `ProjectionAlign` → [execution-units.md](docs/drama-execution-kernel/execution-units.md)。
+- **三份待实现合同**：`yeisme.owner_action.v1`（含 `capability_id/kind/binding_ref/retry_used/approval_ref`）、`scaena.draw_batch.v1`、`yeisme.replacement_bound.v1` → [contracts/](docs/drama-execution-kernel/contracts/)。
 
 ### 落地 Skills（按模块归位，不建第二套 owner）
 
@@ -180,15 +181,15 @@ scripts/skills.sh --project /path/to/project list-source --json
 | # | stage_kind | Primary | 停止条件 |
 | --- | --- | --- | --- |
 | 1 | `source_admission` | `ai-drama-router` + `ai-drama-context-pack-builder` | 原文未读完 / hash 漂移 / 原创性 blocker |
-| 2 | `asset_gap` | `scaena-subject-asset-readiness` / `scaena-asset-draw-batch` | wave 上游未 frozen / 无费用授权 |
+| 2 | `asset_gap` | `scaena-subject-asset-readiness` / `scaena-asset-draw-batch` + `GenerationCapability<image>` | wave 上游未 frozen / 无审批窗口 / binding 非 executable / 重试耗尽 |
 | 3 | `director_compose` | `ai-drama-director` | 对白 / mention / 时长未冻结 |
 | 4 | `semantic_acceptance` | `ai-drama-continuity-supervisor` / `ai-drama-assessment` | 语义异议 / rights / cost blocker |
-| 5 | `controlled_write` | `ai-drama-action-receipt` + `scaena-production-operator` | UNKNOWN / 写前状态不符 / 无幂等键 |
+| 5 | `controlled_write` | `GenerationCapability<video\|audio>` + `ai-drama-action-receipt` + `scaena-production-operator` | UNKNOWN / 写前状态不符 / 无幂等键 / 越审批窗口 / 重试耗尽 |
 | 6 | `scope_completion` | `ai-drama-production-orchestrator` | 任一集未收口；**停在正片提交前** |
 
 完成分级：`ACCEPTED / COMPLETED / BOUND / REVIEWED / STAGE_COMPLETE / EPISODE_PREPARED / FULL_SCOPE_PREPARED`；`FULL_SCOPE_PREPARED` 不等于成片或审美验收。完整门禁矩阵见 [automation-core.md](docs/drama-execution-kernel/automation-core.md)。
 
-### 一键开始：三版提示词 + 接入方式询问
+### 一键开始：三版提示词 + 审批窗口
 
 `ai-drama-bootstrap` 提供三种形态，**共用同一套安全不变式与命令真源**：
 
@@ -196,20 +197,26 @@ scripts/skills.sh --project /path/to/project list-source --json
 | --- | --- | --- |
 | 完整版 | `ai-drama-skills/ai-drama-bootstrap/references/bootstrap-prompt.md` | 新机器、逐条审计 |
 | 简短版 | 同目录 `bootstrap-prompt-short.md` | 工具已装好，快速接剧本开做 |
-| 渐进式 | 同目录 `bootstrap-prompt-progressive.md` | 分层放行：L0 探测 → L0.5 方式确认 → L1 skills → L2 CLI → L3 连接 → L4 交接，每层可独立发送可停 |
+| 渐进式 | 同目录 `bootstrap-prompt-progressive.md` | 分层放行：L0 探测 → L0.5 审批窗口 → L1 skills → L2 工具 → L3 连接 → L4 交接，每层可独立发送可停 |
 | 对照指南 | 同目录 `prompt-variants.md` | 选版本 |
 
-**硬门禁**：阶段 0 之后、任何安装/连接之前，Agent 必须明确询问一次 `SURFACE = cli | mcp | both`，不允许自动推断，模糊表达不算选择。
+**不再询问 `cli|mcp|both`**：流程只认 `GenerationCapability<kind>`（`image|video|audio`），resolver 自动选 `executable` binding，理由写入 `receipt.binding_ref`。`surface-choice.md` 已降级为 binding 参考，不再是流程门禁。
 
-| | `cli` | `mcp` |
-| --- | --- | --- |
-| 产品 CLI | 需要（`yeisme-dist` 安装） | **不需要** |
-| 发现 | `setup --agent` / `doctor --agent` / CLI help | `tools/list` + `inputSchema` + `resources/read` |
-| 连接 | `remote connect` secret-free profile | `--endpoint` + `--key-file` 的 stdio 进程 |
-| 参考输入 | 同机本地路径合法 | 必须 `eikona://artifact/...` / `eikona://asset/...` |
-| 动作面 | 完整 CLI 命令族 | `eikona.search` + `eikona.execute` allowlisted action |
+**全自动化 + 全覆盖审批**（二者用一次窗口授权统一）：
 
-命令与差异全表：`ai-drama-skills/ai-drama-bootstrap/references/{surface-choice,install-and-connect}.md`。
+```text
+ApprovalWindow = capability_kinds[] + intent_digest + binding_allowlist
+                 + count + cost_ceiling + retry_budget=2 + stop_before_final_submit
+DISCOVERED → APPROVED → INVOKING → (RETRY×≤2) → ACCEPTED → COMPLETED
+                                    └→ TERMINAL_REJECTED / UNKNOWN / NEEDS_DECISION
+```
+
+- 窗口内全自动：自动发现 binding、自动选可执行入口、**可重试错误自动重试最多 2 次**（同 `action_id` / `idempotency_key` / `intent_digest`）、连续推进六阶段、进度询问不暂停；
+- 免审批只读：`probe` / `discover` / `tools/list` / `resources/read` / `status` / `reconcile`；必须审批：三类付费生成、绑定 / 替换 / 回滚、导出 / 发布、凭据 / 连接变更、正片提交、新增 kind 或超预算；
+- UNKNOWN 只 `reconcile` 且不消耗重试预算；已受理 / 业务拒绝 / 创意变化禁止重试；耗尽或越界交 `needs_decision`；
+- 一张窗口可覆盖三类，但付费生成仍按动作留独立凭证；换 binding 不增加权限。
+
+三类合同、能力发现矩阵与完整规则见 [capability-abstraction.md](docs/drama-execution-kernel/capability-abstraction.md)；命令全表见 `ai-drama-skills/ai-drama-bootstrap/references/install-and-connect.md`。
 
 ### 验证
 
@@ -221,7 +228,7 @@ scripts/skills.sh resolve ai-drama-bootstrap
 
 ### 明确不做
 
-不新建第二个做剧 router 或跨 owner 网关；不自动付费、不自动发布、不自动派生子代理、不跑 race；不把凭据值写进日志 / stdout / 仓库 / evidence；不把 `ACCEPTED` 写成完成；不把客户端路径当远端可读文件；不把 planned / readonly 能力升级为可写。
+不新建第二个做剧 router 或跨 owner 网关；不把 `cli/mcp` 或具体产品名做成流程分支或必答问题；不自动付费、不自动发布、不自动派生子代理、不跑 race；不把凭据值写进日志 / stdout / 仓库 / evidence；不把 `ACCEPTED` 写成完成；不把客户端路径当远端可读文件；不把 planned / readonly 能力升级为可写；不在 UNKNOWN 或创意输入变化时重试。
 
 ## 聚合模块
 
