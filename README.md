@@ -134,18 +134,94 @@ scripts/skills.sh --project /path/to/project list-source --json
 
 独立项目保留原 Skill 名称，宿主 profile 按名称解析，因此拆仓不要求调用方重命名 Skill。
 
-### 跨模块执行内核（DEK v1）
+## 做剧自动化工作流（DEK v1 + Bootstrap）
 
-做剧执行链横跨 `ai-drama/` 与 `scaena/` 两个独立项目，其**抽象设计、执行单元与三份合同**统一放在 [`docs/drama-execution-kernel/`](docs/drama-execution-kernel/README.md)，不在各拆仓重复正文。四个新 Skill 按现有模块归位：
+做剧执行链横跨 `ai-drama/` 与 `scaena/` 两个独立项目。本仓库的 [`docs/drama-execution-kernel/`](docs/drama-execution-kernel/README.md) 是**抽象设计、执行单元、合同与流程纪律的唯一真源**；两个独立仓只放指针，不重复正文。目标：把一份剧本或小说交给 Agent 后，从环境安装到生成前准备全程可自动推进、可审计、可恢复。
+
+### 设计来源：流程核心纪律提取
+
+从外部「糯米工作流程」里只提取**流程编排纪律**，不引入其角色、脚本、Windows 路径、桌面 CLI、模型白名单或单主控会话快照；全部改用现有做剧工具的真实合同表达。
+
+| 提取的流程纪律 | 现有承载 |
+| --- | --- |
+| 单一正式入口；询问/规划/审计不扩为生产任务 | `ai-drama-router`（唯一语义入口） |
+| 一次理解、按阶段交接；不增加第二套状态文件 | `DramaRoutePlan v1` 的 `stage_plans[]` / `gates[]` / `canonical_owner` |
+| 清单不等于已读；hash 变化刷新 | `ai-drama-context-pack-builder` + `FrozenRef` digest |
+| 每集六阶段流水线 | `automation_profile` 六阶段 stage_plan（见下） |
+| 判断与执行分离 | `OwnerAction` / `IdempotentGrant` / owner CLI 受控入口 |
+| 完成分级、禁止互相冒充 | `Outcome` 代数（DEK） |
+| 准备任务停在正片提交前 | `stop_before_final_submit: true` + 费用显式授权 |
+| 已授权连续推进、进度询问不暂停、未知先核对 | `continuous_advance` + `unknown_policy: reconcile_readonly` |
+| 默认不看图，优先文字档案 | `visual_review_default: text_first` |
+| 单主控、子代理默认关闭 | `subagents: disabled_unless_explicit` |
+
+### 抽象与执行单元
+
+- **六个抽象 + 一条调度律**：`FrozenRef` / `OwnerAction` / `Outcome` / `IdempotentGrant` / `LineageReuse` / `HumanGate` + `WaveBatch`，全部有现有 CLI 承载点与不变量 → [abstract-design.md](docs/drama-execution-kernel/abstract-design.md)。
+- **9 个领域 EU + 2 个横切层**：`CanonIntake` → `DrawBatch` → `CandidateGenerate` → `CandidateRecord` → `HumanSelectFreeze` → `ShotBind` → `VideoSubmit` → `Reconcile` → `BoundedReplace` / `FailedRepair`；横切 `RemoteAction`（transport）与 `ProjectionAlign`（控制中心）→ [execution-units.md](docs/drama-execution-kernel/execution-units.md)。
+- **三份待实现合同**：`yeisme.owner_action.v1`、`scaena.draw_batch.v1`、`yeisme.replacement_bound.v1` → [contracts/](docs/drama-execution-kernel/contracts/)。
+
+### 落地 Skills（按模块归位，不建第二套 owner）
 
 | Skill | 模块 | 职责 |
 | --- | --- | --- |
+| `ai-drama-bootstrap` | `ai-drama/` | Router 之前的环境准备：安装 skills / CLI、配置连接、交接 Router |
 | `ai-drama-action-receipt` | `ai-drama/` | 冻结引用、幂等授权、结果词汇与 UNKNOWN 恢复 |
 | `ai-drama-remote-operations` | `ai-drama/` | owner HTTP 服务 + remote profile + 控制中心投影对齐 |
 | `scaena-asset-draw-batch` | `scaena/` | 确认清单批量抽卡、wave 依赖、统一回查、快覆盖 |
 | `scaena-bounded-replacement` | `scaena/` | `identity_equal` 门、有界替换、失败受控修复 |
 
-DEK 不新建 router、不建跨 owner 网关、不改变上表各独立项目的 owner 边界；发布时按模块同步到对应拆仓，源层只在本仓库修改。
+`ai-drama-router` 仍是唯一语义入口；DEK 不新建 router、不建跨 owner 网关、不改变各独立项目的 owner 边界。
+
+### 自动化核心流程
+
+`ai-drama.route-plan.v1` 增加可选 `automation_profile`（只控制执行推进方式，不改路由选择），六阶段顺序：
+
+| # | stage_kind | Primary | 停止条件 |
+| --- | --- | --- | --- |
+| 1 | `source_admission` | `ai-drama-router` + `ai-drama-context-pack-builder` | 原文未读完 / hash 漂移 / 原创性 blocker |
+| 2 | `asset_gap` | `scaena-subject-asset-readiness` / `scaena-asset-draw-batch` | wave 上游未 frozen / 无费用授权 |
+| 3 | `director_compose` | `ai-drama-director` | 对白 / mention / 时长未冻结 |
+| 4 | `semantic_acceptance` | `ai-drama-continuity-supervisor` / `ai-drama-assessment` | 语义异议 / rights / cost blocker |
+| 5 | `controlled_write` | `ai-drama-action-receipt` + `scaena-production-operator` | UNKNOWN / 写前状态不符 / 无幂等键 |
+| 6 | `scope_completion` | `ai-drama-production-orchestrator` | 任一集未收口；**停在正片提交前** |
+
+完成分级：`ACCEPTED / COMPLETED / BOUND / REVIEWED / STAGE_COMPLETE / EPISODE_PREPARED / FULL_SCOPE_PREPARED`；`FULL_SCOPE_PREPARED` 不等于成片或审美验收。完整门禁矩阵见 [automation-core.md](docs/drama-execution-kernel/automation-core.md)。
+
+### 一键开始：三版提示词 + 接入方式询问
+
+`ai-drama-bootstrap` 提供三种形态，**共用同一套安全不变式与命令真源**：
+
+| 版本 | 位置 | 适合 |
+| --- | --- | --- |
+| 完整版 | `ai-drama-skills/ai-drama-bootstrap/references/bootstrap-prompt.md` | 新机器、逐条审计 |
+| 简短版 | 同目录 `bootstrap-prompt-short.md` | 工具已装好，快速接剧本开做 |
+| 渐进式 | 同目录 `bootstrap-prompt-progressive.md` | 分层放行：L0 探测 → L0.5 方式确认 → L1 skills → L2 CLI → L3 连接 → L4 交接，每层可独立发送可停 |
+| 对照指南 | 同目录 `prompt-variants.md` | 选版本 |
+
+**硬门禁**：阶段 0 之后、任何安装/连接之前，Agent 必须明确询问一次 `SURFACE = cli | mcp | both`，不允许自动推断，模糊表达不算选择。
+
+| | `cli` | `mcp` |
+| --- | --- | --- |
+| 产品 CLI | 需要（`yeisme-dist` 安装） | **不需要** |
+| 发现 | `setup --agent` / `doctor --agent` / CLI help | `tools/list` + `inputSchema` + `resources/read` |
+| 连接 | `remote connect` secret-free profile | `--endpoint` + `--key-file` 的 stdio 进程 |
+| 参考输入 | 同机本地路径合法 | 必须 `eikona://artifact/...` / `eikona://asset/...` |
+| 动作面 | 完整 CLI 命令族 | `eikona.search` + `eikona.execute` allowlisted action |
+
+命令与差异全表：`ai-drama-skills/ai-drama-bootstrap/references/{surface-choice,install-and-connect}.md`。
+
+### 验证
+
+```bash
+scripts/skills.sh validate-custom
+scripts/skills.sh validate-runtime
+scripts/skills.sh resolve ai-drama-bootstrap
+```
+
+### 明确不做
+
+不新建第二个做剧 router 或跨 owner 网关；不自动付费、不自动发布、不自动派生子代理、不跑 race；不把凭据值写进日志 / stdout / 仓库 / evidence；不把 `ACCEPTED` 写成完成；不把客户端路径当远端可读文件；不把 planned / readonly 能力升级为可写。
 
 ## 聚合模块
 

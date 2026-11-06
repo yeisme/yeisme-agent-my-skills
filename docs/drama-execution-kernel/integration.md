@@ -22,7 +22,18 @@
 
 `ai-drama-router` 已在 root runtime，不重复分配。所有新 skill **按需加载**，由 Router 的 `execution_lane` 轴选中，不进 root runtime、不批量激活。
 
-`ai-drama-bootstrap` 是 Router 之前的环境准备层（安装 skills / CLI、配置连接、交接 Router），由用户复制主提示词触发，**按需、不加入任何 target profile**。可复制提示词的唯一源在 `yeisme/ai-drama-skills` 的 `ai-drama-bootstrap/references/bootstrap-prompt.md`。自动化核心流程与 `automation_profile` 见 [automation-core.md](automation-core.md)。
+`ai-drama-bootstrap` 是 Router 之前的环境准备层（安装 skills / CLI、配置连接、交接 Router），由用户复制引导提示词触发，**按需、不加入任何 target profile**。提示词源在 `yeisme/ai-drama-skills` 的 `ai-drama-bootstrap/references/`：
+
+| 版本 | 文件 |
+| --- | --- |
+| 完整版 | `bootstrap-prompt.md` |
+| 简短版 | `bootstrap-prompt-short.md` |
+| 渐进式 | `bootstrap-prompt-progressive.md` |
+| 选择指南 | `prompt-variants.md` |
+| 方式门禁与命令差异 | `surface-choice.md` |
+| 命令全表 | `install-and-connect.md` |
+
+三版共同的硬门禁：阶段 0 之后、任何安装或连接之前必须明确询问 `SURFACE = cli | mcp | both`，不自动推断、不接受模糊表达、不静默切换；`mcp` 路径不需要产品 CLI，动作参数只从 `tools/list` / `inputSchema` / 资源读取，远程参考输入必须是 `eikona://` URI。自动化核心流程与 `automation_profile` 见 [automation-core.md](automation-core.md)。
 
 ## 完善清单（向后兼容，只加引用段落，不改 frontmatter）
 

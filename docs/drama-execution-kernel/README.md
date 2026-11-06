@@ -43,6 +43,21 @@
 | `scaena-bounded-replacement` | EU-09、EU-31、C3、A5 判定门 |
 | `ai-drama-remote-operations` | L-Transport / L-Projection、G1/G2 |
 
+## 引导提示词与接入方式
+
+`ai-drama-bootstrap`（`yeisme/ai-drama-skills`）提供可复制的引导提示词，让新机器/新会话自动完成「安装 skills + 安装工具 + 配置连接 + 接剧本开做」：
+
+| 版本 | 位置（`ai-drama-skills/ai-drama-bootstrap/references/`） | 特点 |
+| --- | --- | --- |
+| 完整版 | `bootstrap-prompt.md` | 逐条命令 + 全部门禁，一次跑完 |
+| 简短版 | `bootstrap-prompt-short.md` | ~20 行，委托给 Skill |
+| 渐进式 | `bootstrap-prompt-progressive.md` | L0 / L0.5 / L1 / L2 / L3 / L4，每层可独立发送、可停 |
+| 选择指南 | `prompt-variants.md` | 三版对照 |
+| 方式差异 | `surface-choice.md` | CLI / MCP / both 命令、差异、不变式 |
+| 命令全表 | `install-and-connect.md` | 安装与连接真实命令 |
+
+**方式门禁**：阶段 0 之后、任何安装或连接之前，必须明确询问 `SURFACE = cli | mcp | both`，不自动推断、不接受模糊表达、不静默切换。`mcp` 路径不需要产品 CLI，动作参数只从 `tools/list` / `inputSchema` / 资源读取，远程参考输入必须是 `eikona://` URI；`cli` 路径用 `remote connect` + `--json` / `--agent`。`both` 时同一个 `action_id` 只在一侧执行。
+
 ## 独立分发
 
 本模块按 `yeisme-skill-publisher` 规范组织，可单独安装单个 skill，不需要激活整套做剧矩阵。四个 skill 分别位于两个独立仓，**安装入口指向 skill 实际所在的仓**，不要指向带嵌套 submodule 的聚合仓：
