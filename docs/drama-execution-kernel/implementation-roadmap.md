@@ -24,7 +24,7 @@ D5 收口（本仓）        → Skills/profile 同步 + 总结
 | 阶段 | owner | 可并行 lane | 依赖 | 交接状态 |
 | --- | --- | --- | --- | --- |
 | D0 | 主仓 | — | — | ✅ 已完成：`openspec/changes/drama-execution-kernel-handoff-v1/`（proposal/design/tasks/spec，`openspec validate` 通过） |
-| D1 | `agent/scaena` + `cli/eikona` | 2 条（各自 owner 内） | D0 | ⏳ 已交接 → `scaena-dek-typed-action-v1` / `eikona-dek-action-receipt-v1` |
+| D1 | `agent/scaena` + `cli/eikona` | 2 条（各自 owner 内） | D0 | ✅ Scaena 侧已实现（`scaena-dek-typed-action-v1`，已推送 develop）：`CapabilityInvocation` / `GenerationReceipt` / `POST .../dek/actions:invoke` / 只读 reconcile / typed SDK / `scaena dek` CLI / 聚焦测试全绿；receipt 明确 `execution=needs_contract`。⏳ `cli/eikona` 侧对齐待做 |
 | D2 | `agent/scaena` | 1 条 | D1 | ⏳ 已交接 → `scaena-dek-draw-batch-v1` |
 | D3 | `cli/eikona` + `agent/scaena` | 2 条 | D1 | ⏳ 已交接 → `eikona-dek-action-receipt-v1` / `scaena-dek-bounded-replacement-v1` |
 | D4 | `client/yeisme-control-center` | 1 条 | D1 | ⏳ 已交接 → `control-center-dek-action-projection-v1` |

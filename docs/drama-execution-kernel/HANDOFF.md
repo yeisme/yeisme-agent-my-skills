@@ -152,7 +152,7 @@ python3 scripts/validate_skills.py
 | 阶段 | 状态 |
 | --- | --- |
 | D0 根交接 | ✅ 已完成（`openspec/changes/drama-execution-kernel-handoff-v1/`） |
-| D1 C1 typed action | ⏳ 已交接，待 `agent/scaena` + `cli/eikona` 实施 |
+| D1 C1 typed action | ✅ **已实现owner 侧切片**（`agent/scaena` `scaena-dek-typed-action-v1`）：公开契约、canonical 路由、handler、typed SDK、`scaena dek invoke\|reconcile`、routed 分类、单元测试；EU 执行面仍 `needs_contract`，`cli/eikona` 侧对齐待做 |
 | D2 C2 抽卡批 | ⏳ 已交接，待 `agent/scaena` 实施 |
 | D3 C3 有界替换 | ⏳ 已交接，待 `cli/eikona` + `agent/scaena` 实施 |
 | D4 控制中心投影 | ⏳ 已交接，待 `client/yeisme-control-center` 实施 |
